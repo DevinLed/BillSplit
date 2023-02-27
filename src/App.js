@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Header from "./components/Header";
 import "./darkMode.css";
-import "./index.css"
+import "./index.css";
 import MainScreen from "./components/MainScreen";
 import AddGroup from "./components/AddGroup";
 import AddPerson from "./components/AddPerson";
@@ -9,6 +9,12 @@ import EditGroup from "./components/EditGroup";
 import EditPerson from "./components/EditPerson";
 
 function App() {
+  // Main screen menu selection - 5 buttons: Start Bill, Edit Person, Edit Group, History, Darkmode
+  const [startBill, setStartBill] = useState(true);
+  const [showPersonEdit, setPersonEdit] = useState(false);
+  const [showGroupEdit, setGroupEdit] = useState(false);
+  const [showHistory, setHistory] = useState(false);
+  // For Dark/Bright mode. Keeps mode storage for page refresh.
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
   const toggleTheme = () => {
     if (theme === "light") {
@@ -17,26 +23,33 @@ function App() {
       setTheme("light");
     }
   };
-  const [showBill, setShowBill] = useState(true);
-  const [selectPersonEdit, setSelectPersonEdit] = useState(false);
-  const [showPersonEdit, setPersonEdit] = useState(false);
-  const [setAddPerson] = useState(false);
-  const [showGroupEdit, setGroupEdit] = useState(false);
-  const [showHistory, setHistory] = useState(false);
-
+  // useEffect to track dark mode
   useEffect(() => {
     localStorage.setItem("theme", theme);
     document.body.className = theme;
   }, [theme]);
+  // Text switch for dark mode button
+  const [buttonText, setButtonText] = useState("Dark Mode");
+  const changeText = (text) => setButtonText(text);
+
+  // Menus for edit person and edit group
+
+  const [selectPersonEdit, setSelectPersonEdit] = useState(false);
+
+  // Selections in Split a bill menu
+  const [addPerson, setAddPerson] = useState(false);
+  const [addGroup, setAddGroup] = useState(false);
+
   return (
     <>
       <main className="m-5 p-5 md:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl bg-white-500 rounded shadow">
         <div className={`App ${theme}`}>
-          {showBill ? (
-            <div className="flex flex-col items-center justify-center mb-5 xl:flex-row xl:justify-between">
+          {startBill ? (
+            <div className="flex flex-col items-center justify-center">
+              {/*  Header narrative for the Main Screen + 4 button selection screens */}
               <Header
-                showBill={showBill}
-                personEdit={showPersonEdit}
+                startBill={startBill}
+                showPersonEdit={showPersonEdit}
                 selectPersonEdit={selectPersonEdit}
                 setPersonEdit={setPersonEdit}
                 groupEdit={showGroupEdit}
@@ -46,7 +59,7 @@ function App() {
                   <button
                     className="justify-center mt-5 ml-5 bg-blue-500 text-white font-bold py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-transparent hover:text-blue-500 transition-all duration-300"
                     onClick={() => {
-                      setShowBill(false);
+                      setStartBill(false);
                       setPersonEdit(true);
                     }}
                   >
@@ -57,7 +70,7 @@ function App() {
                   <button
                     className="mt-5 ml-5 bg-blue-500 text-white font-bold py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-transparent hover:text-blue-500 transition-all duration-300"
                     onClick={() => {
-                      setShowBill(false);
+                      setStartBill(false);
                       setSelectPersonEdit(true);
                     }}
                   >
@@ -68,7 +81,7 @@ function App() {
                   <button
                     className="mt-5 ml-5 bg-blue-500 text-white font-bold py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-transparent hover:text-blue-500 transition-all duration-300"
                     onClick={() => {
-                      setShowBill(false);
+                      setStartBill(false);
                       setGroupEdit(true);
                     }}
                   >
@@ -79,7 +92,7 @@ function App() {
                   <button
                     className="mt-5 ml-5 bg-blue-500 text-white font-bold py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-transparent hover:text-blue-500 transition-all duration-300"
                     onClick={() => {
-                      setShowBill(false);
+                      setStartBill(false);
                       setHistory(true);
                     }}
                   >
@@ -88,10 +101,17 @@ function App() {
                 </li>
                 <li>
                   <button
-                    onClick={toggleTheme}
+                    onClick={() => {
+                      toggleTheme();
+                      if (theme === "light") {
+                        changeText("Bright Mode");
+                      } else {
+                        changeText("Dark Mode");
+                      }
+                    }}
                     className="mt-5 ml-5 bg-black text-white font-bold py-2 px-4 rounded shadow border-2 border-black hover:text-white-500 transition-all duration-300"
                   >
-                    Toggle Mode
+                    {buttonText}
                   </button>
                 </li>
               </ul>
@@ -100,31 +120,35 @@ function App() {
             ""
           )}
           {showPersonEdit ? (
-            <div>
+            <div className="flex flex-col items-center justify-center">
               <Header
-                showBill={showBill}
-                setShowBill={setShowBill}
-                personEdit={showPersonEdit}
+                startBill={startBill}
+                setStartBill={setStartBill}
+                showPersonEdit={showPersonEdit}
                 groupEdit={showGroupEdit}
                 setPersonEdit={setPersonEdit}
                 setGroupEdit={setGroupEdit}
               ></Header>
-              <ul>
-                <li>
-                  <a href="blank">John</a>
+              <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  Jack
+                  <span class="badge badge-primary badge-pill">14</span>
                 </li>
-                <li>
-                  <a href="blank">Jacob</a>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  John
+                  <span class="badge badge-primary badge-pill">2</span>
                 </li>
-                <li>
-                  <a href="blank">Jim</a>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  Jacob
+                  <span class="badge badge-primary badge-pill">1</span>
                 </li>
-                <li>
-                  <a href="blank">Jack</a>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  Jim
+                  <span class="badge badge-primary badge-pill">1</span>
                 </li>
               </ul>
               <button
-                className="mt-5 ml-5 bg-blue-500 text-white font-bold py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-transparent hover:text-blue-500 transition-all duration-300"
+                className="mt-2 ml-5 mb-5 bg-blue-500 text-white font-bold py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-transparent hover:text-blue-500 transition-all duration-300"
                 onClick={() => setAddPerson(true)}
               >
                 Add a Person
@@ -148,11 +172,11 @@ function App() {
             ""
           )}
           {selectPersonEdit ? (
-            <div>
+            <div className="flex flex-col items-center justify-center">
               <Header
-                showBill={showBill}
-                setShowBill={setShowBill}
-                personEdit={showPersonEdit}
+                startBill={startBill}
+                setStartBill={setStartBill}
+                showPersonEdit={showPersonEdit}
                 selectPersonEdit={selectPersonEdit}
                 setSelectPersonEdit={setSelectPersonEdit}
                 groupEdit={showGroupEdit}
@@ -161,7 +185,7 @@ function App() {
               ></Header>
               <ul>
                 <li>
-                  <a href="blank">John</a>
+                  <button>Johnsd</button>
                 </li>
                 <li>
                   <a href="blank">Jacob</a>
@@ -184,11 +208,11 @@ function App() {
             ""
           )}
           {showGroupEdit ? (
-            <div>
+            <div className="flex flex-col items-center justify-center">
               <Header
-                showBill={showBill}
-                setShowBill={setShowBill}
-                personEdit={showPersonEdit}
+                startBill={startBill}
+                setStartBill={setStartBill}
+                showPersonEdit={showPersonEdit}
                 groupEdit={showGroupEdit}
                 setPersonEdit={setPersonEdit}
                 setGroupEdit={setGroupEdit}
@@ -204,7 +228,7 @@ function App() {
                   <a href="blank">Work</a>
                 </li>
               </ul>
-              <button className="mt-5 ml-5 bg-blue-500 text-white font-bold py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-transparent hover:text-blue-500 transition-all duration-300">
+              <button className="mt-5 bg-blue-500 text-white font-bold py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-transparent hover:text-blue-500 transition-all duration-300">
                 Edit group
               </button>
             </div>
@@ -214,13 +238,12 @@ function App() {
           {showHistory ? (
             <div>
               <Header
-                showBill={showBill}
-                setShowBill={setShowBill}
+                setStartBill={setStartBill}
                 setHistory={setHistory}
                 showHistory={showHistory}
               ></Header>
 
-              <article>
+              <article className="flex flex-col items-center justify-center">
                 <p>Show history of past few weeks</p>
               </article>
             </div>

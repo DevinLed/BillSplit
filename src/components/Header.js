@@ -2,37 +2,33 @@ import React from "react";
 import { IoIosArrowBack } from "react-icons/io";
 
 export default function Header({
-  showBill,
-  setShowBill,
-  personEdit,
+  startBill,
+  setStartBill,
+  showPersonEdit,
   setPersonEdit,
   setSelectPersonEdit,
-  selectPersonEdit,
   setGroupEdit,
   groupEdit,
   setHistory,
   showHistory,
 }) {
-  console.log(showBill);
-  console.log(personEdit);
-  console.log(groupEdit);
   return (
     <>
-      {showBill ? (
-        <header className="flex flex-col items-center justify-center mb-5 xl:flex-row xl:justify-between">
-          <h1 className="font-bold uppercase tracking-wide text-4xl mb-3">
+      {startBill ? (
+        <header className="flex flex-col items-center text-2xl mb-5 xs:flex-row xs:justify-center md:flex-row md:justify-center xl:flex-row xl:justify-center">
+          <h1>
             Bill Splitter
           </h1>
         </header>
       ) : (
         ""
       )}
-      {personEdit ? (
+      {showPersonEdit ? (
         <>
-          <div className="flex flex-col items-center text-4xl mb-5 xs:flex-row xs:justify-center md:flex-row md:justify-center xl:flex-row xl:justify-center">
+          <div className="flex flex-col items-center text-2xl mb-5 xs:flex-row xs:justify-center md:flex-row md:justify-center xl:flex-row xl:justify-center">
             <button
               onClick={() => {
-                setShowBill(true);
+                setStartBill(true);
                 setPersonEdit(false);
               }}
             >
@@ -47,10 +43,10 @@ export default function Header({
 
       {setSelectPersonEdit ? (
         <>
-          <div className="flex flex-col items-center text-4xl mb-5 xs:flex-row xs:justify-center md:flex-row md:justify-center xl:flex-row xl:justify-center">
+          <div className="flex flex-col items-center text-2xl mb-5 xs:flex-row xs:justify-center md:flex-row md:justify-center xl:flex-row xl:justify-center">
             <button
               onClick={() => {
-                setShowBill(true);
+                setStartBill(true);
                 setSelectPersonEdit(false);
               }}
             >
@@ -64,10 +60,10 @@ export default function Header({
       )}
       {groupEdit ? (
         <>
-          <div className="flex flex-col items-center text-4xl mb-5 xs:flex-row xs:justify-center md:flex-row md:justify-center xl:flex-row xl:justify-center">
+          <div className="flex flex-col items-center text-2xl mb-5 xs:flex-row xs:justify-center md:flex-row md:justify-center xl:flex-row xl:justify-center">
             <button
               onClick={() => {
-                setShowBill(true);
+                setStartBill(true);
                 setGroupEdit(false);
               }}
             >
@@ -81,10 +77,10 @@ export default function Header({
       )}
       {showHistory ? (
         <>
-          <div className="flex flex-col items-center text-4xl mb-5 xs:flex-row xs:justify-center md:flex-row md:justify-center xl:flex-row xl:justify-center">
+          <div className="flex flex-col items-center text-2xl mb-5 xs:flex-row xs:justify-center md:flex-row md:justify-center xl:flex-row xl:justify-center">
             <button
               onClick={() => {
-                setShowBill(true);
+                setStartBill(true);
                 setHistory(false);
               }}
             >
