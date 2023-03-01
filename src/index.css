@@ -25,11 +25,58 @@ input, textarea{
 }
 button{
   user-select: none;
+  color: white;
+}
+button:hover{
+  color: #007bff;
 }
 
 .footer li{
   margin: 0.rem 0.2rem;
 }
+.list-group {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  padding-left: 0;
+  margin-bottom: 20px;
+  width: 50%;
+  color: blue;
+}
 
+.p-5{
+  padding: 0px;
+}
+.dropdown-container {
+  text-align: left;
+  border: 1px solid #ccc;
+  position: relative;
+  border-radius: 5px;
+}
 
-
+.dropdown-input {
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  user-select: none;
+}
+.dropdown-menu{
+  position: absolute;
+  transform: translateY(4px);
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  overflow: auto;
+  max-height: 150px;
+  background-color: #fff;
+}
+.dropdown-item{
+  padding: 5px;
+  cursor: pointer;
+  }
+  

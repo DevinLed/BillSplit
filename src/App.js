@@ -14,6 +14,7 @@ function App() {
   const [showPersonEdit, setPersonEdit] = useState(false);
   const [showGroupEdit, setGroupEdit] = useState(false);
   const [showHistory, setHistory] = useState(false);
+
   // For Dark/Bright mode. Keeps mode storage for page refresh.
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
   const toggleTheme = () => {
@@ -42,7 +43,7 @@ function App() {
 
   return (
     <>
-      <main className="m-5 p-5 md:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl bg-white-500 rounded shadow">
+      <main className="mt-5 p-0 pt-3 xs:max-w-xl sm:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl bg-white-500 rounded shadow">
         <div className={`App ${theme}`}>
           {startBill ? (
             <div className="flex flex-col items-center justify-center">
@@ -57,7 +58,7 @@ function App() {
               <ul>
                 <li>
                   <button
-                    className="justify-center mt-5 ml-5 bg-blue-500 text-white font-bold py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-transparent hover:text-blue-500 transition-all duration-300"
+                    className="justify-center mt-5 bg-blue-500 font-bold py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
                     onClick={() => {
                       setStartBill(false);
                       setPersonEdit(true);
@@ -68,7 +69,7 @@ function App() {
                 </li>
                 <li>
                   <button
-                    className="mt-5 ml-5 bg-blue-500 text-white font-bold py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-transparent hover:text-blue-500 transition-all duration-300"
+                    className="mt-5 bg-blue-500 font-bold py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
                     onClick={() => {
                       setStartBill(false);
                       setSelectPersonEdit(true);
@@ -79,7 +80,7 @@ function App() {
                 </li>
                 <li>
                   <button
-                    className="mt-5 ml-5 bg-blue-500 text-white font-bold py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-transparent hover:text-blue-500 transition-all duration-300"
+                    className="mt-5 bg-blue-500 font-bold py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
                     onClick={() => {
                       setStartBill(false);
                       setGroupEdit(true);
@@ -90,7 +91,7 @@ function App() {
                 </li>
                 <li>
                   <button
-                    className="mt-5 ml-5 bg-blue-500 text-white font-bold py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-transparent hover:text-blue-500 transition-all duration-300"
+                    className="mt-5 bg-blue-500 font-bold py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
                     onClick={() => {
                       setStartBill(false);
                       setHistory(true);
@@ -109,7 +110,7 @@ function App() {
                         changeText("Dark Mode");
                       }
                     }}
-                    className="mt-5 ml-5 bg-black text-white font-bold py-2 px-4 rounded shadow border-2 border-black hover:text-white-500 transition-all duration-300"
+                    className="mt-5 bg-black text-white font-bold py-2 px-4 rounded shadow border-2 border-black hover:text-white-500 transition-all duration-300"
                   >
                     {buttonText}
                   </button>
@@ -130,7 +131,7 @@ function App() {
                 setGroupEdit={setGroupEdit}
               ></Header>
               <ul class="list-group">
-                <li class="list-group-item d-flex justify-content-between align-items-center">
+                <li class="list-group-item d-flex l-500 justify-content-between align-items-center">
                   Jack
                   <span class="badge badge-primary badge-pill">14</span>
                 </li>
@@ -148,23 +149,26 @@ function App() {
                 </li>
               </ul>
               <button
-                className="mt-2 ml-5 mb-5 bg-blue-500 text-white font-bold py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-transparent hover:text-blue-500 transition-all duration-300"
+                className="bg-blue-500 mb-3 font-bold py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
                 onClick={() => setAddPerson(true)}
               >
                 Add a Person
               </button>
-              <ul>
-                <li>
-                  <a href="blank">Household</a>
+              <ul class="list-group">
+                <li class="list-group-item d-flex l-500 justify-content-between align-items-center">
+                  Household
+                  <span class="badge badge-primary badge-pill">14</span>
                 </li>
-                <li>
-                  <a href="blank">Family</a>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  Family
+                  <span class="badge badge-primary badge-pill">2</span>
                 </li>
-                <li>
-                  <a href="blank">Work</a>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  Work
+                  <span class="badge badge-primary badge-pill">1</span>
                 </li>
               </ul>
-              <button className="mt-5 ml-5 bg-blue-500 text-white font-bold py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-transparent hover:text-blue-500 transition-all duration-300">
+              <button className="bg-blue-500 font-bold py-2 px-4 mb-5 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300">
                 Add a group
               </button>
             </div>
@@ -183,22 +187,26 @@ function App() {
                 setPersonEdit={setPersonEdit}
                 setGroupEdit={setGroupEdit}
               ></Header>
-              <ul>
-                <li>
-                  <button>Johnsd</button>
+              <ul class="list-group">
+                <li class="list-group-item d-flex l-500 justify-content-between align-items-center">
+                  Jack
+                  <span class="badge badge-primary badge-pill">14</span>
                 </li>
-                <li>
-                  <a href="blank">Jacob</a>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  John
+                  <span class="badge badge-primary badge-pill">2</span>
                 </li>
-                <li>
-                  <a href="blank">Jim</a>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  Jacob
+                  <span class="badge badge-primary badge-pill">1</span>
                 </li>
-                <li>
-                  <a href="blank">Jack</a>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  Jim
+                  <span class="badge badge-primary badge-pill">1</span>
                 </li>
               </ul>
               <button
-                className="mt-5 ml-5 bg-blue-500 text-white font-bold py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-transparent hover:text-blue-500 transition-all duration-300"
+                className="bg-blue-500 font-bold py-2 px-4 mb-5 rounded shadow border-2 border-blue-500 hover:bg-white  transition-all duration-300"
                 onClick={() => setAddPerson(true)}
               >
                 Edit Person
@@ -217,18 +225,21 @@ function App() {
                 setPersonEdit={setPersonEdit}
                 setGroupEdit={setGroupEdit}
               ></Header>
-              <ul>
-                <li>
-                  <a href="blank">Household</a>
+              <ul class="list-group">
+                <li class="list-group-item d-flex l-500 justify-content-between align-items-center">
+                  Household
+                  <span class="badge badge-primary badge-pill">14</span>
                 </li>
-                <li>
-                  <a href="blank">Family</a>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  Family
+                  <span class="badge badge-primary badge-pill">2</span>
                 </li>
-                <li>
-                  <a href="blank">Work</a>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  Work
+                  <span class="badge badge-primary badge-pill">1</span>
                 </li>
               </ul>
-              <button className="mt-5 bg-blue-500 text-white font-bold py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-transparent hover:text-blue-500 transition-all duration-300">
+              <button className="mt-5 bg-blue-500 font-bold mb-5 py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300">
                 Edit group
               </button>
             </div>
@@ -243,8 +254,8 @@ function App() {
                 showHistory={showHistory}
               ></Header>
 
-              <article className="flex flex-col items-center justify-center">
-                <p>Show history of past few weeks</p>
+              <article className="flex flex-col items-center justify-center ">
+                <p className="mb-5 ">Show history of past few weeks</p>
               </article>
             </div>
           ) : (
