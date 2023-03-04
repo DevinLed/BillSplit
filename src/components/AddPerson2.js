@@ -2,17 +2,17 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 
-export default function AddPerson({
-  personName,
-  personPhone,
-  personEmail,
-  personOwing,
-  addPerson,
-  setAddPerson,
-  setPersonName,
-  setPersonPhone,
-  setPersonEmail,
-  setPersonOwing,
+export default function AddPerson2({
+  personName2,
+  personPhone2,
+  personEmail2,
+  personOwing2,
+  addPerson2,
+  setAddPerson2,
+  setPersonName2,
+  setPersonPhone2,
+  setPersonEmail2,
+  setPersonOwing2,
   setGroupName,
   GroupName,
   list,
@@ -32,7 +32,7 @@ export default function AddPerson({
             {/*header*/}
             <div className="flex items-center justify-evenly p-3 border-b border-solid border-slate-200 rounded-t">
               <h3 className="text-2xl font-semibold">
-                Add A Person
+                Add A Person to Group
               </h3>
             </div>
             {/*body*/}
@@ -48,7 +48,7 @@ export default function AddPerson({
                       class="form-control"
                       id="colFormLabel"
                       placeholder="Name"
-                      onChange={(e) => setPersonName(e.target.value)}
+                      onChange={(e) => setPersonName2(e.target.value)}
                     />
                   </div>
                 </div>
@@ -63,7 +63,7 @@ export default function AddPerson({
                       class="form-control"
                       id="colFormLabel"
                       placeholder="Phone Number"
-                      onChange={(e) => setPersonPhone(e.target.value)}
+                      onChange={(e) => setPersonPhone2(e.target.value)}
                     />
                   </div>
                 </div>
@@ -77,7 +77,7 @@ export default function AddPerson({
                       type="email"
                       class="form-control"
                       placeholder="Email"
-                      onChange={(e) => setPersonEmail(e.target.value)}
+                      onChange={(e) => setPersonEmail2(e.target.value)}
                     />
                   </div>
                 </div>
@@ -95,7 +95,7 @@ export default function AddPerson({
                       class="form-control"
                       aria-label="Amount (to the nearest dollar)"
                       placeholder="0.00"
-                      onChange={(e) => setPersonOwing(e.target.value)}
+                      onChange={(e) => setPersonOwing2(e.target.value)}
                     />
                     <div class="input-group-append">
                       <span class="input-group-text mr-9">.00</span>
@@ -108,14 +108,14 @@ export default function AddPerson({
             <div className="flex items-center justify-end pb-6 px-6 border-t border-solid border-slate-200 rounded-b">
               <button
                 className="justify-center mt-3 bg-blue-500 font-bold py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
-                onClick={() => setAddPerson(false)}
+                onClick={() => setAddPerson2(false)}
               >
                 Close
               </button>
               <button
                 className="justify-center mt-3 ml-2 bg-blue-500 font-bold py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
                 onClick={() => {
-                  setAddPerson(false);
+                  setAddPerson2(false);
                   
                   handleSubmit("");
                 }}

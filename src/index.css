@@ -79,4 +79,6 @@ button:hover{
   padding: 5px;
   cursor: pointer;
   }
-  
+.currency-control{
+  width: 50px;
+}
