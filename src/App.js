@@ -1,5 +1,4 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 import Header from "./components/Header";
 import "./darkMode.css";
@@ -89,25 +88,25 @@ function App() {
   const [personOwing5, setPersonOwing5] = useState("");
 
   //  used to update list of person and group
-  const [list, setList] = useState("[]");
+  const [list, setList] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [total, setTotal] = useState(0);
 
-  const handleSubmit = (e) => {
+  const handleSubmit=(e) => {
     e.preventDefault();
 
     const newItems = {
-      id: uuidv4(),
       personName,
       personPhone,
       personEmail,
       personOwing,
+      id: uuidv4(),
     };
     setPersonName("");
     setPersonPhone("");
     setPersonEmail("");
     setPersonOwing("");
-    setList([...list, newItems]);
+    setList(()=>[...list,newItems]);
     setIsEditing(false);
   };
 
@@ -203,7 +202,8 @@ function App() {
             ""
           )}
           {showPersonEdit ? (
-            <div className="flex flex-col items-center justify-center">
+            <form onSubmit={handleSubmit}>
+              <div className="flex flex-col items-center justify-center">
               <Header
                 startBill={startBill}
                 setStartBill={setStartBill}
@@ -218,15 +218,20 @@ function App() {
                 setHistory={setHistory}
                 setGroupName={setGroupName}
               ></Header>
-              <ul class="list-group">
+              {/*Table generator for people added*/}
+                {list.map(({id, personName}) => (
+                  <React.Fragment key={id}>
+              <ul class="list-group m-0">
                 <li class="list-group-item d-flex l-500 justify-content-between align-items-center">
                   {personName}
                   <span class="badge badge-primary badge-pill">0</span>
                 </li>
               </ul>
+              </React.Fragment>
+              ))}
 
               <button
-                className="bg-blue-500 font-bold py-2 px-4 mb-5 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
+                className="mt-4 bg-blue-500 font-bold py-2 px-4 mb-5 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
                 onClick={() => setAddPerson(true)}
               >
                 Add Person
@@ -244,24 +249,33 @@ function App() {
                 Add a group
               </button>
             </div>
+
+
+            </form>
+            
           ) : (
             ""
           )}
+          {/*Single add person access*/}
           {addPerson ? (
             <AddPerson
               addPerson={addPerson}
               setAddPerson={setAddPerson}
               personName={personName}
               setPersonName={setPersonName}
+              setPersonPhone={setPersonPhone}
+              setPersonEmail={setPersonEmail}
+              setPersonOwing={setPersonOwing}
               personEmail={personEmail}
               personPhone={personPhone}
               personOwing={personOwing}
               setGroupName={setGroupName}
-              handleSubmit={handleSubmit}
             ></AddPerson>
           ) : (
             ""
           )}
+          
+          {/*Group add person access, up to 5*/}
           {addPerson1 ? (
             <AddPerson1
               addPerson1={addPerson1}

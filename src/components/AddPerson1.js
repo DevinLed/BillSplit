@@ -2,7 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 
-export default function AddPerson({
+export default function AddPerson1({
   personName1,
   personPhone1,
   personEmail1,

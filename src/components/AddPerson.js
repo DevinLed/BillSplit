@@ -17,14 +17,17 @@ export default function AddPerson({
   GroupName,
   list,
   setList,
-  handleSubmit
+  handleSubmit,
+  newItems,
+  id
 }) {
 
 
-
+ 
 
   return (
     <>
+    <form>
       <div className="p-8 justify-center items-center flex overflow-x-hidden overflow-y-hidden fixed inset-0 z-50 focus:outline-none">
         <div className="relative w-auto my-6 mx-auto max-w-sm">
           {/*content*/}
@@ -36,8 +39,8 @@ export default function AddPerson({
               </h3>
             </div>
             {/*body*/}
+              
             <div className="relative p-6 flex-auto">
-              <form onSubmit={handleSubmit}>
                 <div class="form-group row">
                   <label for="colFormLabel" class="col-sm-2 col-form-label">
                     Name
@@ -49,6 +52,7 @@ export default function AddPerson({
                       id="colFormLabel"
                       placeholder="Name"
                       onChange={(e) => setPersonName(e.target.value)}
+                      
                     />
                   </div>
                 </div>
@@ -102,7 +106,8 @@ export default function AddPerson({
                     </div>
                   </div>
                 </div>
-              </form>
+                
+              
             </div>
             {/*footer*/}
             <div className="flex items-center justify-end pb-6 px-6 border-t border-solid border-slate-200 rounded-b">
@@ -116,9 +121,8 @@ export default function AddPerson({
                 className="justify-center mt-3 ml-2 bg-blue-500 font-bold py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
                 onClick={() => {
                   setAddPerson(false);
-                  
-                  handleSubmit("");
-                }}
+                  handleSubmit();
+                }} 
               >
                 Save
               </button>
@@ -126,6 +130,9 @@ export default function AddPerson({
           </div>
         </div>
       </div>
+            </form>
+            
     </>
+    
   );
 }
