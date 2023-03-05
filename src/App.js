@@ -51,10 +51,9 @@ function App() {
   const [personPhone, setPersonPhone] = useState("");
   const [personEmail, setPersonEmail] = useState("");
   const [personOwing, setPersonOwing] = useState("");
-  
+
   // Person table (max 5) for groups
   const [groupName, setGroupName] = useState("");
-
 
   const [addPerson1, setAddPerson1] = useState(false);
   const [addPerson2, setAddPerson2] = useState(false);
@@ -66,22 +65,22 @@ function App() {
   const [personPhone1, setPersonPhone1] = useState("");
   const [personEmail1, setPersonEmail1] = useState("");
   const [personOwing1, setPersonOwing1] = useState("");
-  
+
   const [personName2, setPersonName2] = useState("");
   const [personPhone2, setPersonPhone2] = useState("");
   const [personEmail2, setPersonEmail2] = useState("");
   const [personOwing2, setPersonOwing2] = useState("");
-  
+
   const [personName3, setPersonName3] = useState("");
   const [personPhone3, setPersonPhone3] = useState("");
   const [personEmail3, setPersonEmail3] = useState("");
   const [personOwing3, setPersonOwing3] = useState("");
-  
+
   const [personName4, setPersonName4] = useState("");
   const [personPhone4, setPersonPhone4] = useState("");
   const [personEmail4, setPersonEmail4] = useState("");
   const [personOwing4, setPersonOwing4] = useState("");
-  
+
   const [personName5, setPersonName5] = useState("");
   const [personPhone5, setPersonPhone5] = useState("");
   const [personEmail5, setPersonEmail5] = useState("");
@@ -92,7 +91,7 @@ function App() {
   const [isEditing, setIsEditing] = useState(false);
   const [total, setTotal] = useState(0);
 
-  const handleSubmit=(e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
     const newItems = {
@@ -106,7 +105,7 @@ function App() {
     setPersonPhone("");
     setPersonEmail("");
     setPersonOwing("");
-    setList(()=>[...list,newItems]);
+    setList([...list, newItems]);
     setIsEditing(false);
   };
 
@@ -143,6 +142,7 @@ function App() {
                     onClick={() => {
                       setStartBill(false);
                       setPersonEdit(true);
+                      setGroupEdit(true);
                     }}
                   >
                     Split a Bill
@@ -204,38 +204,51 @@ function App() {
           {showPersonEdit ? (
             <form onSubmit={handleSubmit}>
               <div className="flex flex-col items-center justify-center">
-              <Header
-                startBill={startBill}
-                setStartBill={setStartBill}
-                showPersonEdit={showPersonEdit}
-                groupEdit={showGroupEdit}
-                setPersonEdit={setPersonEdit}
-                setGroupEdit={setGroupEdit}
-                setSelectPersonEdit={setSelectPersonEdit}
-                setSelectGroupEdit={setSelectGroupEdit}
-                selectPersonEdit={selectPersonEdit}
-                selectGroupEdit={selectGroupEdit}
-                setHistory={setHistory}
-                setGroupName={setGroupName}
-              ></Header>
-              {/*Table generator for people added*/}
-                {list.map(({id, personName}) => (
+                <Header
+                  startBill={startBill}
+                  setStartBill={setStartBill}
+                  showPersonEdit={showPersonEdit}
+                  groupEdit={showGroupEdit}
+                  setPersonEdit={setPersonEdit}
+                  setGroupEdit={setGroupEdit}
+                  setSelectPersonEdit={setSelectPersonEdit}
+                  setSelectGroupEdit={setSelectGroupEdit}
+                  selectPersonEdit={selectPersonEdit}
+                  selectGroupEdit={selectGroupEdit}
+                  setHistory={setHistory}
+                  setGroupName={setGroupName}
+                ></Header>
+                {/*Table generator for people added*/}
+                {list.map(({ id, personName, personOwing }) => (
                   <React.Fragment key={id}>
-              <ul class="list-group m-0">
-                <li class="list-group-item d-flex l-500 justify-content-between align-items-center">
-                  {personName}
-                  <span class="badge badge-primary badge-pill">0</span>
-                </li>
-              </ul>
-              </React.Fragment>
-              ))}
+                    {personName.length ? (
+                      <ul class="list-group m-0">
+                        <li class="list-group-item d-flex l-500 justify-content-between align-items-center">
+                          {personName}
+                          <span class="badge badge-primary badge-pill">
+                            {personOwing}
+                          </span>
+                        </li>
+                      </ul>
+                    ) : (
+                      ""
+                    )}
+                  </React.Fragment>
+                ))}
 
-              <button
-                className="mt-4 bg-blue-500 font-bold py-2 px-4 mb-5 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
-                onClick={() => setAddPerson(true)}
-              >
-                Add Person
-              </button>
+                <button
+                  className="mt-4 bg-blue-500 font-bold py-2 px-4 mb-5 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
+                  onClick={() => setAddPerson(true)}
+                >
+                  Add Person
+                </button>
+              </div>
+            </form>
+          ) : (
+            ""
+          )}
+          {showGroupEdit ? (
+            <div className="flex flex-col items-center justify-center">
               <ul class="list-group">
                 <li class="list-group-item d-flex l-500 justify-content-between align-items-center">
                   {groupName}
@@ -249,10 +262,6 @@ function App() {
                 Add a group
               </button>
             </div>
-
-
-            </form>
-            
           ) : (
             ""
           )}
@@ -274,7 +283,7 @@ function App() {
           ) : (
             ""
           )}
-          
+
           {/*Group add person access, up to 5*/}
           {addPerson1 ? (
             <AddPerson1
@@ -351,7 +360,7 @@ function App() {
           ) : (
             ""
           )}
-          
+
           {addGroup ? (
             <AddGroup
               addPerson1={addPerson1}
