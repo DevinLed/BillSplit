@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 import Header from "./components/Header";
 import "./darkMode.css";
@@ -107,7 +107,11 @@ function App() {
     setPersonOwing("");
     setList([...list, newItems]);
     setIsEditing(false);
-  };
+    console.log(personName);
+    console.log(personPhone);
+    console.log(personEmail);
+    console.log(personOwing);
+  }
 
   useEffect(() => {
     let rows = document.querySelectorAll(".amount");
@@ -225,6 +229,7 @@ function App() {
                       <ul class="list-group m-0">
                         <li class="list-group-item d-flex l-500 justify-content-between align-items-center">
                           {personName}
+
                           <span class="badge badge-primary badge-pill">
                             {personOwing}
                           </span>
@@ -255,7 +260,7 @@ function App() {
                   <span class="badge badge-primary badge-pill">0</span>
                 </li>
               </ul>
-              <button
+              <button type="button"
                 className="bg-blue-500 font-bold py-2 px-4 mb-5 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
                 onClick={() => setAddGroup(true)}
               >

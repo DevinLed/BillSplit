@@ -21,6 +21,9 @@ export default function AddPerson({
   newItems,
   id,
 }) {
+
+
+  
   return (
     <>
       <div className="p-8 justify-center items-center flex overflow-x-hidden overflow-y-hidden fixed inset-0 z-50 focus:outline-none">
@@ -97,6 +100,7 @@ export default function AddPerson({
               </div>
             </div>
             {/*footer*/}
+            <form onSubmit={handleSubmit}>
             <div className="flex items-center justify-end pb-6 px-6 border-t border-solid border-slate-200 rounded-b">
               <button
                 className="justify-center mt-3 bg-blue-500 font-bold py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
@@ -104,7 +108,7 @@ export default function AddPerson({
               >
                 Close
               </button>
-              <button
+              <button type="submit" onSubmit={handleSubmit}
                 className="justify-center mt-3 ml-2 bg-blue-500 font-bold py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
                 onClick={() => {
                   setAddPerson(false);
@@ -113,6 +117,7 @@ export default function AddPerson({
                 Save
               </button>
             </div>
+            </form>
           </div>
         </div>
       </div>
