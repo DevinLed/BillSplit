@@ -8,11 +8,7 @@ export default function Header({
   showPersonEdit,
   setPersonEdit,
   selectPersonEdit,
-  showGroupEdit,
-  setGroupEdit,
   setSelectPersonEdit,
-  selectGroupEdit,
-  setSelectGroupEdit,
   setHistory,
   showHistory,
   selectPersonReceipt,
@@ -39,7 +35,7 @@ export default function Header({
             >
               <IoIosArrowBack />
             </button>
-            <h1 className="ml-2 mr-2">Select Person or Group</h1>
+            <h1 className="ml-2 mr-2">Select Person</h1>
 
             <div class="dropdown">
               <button
@@ -61,16 +57,6 @@ export default function Header({
                   class="dropdown-item"
                 >
                   Edit Person
-                </button>
-                <button
-                  onClick={() => {
-                    setSelectGroupEdit(true);
-                    setPersonEdit(false);
-                  }}
-                  class="dropdown-item"
-                  type="button"
-                >
-                  Edit Group
                 </button>
                 <button
                   onClick={() => {
@@ -120,7 +106,6 @@ export default function Header({
                   onClick={() => {
                     setPersonEdit(true);
                     setSelectPersonEdit(false);
-                    setGroupEdit(true);
                   }}
                   class="dropdown-item"
                 >
@@ -128,18 +113,7 @@ export default function Header({
                 </button>
                 <button
                   onClick={() => {
-                    setSelectGroupEdit(true);
-                    setSelectPersonEdit(false);
-                  }}
-                  class="dropdown-item"
-                  type="button"
-                >
-                  Edit Group
-                </button>
-                <button
-                  onClick={() => {
                     setHistory(true);
-                    setSelectGroupEdit(false);
                   }}
                   class="dropdown-item"
                   type="button"
@@ -160,7 +134,6 @@ export default function Header({
             onClick={() => {
               setPersonEdit(true);
               setSelectPersonReceipt(false);
-              setGroupEdit(true);
 
             }}
           >
@@ -201,18 +174,7 @@ export default function Header({
               </button>
               <button
                 onClick={() => {
-                  setSelectGroupEdit(true);
-                  setSelectPersonEdit(false);
-                }}
-                class="dropdown-item"
-                type="button"
-              >
-                Edit Group
-              </button>
-              <button
-                onClick={() => {
                   setHistory(true);
-                  setSelectGroupEdit(false);
                 }}
                 class="dropdown-item"
                 type="button"
@@ -222,68 +184,6 @@ export default function Header({
             </div>
           </div>
         </div>
-      ) : (
-        ""
-      )}
-      {selectGroupEdit ? (
-        <>
-          <div className="flex items-stretch font-bold bg-gray-200 h-10 align-items-center w-full items-center text-2xl mb-5 justify-between">
-            <button
-              className="text-black hover:text-black ml-2"
-              onClick={() => {
-                setStartBill(true);
-                setSelectGroupEdit(false);
-              }}
-            >
-              <IoIosArrowBack />
-            </button>
-            <h1 className="m-5">Edit a group</h1>
-
-            <div class="dropdown">
-              <button
-                className="text-black hover:text-black mr-2"
-                type="button"
-                id="dropdownMenu2"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-              >
-                <AiOutlineMenu />
-              </button>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                <button
-                  onClick={() => {
-                    setPersonEdit(true);
-                    setSelectGroupEdit(false);
-                  }}
-                  class="dropdown-item"
-                >
-                  New Receipt
-                </button>
-                <button
-                  onClick={() => {
-                    setSelectPersonEdit(true);
-                    setSelectGroupEdit(false);
-                  }}
-                  class="dropdown-item"
-                  type="button"
-                >
-                  Edit Person
-                </button>
-                <button
-                  onClick={() => {
-                    setHistory(true);
-                    setSelectGroupEdit(false);
-                  }}
-                  class="dropdown-item"
-                  type="button"
-                >
-                  History
-                </button>
-              </div>
-            </div>
-          </div>
-        </>
       ) : (
         ""
       )}
@@ -330,16 +230,6 @@ export default function Header({
                   type="button"
                 >
                   Edit Person
-                </button>
-                <button
-                  onClick={() => {
-                    setSelectGroupEdit(true);
-                    setHistory(false);
-                  }}
-                  class="dropdown-item"
-                  type="button"
-                >
-                  Edit Group
                 </button>
               </div>
             </div>
