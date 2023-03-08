@@ -51,6 +51,7 @@ function App() {
   const [personPhone, setPersonPhone] = useState("");
   const [personEmail, setPersonEmail] = useState("");
   const [personOwing, setPersonOwing] = useState("");
+  const [selectPersonReceipt, setSelectPersonReceipt] = useState("");
 
   // Person table (max 5) for groups
   const [groupName, setGroupName] = useState("");
@@ -111,7 +112,7 @@ function App() {
     console.log(personPhone);
     console.log(personEmail);
     console.log(personOwing);
-  }
+  };
 
   useEffect(() => {
     let rows = document.querySelectorAll(".amount");
@@ -206,27 +207,34 @@ function App() {
             ""
           )}
           {showPersonEdit ? (
-            <form onSubmit={handleSubmit}>
-              <div className="flex flex-col items-center justify-center">
-                <Header
-                  startBill={startBill}
-                  setStartBill={setStartBill}
-                  showPersonEdit={showPersonEdit}
-                  groupEdit={showGroupEdit}
-                  setPersonEdit={setPersonEdit}
-                  setGroupEdit={setGroupEdit}
-                  setSelectPersonEdit={setSelectPersonEdit}
-                  setSelectGroupEdit={setSelectGroupEdit}
-                  selectPersonEdit={selectPersonEdit}
-                  selectGroupEdit={selectGroupEdit}
-                  setHistory={setHistory}
-                  setGroupName={setGroupName}
-                ></Header>
-                {/*Table generator for people added*/}
-                {list.map(({ id, personName, personOwing }) => (
-                  <React.Fragment key={id}>
-                    {personName.length ? (
-                      <ul class="list-group m-0">
+            <div className="flex flex-col items-center justify-center">
+              <Header
+                startBill={startBill}
+                setStartBill={setStartBill}
+                showPersonEdit={showPersonEdit}
+                showGroupEdit={showGroupEdit}
+                setPersonEdit={setPersonEdit}
+                setGroupEdit={setGroupEdit}
+                setSelectPersonEdit={setSelectPersonEdit}
+                setSelectGroupEdit={setSelectGroupEdit}
+                selectPersonEdit={selectPersonEdit}
+                selectGroupEdit={selectGroupEdit}
+                setHistory={setHistory}
+                setGroupName={setGroupName}
+              ></Header>
+              {/*Table generator for people added*/}
+              {list.map(({ id, personName, personOwing }) => (
+                <React.Fragment key={id}>
+                  {personName.length ? (
+                    <ul class="list-group m-0">
+                      <button
+                        class="outline-none text-primary"
+                        onClick={() => {
+                          setSelectPersonReceipt(true);
+                          setPersonEdit(false);
+                          setGroupEdit(false);
+                        }}
+                      >
                         <li class="list-group-item d-flex l-500 justify-content-between align-items-center">
                           {personName}
 
@@ -234,23 +242,73 @@ function App() {
                             {personOwing}
                           </span>
                         </li>
-                      </ul>
-                    ) : (
-                      ""
-                    )}
-                  </React.Fragment>
-                ))}
-
+                      </button>
+                    </ul>
+                  ) : (
+                    ""
+                  )}
+                </React.Fragment>
+              ))}
+              <form onSubmit={handleSubmit}>
                 <button
                   className="mt-4 bg-blue-500 font-bold py-2 px-4 mb-5 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
                   onClick={() => setAddPerson(true)}
                 >
                   Add Person
                 </button>
-              </div>
-            </form>
+              </form>
+            </div>
           ) : (
             ""
+          )}
+          {selectPersonReceipt ? (
+            <div className="flex flex-col items-center justify-center">
+              
+              <Header
+                startBill={startBill}
+                setStartBill={setStartBill}
+                showPersonEdit={showPersonEdit}
+                groupEdit={showGroupEdit}
+                setPersonEdit={setPersonEdit}
+                setGroupEdit={setGroupEdit}
+                setSelectPersonEdit={setSelectPersonEdit}
+                setSelectGroupEdit={setSelectGroupEdit}
+                selectPersonEdit={selectPersonEdit}
+                selectGroupEdit={selectGroupEdit}
+                setHistory={setHistory}
+                setGroupName={setGroupName}
+                selectPersonReceipt={selectPersonReceipt}
+                setSelectPersonReceipt={setSelectPersonReceipt}
+              ></Header>
+              {list.map(({ id, personName, personOwing }) => (
+                <React.Fragment key={id}>
+                  {personName.length ? (
+                    <div>
+                      
+              
+              <h1>Split a bill with {personName}</h1>
+
+              <ul class="list-group m-0">
+                <li>
+<button class="btn btn-primary btn-lg m-5" type="submit">
+  Manual
+</button>
+</li><li>
+
+<button class="btn btn-primary btn-lg m-5" type="submit">
+  Picture
+</button>
+</li>
+</ul>
+                    </div>
+                  ) : (
+                    ""
+                  )}
+                </React.Fragment>
+              ))}
+            </div>
+          ) : (
+            " "
           )}
           {showGroupEdit ? (
             <div className="flex flex-col items-center justify-center">
@@ -260,7 +318,8 @@ function App() {
                   <span class="badge badge-primary badge-pill">0</span>
                 </li>
               </ul>
-              <button type="button"
+              <button
+                type="button"
                 className="bg-blue-500 font-bold py-2 px-4 mb-5 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
                 onClick={() => setAddGroup(true)}
               >
@@ -284,6 +343,7 @@ function App() {
               personPhone={personPhone}
               personOwing={personOwing}
               setGroupName={setGroupName}
+              handleSubmit={handleSubmit}
             ></AddPerson>
           ) : (
             ""

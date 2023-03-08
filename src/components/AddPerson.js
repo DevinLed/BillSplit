@@ -15,15 +15,10 @@ export default function AddPerson({
   setPersonOwing,
   setGroupName,
   GroupName,
-  list,
-  setList,
-  handleSubmit,
   newItems,
   id,
-}) {
-
-
-  
+  handleSubmit,
+}) {  
   return (
     <>
       <div className="p-8 justify-center items-center flex overflow-x-hidden overflow-y-hidden fixed inset-0 z-50 focus:outline-none">
@@ -47,6 +42,7 @@ export default function AddPerson({
                     class="form-control"
                     id="colFormLabel"
                     placeholder="Name"
+                    value={personName}
                     onChange={(e) => setPersonName(e.target.value)}
                   />
                 </div>
@@ -62,6 +58,7 @@ export default function AddPerson({
                     class="form-control"
                     id="colFormLabel"
                     placeholder="Phone Number"
+                    value={personPhone}
                     onChange={(e) => setPersonPhone(e.target.value)}
                   />
                 </div>
@@ -76,6 +73,7 @@ export default function AddPerson({
                     type="email"
                     class="form-control"
                     placeholder="Email"
+                    value={personEmail}
                     onChange={(e) => setPersonEmail(e.target.value)}
                   />
                 </div>
@@ -94,6 +92,7 @@ export default function AddPerson({
                     class="form-control mr-20"
                     aria-label="Amount (to the nearest dollar)"
                     placeholder="0.00"
+                    value={personOwing}
                     onChange={(e) => setPersonOwing(e.target.value)}
                   />
                 </div>
