@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
+import { Route, Routes, Link } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import Header from "./components/Header";
 import "./darkMode.css";
@@ -6,7 +7,6 @@ import "./index.css";
 import MainScreen from "./components/MainScreen";
 import AddGroup from "./components/AddGroup";
 import AddPerson from "./components/AddPerson";
-import EditGroup from "./components/EditGroup";
 import EditPerson from "./components/EditPerson";
 
 function App() {
@@ -104,6 +104,12 @@ function App() {
   };
   return (
     <>
+      <Routes>
+        <Route path="/AddPerson" element={showPersonEdit} />
+        <Route path="/EditPerson" element={selectPersonEdit} />
+        <Route path="/History" element={showHistory} />
+        </Routes>
+        <Link to="/homepage"></Link>
       <main className="mt-5 p-0 pt-3 xs:max-w-xl sm:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl bg-white-500 rounded shadow">
         <div className={`App ${theme}`}>
           {startBill ? (
@@ -118,6 +124,8 @@ function App() {
               ></Header>
               <ul>
                 <li>
+                  
+    <Link to="/addperson">
                   <button
                     className="justify-center mt-5 bg-blue-500 font-bold py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
                     onClick={() => {
@@ -127,8 +135,11 @@ function App() {
                   >
                     Split a Bill
                   </button>
+                  </Link>
                 </li>
                 <li>
+                  
+    <Link to="/editperson">
                   <button
                     className="mt-5 bg-blue-500 font-bold py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
                     onClick={() => {
@@ -138,8 +149,11 @@ function App() {
                   >
                     Edit Person
                   </button>
+                  </Link>
                 </li>
+                
                 <li>
+    <Link to="/History">
                   <button
                     className="mt-5 bg-blue-500 font-bold py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
                     onClick={() => {
@@ -149,6 +163,7 @@ function App() {
                   >
                     Show History
                   </button>
+                  </Link>
                 </li>
                 <li>
                   <button
@@ -301,8 +316,8 @@ function App() {
                         onClick={() => {
                           selectPerson(id);
                           editRow(id);
-                          
-                  setEditPerson(true);
+
+                          setEditPerson(true);
                         }}
                       >
                         <li class="list-group-item d-flex l-500 justify-content-between align-items-center">
@@ -321,10 +336,7 @@ function App() {
               ))}
               <button
                 className="bg-blue-500 font-bold py-2 px-4 mb-5 mt-5 rounded shadow border-2 border-blue-500 hover:bg-white  transition-all duration-300"
-                onClick={() => 
-                  setAddPerson(true)
-                  
-                }
+                onClick={() => setAddPerson(true)}
               >
                 Add Person
               </button>
