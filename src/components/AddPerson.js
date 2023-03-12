@@ -7,13 +7,13 @@ export default function AddPerson({
   personPhone,
   personEmail,
   personOwing,
-  addPerson,
   setAddPerson,
   setPersonName,
   setPersonPhone,
   setPersonEmail,
   setPersonOwing,
-  handleSubmit
+  handleSubmit,
+  setIsSelected,
 }) {  
   return (
     <>
@@ -95,7 +95,7 @@ export default function AddPerson({
               </div>
             </div>
             {/*footer*/}
-            <div className="flex items-center justify-end pb-6 px-6 border-t border-solid border-slate-200 rounded-b">
+            <div className="flex items-center  justify-content-between align-items-center pb-6 px-6 border-t border-solid border-slate-200 rounded-b">
               <button
                 className="justify-center mt-3 bg-blue-500 font-bold py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
                 onClick={() => setAddPerson(false)}

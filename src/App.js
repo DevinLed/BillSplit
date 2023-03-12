@@ -40,24 +40,27 @@ function App() {
 
   // Selections for Adding in Split a bill menu
   const [addPerson, setAddPerson] = useState(false);
+  const [editPerson, setEditPerson] = useState(false);
   const [personName, setPersonName] = useState("");
   const [personPhone, setPersonPhone] = useState("");
   const [personEmail, setPersonEmail] = useState("");
   const [personOwing, setPersonOwing] = useState("");
   const [selectPersonReceipt, setSelectPersonReceipt] = useState("");
+  const [personState, setPersonState] = useState("");
+  const [selectedPerson, setSelectedPerson] = useState("");
 
   //  used to update list of person and group
   const [list, setList] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [total, setTotal] = useState(0);
 
-  const handleSubmit = () => {
-
+  const handleSubmit = (e) => {
     const newItems = {
       personName,
       personPhone,
       personEmail,
       personOwing,
+
       id: uuidv4(),
     };
     setPersonName("");
@@ -67,20 +70,38 @@ function App() {
     setAddPerson(false);
     setList([...list, newItems]);
     setIsEditing(false);
-    console.log(personName);
+  };
+  const handleEditSubmit = (e) => {
+    const newItems = {
+      personName,
+      personPhone,
+      personEmail,
+      personOwing,
+
+      id: uuidv4(),
+    };
+    setPersonName("");
+    setPersonPhone("");
+    setPersonEmail("");
+    setPersonOwing("");
+    setAddPerson(false);
+    setList([...list, newItems]);
+    setIsEditing(false);
+  };
+  const editRow = (id) => {
+    const editingRow = list.find((row) => row.id === id);
+    setList(list.filter((row) => row.id !== id));
+    setIsEditing(true);
+    setPersonName(editingRow.personName);
+    setPersonPhone(editingRow.personPhone);
+    setPersonEmail(editingRow.personEmail);
+    setPersonOwing(editingRow.personOwing);
   };
 
-  useEffect(() => {
-    let rows = document.querySelectorAll(".amount");
-    let sum = 0;
-    for (let i = 0; i < rows.length; i++) {
-      if (rows[i].className === "amount") {
-        sum += isNaN(rows[i].innerHTML) ? 0 : parseInt(rows[i].innerHTML);
-        setTotal(sum);
-      }
-    }
-  });
-
+  const selectPerson = (id) => {
+    const selectingPerson = list.find((row) => row.id === id);
+    setPersonName(selectingPerson.personName);
+  };
   return (
     <>
       <main className="mt-5 p-0 pt-3 xs:max-w-xl sm:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl bg-white-500 rounded shadow">
@@ -172,6 +193,7 @@ function App() {
                         onClick={() => {
                           setSelectPersonReceipt(true);
                           setPersonEdit(false);
+                          selectPerson(id);
                         }}
                       >
                         <li class="list-group-item d-flex l-500 justify-content-between align-items-center">
@@ -188,12 +210,12 @@ function App() {
                   )}
                 </React.Fragment>
               ))}
-                <button
-                  className="mt-4 bg-blue-500 font-bold py-2 px-4 mb-5 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
-                  onClick={() => setAddPerson(true)}
-                >
-                  Add Person
-                </button>
+              <button
+                className="mt-4 bg-blue-500 font-bold py-2 px-4 mb-5 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
+                onClick={() => setAddPerson(true)}
+              >
+                Add Person
+              </button>
             </div>
           ) : (
             ""
@@ -213,36 +235,25 @@ function App() {
                 selectPersonReceipt={selectPersonReceipt}
                 setSelectPersonReceipt={setSelectPersonReceipt}
               ></Header>
-              {list.map(({ id, personName, personOwing }) => (
-                <React.Fragment key={id}>
-                  {personName.length ? (
-                    <div>
-                      <h1>Split a bill with {personName}</h1>
 
-                      <ul class="list-group m-0">
-                        <li>
-                          <button
-                            class="btn btn-primary btn-lg m-5"
-                            type="submit"
-                          >
-                            Manual
-                          </button>
-                        </li>
-                        <li>
-                          <button
-                            class="btn btn-primary btn-lg m-5"
-                            type="submit"
-                          >
-                            Picture
-                          </button>
-                        </li>
-                      </ul>
-                    </div>
-                  ) : (
-                    ""
-                  )}
-                </React.Fragment>
-              ))}
+              <div className="flex flex-col items-center justify-center">
+                <h1>Split a bill with {personName}</h1>
+                <ul class="list-group items-center justify-center">
+                  <li>
+                    <button class="btn btn-primary btn-lg mt-5" type="submit">
+                      Manual
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      class="btn btn-primary btn-lg mt-5 mb-5"
+                      type="submit"
+                    >
+                      Picture
+                    </button>
+                  </li>
+                </ul>
+              </div>
             </div>
           ) : (
             " "
@@ -261,6 +272,8 @@ function App() {
               personPhone={personPhone}
               personOwing={personOwing}
               handleSubmit={handleSubmit}
+              setPersonState={setPersonState}
+              personState={personState}
             ></AddPerson>
           ) : (
             ""
@@ -278,31 +291,65 @@ function App() {
                 setHistory={setHistory}
                 setPersonEdit={setPersonEdit}
               ></Header>
-              <ul class="list-group">
-                <li class="list-group-item d-flex l-500 justify-content-between align-items-center">
-                  Jack
-                  <span class="badge badge-primary badge-pill">14</span>
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                  John
-                  <span class="badge badge-primary badge-pill">2</span>
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                  Jacob
-                  <span class="badge badge-primary badge-pill">1</span>
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                  Jim
-                  <span class="badge badge-primary badge-pill">1</span>
-                </li>
-              </ul>
+              {/*Table generator for people added*/}
+              {list.map(({ id, personName, personOwing }) => (
+                <React.Fragment key={id}>
+                  {personName.length ? (
+                    <ul class="list-group m-0">
+                      <button
+                        class="outline-none text-primary focus:outline-none"
+                        onClick={() => {
+                          selectPerson(id);
+                          editRow(id);
+                          
+                  setEditPerson(true);
+                        }}
+                      >
+                        <li class="list-group-item d-flex l-500 justify-content-between align-items-center">
+                          {personName}
+
+                          <span class="badge badge-primary badge-pill">
+                            {personOwing}
+                          </span>
+                        </li>
+                      </button>
+                    </ul>
+                  ) : (
+                    ""
+                  )}
+                </React.Fragment>
+              ))}
               <button
-                className="bg-blue-500 font-bold py-2 px-4 mb-5 rounded shadow border-2 border-blue-500 hover:bg-white  transition-all duration-300"
-                onClick={() => setAddPerson(true)}
+                className="bg-blue-500 font-bold py-2 px-4 mb-5 mt-5 rounded shadow border-2 border-blue-500 hover:bg-white  transition-all duration-300"
+                onClick={() => 
+                  setAddPerson(true)
+                  
+                }
               >
-                Edit Person
+                Add Person
               </button>
             </div>
+          ) : (
+            ""
+          )}
+          {editPerson ? (
+            <EditPerson
+              addPerson={addPerson}
+              setAddPerson={setAddPerson}
+              personName={personName}
+              setPersonName={setPersonName}
+              setPersonPhone={setPersonPhone}
+              setPersonEmail={setPersonEmail}
+              setPersonOwing={setPersonOwing}
+              setEditPerson={setEditPerson}
+              personEmail={personEmail}
+              personPhone={personPhone}
+              personOwing={personOwing}
+              handleEditSubmit={handleEditSubmit}
+              setPersonState={setPersonState}
+              personState={personState}
+              editRow={editRow}
+            ></EditPerson>
           ) : (
             ""
           )}

@@ -62,6 +62,8 @@ export default function Header({
                   onClick={() => {
                     setHistory(true);
                     setPersonEdit(false);
+                    setSelectPersonEdit(false);
+                    setSelectPersonReceipt(false);
                   }}
                   class="dropdown-item"
                   type="button"
@@ -113,6 +115,7 @@ export default function Header({
                 </button>
                 <button
                   onClick={() => {
+                    setSelectPersonEdit(false);
                     setHistory(true);
                   }}
                   class="dropdown-item"
@@ -156,6 +159,7 @@ export default function Header({
               <button
                 onClick={() => {
                   setPersonEdit(true);
+                  setSelectPersonReceipt(false);
                   setSelectPersonEdit(false);
                 }}
                 class="dropdown-item"
@@ -175,6 +179,7 @@ export default function Header({
               <button
                 onClick={() => {
                   setHistory(true);
+                  setSelectPersonReceipt(false);
                 }}
                 class="dropdown-item"
                 type="button"

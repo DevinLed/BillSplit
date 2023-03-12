@@ -1,39 +1,10 @@
-import React,{useState} from "react";
-import { v4 as uuidv4 } from "uuid";
+import React from "react";
 
-export default function PersonList({personName, personPhone, personEmail, personOwing, setPersonName, setPersonPhone, setPersonEmail, setPersonOwing}) {
+export default function PersonList({ list, setList }) {
 
     
-  const [list, setList] = useState([]);
-  const [isEditing, setIsEditing] = useState(false);
-  const [total, setTotal] = useState(0);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    const newItems = {
-      personName,
-      personPhone,
-      personEmail,
-      personOwing,
-      id: uuidv4(),
-    };
-    setPersonName("");
-    setPersonPhone("");
-    setPersonEmail("");
-    setPersonOwing("");
-    setList([...list, newItems]);
-    setIsEditing(false);
-    console.log(personName);
-    console.log(personPhone);
-    console.log(personEmail);
-    console.log(personOwing);
-  }
-
-
   return (
     <>
-    <form onSubmit={handleSubmit}>
       <div className="flex flex-col items-center justify-center">
         {/*Table generator for people added*/}
         {list.map(({ id, personName, personOwing }) => (
@@ -54,7 +25,6 @@ export default function PersonList({personName, personPhone, personEmail, person
           </React.Fragment>
         ))}
       </div>
-      </form>
     </>
   );
 }
