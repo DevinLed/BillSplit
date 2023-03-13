@@ -105,6 +105,7 @@ function App() {
   return (
     <>
       <Routes>
+        <Route path="/Home" element={App} />
         <Route path="/AddPerson" element={showPersonEdit} />
         <Route path="/EditPerson" element={selectPersonEdit} />
         <Route path="/History" element={showHistory} />

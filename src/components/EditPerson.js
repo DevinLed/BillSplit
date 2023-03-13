@@ -93,11 +93,26 @@ export default function EditPerson({
                     onChange={(e) => setPersonOwing(e.target.value)}
                   />
                 </div>
+                <div className="flex items-center m-auto justify-center align-items-center ">
+                  
+                <div className='delete-button' onClick={(e) => { if (window.confirm('Are you sure you want to reset the balance?')) this.onCancel(setPersonOwing(e.target.value)) } } >
+                <button
+                  type="submit"
+                  className="justify-center mt-3 ml-2 bg-gray-500 font-bold py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
+                  onClick={(e) => {
+                    setPersonOwing("")
+                  }}
+                >
+                  Reset balance
+                </button>
+                </div>
+                </div>
               </div>
             </div>
             {/*footer*/}
             <div className="flex items-center  justify-center align-items-center pb-6 px-6 border-t border-solid border-slate-200 rounded-b">
               <button
+                type="submit"
                 className="justify-center mt-3 ml-2 bg-blue-500 font-bold py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
                 onClick={(e) => {
                   handleEditSubmit(e);
