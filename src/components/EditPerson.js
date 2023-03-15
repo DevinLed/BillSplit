@@ -1,6 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
+import { confirmAlert } from 'react-confirm-alert'; // Import
 
 export default function EditPerson({
   personName,
@@ -95,12 +96,24 @@ export default function EditPerson({
                 </div>
                 <div className="flex items-center m-auto justify-center align-items-center ">
                   
-                <div className='delete-button' onClick={(e) => { if (window.confirm('Are you sure you want to reset the balance?')) this.onCancel(setPersonOwing(e.target.value)) } } >
+                <div>
                 <button
                   type="submit"
-                  className="justify-center mt-3 ml-2 bg-gray-500 font-bold py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
+                  className="justify-center align-items-center mt-3 ml-2 bg-gray-500 font-bold py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
                   onClick={(e) => {
-                    setPersonOwing("")
+                    confirmAlert({
+                      title: 'Confirm Balance Reset',
+                      buttons: [
+                        {
+                          label: 'Yes',
+                          onClick: () => {setPersonOwing(""); console.log('Balance Reset')}
+                        },
+                        {
+                          label: 'No',
+                          onClick: () => console.log('Balance Kept')
+                        }
+                      ]
+                    });
                   }}
                 >
                   Reset balance

@@ -85,3 +85,17 @@ button:focus, a:focus {
 .currency-control{
   width: 50px;
 }
+.badgeBalance {
+  display: inline-block;
+padding: .25em .4em;
+  padding-right: 0.4em;
+  padding-left: 0.4em;
+font-size: 75%;
+font-weight: 700;
+line-height: 1;
+text-align: center;
+white-space: nowrap;
+padding-right: .6em;
+padding-left: .6em;
+border-radius: 10rem;
+}

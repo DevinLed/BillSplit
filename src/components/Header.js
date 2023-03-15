@@ -27,7 +27,6 @@ export default function Header({
       {showPersonEdit ? (
         <>
           <div className="flex items-stretch font-bold bg-gray-200 h-10 align-items-center w-full items-center text-2xl mb-5 justify-between">
-            <Link to="/Home">
             <button
               className="text-black hover:text-black ml-2"
               onClick={() => {
@@ -35,9 +34,10 @@ export default function Header({
                 setPersonEdit(false);
               }}
             >
+              <Link to="/Home"></Link>
               <IoIosArrowBack />
             </button>
-            </Link>
+
             <h1 className="ml-2 mr-2">Select Person</h1>
 
             <div class="dropdown">
@@ -84,8 +84,6 @@ export default function Header({
       {selectPersonEdit ? (
         <>
           <div className="flex items-stretch font-bold bg-gray-200 h-10 align-items-center w-full items-center text-2xl mb-5 justify-between">
-            
-          <Link to="/Home">
             <button
               className="text-black hover:text-black ml-2"
               onClick={() => {
@@ -93,9 +91,9 @@ export default function Header({
                 setSelectPersonEdit(false);
               }}
             >
+              <Link to="/Home"></Link>
               <IoIosArrowBack />
             </button>
-            </Link>
             <h1 className="m-5">Edit Person</h1>
 
             <div class="dropdown">
@@ -138,19 +136,16 @@ export default function Header({
       )}
       {selectPersonReceipt ? (
         <div className="flex items-stretch font-bold bg-gray-200 h-10 align-items-center w-full items-center text-2xl mb-5 justify-between">
-          
-          <Link to="/Home">
           <button
             className="text-black hover:text-black ml-2"
             onClick={() => {
               setPersonEdit(true);
               setSelectPersonReceipt(false);
-
             }}
           >
+            <Link to="/Home"></Link>
             <IoIosArrowBack />
           </button>
-          </Link>
           <h1 className="m-5">Select a method</h1>
 
           <div class="dropdown">
@@ -205,17 +200,15 @@ export default function Header({
         <>
           <div className="flex items-stretch font-bold bg-gray-200 h-10 align-items-center w-full items-center text-2xl mb-5 justify-between">
             
-          <Link to="/Home">
-            <button
-              className="text-black hover:text-black ml-2"
-              onClick={() => {
-                setStartBill(true);
-                setHistory(false);
-              }}
-            >
-              <IoIosArrowBack />
-            </button>
-            </Link>
+              <button
+                className="text-black hover:text-black ml-2"
+                onClick={() => {
+                  setStartBill(true);
+                  setHistory(false);
+                }}
+              ><Link to="/Home"></Link>
+                <IoIosArrowBack />
+              </button>
             <h1 className="m-5">History</h1>
             <div class="dropdown">
               <button

@@ -105,12 +105,11 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path="/Home" element={App} />
         <Route path="/AddPerson" element={showPersonEdit} />
         <Route path="/EditPerson" element={selectPersonEdit} />
         <Route path="/History" element={showHistory} />
-        </Routes>
-        <Link to="/homepage"></Link>
+      </Routes>
+      <Link to="/homepage"></Link>
       <main className="mt-5 p-0 pt-3 xs:max-w-xl sm:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl bg-white-500 rounded shadow">
         <div className={`App ${theme}`}>
           {startBill ? (
@@ -125,45 +124,43 @@ function App() {
               ></Header>
               <ul>
                 <li>
-                  
-    <Link to="/addperson">
-                  <button
-                    className="justify-center mt-5 bg-blue-500 font-bold py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
-                    onClick={() => {
-                      setStartBill(false);
-                      setPersonEdit(true);
-                    }}
-                  >
-                    Split a Bill
-                  </button>
+                  <Link to="/addperson">
+                    <button
+                      className="justify-center mt-5 bg-blue-500 font-bold py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
+                      onClick={() => {
+                        setStartBill(false);
+                        setPersonEdit(true);
+                      }}
+                    >
+                      Split a Bill
+                    </button>
                   </Link>
                 </li>
                 <li>
-                  
-    <Link to="/editperson">
-                  <button
-                    className="mt-5 bg-blue-500 font-bold py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
-                    onClick={() => {
-                      setStartBill(false);
-                      setSelectPersonEdit(true);
-                    }}
-                  >
-                    Edit Person
-                  </button>
+                  <Link to="/editperson">
+                    <button
+                      className="mt-5 bg-blue-500 font-bold py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
+                      onClick={() => {
+                        setStartBill(false);
+                        setSelectPersonEdit(true);
+                      }}
+                    >
+                      Edit Person
+                    </button>
                   </Link>
                 </li>
-                
+
                 <li>
-    <Link to="/History">
-                  <button
-                    className="mt-5 bg-blue-500 font-bold py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
-                    onClick={() => {
-                      setStartBill(false);
-                      setHistory(true);
-                    }}
-                  >
-                    Show History
-                  </button>
+                  <Link to="/History">
+                    <button
+                      className="mt-5 bg-blue-500 font-bold py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
+                      onClick={() => {
+                        setStartBill(false);
+                        setHistory(true);
+                      }}
+                    >
+                      Show History
+                    </button>
                   </Link>
                 </li>
                 <li>
@@ -215,8 +212,13 @@ function App() {
                         <li class="list-group-item d-flex l-500 justify-content-between align-items-center">
                           {personName}
 
-                          <span class="badge badge-primary badge-pill">
-                            {personOwing}
+                          <span
+                            class="badge badge-primary badge-pill"
+                            style={{
+                              color: personOwing < 0 ? "red" : "white",
+                            }}
+                          >
+                            ${personOwing}
                           </span>
                         </li>
                       </button>
@@ -324,8 +326,13 @@ function App() {
                         <li class="list-group-item d-flex l-500 justify-content-between align-items-center">
                           {personName}
 
-                          <span class="badge badge-primary badge-pill">
-                            {personOwing}
+                          <span
+                            class="badge badge-primary badge-pill"
+                            style={{
+                              color: personOwing < 0 ? "red" : "white",
+                            }}
+                          >
+                            ${personOwing}
                           </span>
                         </li>
                       </button>
