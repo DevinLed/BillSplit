@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { BrowserRouter, Switch, Route, Routes, Link } from "react-router-dom";
 import Header from './Header'
+import Footer from "./Footer";
 
 export default function History() {
 
@@ -15,9 +16,9 @@ const [showHistory, setShowHistory] = useState(true);
                 <p className="mb-5 ">Show history of past few weeks</p>
               </article>
             </div>
+        <Footer/>
 
         </main>
-    
     
     
     </>

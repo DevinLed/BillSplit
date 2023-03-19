@@ -2,6 +2,7 @@ import React from "react";
 import { IoIosArrowBack } from "react-icons/io";
 import { AiOutlineMenu } from "react-icons/ai";
 import { Route, Routes, Link } from "react-router-dom";
+import Footer from "./Footer";
 
 export default function Header({
   startBill,
@@ -15,7 +16,7 @@ export default function Header({
   selectPersonReceipt,
   setSelectPersonReceipt,
   selectPersonList,
-  selectEditPersonList
+  selectEditPersonList,
 }) {
   return (
     <>
@@ -29,11 +30,10 @@ export default function Header({
       {selectPersonList ? (
         <>
           <div className="flex items-stretch font-bold bg-gray-200 h-10 align-items-center w-full items-center text-2xl mb-5 justify-between">
-            
-          <Link to="/Home">
-            <button className="text-black hover:text-black ml-2">
-              <IoIosArrowBack />
-            </button>
+            <Link to="/Home">
+              <button className="text-black hover:text-black ml-2">
+                <IoIosArrowBack />
+              </button>
             </Link>
 
             <h1 className="ml-2 mr-2">Select Person</h1>
@@ -51,16 +51,12 @@ export default function Header({
               </button>
               <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
                 <Link to="/EditList">
-                <button class="dropdown-item">
-                  Edit Person
-                </button>
+                  <button class="dropdown-item">Edit Person</button>
                 </Link>
                 <Link to="/History">
-                <button
-                  class="dropdown-item"
-                  type="button">
-                  History
-                </button>
+                  <button class="dropdown-item" type="button">
+                    History
+                  </button>
                 </Link>
               </div>
             </div>
@@ -73,10 +69,10 @@ export default function Header({
       {selectEditPersonList ? (
         <>
           <div className="flex items-stretch font-bold bg-gray-200 h-10 align-items-center w-full items-center text-2xl mb-5 justify-between">
-          <Link to="/Home">
-            <button className="text-black hover:text-black ml-2">
-              <IoIosArrowBack />
-            </button>
+            <Link to="/Home">
+              <button className="text-black hover:text-black ml-2">
+                <IoIosArrowBack />
+              </button>
             </Link>
 
             <h1 className="m-5">Edit Person</h1>
@@ -93,15 +89,11 @@ export default function Header({
                 <AiOutlineMenu />
               </button>
               <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-              <Link to="/SplitBill">
-                <button class="dropdown-item">
-                  New Receipt
-                </button>
+                <Link to="/SplitBill">
+                  <button class="dropdown-item">New Receipt</button>
                 </Link>
                 <Link to="/History">
-                <button class="dropdown-item">
-                  History
-                </button>
+                  <button class="dropdown-item">History</button>
                 </Link>
               </div>
             </div>
@@ -112,16 +104,11 @@ export default function Header({
       )}
       {selectPersonReceipt ? (
         <div className="flex items-stretch font-bold bg-gray-200 h-10 align-items-center w-full items-center text-2xl mb-5 justify-between">
-          <button
-            className="text-black hover:text-black ml-2"
-            onClick={() => {
-              setPersonEdit(true);
-              setSelectPersonReceipt(false);
-            }}
-          >
-            <Link to="/Home"></Link>
-            <IoIosArrowBack />
-          </button>
+          <Link to="/SplitBIll">
+            <button className="text-black hover:text-black ml-2">
+              <IoIosArrowBack />
+            </button>
+          </Link>
           <h1 className="m-5">Select a method</h1>
 
           <div class="dropdown">
@@ -136,30 +123,16 @@ export default function Header({
               <AiOutlineMenu />
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-              <button
-                onClick={() => {
-                  setPersonEdit(true);
-                  setSelectPersonReceipt(false);
-                  setSelectPersonEdit(false);
-                }}
-                class="dropdown-item"
-              >
-                New Receipt
-              </button><Link to="/EditPerson">
-                <button class="dropdown-item">
-                  Edit Person
-                </button>
-                </Link>
-              <button
-                onClick={() => {
-                  setHistory(true);
-                  setSelectPersonReceipt(false);
-                }}
-                class="dropdown-item"
-                type="button"
-              >
-                History
-              </button>
+              <Link to="/SplitBill">
+                <button class="dropdown-item">New Receipt</button>
+              </Link>
+              <Link to="/EditList">
+                <button class="dropdown-item">Edit Person</button>
+              </Link>
+
+              <Link to="/History">
+                <button class="dropdown-item">History</button>
+              </Link>
             </div>
           </div>
         </div>
@@ -169,10 +142,10 @@ export default function Header({
       {showHistory ? (
         <>
           <div className="flex items-stretch font-bold bg-gray-200 h-10 align-items-center w-full items-center text-2xl mb-5 justify-between">
-          <Link to="/Home">
-            <button className="text-black hover:text-black ml-2">
-              <IoIosArrowBack />
-            </button>
+            <Link to="/Home">
+              <button className="text-black hover:text-black ml-2">
+                <IoIosArrowBack />
+              </button>
             </Link>
             <h1 className="m-5">History</h1>
             <div class="dropdown">
@@ -187,15 +160,11 @@ export default function Header({
                 <AiOutlineMenu />
               </button>
               <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-              <Link to="/SplitBill">
-                <button class="dropdown-item">
-                  New Receipt
-                </button>
+                <Link to="/SplitBill">
+                  <button class="dropdown-item">New Receipt</button>
                 </Link>
                 <Link to="/EditList">
-                <button class="dropdown-item">
-                  Edit Person
-                </button>
+                  <button class="dropdown-item">Edit Person</button>
                 </Link>
               </div>
             </div>

@@ -15,6 +15,8 @@ import AddPerson from "./components/AddPerson";
 import Home from "./components/Home";
 import Header from "./components/Header";
 import EditList from "./components/EditList";
+import ReceiptInput from "./components/ReceiptInput";
+import Footer from "./components/Footer";
 import "./darkMode.css";
 import "./index.css";
 
@@ -29,9 +31,8 @@ function App() {
   const [personPhone, setPersonPhone] = useState("");
   const [personEmail, setPersonEmail] = useState("");
   const [personOwing, setPersonOwing] = useState("");
-  const [selectPersonReceipt, setSelectPersonReceipt] = useState("");
   const [personState, setPersonState] = useState("");
-  const [selectedPerson, setSelectedPerson] = useState("");
+  const [selectedPerson, setSelectedPerson] = useState(false);
   const [list, setList] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [isSelected, setIsSelected] = useState(false);
@@ -89,6 +90,24 @@ function App() {
       <Routes>
         <Route path="/" element=<Navigate to="/Home" /> />
         <Route path="/Home" element={<Home />} />
+        <Route path="/ReceiptInput" element={<ReceiptInput 
+              addPerson={addPerson}
+              setAddPerson={setAddPerson}
+              selectPerson={selectPerson}
+              personName={personName}
+              personEmail={personEmail}
+              personPhone={personPhone}
+              personOwing={personOwing}
+              setPersonName={setPersonName}
+              setPersonEmail={setPersonEmail}
+              setPersonPhone={setPersonPhone}
+              setPersonOwing={setPersonOwing}
+              handleSubmit={handleSubmit}
+              setPersonState={setPersonState}
+              personState={personState}
+              setIsSelected={setIsSelected}
+              list={list}
+              />}/>
         <Route
           path="/SplitBill"
           element={
@@ -98,7 +117,7 @@ function App() {
               selectPerson={selectPerson}
               personName={personName}
               personEmail={personEmail}
-              personPhone={personEmail}
+              personPhone={personPhone}
               personOwing={personOwing}
               setPersonName={setPersonName}
               setPersonEmail={setPersonEmail}
@@ -121,7 +140,7 @@ function App() {
               selectPerson={selectPerson}
               personName={personName}
               personEmail={personEmail}
-              personPhone={personEmail}
+              personPhone={personPhone}
               personOwing={personOwing}
               setPersonName={setPersonName}
               setPersonEmail={setPersonEmail}

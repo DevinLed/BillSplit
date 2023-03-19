@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from "react";
 import { Route, Routes, Link } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import Header from "./Header";
+import Footer from "./Footer";
 
 export default function Home() {
 
@@ -93,6 +94,7 @@ export default function Home() {
                 </ul>
               </div>
         </div>
+      <Footer/>
       </main>
     </>
   )

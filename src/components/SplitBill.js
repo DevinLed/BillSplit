@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import { BrowserRouter, Switch, Route, Routes, Link } from "react-router-dom";
 import AddPerson from "./AddPerson";
 import Header from "./Header";
+import Footer from "./Footer";
 
 export default function SplitBill({
   addPerson,
@@ -35,14 +36,8 @@ export default function SplitBill({
             <React.Fragment key={id}>
               {personName.length ? (
                 <ul class="list-group m-0">
-                  <button
-                    class="outline-none text-primary"
-                    onClick={() => {
-                      selectPerson(id);
-                      
-                      setEditPerson(true);
-                    }}
-                  >
+                  <Link to="/ReceiptInput" onClick={() => 
+                          selectPerson(id)}>
                     <li class="list-group-item d-flex l-500 justify-content-between align-items-center">
                       {personName}
 
@@ -55,7 +50,7 @@ export default function SplitBill({
                         ${personOwing}
                       </span>
                     </li>
-                  </button>
+                  </Link>
                 </ul>
               ) : (
                 ""
@@ -89,6 +84,7 @@ export default function SplitBill({
         ) : (
           ""
         )}
+      <Footer/>
       </main>
     </>
   );

@@ -4,6 +4,7 @@ import { BrowserRouter, Switch, Route, Routes, Link } from "react-router-dom";
 import AddPerson from "./AddPerson";
 import Header from "./Header";
 import EditPerson from "./EditPerson";
+import Footer from "./Footer";
 
 export default function EditList({
   addPerson,
@@ -34,7 +35,7 @@ export default function EditList({
         <Header selectEditPersonList={selectEditPersonList} />
         <div className="flex flex-col items-center justify-center">
           {/*Table generator for people added*/}
-          {list.map(({ id, personName, personOwing }) => (
+          {list.map(({ id, personName, personPhone, personEmail, personOwing }) => (
             <React.Fragment key={id}>
               {personName.length ? (
                 <ul class="list-group m-0">
@@ -116,6 +117,7 @@ export default function EditList({
         ) : (
           ""
         )}
+      <Footer/>
       </main>
     </>
   );
