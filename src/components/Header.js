@@ -14,6 +14,8 @@ export default function Header({
   showHistory,
   selectPersonReceipt,
   setSelectPersonReceipt,
+  selectPersonList,
+  selectEditPersonList
 }) {
   return (
     <>
@@ -24,19 +26,15 @@ export default function Header({
       ) : (
         ""
       )}
-      {showPersonEdit ? (
+      {selectPersonList ? (
         <>
           <div className="flex items-stretch font-bold bg-gray-200 h-10 align-items-center w-full items-center text-2xl mb-5 justify-between">
-            <button
-              className="text-black hover:text-black ml-2"
-              onClick={() => {
-                setStartBill(true);
-                setPersonEdit(false);
-              }}
-            >
-              <Link to="/Home"></Link>
+            
+          <Link to="/Home">
+            <button className="text-black hover:text-black ml-2">
               <IoIosArrowBack />
             </button>
+            </Link>
 
             <h1 className="ml-2 mr-2">Select Person</h1>
 
@@ -52,27 +50,18 @@ export default function Header({
                 <AiOutlineMenu />
               </button>
               <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                <button
-                  onClick={() => {
-                    setSelectPersonEdit(true);
-                    setPersonEdit(false);
-                  }}
-                  class="dropdown-item"
-                >
+                <Link to="/EditList">
+                <button class="dropdown-item">
                   Edit Person
                 </button>
+                </Link>
+                <Link to="/History">
                 <button
-                  onClick={() => {
-                    setHistory(true);
-                    setPersonEdit(false);
-                    setSelectPersonEdit(false);
-                    setSelectPersonReceipt(false);
-                  }}
                   class="dropdown-item"
-                  type="button"
-                >
+                  type="button">
                   History
                 </button>
+                </Link>
               </div>
             </div>
           </div>
@@ -81,19 +70,15 @@ export default function Header({
         ""
       )}
 
-      {selectPersonEdit ? (
+      {selectEditPersonList ? (
         <>
           <div className="flex items-stretch font-bold bg-gray-200 h-10 align-items-center w-full items-center text-2xl mb-5 justify-between">
-            <button
-              className="text-black hover:text-black ml-2"
-              onClick={() => {
-                setStartBill(true);
-                setSelectPersonEdit(false);
-              }}
-            >
-              <Link to="/Home"></Link>
+          <Link to="/Home">
+            <button className="text-black hover:text-black ml-2">
               <IoIosArrowBack />
             </button>
+            </Link>
+
             <h1 className="m-5">Edit Person</h1>
 
             <div class="dropdown">
@@ -108,25 +93,16 @@ export default function Header({
                 <AiOutlineMenu />
               </button>
               <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                <button
-                  onClick={() => {
-                    setPersonEdit(true);
-                    setSelectPersonEdit(false);
-                  }}
-                  class="dropdown-item"
-                >
+              <Link to="/SplitBill">
+                <button class="dropdown-item">
                   New Receipt
                 </button>
-                <button
-                  onClick={() => {
-                    setSelectPersonEdit(false);
-                    setHistory(true);
-                  }}
-                  class="dropdown-item"
-                  type="button"
-                >
+                </Link>
+                <Link to="/History">
+                <button class="dropdown-item">
                   History
                 </button>
+                </Link>
               </div>
             </div>
           </div>
@@ -169,17 +145,11 @@ export default function Header({
                 class="dropdown-item"
               >
                 New Receipt
-              </button>
-              <button
-                onClick={() => {
-                  setSelectPersonEdit(true);
-                  setSelectPersonReceipt(false);
-                }}
-                class="dropdown-item"
-                type="button"
-              >
-                Edit Person
-              </button>
+              </button><Link to="/EditPerson">
+                <button class="dropdown-item">
+                  Edit Person
+                </button>
+                </Link>
               <button
                 onClick={() => {
                   setHistory(true);
@@ -199,16 +169,11 @@ export default function Header({
       {showHistory ? (
         <>
           <div className="flex items-stretch font-bold bg-gray-200 h-10 align-items-center w-full items-center text-2xl mb-5 justify-between">
-            
-              <button
-                className="text-black hover:text-black ml-2"
-                onClick={() => {
-                  setStartBill(true);
-                  setHistory(false);
-                }}
-              ><Link to="/Home"></Link>
-                <IoIosArrowBack />
-              </button>
+          <Link to="/Home">
+            <button className="text-black hover:text-black ml-2">
+              <IoIosArrowBack />
+            </button>
+            </Link>
             <h1 className="m-5">History</h1>
             <div class="dropdown">
               <button
@@ -222,25 +187,16 @@ export default function Header({
                 <AiOutlineMenu />
               </button>
               <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                <button
-                  onClick={() => {
-                    setPersonEdit(true);
-                    setHistory(false);
-                  }}
-                  class="dropdown-item"
-                >
+              <Link to="/SplitBill">
+                <button class="dropdown-item">
                   New Receipt
                 </button>
-                <button
-                  onClick={() => {
-                    setSelectPersonEdit(true);
-                    setHistory(false);
-                  }}
-                  class="dropdown-item"
-                  type="button"
-                >
+                </Link>
+                <Link to="/EditList">
+                <button class="dropdown-item">
                   Edit Person
                 </button>
+                </Link>
               </div>
             </div>
           </div>

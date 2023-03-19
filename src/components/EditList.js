@@ -3,8 +3,9 @@ import { v4 as uuidv4 } from "uuid";
 import { BrowserRouter, Switch, Route, Routes, Link } from "react-router-dom";
 import AddPerson from "./AddPerson";
 import Header from "./Header";
+import EditPerson from "./EditPerson";
 
-export default function SplitBill({
+export default function EditList({
   addPerson,
   setAddPerson,
   selectPerson,
@@ -17,18 +18,20 @@ export default function SplitBill({
   setPersonPhone,
   setPersonOwing,
   handleSubmit,
+  handleEditSubmit,
   setPersonState,
   personState,
   setIsSelected,
-  list,
-  setEditPerson
+  editPerson,
+  setEditPerson,
+  editRow,
+  list
 }) {
-  const [selectPersonList, setSelectPersonList] = useState(true);
-
+  const [selectEditPersonList, setEditSelectPersonList] = useState(true);
   return (
     <>
       <main className="mt-5 p-0 pt-3 xs:max-w-xl sm:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl bg-white-500 rounded shadow">
-        <Header selectPersonList={selectPersonList} />
+        <Header selectEditPersonList={selectEditPersonList} />
         <div className="flex flex-col items-center justify-center">
           {/*Table generator for people added*/}
           {list.map(({ id, personName, personOwing }) => (
@@ -36,10 +39,11 @@ export default function SplitBill({
               {personName.length ? (
                 <ul class="list-group m-0">
                   <button
-                    class="outline-none text-primary"
+                    class="outline-none text-primary focus:outline-none"
                     onClick={() => {
                       selectPerson(id);
-                      
+                      editRow(id);
+
                       setEditPerson(true);
                     }}
                   >
@@ -63,12 +67,13 @@ export default function SplitBill({
             </React.Fragment>
           ))}
           <button
-            className="mt-4 bg-blue-500 font-bold py-2 px-4 mb-5 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
+            className="bg-blue-500 font-bold py-2 px-4 mb-5 mt-5 rounded shadow border-2 border-blue-500 hover:bg-white  transition-all duration-300"
             onClick={() => setAddPerson(true)}
           >
             Add Person
           </button>
         </div>
+        
         {addPerson ? (
           <AddPerson
             addPerson={addPerson}
@@ -86,6 +91,28 @@ export default function SplitBill({
             personState={personState}
             setIsSelected={setIsSelected}
           ></AddPerson>
+        ) : (
+          ""
+        )}
+        {editPerson ? (
+          <EditPerson
+            addPerson={addPerson}
+            setAddPerson={setAddPerson}
+            personName={personName}
+            setPersonName={setPersonName}
+            setPersonPhone={setPersonPhone}
+            setPersonEmail={setPersonEmail}
+            setPersonOwing={setPersonOwing}
+            personEmail={personEmail}
+            personPhone={personPhone}
+            personOwing={personOwing}
+            handleSubmit={handleSubmit}
+            handleEditSubmit={handleEditSubmit}
+            setPersonState={setPersonState}
+            personState={personState}
+            setIsSelected={setIsSelected}
+            setEditPerson={setEditPerson}
+          ></EditPerson>
         ) : (
           ""
         )}
