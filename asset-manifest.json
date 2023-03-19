@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/BIllSplit/static/css/main.88630601.css",
+    "main.js": "/BIllSplit/static/js/main.fe0b7a3a.js",
+    "index.html": "/BIllSplit/index.html",
+    "main.88630601.css.map": "/BIllSplit/static/css/main.88630601.css.map",
+    "main.fe0b7a3a.js.map": "/BIllSplit/static/js/main.fe0b7a3a.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.88630601.css",
+    "static/js/main.fe0b7a3a.js"
+  ]
+}
