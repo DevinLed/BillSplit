@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/BIllSplit/static/css/main.88630601.css",
-    "main.js": "/BIllSplit/static/js/main.fe0b7a3a.js",
-    "index.html": "/BIllSplit/index.html",
-    "main.88630601.css.map": "/BIllSplit/static/css/main.88630601.css.map",
-    "main.fe0b7a3a.js.map": "/BIllSplit/static/js/main.fe0b7a3a.js.map"
+    "main.css": "/BillSplit/static/css/main.88630601.css",
+    "main.js": "/BillSplit/static/js/main.01f2e4e9.js",
+    "index.html": "/BillSplit/index.html",
+    "main.88630601.css.map": "/BillSplit/static/css/main.88630601.css.map",
+    "main.01f2e4e9.js.map": "/BillSplit/static/js/main.01f2e4e9.js.map"
   },
   "entrypoints": [
     "static/css/main.88630601.css",
-    "static/js/main.fe0b7a3a.js"
+    "static/js/main.01f2e4e9.js"
   ]
 }
