@@ -17,12 +17,14 @@ import Header from "./components/Header";
 import EditList from "./components/EditList";
 import ReceiptInput from "./components/ReceiptInput";
 import Footer from "./components/Footer";
+import Manual from "./components/Manual";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
 import "./darkMode.css";
 import "./index.css";
 
 function App() {
-  // Main screen menu selection - 5 buttons: Start Bill, Edit Person, Edit Group, History, Darkmode
-  // For Dark/Bright mode. Keeps mode storage for page refresh.
 
   // Menus for edit person and edit group
   const [addPerson, setAddPerson] = useState(false);
@@ -36,6 +38,12 @@ function App() {
   const [list, setList] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [isSelected, setIsSelected] = useState(false);
+
+  // Calendar for manual receipt entry
+  const [merchantName, setMerchantName] = useState("");
+  const [invoiceNumber,setInvoiceNumber] = useState("");
+  const [startDate, setStartDate] = useState(new Date());
+
   const handleSubmit = (e) => {
     const newItems = {
       personName,
@@ -75,7 +83,6 @@ function App() {
     setPersonName(selectingPerson.personName);
   };
 
-  
   const editRow = (id) => {
     const editingRow = list.find((row) => row.id === id);
     setList(list.filter((row) => row.id !== id));
@@ -90,7 +97,10 @@ function App() {
       <Routes>
         <Route path="/" element=<Navigate to="/Home" /> />
         <Route path="/Home" element={<Home />} />
-        <Route path="/ReceiptInput" element={<ReceiptInput 
+        <Route
+          path="/ReceiptInput"
+          element={
+            <ReceiptInput
               addPerson={addPerson}
               setAddPerson={setAddPerson}
               selectPerson={selectPerson}
@@ -107,7 +117,9 @@ function App() {
               personState={personState}
               setIsSelected={setIsSelected}
               list={list}
-              />}/>
+            />
+          }
+        />
         <Route
           path="/SplitBill"
           element={
@@ -156,6 +168,35 @@ function App() {
               editPerson={editPerson}
               setEditPerson={setEditPerson}
               editRow={editRow}
+            />
+          }
+        />
+        <Route
+          path="/ManualEntry"
+          element={
+            <Manual
+              addPerson={addPerson}
+              setAddPerson={setAddPerson}
+              selectPerson={selectPerson}
+              personName={personName}
+              personEmail={personEmail}
+              personPhone={personPhone}
+              personOwing={personOwing}
+              setPersonName={setPersonName}
+              setPersonEmail={setPersonEmail}
+              setPersonPhone={setPersonPhone}
+              setPersonOwing={setPersonOwing}
+              handleSubmit={handleSubmit}
+              setPersonState={setPersonState}
+              personState={personState}
+              setIsSelected={setIsSelected}
+              list={list}
+              startDate={startDate}           
+              setStartDate={setStartDate}
+              merchantName={merchantName}
+              setMerchantName={setMerchantName}
+              invoiceNumber={invoiceNumber}
+              setInvoiceNumber={setInvoiceNumber}
             />
           }
         />

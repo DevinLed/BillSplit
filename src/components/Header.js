@@ -2,7 +2,6 @@ import React from "react";
 import { IoIosArrowBack } from "react-icons/io";
 import { AiOutlineMenu } from "react-icons/ai";
 import { Route, Routes, Link } from "react-router-dom";
-import Footer from "./Footer";
 
 export default function Header({
   startBill,
@@ -17,6 +16,7 @@ export default function Header({
   setSelectPersonReceipt,
   selectPersonList,
   selectEditPersonList,
+  selectMethodManual
 }) {
   return (
     <>
@@ -110,6 +110,44 @@ export default function Header({
             </button>
           </Link>
           <h1 className="m-5">Select a method</h1>
+
+          <div class="dropdown">
+            <button
+              className="text-black hover:text-black mr-2"
+              type="button"
+              id="dropdownMenu2"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              <AiOutlineMenu />
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+              <Link to="/SplitBill">
+                <button class="dropdown-item">New Receipt</button>
+              </Link>
+              <Link to="/EditList">
+                <button class="dropdown-item">Edit Person</button>
+              </Link>
+
+              <Link to="/History">
+                <button class="dropdown-item">History</button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      ) : (
+        ""
+      )}
+      
+      {selectMethodManual ? (
+        <div className="flex items-stretch font-bold bg-gray-200 h-10 align-items-center w-full items-center text-2xl mb-5 justify-between">
+          <Link to="/ReceiptInput">
+            <button className="text-black hover:text-black ml-2">
+              <IoIosArrowBack />
+            </button>
+          </Link>
+          <h1 className="m-5">Enter Receipt Details</h1>
 
           <div class="dropdown">
             <button

@@ -15,6 +15,7 @@ export default function Home() {
   const [selectPersonEdit, setSelectPersonEdit] = useState(false);
   const [selectGroupEdit, setSelectGroupEdit] = useState(false);
 
+  // For Dark/Bright mode. Keeps mode storage for page refresh.
   
     const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
     const toggleTheme = () => {
@@ -33,6 +34,7 @@ export default function Home() {
     const [buttonText, setButtonText] = useState("Dark Mode");
     const changeText = (text) => setButtonText(text);
   
+  // Main screen menu selection - 5 buttons: Start Bill, Edit Person, Edit Group, History, Darkmode
   return (
     <>
     

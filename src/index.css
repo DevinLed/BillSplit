@@ -27,14 +27,18 @@ textarea {
 button {
   user-select: none;
   color: white;
+  text-decoration: none;
 }
 button:hover {
   color: #007bff;
+  text-decoration: none;
 }
 button:focus,
 a:focus {
-  box-shadow: 0.5px 0.5px 0px 2px rgb(218, 213, 213), 0px 0px 0px 2px black;
+  opacity: 0.5;
+  box-shadow: 0.5px 0.5px 0px 2px rgb(218, 213, 213), 0px 0px 0px 2px #f1f1f1;
   border-radius: 5px;
+  text-decoration: none;
 }
 .footer li {
   margin: 0rem 0.2rem;

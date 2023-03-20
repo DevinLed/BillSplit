@@ -2,7 +2,14 @@ import React, { useRef, useState, useEffect } from "react";
 import AddPerson from "./AddPerson";
 import Header from "./Header";
 import SplitBill from "./SplitBill";
-import Footer from "./Footer";
+import Footer from "./Footer";import {
+  Route,
+  Routes,
+  Link,
+  path,
+  Navigate,
+  Redirect,
+} from "react-router-dom";
 
 export default function ReceiptInput({
   addPerson,
@@ -33,11 +40,11 @@ export default function ReceiptInput({
       <div className="flex flex-col items-center justify-center">
                 <h1>Split a bill with {personName}</h1>
                 <ul class="list-group items-center justify-center">
+                  <Link to="/ManualEntry" class="btn btn-primary btn-lg mt-5">
                   <li>
-                    <button class="btn btn-primary btn-lg mt-5" type="submit">
                       Manual
-                    </button>
-                  </li>
+                    </li>
+                  </Link>
                   <li>
                     <button
                       class="btn btn-primary btn-lg mt-5 mb-5"

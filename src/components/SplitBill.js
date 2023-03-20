@@ -38,7 +38,7 @@ export default function SplitBill({
                 <ul class="list-group m-0">
                   <Link to="/ReceiptInput" onClick={() => 
                           selectPerson(id)}>
-                    <li class="list-group-item d-flex l-500 justify-content-between align-items-center">
+                    <li class="outline-none text-primary focus:outline-none list-group-item d-flex l-500 justify-content-between align-items-center">
                       {personName}
 
                       <span
