@@ -1,8 +1,17 @@
 import React, { useRef, useState, useEffect } from "react";
+import { confirmAlert } from "react-confirm-alert";
 import AddPerson from "./AddPerson";
 import Header from "./Header";
 import SplitBill from "./SplitBill";
 import Footer from "./Footer";
+import {
+  Route,
+  Routes,
+  Link,
+  path,
+  Navigate,
+  Redirect,
+} from "react-router-dom";
 
 import DatePicker from "react-datepicker";
 
@@ -32,8 +41,14 @@ export default function Manual({
   setMerchantName,
   invoiceNumber,
   setInvoiceNumber,
+  personReceiptAmount,
+  setPersonReceiptAmount,
+  value,
+  setValue,
+  addNum,
 }) {
   const [selectMethodManual] = useState(true);
+
   return (
     <>
       <main className="mt-5 p-0 pt-3 xs:max-w-xl sm:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl bg-white-500 rounded shadow">
@@ -43,7 +58,7 @@ export default function Manual({
           <div class="form-group row">
             <div class="col-sm-10 mb-0">
               <input
-                type="name"
+                type="amount"
                 class="form-control"
                 id="colFormLabel"
                 placeholder="Merchant Name"
@@ -62,6 +77,9 @@ export default function Manual({
 
           <div class="form-group row">
             <div class="col-sm-10 mb-0">
+            <label for="colFormLabel" class="col-sm-2 col-form-label">
+                Invoice#
+              </label>
               <input
                 type="invoice"
                 class="form-control"
@@ -91,8 +109,30 @@ export default function Manual({
           </div>
           <div class="form-group row">
             <div class="col-sm-10 mb-0">
-              <button class="btn btn-primary btn-lg" type="submit">
-                Submit
+              <label for="colFormLabel" class="col-sm-2 col-form-label">
+                Amount
+              </label>
+              <input
+                type="number"
+                class="form-control"
+                id="colFormLabel"
+                placeholder="0"
+                value={personReceiptAmount}
+                onChange={(e) => setPersonReceiptAmount(e.target.value)}
+              />
+            </div>
+
+            <div class="col-sm-10 mb-0">
+              <label htmlFor="price">Total owing</label>
+              <p>{value}</p>
+            </div>
+
+            <div class="col-sm-10 mb-0">
+              <button
+                className="mt-4 bg-blue-500 font-bold py-2 px-4 mb-5 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
+                onClick={() => addNum(personOwing, personReceiptAmount)}
+              >
+                submit
               </button>
             </div>
           </div>

@@ -13,6 +13,8 @@ export default function AddPerson({
   setPersonOwing,
   handleSubmit,
   setIsSelected,
+  amount,
+  setAmount
 }) {  
   return (
     <>

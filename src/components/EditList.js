@@ -26,7 +26,9 @@ export default function EditList({
   editPerson,
   setEditPerson,
   editRow,
-  list
+  list,
+  value,
+  setValue
 }) {
   const [selectEditPersonList, setEditSelectPersonList] = useState(true);
   return (
@@ -57,7 +59,7 @@ export default function EditList({
                           color: personOwing < 0 ? "red" : "white",
                         }}
                       >
-                        ${personOwing}
+                        ${value}
                       </span>
                     </li>
                   </button>

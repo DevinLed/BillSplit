@@ -43,6 +43,17 @@ function App() {
   const [merchantName, setMerchantName] = useState("");
   const [invoiceNumber,setInvoiceNumber] = useState("");
   const [startDate, setStartDate] = useState(new Date());
+  const [personReceiptAmount, setPersonReceiptAmount] = useState("");
+  const [value, setValue] = useState(0);
+
+  const addNum = (val, val2) => {
+    let a = parseInt(val, 0);
+    let b = parseInt(val2, 0);
+    setValue(a + b);
+    console.log(a, b);
+  };
+  
+
 
   const handleSubmit = (e) => {
     const newItems = {
@@ -81,7 +92,10 @@ function App() {
   const selectPerson = (id) => {
     const selectingPerson = list.find((row) => row.id === id);
     setPersonName(selectingPerson.personName);
+    setPersonOwing(selectingPerson.personOwing);
   };
+
+  
 
   const editRow = (id) => {
     const editingRow = list.find((row) => row.id === id);
@@ -91,6 +105,13 @@ function App() {
     setPersonPhone(editingRow.personPhone);
     setPersonEmail(editingRow.personEmail);
     setPersonOwing(editingRow.personOwing);
+  };
+
+
+  // Calculate total amount of items in the table
+
+  const deleteRow = (id) => {
+    setList(list.filter((row) => row.id !== id));
   };
   return (
     <>
@@ -117,6 +138,8 @@ function App() {
               personState={personState}
               setIsSelected={setIsSelected}
               list={list}
+              value={value}
+              setValue={setValue}
             />
           }
         />
@@ -140,6 +163,8 @@ function App() {
               personState={personState}
               setIsSelected={setIsSelected}
               list={list}
+              value={value}
+              setValue={setValue}
             />
           }
         />
@@ -168,6 +193,8 @@ function App() {
               editPerson={editPerson}
               setEditPerson={setEditPerson}
               editRow={editRow}
+              value={value}
+              setValue={setValue}
             />
           }
         />
@@ -197,6 +224,11 @@ function App() {
               setMerchantName={setMerchantName}
               invoiceNumber={invoiceNumber}
               setInvoiceNumber={setInvoiceNumber}
+              personReceiptAmount={personReceiptAmount}
+              setPersonReceiptAmount={setPersonReceiptAmount}
+              value={value}
+              setValue={setValue}
+              addNum={addNum}
             />
           }
         />

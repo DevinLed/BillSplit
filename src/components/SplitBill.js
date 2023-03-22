@@ -22,7 +22,10 @@ export default function SplitBill({
   personState,
   setIsSelected,
   list,
-  setEditPerson
+  setEditPerson,
+  value,
+  setValue,
+  
 }) {
   const [selectPersonList, setSelectPersonList] = useState(true);
 
@@ -47,7 +50,7 @@ export default function SplitBill({
                           color: personOwing < 0 ? "red" : "white",
                         }}
                       >
-                        ${personOwing}
+                        ${value}
                       </span>
                     </li>
                   </Link>
