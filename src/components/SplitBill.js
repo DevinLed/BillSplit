@@ -25,6 +25,8 @@ export default function SplitBill({
   setEditPerson,
   value,
   setValue,
+  addNum,
+  personReceiptAmount,
   
 }) {
   const [selectPersonList, setSelectPersonList] = useState(true);
@@ -35,7 +37,7 @@ export default function SplitBill({
         <Header selectPersonList={selectPersonList} />
         <div className="flex flex-col items-center justify-center">
           {/*Table generator for people added*/}
-          {list.map(({ id, personName, personOwing }) => (
+          {list.map(({ id, personName, personOwing}) => (
             <React.Fragment key={id}>
               {personName.length ? (
                 <ul class="list-group m-0">
@@ -50,7 +52,7 @@ export default function SplitBill({
                           color: personOwing < 0 ? "red" : "white",
                         }}
                       >
-                        ${value}
+                       ${value}
                       </span>
                     </li>
                   </Link>
@@ -83,6 +85,11 @@ export default function SplitBill({
             setPersonState={setPersonState}
             personState={personState}
             setIsSelected={setIsSelected}
+            value={value}
+            setValue={setValue}
+            addNum={addNum}
+            personReceiptAmount={personReceiptAmount}
+            
           ></AddPerson>
         ) : (
           ""

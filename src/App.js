@@ -35,6 +35,7 @@ function App() {
   const [personOwing, setPersonOwing] = useState("");
   const [personState, setPersonState] = useState("");
   const [selectedPerson, setSelectedPerson] = useState(false);
+  const [hasReceipt, setHasReceipt] = useState(false);
   const [list, setList] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [isSelected, setIsSelected] = useState(false);
@@ -44,13 +45,12 @@ function App() {
   const [invoiceNumber,setInvoiceNumber] = useState("");
   const [startDate, setStartDate] = useState(new Date());
   const [personReceiptAmount, setPersonReceiptAmount] = useState("");
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState("");
 
   const addNum = (val, val2) => {
     let a = parseInt(val, 0);
     let b = parseInt(val2, 0);
     setValue(a + b);
-    console.log(a, b);
   };
   
 
@@ -61,6 +61,7 @@ function App() {
       personPhone,
       personEmail,
       personOwing,
+      value,
 
       id: uuidv4(),
     };
@@ -71,6 +72,7 @@ function App() {
     setAddPerson(false);
     setList([...list, newItems]);
     setIsEditing(false);
+    setValue("");
   };
   const handleEditSubmit = (e) => {
     const newItems = {
@@ -93,6 +95,7 @@ function App() {
     const selectingPerson = list.find((row) => row.id === id);
     setPersonName(selectingPerson.personName);
     setPersonOwing(selectingPerson.personOwing);
+    setPersonReceiptAmount(selectingPerson.personReceiptAmount);
   };
 
   
@@ -140,6 +143,8 @@ function App() {
               list={list}
               value={value}
               setValue={setValue}
+              hasReceipt={hasReceipt}
+              setHasReceipt={setHasReceipt}
             />
           }
         />
@@ -165,6 +170,10 @@ function App() {
               list={list}
               value={value}
               setValue={setValue}
+              addNum={addNum}
+              personReceiptAmount={personReceiptAmount}
+              hasReceipt={hasReceipt}
+              setHasReceipt={setHasReceipt}
             />
           }
         />
@@ -195,6 +204,8 @@ function App() {
               editRow={editRow}
               value={value}
               setValue={setValue}
+              hasReceipt={hasReceipt}
+              setHasReceipt={setHasReceipt}
             />
           }
         />
@@ -229,6 +240,8 @@ function App() {
               value={value}
               setValue={setValue}
               addNum={addNum}
+              hasReceipt={hasReceipt}
+              setHasReceipt={setHasReceipt}
             />
           }
         />

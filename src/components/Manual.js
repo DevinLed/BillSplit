@@ -46,6 +46,8 @@ export default function Manual({
   value,
   setValue,
   addNum,
+  hasReceipt,
+  setHasReceipt,
 }) {
   const [selectMethodManual] = useState(true);
 
@@ -77,7 +79,7 @@ export default function Manual({
 
           <div class="form-group row">
             <div class="col-sm-10 mb-0">
-            <label for="colFormLabel" class="col-sm-2 col-form-label">
+              <label for="colFormLabel" class="col-sm-2 col-form-label">
                 Invoice#
               </label>
               <input
@@ -113,7 +115,7 @@ export default function Manual({
                 Amount
               </label>
               <input
-                type="number"
+                type="amount"
                 class="form-control"
                 id="colFormLabel"
                 placeholder="0"
@@ -121,7 +123,9 @@ export default function Manual({
                 onChange={(e) => setPersonReceiptAmount(e.target.value)}
               />
             </div>
+            </div>
 
+            <div class="form-group row">
             <div class="col-sm-10 mb-0">
               <label htmlFor="price">Total owing</label>
               <p>{value}</p>
