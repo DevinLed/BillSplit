@@ -28,9 +28,13 @@ export default function ReceiptInput({
   personState,
   setIsSelected,
   list,
-  setEditPerson
+  setEditPerson,
+  value
 }) {
   const [selectPersonReceipt, setSelectPersonReceipt] = useState(true);
+
+
+
   return (
     <>
     <main className="mt-5 p-0 pt-3 xs:max-w-xl sm:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl bg-white-500 rounded shadow">

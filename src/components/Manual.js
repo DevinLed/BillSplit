@@ -46,8 +46,10 @@ export default function Manual({
   value,
   setValue,
   addNum,
+  subNum,
   hasReceipt,
   setHasReceipt,
+  handleValueChange
 }) {
   const [selectMethodManual] = useState(true);
 
@@ -93,24 +95,6 @@ export default function Manual({
           </div>
           <div class="form-group row">
             <div class="col-sm-10 mb-0">
-              <label
-                for="payment"
-                class="form-control flex items-center justify-center mt-0"
-                id="colFormLabel"
-                placeholder="Who Paid?"
-              >
-                Who paid?
-                <button class="btn btn-primary btn-lg m-2" type="submit">
-                  You
-                </button>
-                <button class="btn btn-primary btn-lg mt-2 mb-2" type="submit">
-                  {personName}
-                </button>
-              </label>
-            </div>
-          </div>
-          <div class="form-group row">
-            <div class="col-sm-10 mb-0">
               <label for="colFormLabel" class="col-sm-2 col-form-label">
                 Amount
               </label>
@@ -119,25 +103,43 @@ export default function Manual({
                 class="form-control"
                 id="colFormLabel"
                 placeholder="0"
-                value={personReceiptAmount}
                 onChange={(e) => setPersonReceiptAmount(e.target.value)}
               />
             </div>
             </div>
+          <div class="form-group row">
+            <div class="col-sm-10 mb-0">
+              <label
+                for="payment"
+                class="form-control flex items-center justify-center mt-0"
+                id="colFormLabel"
+                placeholder="Who Paid?"
+              >
+                Who paid?
+                <button class="btn btn-primary btn-lg m-2" type="submit" onClick={() => addNum(personOwing, personReceiptAmount)}>
+                  You
+                </button>
+                <button class="btn btn-primary btn-lg mt-2 mb-2" type="submit" onClick={() => subNum(personOwing, personReceiptAmount)}>
+                  {personName}
+                </button>
+              </label>
+            </div>
+          </div>
 
             <div class="form-group row">
             <div class="col-sm-10 mb-0">
               <label htmlFor="price">Total owing</label>
               <p>{value}</p>
             </div>
-
+    
             <div class="col-sm-10 mb-0">
+              <Link to="/SplitBill">
               <button
                 className="mt-4 bg-blue-500 font-bold py-2 px-4 mb-5 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
-                onClick={() => addNum(personOwing, personReceiptAmount)}
-              >
+                >
                 submit
               </button>
+              </Link>
             </div>
           </div>
         </div>

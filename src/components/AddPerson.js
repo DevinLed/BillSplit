@@ -110,7 +110,6 @@ export default function AddPerson({
                 className="justify-center mt-3 ml-2 bg-blue-500 font-bold py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
                 onClick={(e) => {
                   handleSubmit(e);
-                  addNum(personOwing, personReceiptAmount);
                 }}
               >
                 Save

@@ -49,10 +49,10 @@ export default function SplitBill({
                       <span
                         class="badge badge-primary badge-pill"
                         style={{
-                          color: personOwing < 0 ? "red" : "white",
+                          color: value < 0 ? "red" : "white"
                         }}
                       >
-                       ${value}
+                       ${value ? (value) : (personOwing)}
                       </span>
                     </li>
                   </Link>

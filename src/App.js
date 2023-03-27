@@ -47,11 +47,25 @@ function App() {
   const [personReceiptAmount, setPersonReceiptAmount] = useState("");
   const [value, setValue] = useState("");
 
+
+
+
+
   const addNum = (val, val2) => {
     let a = parseInt(val, 0);
     let b = parseInt(val2, 0);
     setValue(a + b);
+    console.log(value);
   };
+  
+  
+  const subNum = (val, val2) => {
+    let a = parseInt(val, 0);
+    let b = parseInt(val2, 0);
+    setValue(a - b);
+    console.log(value);
+  };
+  
   
 
 
@@ -69,10 +83,10 @@ function App() {
     setPersonPhone("");
     setPersonEmail("");
     setPersonOwing("");
+    setValue("");
     setAddPerson(false);
     setList([...list, newItems]);
     setIsEditing(false);
-    setValue("");
   };
   const handleEditSubmit = (e) => {
     const newItems = {
@@ -90,12 +104,14 @@ function App() {
     setAddPerson(false);
     setList([...list, newItems]);
     setIsEditing(false);
+    setValue("");
   };
   const selectPerson = (id) => {
     const selectingPerson = list.find((row) => row.id === id);
     setPersonName(selectingPerson.personName);
     setPersonOwing(selectingPerson.personOwing);
     setPersonReceiptAmount(selectingPerson.personReceiptAmount);
+    setValue(selectingPerson.value);
   };
 
   
@@ -240,6 +256,7 @@ function App() {
               value={value}
               setValue={setValue}
               addNum={addNum}
+              subNum={subNum}
               hasReceipt={hasReceipt}
               setHasReceipt={setHasReceipt}
             />
