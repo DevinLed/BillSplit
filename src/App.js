@@ -17,7 +17,6 @@ import Header from "./components/Header";
 import EditList from "./components/EditList";
 import ReceiptInput from "./components/ReceiptInput";
 import Footer from "./components/Footer";
-import Manual from "./components/Manual";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -55,7 +54,7 @@ function App() {
     let a = parseInt(val, 0);
     let b = parseInt(val2, 0);
     setValue(a + b);
-    console.log(value);
+    setPersonOwing(value);
   };
   
   
@@ -161,6 +160,16 @@ function App() {
               setValue={setValue}
               hasReceipt={hasReceipt}
               setHasReceipt={setHasReceipt}
+              startDate={startDate}           
+              setStartDate={setStartDate}
+              merchantName={merchantName}
+              setMerchantName={setMerchantName}
+              invoiceNumber={invoiceNumber}
+              setInvoiceNumber={setInvoiceNumber}
+              personReceiptAmount={personReceiptAmount}
+              setPersonReceiptAmount={setPersonReceiptAmount}
+              addNum={addNum}
+              subNum={subNum}              
             />
           }
         />
@@ -225,43 +234,7 @@ function App() {
             />
           }
         />
-        <Route
-          path="/ManualEntry"
-          element={
-            <Manual
-              addPerson={addPerson}
-              setAddPerson={setAddPerson}
-              selectPerson={selectPerson}
-              personName={personName}
-              personEmail={personEmail}
-              personPhone={personPhone}
-              personOwing={personOwing}
-              setPersonName={setPersonName}
-              setPersonEmail={setPersonEmail}
-              setPersonPhone={setPersonPhone}
-              setPersonOwing={setPersonOwing}
-              handleSubmit={handleSubmit}
-              setPersonState={setPersonState}
-              personState={personState}
-              setIsSelected={setIsSelected}
-              list={list}
-              startDate={startDate}           
-              setStartDate={setStartDate}
-              merchantName={merchantName}
-              setMerchantName={setMerchantName}
-              invoiceNumber={invoiceNumber}
-              setInvoiceNumber={setInvoiceNumber}
-              personReceiptAmount={personReceiptAmount}
-              setPersonReceiptAmount={setPersonReceiptAmount}
-              value={value}
-              setValue={setValue}
-              addNum={addNum}
-              subNum={subNum}
-              hasReceipt={hasReceipt}
-              setHasReceipt={setHasReceipt}
-            />
-          }
-        />
+        
         <Route path="/History" element={<History />} />
 
         <Route path="/AddPerson" element={<AddPerson />} />
