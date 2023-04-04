@@ -41,7 +41,7 @@ export default function SplitBill({
             <React.Fragment key={id}>
               {personName.length ? (
                 <ul class="list-group m-0">
-                  <Link to="/ReceiptInput" onClick={() => 
+                  <Link to={`/ReceiptInput/${id}`} onClick={() => 
                           selectPerson(id)}>
                     <li class="outline-none text-primary focus:outline-none list-group-item d-flex l-500 justify-content-between align-items-center">
                       {personName}
@@ -49,7 +49,8 @@ export default function SplitBill({
                       <span
                         class="badge badge-primary badge-pill"
                         style={{
-                          color: value < 0 ? "red" : "white"
+                          backgroundColor: personOwing < 0 ? "red" : "",
+                          color: personOwing < 0 ? "black" : "white",
                         }}
                       >
                        ${value ? (value) : (personOwing)}

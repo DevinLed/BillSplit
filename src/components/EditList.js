@@ -56,10 +56,11 @@ export default function EditList({
                       <span
                         class="badge badge-primary badge-pill"
                         style={{
-                          color: personOwing < 0 ? "red" : "white",
+                          backgroundColor: personOwing < 0 ? "red" : "",
+                          color: personOwing < 0 ? "black" : "white",
                         }}
                       >
-                        ${value}
+                        ${value ? (value) : (personOwing)}
                       </span>
                     </li>
                   </button>

@@ -24,7 +24,6 @@ import "./darkMode.css";
 import "./index.css";
 
 function App() {
-
   // Menus for edit person and edit group
   const [addPerson, setAddPerson] = useState(false);
   const [editPerson, setEditPerson] = useState(false);
@@ -41,32 +40,36 @@ function App() {
 
   // Calendar for manual receipt entry
   const [merchantName, setMerchantName] = useState("");
-  const [invoiceNumber,setInvoiceNumber] = useState("");
+  const [invoiceNumber, setInvoiceNumber] = useState("");
   const [startDate, setStartDate] = useState(new Date());
   const [personReceiptAmount, setPersonReceiptAmount] = useState("");
-  const [value, setValue] = useState("");
+  const [value] = useState("");
 
-
-
-
-
-  const addNum = (val, val2) => {
+  const addNum = (id, val, val2) => {
+    let newList = list;
     let a = parseInt(val, 0);
     let b = parseInt(val2, 0);
-    setValue(a + b);
-    setPersonOwing(value);
+    let value = a + b;
+    for (let i = 0; i < newList.length; i++) {
+      if (newList[i].id === id) {
+        newList[i].personOwing = value;
+      }
+    }
+    setList(newList);
   };
-  
-  
-  const subNum = (val, val2) => {
+
+  const subNum = (id, val, val2) => {
+    let newList = list;
     let a = parseInt(val, 0);
     let b = parseInt(val2, 0);
-    setValue(a - b);
-    console.log(value);
+    let value = a - b;
+    for (let i = 0; i < newList.length; i++) {
+      if (newList[i].id === id) {
+        newList[i].personOwing = value;
+      }
+    }
+    setList(newList);
   };
-  
-  
-
 
   const handleSubmit = (e) => {
     const newItems = {
@@ -74,7 +77,6 @@ function App() {
       personPhone,
       personEmail,
       personOwing,
-      value,
 
       id: uuidv4(),
     };
@@ -82,7 +84,6 @@ function App() {
     setPersonPhone("");
     setPersonEmail("");
     setPersonOwing("");
-    setValue("");
     setAddPerson(false);
     setList([...list, newItems]);
     setIsEditing(false);
@@ -103,17 +104,13 @@ function App() {
     setAddPerson(false);
     setList([...list, newItems]);
     setIsEditing(false);
-    setValue("");
   };
   const selectPerson = (id) => {
     const selectingPerson = list.find((row) => row.id === id);
     setPersonName(selectingPerson.personName);
     setPersonOwing(selectingPerson.personOwing);
     setPersonReceiptAmount(selectingPerson.personReceiptAmount);
-    setValue(selectingPerson.value);
   };
-
-  
 
   const editRow = (id) => {
     const editingRow = list.find((row) => row.id === id);
@@ -125,7 +122,6 @@ function App() {
     setPersonOwing(editingRow.personOwing);
   };
 
-
   // Calculate total amount of items in the table
 
   const deleteRow = (id) => {
@@ -134,10 +130,10 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path="/" element=<Navigate to="/Home" /> />
+        <Route path="/" element={<Navigate to="/Home" />} />
         <Route path="/Home" element={<Home />} />
         <Route
-          path="/ReceiptInput"
+          path="/ReceiptInput/:id"
           element={
             <ReceiptInput
               addPerson={addPerson}
@@ -157,10 +153,9 @@ function App() {
               setIsSelected={setIsSelected}
               list={list}
               value={value}
-              setValue={setValue}
               hasReceipt={hasReceipt}
               setHasReceipt={setHasReceipt}
-              startDate={startDate}           
+              startDate={startDate}
               setStartDate={setStartDate}
               merchantName={merchantName}
               setMerchantName={setMerchantName}
@@ -169,7 +164,7 @@ function App() {
               personReceiptAmount={personReceiptAmount}
               setPersonReceiptAmount={setPersonReceiptAmount}
               addNum={addNum}
-              subNum={subNum}              
+              subNum={subNum}
             />
           }
         />
@@ -194,7 +189,6 @@ function App() {
               setIsSelected={setIsSelected}
               list={list}
               value={value}
-              setValue={setValue}
               addNum={addNum}
               personReceiptAmount={personReceiptAmount}
               hasReceipt={hasReceipt}
@@ -228,13 +222,12 @@ function App() {
               setEditPerson={setEditPerson}
               editRow={editRow}
               value={value}
-              setValue={setValue}
               hasReceipt={hasReceipt}
               setHasReceipt={setHasReceipt}
             />
           }
         />
-        
+
         <Route path="/History" element={<History />} />
 
         <Route path="/AddPerson" element={<AddPerson />} />

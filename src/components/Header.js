@@ -39,8 +39,9 @@ export default function Header({
             <h1 className="ml-2 mr-2">Select Person</h1>
 
             <div class="dropdown">
-              <button
-                className="text-black hover:text-black mr-2"
+              <button 
+                align="end"
+                className="text-black hover:text-black mr-2 right-0"
                 type="button"
                 id="dropdownMenu2"
                 data-toggle="dropdown"
@@ -49,7 +50,7 @@ export default function Header({
               >
                 <AiOutlineMenu />
               </button>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+              <div class="dropdown-menu right-0" aria-labelledby="dropdownMenu2">
                 <Link to="/EditList">
                   <button class="dropdown-item">Edit Person</button>
                 </Link>
@@ -142,7 +143,7 @@ export default function Header({
       
       {selectMethodManual ? (
         <div className="flex items-stretch font-bold bg-gray-200 h-10 align-items-center w-full items-center text-2xl mb-5 justify-between">
-          <Link to="/ReceiptInput">
+          <Link to="/SplitBill">
             <button className="text-black hover:text-black ml-2">
               <IoIosArrowBack />
             </button>
