@@ -1,8 +1,10 @@
 import React, { useRef, useState, useEffect } from "react";
 import Switch from "react-switch";
+import ReactSlider from "react-slider";
 import { useParams } from "react-router-dom";
 import AddPerson from "./AddPerson";
 import Header from "./Header";
+import { v4 as uuidv4 } from "uuid";
 import SplitBill from "./SplitBill";
 import Footer from "./Footer";
 import "../index.css";
@@ -18,6 +20,8 @@ import {
 import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
+import { AiOutlineDelete } from "react-icons/ai";
+import { IoMdAddCircleOutline } from "react-icons/io";
 
 export default function ReceiptInput({
   addPerson,
@@ -37,7 +41,6 @@ export default function ReceiptInput({
   setIsSelected,
   list,
   setEditPerson,
-  value,
   startDate,
   setStartDate,
   merchantName,
@@ -46,7 +49,6 @@ export default function ReceiptInput({
   setInvoiceNumber,
   personReceiptAmount,
   setPersonReceiptAmount,
-  setValue,
   addNum,
   subNum,
   hasReceipt,
@@ -56,7 +58,39 @@ export default function ReceiptInput({
   const [selectPersonReceipt, setSelectPersonReceipt] = useState(true);
   const [selectMethodManual, setSelectMethodManual] = useState(false);
   const { id } = useParams();
+  const [receiptList, setReceiptList] = useState([]);
+  const [description, setDescription] = useState("");
+  const [price, setPrice] = useState("");
+  const [receiptValue, setReceiptValue] = useState("");
 
+  const deleteRow = (id) => {
+    setReceiptList(receiptList.filter((row) => row.id !== id));
+  };
+
+  const handleReceiptSubmit = (e) => {
+    e.preventDefault();
+    console.log(id);
+
+    const newReceiptItems = {
+      id: uuidv4(),
+      description,
+      price,
+    };
+    setDescription("");
+    setPrice("");
+    setReceiptList([...receiptList, newReceiptItems]);
+  };
+
+  useEffect(() => {
+    let rows = document.querySelectorAll(".price");
+    let sum = 0;
+    for (let i = 0; i < rows.length; i++) {
+      if (rows[i].className === "price") {
+        sum += isNaN(rows[i].innerHTML) ? 0 : parseInt(rows[i].innerHTML);
+        setReceiptValue(sum);
+      }
+    }
+  }, [price, receiptValue, setReceiptValue]);
   return (
     <>
       {selectPersonReceipt ? (
@@ -101,7 +135,7 @@ export default function ReceiptInput({
             <div className="flex flex-col items-center justify-center mt-0">
               <Header selectMethodManual={selectMethodManual} />
 
-              <div class="bg-grey dark:bg-slate-900 rounded-lg px-6 py-6 ring-slate-900/5">
+              <div class="flex flex-col items-center w-96 justify-center bg-grey dark:bg-slate-900 rounded-lg px-6 py-6 ring-slate-900/5">
                 <div class="col-sm-10 mb-0">
                   <input
                     type="amount"
@@ -145,9 +179,7 @@ export default function ReceiptInput({
                     id="colFormLabel"
                     placeholder="Who Paid?"
                   >
-                  <div className="pr-5">
-                    Who paid? 
-                    </div>
+                    <div className="pr-5">Who paid?</div>
                     You
                     <Switch
                       checked={subNum(id, personOwing, personReceiptAmount)}
@@ -165,46 +197,82 @@ export default function ReceiptInput({
                       id="material-switch"
                     />
                     {personName}
-                    
                   </label>
                 </div>
-                <div class="bg-white dark:bg-slate-900 rounded-lg py-6 ring-slate-900/5 m-0">
-                <div class="col-sm-10 mb-0">
-                  <table>
-                    
-  <thead>
-    <tr>
-      <th>Song</th>
-      <th>Artist</th>
-      <th>Year</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>The Sliding Mr. Bones (Next Stop, Pottersville)</td>
-      <td>Malcolm Lockyer</td>
-      <td>1961</td>
-    </tr>
-    <tr>
-      <td>Witchy Woman</td>
-      <td>The Eagles</td>
-      <td>1972</td>
-    </tr>
-    <tr>
-      <td>Shining Star</td>
-      <td>Earth, Wind, and Fire</td>
-      <td>1975</td>
-    </tr>
-  </tbody>
-                  <input
-                    type="amount"
-                    class="form-control font-bold ml-12 w-50"
-                    id="colFormLabel"
-                    placeholder="Amount"
-                    onChange={(e) => setPersonReceiptAmount(e.target.value)}
-                  /></table>
+                <div class="w-full bg-white dark:bg-slate-900 rounded-lg py-1 ring-slate-900/5 m-0">
+                  <div class="col-sm-10 mb-0">
+                    <table>
+                      <thead className="table-fixed">
+                        <tr>
+                          <th className="px-15">Item</th>
+                          <th className="px-15">Price</th>
+                          <th className="px-1">You | Split | {personName}</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>
+                            <input
+                              type="amount"
+                              class="form-control font-bold w-20"
+                              id="colFormLabel"
+                              placeholder="Item Name"
+                              onChange={(e) => setDescription(e.target.value)}
+                            />
+                          </td>
+                          <td>
+                            <input
+                              type="amount"
+                              class="form-control font-bold w-20"
+                              id="colFormLabel"
+                              placeholder="Amount"
+                              value={price}
+                              onChange={(e) => setPrice(e.target.value)}
+                            />
+                          </td>
+
+                          <Switch
+                            onColor="#86d3ff"
+                            offColor="#86d3ff"
+                            handleDiameter={30}
+                            uncheckedIcon={false}
+                            checkedIcon={false}
+                            boxShadow="0px 1px 2px rgba(0, 0, 0, 0.6)"
+                            activeBoxShadow="0px 0px 1px 2px rgba(0, 0, 0, 0.2)"
+                            height={20}
+                            width={110}
+                            className="react-switch fixed"
+                            id="material-switch"
+                          />
+                        </tr>
+                      </tbody>
+                      <button
+                      className="text-blue-500 font-bold text-xl"
+                        onClick={(e) => {
+                          handleReceiptSubmit(e);
+                        }}
+                      >
+                      <IoMdAddCircleOutline className="h-10 w-10"/>
+                        
+                      </button>
+                      {receiptList.map(([id, description, price]) => (
+                        <React.Fragment key={id}>
+                          <tbody>
+                            <tr>
+                              <td>{description}</td>
+                              <td>{price}</td>
+                              <td>
+                                <button onClick={() => deleteRow(id)}>
+                                  <AiOutlineDelete className="text-red-500 font-bold text-xl" />
+                                </button>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </React.Fragment>
+                      ))}
+                    </table>
+                  </div>
                 </div>
-              </div>
               </div>
               <div class="form-group row">
                 <div class="col-sm-10 mb-0">

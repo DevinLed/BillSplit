@@ -122,11 +122,7 @@ function App() {
     setPersonOwing(editingRow.personOwing);
   };
 
-  // Calculate total amount of items in the table
 
-  const deleteRow = (id) => {
-    setList(list.filter((row) => row.id !== id));
-  };
   return (
     <>
       <Routes>
