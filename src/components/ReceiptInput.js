@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import Switch from "react-switch";
-import ReactSlider from "react-slider";
+import Slider from "react-slider";
 import { useParams } from "react-router-dom";
 import AddPerson from "./AddPerson";
 import Header from "./Header";
@@ -20,7 +20,7 @@ import {
 import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
-import { AiOutlineDelete } from "react-icons/ai";
+import { FaPlus, FaTrash } from "react-icons/fa";
 import { IoMdAddCircleOutline } from "react-icons/io";
 
 export default function ReceiptInput({
@@ -56,41 +56,44 @@ export default function ReceiptInput({
   handleValueChange,
 }) {
   const [selectPersonReceipt, setSelectPersonReceipt] = useState(true);
+
   const [selectMethodManual, setSelectMethodManual] = useState(false);
   const { id } = useParams();
   const [receiptList, setReceiptList] = useState([]);
-  const [description, setDescription] = useState("");
-  const [price, setPrice] = useState("");
-  const [receiptValue, setReceiptValue] = useState("");
+  const [items, setItems] = useState([]);
+  const [name, setName] = useState("");
+  const [amount, setAmount] = useState("");
 
-  const deleteRow = (id) => {
-    setReceiptList(receiptList.filter((row) => row.id !== id));
+  const handleNameChange = (event) => {
+    setName(event.target.value);
   };
 
-  const handleReceiptSubmit = (e) => {
-    e.preventDefault();
-    console.log(id);
-
-    const newReceiptItems = {
-      id: uuidv4(),
-      description,
-      price,
-    };
-    setDescription("");
-    setPrice("");
-    setReceiptList([...receiptList, newReceiptItems]);
+  const handleAmountChange = (event) => {
+    setAmount(event.target.value);
   };
 
-  useEffect(() => {
-    let rows = document.querySelectorAll(".price");
-    let sum = 0;
-    for (let i = 0; i < rows.length; i++) {
-      if (rows[i].className === "price") {
-        sum += isNaN(rows[i].innerHTML) ? 0 : parseInt(rows[i].innerHTML);
-        setReceiptValue(sum);
-      }
+  const handleReceiptSubmit = (event) => {
+    event.preventDefault();
+    setItems([...items, { name: name, amount: amount }]);
+    setName("");
+    setAmount("");
+  };
+
+  const handleDelete = (index) => {
+    const newItems = [...items];
+    newItems.splice(index, 1);
+    setItems(newItems);
+  };
+  const getTotal = () => {
+    let total = 0;
+    for (const item of items) {
+      total += parseInt(item.amount);
+      setPersonReceiptAmount(total);
+      addNum(id, personOwing, personReceiptAmount);
     }
-  }, [price, receiptValue, setReceiptValue]);
+    return total;
+  };
+
   return (
     <>
       {selectPersonReceipt ? (
@@ -200,85 +203,93 @@ export default function ReceiptInput({
                   </label>
                 </div>
                 <div class="w-full bg-white dark:bg-slate-900 rounded-lg py-1 ring-slate-900/5 m-0">
-                  <div class="col-sm-10 mb-0">
-                    <table>
-                      <thead className="table-fixed">
-                        <tr>
-                          <th className="px-15">Item</th>
-                          <th className="px-15">Price</th>
-                          <th className="px-1">You | Split | {personName}</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>
-                            <input
-                              type="amount"
-                              class="form-control font-bold w-20"
-                              id="colFormLabel"
-                              placeholder="Item Name"
-                              onChange={(e) => setDescription(e.target.value)}
-                            />
-                          </td>
-                          <td>
-                            <input
-                              type="amount"
-                              class="form-control font-bold w-20"
-                              id="colFormLabel"
-                              placeholder="Amount"
-                              value={price}
-                              onChange={(e) => setPrice(e.target.value)}
-                            />
-                          </td>
+                  <div class="col-sm-15 mb-0">
+                    <form onSubmit={handleReceiptSubmit}>
+                      <table class="table-auto">
+                        <thead className="table-fixed">
+                          <tr>
+                            <th className="px-15">Item</th>
+                            <th className="px-15">Price</th>
+                            <th className="px-1">You | Split | {personName}</th>
+                          </tr>
+                        </thead>
 
-                          <Switch
-                            onColor="#86d3ff"
-                            offColor="#86d3ff"
-                            handleDiameter={30}
-                            uncheckedIcon={false}
-                            checkedIcon={false}
-                            boxShadow="0px 1px 2px rgba(0, 0, 0, 0.6)"
-                            activeBoxShadow="0px 0px 1px 2px rgba(0, 0, 0, 0.2)"
-                            height={20}
-                            width={110}
-                            className="react-switch fixed"
-                            id="material-switch"
-                          />
-                        </tr>
+                        <tbody className="max-h-15 overflow-y-scroll">
+                          <tr>
+                            <td>
+                              <input
+                                type="amount"
+                                class="form-control font-bold w-20"
+                                id="colFormLabel"
+                                placeholder="Item Name"
+                                value={name}
+                                onChange={handleNameChange}
+                              />
+                            </td>
+                            <td>
+                              <input
+                                type="amount"
+                                class="form-control font-bold w-20"
+                                id="colFormLabel"
+                                placeholder="Amount"
+                                value={amount}
+                                onChange={handleAmountChange}
+                              />
+                            </td>
+                            <td>
+                              
+                    <Switch
+                      onColor="#86d3ff"
+                      offColor="#86d3ff"
+                      handleDiameter={30}
+                      uncheckedIcon={false}
+                      checkedIcon={false}
+                      boxShadow="0px 1px 2px rgba(0, 0, 0, 0.6)"
+                      activeBoxShadow="0px 0px 1px 2px rgba(0, 0, 0, 0.2)"
+                      height={20}
+                      width={96}
+                      className="react-switch mb-5"
+                      id="material-switch"
+                    />
+                            </td>
+                          </tr>
+                        </tbody>
+                        <button
+                          type="submit"
+                          className="add-button  text-black"
+                        >
+                          <FaPlus />
+                        </button>
+                      </table>
+                    </form>
+                    <table>
+                      <tbody>
+                        {items.map((item, index) => (
+                          <tr key={index}>
+                            <td>{item.name}</td>
+                            <td>{item.amount}</td>
+                            <td>
+                              <button
+                                className="delete-button bg-black-500 text-black"
+                                onClick={() => handleDelete(index)}
+                              >
+                                <FaTrash />
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
                       </tbody>
-                      <button
-                      className="text-blue-500 font-bold text-xl"
-                        onClick={(e) => {
-                          handleReceiptSubmit(e);
-                        }}
-                      >
-                      <IoMdAddCircleOutline className="h-10 w-10"/>
-                        
-                      </button>
-                      {receiptList.map(([id, description, price]) => (
-                        <React.Fragment key={id}>
-                          <tbody>
-                            <tr>
-                              <td>{description}</td>
-                              <td>{price}</td>
-                              <td>
-                                <button onClick={() => deleteRow(id)}>
-                                  <AiOutlineDelete className="text-red-500 font-bold text-xl" />
-                                </button>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </React.Fragment>
-                      ))}
+                      <tfoot>
+                        <tr>
+                          <td colSpan="2">Total:</td>
+                          <td>{getTotal()}</td>
+                        </tr>
+                      </tfoot>
                     </table>
                   </div>
                 </div>
               </div>
               <div class="form-group row">
-                <div class="col-sm-10 mb-0">
-                  <label htmlFor="price">Total owing</label>
-                  <p>{personOwing}</p>
-                </div>
                 <div class="col-sm-10 mb-0">
                   <Link to="/SplitBill">
                     <button className="mt-4 bg-blue-500 font-bold py-2 px-4 mb-5 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300">
