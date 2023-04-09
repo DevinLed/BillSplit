@@ -1,6 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
 import Switch from "react-switch";
-import Slider from "react-slider";
 import { useParams } from "react-router-dom";
 import AddPerson from "./AddPerson";
 import Header from "./Header";
@@ -19,6 +18,8 @@ import {
 
 import DatePicker from "react-datepicker";
 
+import Slider from "rc-slider";
+import "rc-slider/assets/index.css";
 import "react-datepicker/dist/react-datepicker.css";
 import { FaPlus, FaTrash } from "react-icons/fa";
 import { IoMdAddCircleOutline } from "react-icons/io";
@@ -55,6 +56,9 @@ export default function ReceiptInput({
   setHasReceipt,
   handleValueChange,
 }) {
+
+
+  
   const [selectPersonReceipt, setSelectPersonReceipt] = useState(true);
 
   const [selectMethodManual, setSelectMethodManual] = useState(false);
@@ -63,6 +67,40 @@ export default function ReceiptInput({
   const [items, setItems] = useState([]);
   const [name, setName] = useState("");
   const [amount, setAmount] = useState("");
+  const [addToValue, setAddToValue] = useState(false);
+  const [selectedValue, setSelectedValue] = useState("you");
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [sliderValue, setSliderValue] = useState(0);
+
+  const handleSliderChange = (value) => {
+    setSliderValue(value);
+  };
+
+  const renderYouColumn = () => {
+    return <div>{console.log("this is for you")}</div>;
+  };
+
+  const renderSplitColumn = () => {
+    return <div>{console.log("this is for both")}</div>;
+  };
+
+  const renderPersonNameColumn = () => {
+    return <div>{console.log("this is for them")}</div>;
+  };
+
+  const renderColumn = () => {
+    if (sliderValue <= 33) {
+      return renderYouColumn();
+    } else if (sliderValue <= 66) {
+      return renderSplitColumn();
+    } else {
+      return renderPersonNameColumn();
+    }
+  };
+
+  const handleRadioChange = (event) => {
+    setSelectedValue(event.target.value);
+  };
 
   const handleNameChange = (event) => {
     setName(event.target.value);
@@ -73,10 +111,14 @@ export default function ReceiptInput({
   };
 
   const handleReceiptSubmit = (event) => {
+    if (!name || !amount) {
+      return;
+    }
     event.preventDefault();
-    setItems([...items, { name: name, amount: amount }]);
+    setItems([...items, { name: name, amount: parseFloat(amount).toFixed(2) }]);
     setName("");
     setAmount("");
+    setCurrentIndex(currentIndex + 1);
   };
 
   const handleDelete = (index) => {
@@ -89,11 +131,14 @@ export default function ReceiptInput({
     for (const item of items) {
       total += parseInt(item.amount);
       setPersonReceiptAmount(total);
-      addNum(id, personOwing, personReceiptAmount);
+      if (selectedValue === "you") {
+        addNum(id, personOwing, personReceiptAmount);
+      } else {
+        subNum(id, personOwing, personReceiptAmount);
+      }
     }
     return total;
   };
-
   return (
     <>
       {selectPersonReceipt ? (
@@ -138,7 +183,7 @@ export default function ReceiptInput({
             <div className="flex flex-col items-center justify-center mt-0">
               <Header selectMethodManual={selectMethodManual} />
 
-              <div class="flex flex-col items-center w-96 justify-center bg-grey dark:bg-slate-900 rounded-lg px-6 py-6 ring-slate-900/5">
+              <div class="flex flex-col items-center max-w-min  justify-center bg-grey dark:bg-slate-900 rounded-lg px-6 py-6 ring-slate-900/5">
                 <div class="col-sm-10 mb-0">
                   <input
                     type="amount"
@@ -175,99 +220,99 @@ export default function ReceiptInput({
                     onChange={(e) => setInvoiceNumber(e.target.value)}
                   />
                 </div>
-                <div class="col-sm-10 mb-0">
+                <div className="max-w-fit">
                   <label
-                    for="payment"
-                    class="form-control flex items-center justify-left mt-0 pr-50"
-                    id="colFormLabel"
-                    placeholder="Who Paid?"
+                    htmlFor="payment"
+                    className="form-control flex items-center justify-left mt-0 px-2"
                   >
-                    <div className="pr-5">Who paid?</div>
-                    You
-                    <Switch
-                      checked={subNum(id, personOwing, personReceiptAmount)}
-                      onChange={addNum(id, personOwing, personReceiptAmount)}
-                      onColor="#86d3ff"
-                      offColor="#86d3ff"
-                      handleDiameter={30}
-                      uncheckedIcon={false}
-                      checkedIcon={false}
-                      boxShadow="0px 1px 2px rgba(0, 0, 0, 0.6)"
-                      activeBoxShadow="0px 0px 1px 2px rgba(0, 0, 0, 0.2)"
-                      height={20}
-                      width={48}
-                      className="react-switch "
-                      id="material-switch"
-                    />
-                    {personName}
+                    <div className="whitespace-no-wrap w-20">Who paid?</div>
+                    <label className="ml-3 px-1 inline-flex items-center justify-center">
+                      <input
+                        type="radio"
+                        name="payment"
+                        className="form-radio mb-0"
+                        value="you"
+                        checked={selectedValue === "you"}
+                        onChange={handleRadioChange}
+                      />
+                      <span className="ml-2">You</span>
+                    </label>
+                    <label className="inline-flex items-center px-3">
+                      <input
+                        type="radio"
+                        name="payment"
+                        className="form-radio mb-0"
+                        value="them"
+                        checked={selectedValue === "them"}
+                        onChange={handleRadioChange}
+                      />
+                      <span className="ml-2">{personName}</span>
+                    </label>
                   </label>
                 </div>
-                <div class="w-full bg-white dark:bg-slate-900 rounded-lg py-1 ring-slate-900/5 m-0">
-                  <div class="col-sm-15 mb-0">
-                    <form onSubmit={handleReceiptSubmit}>
-                      <table class="table-auto">
-                        <thead className="table-fixed">
-                          <tr>
-                            <th className="px-15">Item</th>
-                            <th className="px-15">Price</th>
-                            <th className="px-1">You | Split | {personName}</th>
-                          </tr>
-                        </thead>
 
-                        <tbody className="max-h-15 overflow-y-scroll">
-                          <tr>
-                            <td>
-                              <input
-                                type="amount"
-                                class="form-control font-bold w-20"
-                                id="colFormLabel"
-                                placeholder="Item Name"
-                                value={name}
-                                onChange={handleNameChange}
+                <div className="w-full bg-white dark:bg-slate-900 rounded-lg py-1 m-0 max-w-min px-1 whitespace-no-wrap">
+                  <div class="mb-0 mx-auto max-w-min">
+                    <table className="border border-black table-fixed max-w-min m-auto">
+                      <thead className="whitespace-no-wrap overflow-hidden max-w-fit truncate">
+                        <tr className="whitespace-no-wrap overflow-hidden max-w-fit px-2">
+                          <th className="px-15">Item</th>
+                          <th className="px-15">Price</th>
+                          <th className="px-1" colSpan={3}>
+                            You | Split | Them
+                          </th>
+                        </tr>
+                      </thead>
+
+                      <tbody className="pt-5">
+                        <tr>
+                          <td>
+                            <input
+                              type="amount"
+                              class="form-control font-bold w-20 px-1 text-xs mb-1"
+                              id="colFormLabel"
+                              placeholder="Item Name"
+                              value={name}
+                              onChange={handleNameChange}
+                            />
+                          </td>
+                          <td>
+                            <input
+                              type="amount"
+                              class="form-control font-bold w-20 px-1 text-xs mb-1"
+                              id="colFormLabel"
+                              placeholder="Amount"
+                              value={amount}
+                              onChange={handleAmountChange}
+                            />
+                          </td>
+                          <td colSpan="3" className="px-2">
+                            <div style={{ width: "auto", margin: "auto" }}>
+                              <Slider
+                                defaultValue={0}
+                                min={0}
+                                max={100} step={12.40} 
+                                onChange={handleSliderChange}
                               />
-                            </td>
-                            <td>
-                              <input
-                                type="amount"
-                                class="form-control font-bold w-20"
-                                id="colFormLabel"
-                                placeholder="Amount"
-                                value={amount}
-                                onChange={handleAmountChange}
-                              />
-                            </td>
-                            <td>
-                              
-                    <Switch
-                      onColor="#86d3ff"
-                      offColor="#86d3ff"
-                      handleDiameter={30}
-                      uncheckedIcon={false}
-                      checkedIcon={false}
-                      boxShadow="0px 1px 2px rgba(0, 0, 0, 0.6)"
-                      activeBoxShadow="0px 0px 1px 2px rgba(0, 0, 0, 0.2)"
-                      height={20}
-                      width={96}
-                      className="react-switch mb-5"
-                      id="material-switch"
-                    />
-                            </td>
-                          </tr>
-                        </tbody>
-                        <button
-                          type="submit"
-                          className="add-button  text-black"
-                        >
-                          <FaPlus />
-                        </button>
-                      </table>
-                    </form>
-                    <table>
-                      <tbody>
+                              {renderColumn()}
+                            </div>
+                          </td>
+                        </tr>
                         {items.map((item, index) => (
-                          <tr key={index}>
-                            <td>{item.name}</td>
-                            <td>{item.amount}</td>
+                          <tr
+                            key={index}
+                            className={
+                              index % 2 === currentIndex % 2
+                                ? "blue-background"
+                                : ""
+                            }
+                          >
+                            <td>
+                              {item.name.replace(/\b\w/g, (c) =>
+                                c.toUpperCase()
+                              )}
+                            </td>
+                            <td>${item.amount}</td>
                             <td>
                               <button
                                 className="delete-button bg-black-500 text-black"
@@ -278,10 +323,21 @@ export default function ReceiptInput({
                             </td>
                           </tr>
                         ))}
+                        <tr>
+                          <button
+                            type="submit"
+                            className="add-button text-black m-2 text-lg"
+                            onClick={(e) => {
+                              handleReceiptSubmit(e);
+                            }}
+                          >
+                            <FaPlus />
+                          </button>
+                        </tr>
                       </tbody>
                       <tfoot>
                         <tr>
-                          <td colSpan="2">Total:</td>
+                          <td>Total:</td>
                           <td>{getTotal()}</td>
                         </tr>
                       </tfoot>

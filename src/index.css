@@ -119,4 +119,6 @@ a:focus {
   vertical-align: middle;
   margin-left: 4px;
 }
-     
+.blue-background {
+  background-color: lightblue;
+}
