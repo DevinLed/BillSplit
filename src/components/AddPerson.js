@@ -43,7 +43,7 @@ export default function AddPerson({
                     id="colFormLabel"
                     placeholder="Name"
                     value={personName}
-                    onChange={(e) => setPersonName(e.target.value)}
+                    onChange={(e) => setPersonName(e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1))}
                   />
                 </div>
               </div>

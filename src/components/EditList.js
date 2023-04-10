@@ -60,7 +60,7 @@ export default function EditList({
                           color: personOwing < 0 ? "black" : "white",
                         }}
                       >
-                        ${value ? (value) : (personOwing)}
+                        ${(personOwing)}
                       </span>
                     </li>
                   </button>

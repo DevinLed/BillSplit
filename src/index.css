@@ -37,7 +37,6 @@ button:focus,
 a:focus {
   opacity: 0.5;
   box-shadow: 0.5px 0.5px 0px 2px rgb(218, 213, 213), 0px 0px 0px 2px #f1f1f1;
-  border-radius: 5px;
   text-decoration: none;
 }
 .footer li {
