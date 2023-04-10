@@ -107,7 +107,7 @@ export default function EditPerson({
                         type="submit"
                         className="justify-center align-items-center mt-3 ml-2 bg-gray-500 font-bold py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
                         onClick={(e) => {
-                                  setPersonOwing("");}}
+                                  setPersonOwing(0.00);}}
                       >
                         Reset balance
                       </button>
