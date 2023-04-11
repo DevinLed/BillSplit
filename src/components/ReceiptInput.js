@@ -22,7 +22,7 @@ import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import "react-datepicker/dist/react-datepicker.css";
 import { FaPlus, FaTrash } from "react-icons/fa";
-import {GrSubtractCircle} from "react-icons/gr";
+import { GrSubtractCircle } from "react-icons/gr";
 import { IoMdAddCircleOutline, IoMdRemoveCircleOutline } from "react-icons/io";
 
 export default function ReceiptInput({
@@ -69,6 +69,12 @@ export default function ReceiptInput({
   const [selectedValue, setSelectedValue] = useState("you");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [sliderValue, setSliderValue] = useState(0);
+  const [youValue, setYouValue] = useState(0);
+  const [splitValue, setSplitValue] = useState(0);
+  const [themValue,setThemValue] = useState(0);
+
+
+
 
   const [selected, setSelected] = useState(null);
   const handleButton1Click = () => {
@@ -94,6 +100,7 @@ export default function ReceiptInput({
     return <div>{console.log("this is for them")}</div>;
   };
 
+
   const renderColumn = () => {
     if (sliderValue <= 33) {
       return renderYouColumn();
@@ -104,9 +111,6 @@ export default function ReceiptInput({
     }
   };
 
-  const handleRadioChange = (event) => {
-    setSelectedValue(event.target.value);
-  };
 
   const handleNameChange = (event) => {
     setName(event.target.value);
@@ -116,12 +120,31 @@ export default function ReceiptInput({
     setAmount(event.target.value);
   };
 
-  const handleReceiptSubmit = (event) => {
+  const handleReceiptSubmit = (sliderValue) => {
     if (!name || !amount) {
       return;
     }
-    event.preventDefault();
-    setItems([...items, { name: name, amount: parseFloat(amount).toFixed(2) }]);
+    setItems([
+      ...items,
+      {
+        name: name,
+        amount: parseFloat(amount).toFixed(2),
+        sliderValue: sliderValue,
+      },
+    ]);
+    switch(sliderValue) {
+      case 0:
+        setYouValue(youValue + 1);
+        break;
+      case 55:
+        setSplitValue(splitValue + 1);
+        break;
+      case 100:
+        setThemValue(themValue + 1);
+        break;
+      default:
+        break;
+    }
     setName("");
     setAmount("");
     setCurrentIndex(currentIndex + 1);
@@ -197,9 +220,11 @@ export default function ReceiptInput({
                     id="colFormLabel"
                     placeholder="Merchant Name"
                     value={merchantName}
-                    onChange={(e) => setMerchantName(e.target.value.replace(/\b\w/g, (c) =>
-                    c.toUpperCase()
-                  ))}
+                    onChange={(e) =>
+                      setMerchantName(
+                        e.target.value.replace(/\b\w/g, (c) => c.toUpperCase())
+                      )
+                    }
                   />
 
                   <div class="flex items-center justify-left h-11 mb-1">
@@ -314,11 +339,23 @@ export default function ReceiptInput({
                                 min={0}
                                 max={100}
                                 step={55}
-                                onChange={handleSliderChange}
+                                onChange={(value) => {handleSliderChange(value);console.log('Slider value has changed:', sliderValue, '->', value);}}
                               />
                               {renderColumn()}
                             </div>
                           </td>
+                        </tr>
+                        
+                        <tr className="add-button text-black m-2 text-center items-center justify-center">
+                          <button
+                            type="submit"
+                            className="add-button text-gray-500 m-2 text-2xl text-center items-center justify-center"
+                            onClick={() => {
+                              handleReceiptSubmit(sliderValue);
+                            }}
+                          >
+                            <IoMdAddCircleOutline />
+                          </button>
                         </tr>
                         {items.map((item, index) => (
                           <tr
@@ -334,67 +371,68 @@ export default function ReceiptInput({
                                 c.toUpperCase()
                               )}
                             </td>
-                            <td className="text-right text-sm"><button
+                            <td className="text-sm flex items-center mr-2">
+                              <button
                                 className="add-button text-gray-500 m-2 text-2xl text-center items-center justify-center"
                                 onClick={() => handleDelete(index)}
                               >
-                                <IoMdRemoveCircleOutline/>
-                              </button>${item.amount}
-                              </td>
-                            <td 
-                            colSpan={3}>
-                            <div style={{ width: "auto", margin: "auto", padding: "8px" }}>
-                              <Slider
-                                defaultValue={55}
-                                min={0}
-                                max={100}
-                                step={55}
-                                onChange={handleSliderChange}
-                              />
-                              {renderColumn()}
-                            </div>
+                                <IoMdRemoveCircleOutline />
+                              </button>
+                              <span className="ml-2">${item.amount}</span>
+                            </td>
+                            <td colSpan={3}>
+                              <div
+                                style={{
+                                  width: "auto",
+                                  margin: "auto",
+                                  padding: "8px",
+                                }}
+                              >
+                                <Slider
+                                  defaultValue={item.sliderValue}
+                                  min={0}
+                                  max={100}
+                                  step={55}
+                                  onChange={(value) =>
+                                    handleSliderChange(value)
+                                  }
+                                />
+                                {renderColumn()}
+                              </div>
                             </td>
                             <td></td>
                             <td></td>
                           </tr>
                         ))}
-                        <tr className="add-button text-black m-2 text-center items-center justify-center">
-                          <button
-                            type="submit"
-                            className="add-button text-gray-500 m-2 text-2xl text-center items-center justify-center"
-                            onClick={(e) => {
-                              handleReceiptSubmit(e);
-                            }}
-                          >
-                            <IoMdAddCircleOutline />
-                          </button>
-                        </tr>
                       </tbody>
                       <tfoot className="bg-blue-200">
-                        <tr className="border-t border-gray-500">
-                          <td className="px-2 py-1" style={{ width: "33.33%" }}>
+                        <tr className="border-t border-gray-500 bg-blue-200">
+                          <td className="px-2 py-1 " style={{ width: "33.33%" }}>
                             Total:
                           </td>
-                          <td className="px-2 py-1 text-right" style={{ width: "33.33%" }}>
+                          <td
+                            className="px-2 mr-2 py-1 text-right"
+                            style={{ width: "33.33%" }}
+                          >
                             ${getTotal()}
                           </td>
                           <td
                             className="text-center px-2 py-1 border-l border-gray-500 text-xs"
                             style={{ width: "33.33%" }}
                           >
-                            $55.00
+                            {youValue}
                           </td>
                           <td
                             className="text-center px-2 py-1 border-l border-gray-500 text-xs"
                             style={{ width: "33.33%" }}
                           >
-                            $55.00
+                            {splitValue}
                           </td>
                           <td
                             className="text-center px-2 py-1 border-l border-gray-500 text-xs"
                             style={{ width: "33.33%" }}
                           >
-                            $55.00
+                            {themValue}
                           </td>
                         </tr>
                       </tfoot>

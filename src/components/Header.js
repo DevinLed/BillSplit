@@ -41,7 +41,7 @@ export default function Header({
             <div class="dropdown">
               <button 
                 align="end"
-                className="text-black hover:text-black mr-2 right-0"
+                className="text-black hover:text-black mr-2 right-0 "
                 type="button"
                 id="dropdownMenu2"
                 data-toggle="dropdown"
@@ -50,7 +50,7 @@ export default function Header({
               >
                 <AiOutlineMenu />
               </button>
-              <div class="dropdown-menu right-0" aria-labelledby="dropdownMenu2">
+              <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
                 <Link to="/EditList">
                   <button class="dropdown-item">Edit Person</button>
                 </Link>
