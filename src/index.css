@@ -73,10 +73,12 @@ a:focus {
   justify-content: space-between;
   user-select: none;
 }
+
 .dropdown-menu {
   position: absolute;
   transform: translateY(4px);
   width: 100%;
+  left: 0;
   border: 1px solid #ccc;
   border-radius: 5px;
   overflow: auto;
@@ -120,4 +122,9 @@ a:focus {
 }
 .blue-background {
   background-color: lightblue;
+}
+#receiptcontainer{
+  align-items: center;
+  justify-content: center;
+  margin: auto;
 }

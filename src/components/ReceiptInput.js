@@ -71,10 +71,13 @@ export default function ReceiptInput({
   const [sliderValue, setSliderValue] = useState(0);
   const [youValue, setYouValue] = useState(0);
   const [splitValue, setSplitValue] = useState(0);
-  const [themValue,setThemValue] = useState(0);
+  const [themValue, setThemValue] = useState(0);
+  const [showTable, setShowTable] = useState("");
+  const [youTotal, setYouTotal] = useState(0);
+  const [splitTotal, setSplitTotal] = useState(0);
+  const [themTotal, setThemTotal] = useState(0);
 
-
-
+  const [defValue, setDefValue] = useState(55);
 
   const [selected, setSelected] = useState(null);
   const handleButton1Click = () => {
@@ -89,17 +92,16 @@ export default function ReceiptInput({
   };
 
   const renderYouColumn = () => {
-    return <div>{console.log("this is for you")}</div>;
+    return <div>{}</div>;
   };
 
   const renderSplitColumn = () => {
-    return <div>{console.log("this is for both")}</div>;
+    return <div>{}</div>;
   };
 
   const renderPersonNameColumn = () => {
-    return <div>{console.log("this is for them")}</div>;
+    return <div>{}</div>;
   };
-
 
   const renderColumn = () => {
     if (sliderValue <= 33) {
@@ -110,7 +112,6 @@ export default function ReceiptInput({
       return renderPersonNameColumn();
     }
   };
-
 
   const handleNameChange = (event) => {
     setName(event.target.value);
@@ -132,9 +133,24 @@ export default function ReceiptInput({
         sliderValue: sliderValue,
       },
     ]);
-    switch(sliderValue) {
+    switch (sliderValue) {
       case 0:
-        setYouValue(youValue + 1);
+        if (selectedValue === "you") {
+        let a = parseInt(amount);
+        let b = parseInt(youTotal);
+        let value = a - b;
+        setYouTotal(value);
+        console.log(value);
+        break;
+        }
+        else if(selectedValue === "them"){
+          let a = parseInt(amount);
+          let b = parseInt(youTotal);
+          let value = a + b;
+          setYouTotal(value);
+          console.log(value);
+        break;
+        }
         break;
       case 55:
         setSplitValue(splitValue + 1);
@@ -149,7 +165,9 @@ export default function ReceiptInput({
     setAmount("");
     setCurrentIndex(currentIndex + 1);
   };
-
+  const handleSaveClick = () => {
+    setSliderValue(55); // Update the default value with the current value
+  };
   const handleDelete = (index) => {
     const newItems = [...items];
     newItems.splice(index, 1);
@@ -212,7 +230,7 @@ export default function ReceiptInput({
             <div className="flex flex-col items-center justify-center mt-0">
               <Header selectMethodManual={selectMethodManual} />
 
-              <div class="flex flex-col items-center max-w-min  justify-center bg-grey dark:bg-slate-900 rounded-lg px-6 py-6 ring-slate-900/5">
+              <div class="flex flex-col items-center max-w-min justify-center bg-grey dark:bg-slate-900 rounded-lg px-6 py-6 ring-slate-900/5">
                 <div class="col-sm-10 mb-0">
                   <input
                     type="amount"
@@ -227,7 +245,7 @@ export default function ReceiptInput({
                     }
                   />
 
-                  <div class="flex items-center justify-left h-11 mb-1">
+                  <div class="flex items-center justify-left h-11 mb-1 ml-1">
                     <div class="px-0 z-50">
                       <label for="colFormLabel" class="col-form-label ">
                         Date of Receipt
@@ -266,6 +284,7 @@ export default function ReceiptInput({
                         onClick={() => {
                           handleButton1Click();
                           setSelectedValue("you");
+                          setShowTable(true);
                         }}
                       >
                         You
@@ -277,6 +296,7 @@ export default function ReceiptInput({
                         onClick={() => {
                           handleButton2Click();
                           setSelectedValue("them");
+                          setShowTable(true)
                         }}
                       >
                         {personName}
@@ -284,7 +304,7 @@ export default function ReceiptInput({
                     </div>
                   </label>
                 </div>
-
+                {showTable ? (
                 <div className="w-full bg-white dark:bg-slate-900 rounded-lg py-1 m-0 max-w-min px-1 whitespace-no-wrap">
                   <div class="mb-0 mx-auto max-w-min">
                     <table className="border border-black table-fixed max-w-min m-auto">
@@ -338,20 +358,30 @@ export default function ReceiptInput({
                                 defaultValue={55}
                                 min={0}
                                 max={100}
+                                value={sliderValue}
                                 step={55}
-                                onChange={(value) => {handleSliderChange(value);console.log('Slider value has changed:', sliderValue, '->', value);}}
+                                onChange={(value) => {
+                                  handleSliderChange(value);
+                                  console.log(
+                                    "Slider value has changed:",
+                                    sliderValue,
+                                    "->",
+                                    value
+                                  );
+                                }}
                               />
                               {renderColumn()}
                             </div>
                           </td>
                         </tr>
-                        
+
                         <tr className="add-button text-black m-2 text-center items-center justify-center">
                           <button
                             type="submit"
                             className="add-button text-gray-500 m-2 text-2xl text-center items-center justify-center"
                             onClick={() => {
                               handleReceiptSubmit(sliderValue);
+                              handleSaveClick();
                             }}
                           >
                             <IoMdAddCircleOutline />
@@ -392,10 +422,8 @@ export default function ReceiptInput({
                                   defaultValue={item.sliderValue}
                                   min={0}
                                   max={100}
-                                  step={55}
-                                  onChange={(value) =>
-                                    handleSliderChange(value)
-                                  }
+                                  step={0}
+                                  disabled={true}
                                 />
                                 {renderColumn()}
                               </div>
@@ -407,7 +435,10 @@ export default function ReceiptInput({
                       </tbody>
                       <tfoot className="bg-blue-200">
                         <tr className="border-t border-gray-500 bg-blue-200">
-                          <td className="px-2 py-1 " style={{ width: "33.33%" }}>
+                          <td
+                            className="px-2 py-1 "
+                            style={{ width: "33.33%" }}
+                          >
                             Total:
                           </td>
                           <td
@@ -420,7 +451,7 @@ export default function ReceiptInput({
                             className="text-center px-2 py-1 border-l border-gray-500 text-xs"
                             style={{ width: "33.33%" }}
                           >
-                            {youValue}
+                            {youTotal}
                           </td>
                           <td
                             className="text-center px-2 py-1 border-l border-gray-500 text-xs"
@@ -438,15 +469,22 @@ export default function ReceiptInput({
                       </tfoot>
                     </table>
                   </div>
-                </div>
-              </div>
-              <div class="form-group row">
-                <div class="col-sm-10 mb-0">
-                  <Link to="/SplitBill">
-                    <button className="mt-4 bg-blue-500 font-bold py-2 px-4 mb-5 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300">
-                      Submit
-                    </button>
-                  </Link>
+                </div>):("")}
+                <div className="col-sm-10 ml-0 mr-0 flex flex-col items-center justify-center mt-3">
+                  <div>
+                    <Link to="/ReceiptInput/:id">
+                      <button className="mt-4 bg-blue-500 font-bold py-2 px-4 mb-5 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300">
+                        Add Another Receipt
+                      </button>
+                    </Link>
+                  </div>
+                  <div>
+                    <Link to="/SplitBill">
+                      <button className="bg-blue-500 font-bold py-2 px-4 mb-5 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300">
+                        Submit
+                      </button>
+                    </Link>
+                  </div>
                 </div>
               </div>
             </div>

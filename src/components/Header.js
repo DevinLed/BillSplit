@@ -142,7 +142,7 @@ export default function Header({
       )}
       
       {selectMethodManual ? (
-        <div className="flex items-stretch font-bold bg-gray-200 h-10 align-items-center w-full items-center text-2xl mb-5 justify-between">
+        <div className="flex items-stretch font-bold bg-gray-200 h-10 align-items-center w-full items-center text-2xl mb-2 justify-between">
           <Link to="/SplitBill">
             <button className="text-black hover:text-black ml-2">
               <IoIosArrowBack />
