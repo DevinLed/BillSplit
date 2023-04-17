@@ -68,7 +68,7 @@ export default function ReceiptInput({
   const [addToValue, setAddToValue] = useState(false);
   const [selectedValue, setSelectedValue] = useState("you");
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [sliderValue, setSliderValue] = useState(0);
+  const [sliderValue, setSliderValue] = useState(55);
   const [youValue, setYouValue] = useState(0);
   const [splitValue, setSplitValue] = useState(0);
   const [themValue, setThemValue] = useState(0);
@@ -76,6 +76,8 @@ export default function ReceiptInput({
   const [youTotal, setYouTotal] = useState(0);
   const [splitTotal, setSplitTotal] = useState(0);
   const [themTotal, setThemTotal] = useState(0);
+  const [receiptSubmitted, setReceiptSubmitted] = useState(false);
+  const [totalToAdd, setTotalToAdd] = useState("");
 
   const [defValue, setDefValue] = useState(55);
 
@@ -134,30 +136,30 @@ export default function ReceiptInput({
       },
     ]);
     switch (sliderValue) {
-      case 0:
-        if (selectedValue === "you") {
+      case 0: {
         let a = parseInt(amount);
         let b = parseInt(youTotal);
-        let value = a - b;
+        let value = a + b;
         setYouTotal(value);
         console.log(value);
         break;
-        }
-        else if(selectedValue === "them"){
-          let a = parseInt(amount);
-          let b = parseInt(youTotal);
-          let value = a + b;
-          setYouTotal(value);
-          console.log(value);
+      }
+      case 55: {
+        let a = parseInt(amount);
+        let b = parseInt(splitTotal);
+        let value = a + b;
+        setSplitTotal(value);
+        console.log(value);
         break;
-        }
+      }
+      case 100: {
+        let a = parseInt(amount);
+        let b = parseInt(themTotal);
+        let value = a + b;
+        setThemTotal(value);
+        console.log(value);
         break;
-      case 55:
-        setSplitValue(splitValue + 1);
-        break;
-      case 100:
-        setThemValue(themValue + 1);
-        break;
+      }
       default:
         break;
     }
@@ -170,22 +172,54 @@ export default function ReceiptInput({
   };
   const handleDelete = (index) => {
     const newItems = [...items];
-    newItems.splice(index, 1);
+    const deletedItem = newItems.splice(index, 1)[0]; // remove the deleted item from the list and get its details
+
+    // update the corresponding total based on the deleted item's sliderValue
+    switch (deletedItem.sliderValue) {
+      case 0: {
+        setYouTotal(youTotal - parseInt(deletedItem.amount));
+        break;
+      }
+      case 55: {
+        setSplitTotal(splitTotal - parseInt(deletedItem.amount));
+        break;
+      }
+      case 100: {
+        setThemTotal(themTotal - parseInt(deletedItem.amount));
+        break;
+      }
+      default:
+        break;
+    }
+
     setItems(newItems);
   };
   const getTotal = () => {
     let total = 0;
     for (const item of items) {
       total += parseInt(item.amount);
-      setPersonReceiptAmount(total);
-      if (selectedValue === "you") {
-        addNum(id, personOwing, personReceiptAmount);
-      } else {
-        subNum(id, personOwing, personReceiptAmount);
-      }
     }
+
+    let splitValue = parseFloat(splitTotal / 2).toFixed(2);
+    let themValue = parseFloat(themTotal).toFixed(2);
+    let youValue = parseFloat(youTotal).toFixed(2);
+    if (selectedValue === "you") {
+      setPersonReceiptAmount(parseFloat(splitValue) + parseFloat(themValue));
+    } else if (selectedValue === "them") {
+      setPersonReceiptAmount(parseFloat(splitValue) + parseFloat(youValue));
+    }
+
     return parseFloat(total).toFixed(2);
   };
+
+  const getFinalTotal = () => {
+    if (selectedValue === "you") {
+      addNum(id, personOwing, personReceiptAmount);
+    } else {
+      subNum(id, personOwing, personReceiptAmount);
+    }
+  };
+
   return (
     <>
       {selectPersonReceipt ? (
@@ -296,7 +330,7 @@ export default function ReceiptInput({
                         onClick={() => {
                           handleButton2Click();
                           setSelectedValue("them");
-                          setShowTable(true)
+                          setShowTable(true);
                         }}
                       >
                         {personName}
@@ -305,171 +339,183 @@ export default function ReceiptInput({
                   </label>
                 </div>
                 {showTable ? (
-                <div className="w-full bg-white dark:bg-slate-900 rounded-lg py-1 m-0 max-w-min px-1 whitespace-no-wrap">
-                  <div class="mb-0 mx-auto max-w-min">
-                    <table className="border border-black table-fixed max-w-min m-auto">
-                      <thead className="whitespace-no-wrap overflow-hidden max-w-fit truncate">
-                        <tr className="whitespace-no-wrap overflow-hidden max-w-fit px-2">
-                          <th className="px-15">Item</th>
-                          <th className="px-15">Price</th>
-                          <th
-                            className="px-1"
-                            colSpan={3}
-                            style={{ width: "33.33%" }}
-                          >
-                            <span className="pr-2 pl-4 border-r border-black">
-                              You
-                            </span>
-                            <span className="px-2 border-r border-l border-black">
-                              Split
-                            </span>
-                            <span className="pl-2 border-l border-black">
-                              Them
-                            </span>
-                          </th>
-                        </tr>
-                      </thead>
+                  <div>
+                    <div className="w-full bg-white dark:bg-slate-900 rounded-lg py-1 m-0 max-w-min px-1 whitespace-no-wrap">
+                      <div class="mb-0 mx-auto max-w-min">
+                        <table className="border border-black table-fixed max-w-min m-auto">
+                          <thead className="whitespace-no-wrap overflow-hidden max-w-fit truncate">
+                            <tr className="whitespace-no-wrap overflow-hidden max-w-fit px-2">
+                              <th className="px-15">Item</th>
+                              <th className="px-15">Price</th>
+                              <th
+                                className="px-1"
+                                colSpan={3}
+                                style={{ width: "33.33%" }}
+                              >
+                                <span className="pr-2 pl-4 border-r border-black">
+                                  You
+                                </span>
+                                <span className="px-2 border-r border-l border-black">
+                                  Split
+                                </span>
+                                <span className="pl-2 border-l border-black">
+                                  Them
+                                </span>
+                              </th>
+                            </tr>
+                          </thead>
 
-                      <tbody className="pt-5">
-                        <tr>
-                          <td>
-                            <input
-                              type="amount"
-                              className="form-control font-bold w-20 px-1 text-xs mb-1"
-                              id="colFormLabel"
-                              placeholder="Item Name"
-                              value={name}
-                              onChange={handleNameChange}
-                            />
-                          </td>
-                          <td>
-                            <input
-                              type="amount"
-                              className="form-control font-bold w-20 px-1 text-xs mb-1"
-                              id="colFormLabel"
-                              placeholder="Amount"
-                              value={amount}
-                              onChange={handleAmountChange}
-                            />
-                          </td>
-                          <td colSpan="3" className="px-2">
-                            <div style={{ width: "auto", margin: "auto" }}>
-                              <Slider
-                                defaultValue={55}
-                                min={0}
-                                max={100}
-                                value={sliderValue}
-                                step={55}
-                                onChange={(value) => {
-                                  handleSliderChange(value);
-                                  console.log(
-                                    "Slider value has changed:",
-                                    sliderValue,
-                                    "->",
-                                    value
-                                  );
-                                }}
-                              />
-                              {renderColumn()}
-                            </div>
-                          </td>
-                        </tr>
+                          <tbody className="pt-5">
+                            <tr>
+                              <td>
+                                <input
+                                  type="amount"
+                                  className="form-control font-bold w-20 px-1 text-xs mb-1"
+                                  id="colFormLabel"
+                                  placeholder="Item Name"
+                                  value={name}
+                                  onChange={handleNameChange}
+                                />
+                              </td>
+                              <td>
+                                <input
+                                  type="amount"
+                                  className="form-control font-bold w-20 px-1 text-xs mb-1"
+                                  id="colFormLabel"
+                                  placeholder="Amount"
+                                  value={amount}
+                                  onChange={handleAmountChange}
+                                />
+                              </td>
+                              <td colSpan="3" className="px-2">
+                                <div style={{ width: "auto", margin: "auto" }}>
+                                  <Slider
+                                    defaultValue={55}
+                                    min={0}
+                                    max={100}
+                                    value={sliderValue}
+                                    step={55}
+                                    onChange={(value) =>
+                                      handleSliderChange(value)
+                                    }
+                                  />
+                                  {renderColumn()}
+                                </div>
+                              </td>
+                            </tr>
 
-                        <tr className="add-button text-black m-2 text-center items-center justify-center">
-                          <button
-                            type="submit"
-                            className="add-button text-gray-500 m-2 text-2xl text-center items-center justify-center"
-                            onClick={() => {
-                              handleReceiptSubmit(sliderValue);
-                              handleSaveClick();
-                            }}
-                          >
-                            <IoMdAddCircleOutline />
-                          </button>
-                        </tr>
-                        {items.map((item, index) => (
-                          <tr
-                            key={index}
-                            className={
-                              index % 2 === currentIndex % 2
-                                ? "bg-blue-100"
-                                : ""
-                            }
-                          >
-                            <td>
-                              {item.name.replace(/\b\w/g, (c) =>
-                                c.toUpperCase()
-                              )}
-                            </td>
-                            <td className="text-sm flex items-center mr-2">
+                            <tr className="add-button text-black m-2 text-center items-center justify-center">
                               <button
                                 className="add-button text-gray-500 m-2 text-2xl text-center items-center justify-center"
-                                onClick={() => handleDelete(index)}
-                              >
-                                <IoMdRemoveCircleOutline />
-                              </button>
-                              <span className="ml-2">${item.amount}</span>
-                            </td>
-                            <td colSpan={3}>
-                              <div
-                                style={{
-                                  width: "auto",
-                                  margin: "auto",
-                                  padding: "8px",
+                                onClick={() => {
+                                  handleReceiptSubmit(sliderValue);
+                                  handleSaveClick();
                                 }}
                               >
-                                <Slider
-                                  defaultValue={item.sliderValue}
-                                  min={0}
-                                  max={100}
-                                  step={0}
-                                  disabled={true}
-                                />
-                                {renderColumn()}
-                              </div>
-                            </td>
-                            <td></td>
-                            <td></td>
-                          </tr>
-                        ))}
-                      </tbody>
-                      <tfoot className="bg-blue-200">
-                        <tr className="border-t border-gray-500 bg-blue-200">
-                          <td
-                            className="px-2 py-1 "
-                            style={{ width: "33.33%" }}
-                          >
-                            Total:
-                          </td>
-                          <td
-                            className="px-2 mr-2 py-1 text-right"
-                            style={{ width: "33.33%" }}
-                          >
-                            ${getTotal()}
-                          </td>
-                          <td
-                            className="text-center px-2 py-1 border-l border-gray-500 text-xs"
-                            style={{ width: "33.33%" }}
-                          >
-                            {youTotal}
-                          </td>
-                          <td
-                            className="text-center px-2 py-1 border-l border-gray-500 text-xs"
-                            style={{ width: "33.33%" }}
-                          >
-                            {splitValue}
-                          </td>
-                          <td
-                            className="text-center px-2 py-1 border-l border-gray-500 text-xs"
-                            style={{ width: "33.33%" }}
-                          >
-                            {themValue}
-                          </td>
-                        </tr>
-                      </tfoot>
-                    </table>
+                                <IoMdAddCircleOutline />
+                              </button>
+                            </tr>
+                            {items.map((item, index) => (
+                              <tr
+                                key={index}
+                                className={
+                                  index % 2 === currentIndex % 2
+                                    ? "bg-blue-100"
+                                    : ""
+                                }
+                              >
+                                <td>
+                                  {item.name.replace(/\b\w/g, (c) =>
+                                    c.toUpperCase()
+                                  )}
+                                </td>
+                                <td className="text-sm flex items-center mr-2">
+                                  <button
+                                    className="add-button text-gray-500 m-2 text-2xl text-center items-center justify-center"
+                                    onClick={() => handleDelete(index)}
+                                  >
+                                    <IoMdRemoveCircleOutline />
+                                  </button>
+                                  <span className="ml-2">${item.amount}</span>
+                                </td>
+                                <td colSpan={3}>
+                                  <div
+                                    style={{
+                                      width: "auto",
+                                      margin: "auto",
+                                      padding: "8px",
+                                    }}
+                                  >
+                                    <Slider
+                                      defaultValue={item.sliderValue}
+                                      min={0}
+                                      max={100}
+                                      step={0}
+                                      disabled={true}
+                                    />
+                                    {renderColumn()}
+                                  </div>
+                                </td>
+                                <td></td>
+                                <td></td>
+                              </tr>
+                            ))}
+                          </tbody>
+                          <tfoot className="bg-blue-200">
+                            <tr className="border-t border-gray-500 bg-blue-200">
+                              <td
+                                className="px-2 py-1 "
+                                style={{ width: "33.33%" }}
+                              >
+                                Total:
+                              </td>
+                              <td
+                                className="px-2 mr-2 py-1 text-right"
+                                style={{ width: "33.33%" }}
+                              >
+                                ${getTotal()}
+                              </td>
+                              <td
+                                className="text-center px-2 py-1 border-l border-gray-500 text-xs"
+                                style={{ width: "33.33%" }}
+                              >
+                                {youTotal}
+                              </td>
+                              <td
+                                className="text-center px-2 py-1 border-l border-gray-500 text-xs"
+                                style={{ width: "33.33%" }}
+                              >
+                                {splitTotal}
+                              </td>
+                              <td
+                                className="text-center px-2 py-1 border-l border-gray-500 text-xs"
+                                style={{ width: "33.33%" }}
+                              >
+                                {themTotal}
+                              </td>
+                            </tr>
+                          </tfoot>
+                        </table>
+                      </div>
+                    </div>
+                    <div className="bg-white rounded-lg px-3 py-2 shadow-md mt-3 flex items-center justify-center">
+                      <label className="text-lg font-medium text-center">
+                        {selectedValue === "you" ? (
+                          <>
+                            {personName} owes you {personReceiptAmount}
+                          </>
+                        ) : (
+                          <>
+                            You owe {personName} $
+                            {parseFloat(personReceiptAmount).toFixed(2)}
+                          </>
+                        )}
+                      </label>
+                    </div>
                   </div>
-                </div>):("")}
+                ) : (
+                  ""
+                )}
                 <div className="col-sm-10 ml-0 mr-0 flex flex-col items-center justify-center mt-3">
                   <div>
                     <Link to="/ReceiptInput/:id">
@@ -480,7 +526,10 @@ export default function ReceiptInput({
                   </div>
                   <div>
                     <Link to="/SplitBill">
-                      <button className="bg-blue-500 font-bold py-2 px-4 mb-5 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300">
+                      <button
+                        className="bg-blue-500 font-bold py-2 px-4 mb-5 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
+                        onClick={() => getFinalTotal()}
+                      >
                         Submit
                       </button>
                     </Link>
