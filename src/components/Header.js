@@ -39,28 +39,28 @@ export default function Header({
             <h1 className="ml-2 mr-2">Select Person</h1>
 
             <div class="dropdown">
-              <button 
-                align="end"
-                className="text-black hover:text-black mr-2 right-0 "
-                type="button"
-                id="dropdownMenu2"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-              >
-                <AiOutlineMenu />
-              </button>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                <Link to="/EditList">
-                  <button class="dropdown-item">Edit Person</button>
-                </Link>
-                <Link to="/History">
-                  <button class="dropdown-item" type="button">
-                    History
-                  </button>
-                </Link>
-              </div>
-            </div>
+  <button 
+    align="end"
+    className="text-black hover:text-black mr-2 right-0 "
+    type="button"
+    id="dropdownMenu2"
+    data-toggle="dropdown"
+    aria-haspopup="true"
+    aria-expanded="false"
+  >
+    <AiOutlineMenu />
+  </button>
+  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2">
+    <Link to="/EditList">
+      <button class="dropdown-item">Edit Person</button>
+    </Link>
+    <Link to="/History">
+      <button class="dropdown-item" type="button">
+        History
+      </button>
+    </Link>
+  </div>
+</div>
           </div>
         </>
       ) : (
@@ -89,7 +89,7 @@ export default function Header({
               >
                 <AiOutlineMenu />
               </button>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2">
                 <Link to="/SplitBill">
                   <button class="dropdown-item">New Receipt</button>
                 </Link>
@@ -123,7 +123,7 @@ export default function Header({
             >
               <AiOutlineMenu />
             </button>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2">
               <Link to="/SplitBill">
                 <button class="dropdown-item">New Receipt</button>
               </Link>
@@ -161,7 +161,7 @@ export default function Header({
             >
               <AiOutlineMenu />
             </button>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2">
               <Link to="/SplitBill">
                 <button class="dropdown-item">New Receipt</button>
               </Link>
@@ -198,7 +198,7 @@ export default function Header({
               >
                 <AiOutlineMenu />
               </button>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2">
                 <Link to="/SplitBill">
                   <button class="dropdown-item">New Receipt</button>
                 </Link>

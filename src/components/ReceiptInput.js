@@ -265,44 +265,8 @@ export default function ReceiptInput({
               <Header selectMethodManual={selectMethodManual} />
 
               <div class="flex flex-col items-center max-w-min justify-center bg-grey dark:bg-slate-900 rounded-lg px-6 py-6 ring-slate-900/5">
-                <div class="col-sm-10 mb-0">
-                  <input
-                    type="amount"
-                    class="form-control font-bold mb-5 h-10"
-                    id="colFormLabel"
-                    placeholder="Merchant Name"
-                    value={merchantName}
-                    onChange={(e) =>
-                      setMerchantName(
-                        e.target.value.replace(/\b\w/g, (c) => c.toUpperCase())
-                      )
-                    }
-                  />
-
-                  <div class="flex items-center justify-left h-11 mb-1 ml-1">
-                    <div class="px-0 z-50">
-                      <label for="colFormLabel" class="col-form-label ">
-                        Date of Receipt
-                      </label>
-                      <DatePicker
-                        selected={startDate}
-                        onChange={(date) => setStartDate(date)}
-                        className="bg-blue-100"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div class="mb-0">
-                  <input
-                    type="invoice"
-                    class="form-control font-bold w-55 mb-2 mt-2 opacity-4"
-                    id="colFormLabel"
-                    placeholder="Invoice Number"
-                    onChange={(e) => setInvoiceNumber(e.target.value)}
-                  />
-                </div>
-                <div className="max-w-fit">
+                
+              <div className="max-w-fit">
                   <label
                     htmlFor="payment"
                     className="form-control flex items-center justify-left mt-0 px-2"
@@ -339,6 +303,44 @@ export default function ReceiptInput({
                   </label>
                 </div>
                 {showTable ? (
+                  <>
+                <div class="col-sm-10 mb-0 mt-3">
+                <input
+                  type="amount"
+                  class="form-control font-bold mb-5 h-10"
+                  id="colFormLabel"
+                  placeholder="Merchant Name"
+                  value={merchantName}
+                  onChange={(e) =>
+                    setMerchantName(
+                      e.target.value.replace(/\b\w/g, (c) => c.toUpperCase())
+                    )
+                  }
+                />
+
+                <div class="flex items-center justify-left h-11 mb-1 ml-1">
+                  <div class="px-0 z-50">
+                    <label for="colFormLabel" class="col-form-label ">
+                      Date of Receipt
+                    </label>
+                    <DatePicker
+                      selected={startDate}
+                      onChange={(date) => setStartDate(date)}
+                      className="bg-blue-100"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div class="mb-0">
+                <input
+                  type="invoice"
+                  class="form-control font-bold w-55 mb-2 mt-2 opacity-4"
+                  id="colFormLabel"
+                  placeholder="Invoice Number"
+                  onChange={(e) => setInvoiceNumber(e.target.value)}
+                />
+              </div>
                   <div>
                     <div className="w-full bg-white dark:bg-slate-900 rounded-lg py-1 m-0 max-w-min px-1 whitespace-no-wrap">
                       <div class="mb-0 mx-auto max-w-min">
@@ -513,9 +515,7 @@ export default function ReceiptInput({
                       </label>
                     </div>
                   </div>
-                ) : (
-                  ""
-                )}
+                  
                 <div className="col-sm-10 ml-0 mr-0 flex flex-col items-center justify-center mt-3">
                   <div>
                     <Link to="/ReceiptInput/:id">
@@ -535,6 +535,10 @@ export default function ReceiptInput({
                     </Link>
                   </div>
                 </div>
+                  </>
+                ) : (
+                  ""
+                )}
               </div>
             </div>
           </main>
