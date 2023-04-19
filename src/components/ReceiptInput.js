@@ -85,7 +85,11 @@ export default function ReceiptInput({
   const handleButton1Click = () => {
     setSelected(1);
   };
-
+  function handleKeyDown(e) {
+    if (e.key === "Enter") {
+      e.target.blur();
+    }
+  }
   const handleButton2Click = () => {
     setSelected(2);
   };
@@ -265,8 +269,7 @@ export default function ReceiptInput({
               <Header selectMethodManual={selectMethodManual} />
 
               <div class="flex flex-col items-center max-w-min justify-center bg-grey dark:bg-slate-900 rounded-lg px-6 py-6 ring-slate-900/5">
-                
-              <div className="max-w-fit">
+                <div className="max-w-fit">
                   <label
                     htmlFor="payment"
                     className="form-control flex items-center justify-left mt-0 px-2"
@@ -304,237 +307,245 @@ export default function ReceiptInput({
                 </div>
                 {showTable ? (
                   <>
-                <div class="col-sm-10 mb-0 mt-3">
-                <input
-                  type="amount"
-                  class="form-control font-bold mb-5 h-10"
-                  id="colFormLabel"
-                  placeholder="Merchant Name"
-                  value={merchantName}
-                  onChange={(e) =>
-                    setMerchantName(
-                      e.target.value.replace(/\b\w/g, (c) => c.toUpperCase())
-                    )
-                  }
-                />
+                    <div class="col-sm-10 mb-0 mt-3">
+                      <input
+                        type="amount"
+                        class="form-control font-bold mb-5 h-10"
+                        id="colFormLabel"
+                        placeholder="Merchant Name"
+                        value={merchantName}
+                        onKeyDown={handleKeyDown}
+                        onChange={(e) =>
+                          setMerchantName(
+                            e.target.value.replace(/\b\w/g, (c) =>
+                              c.toUpperCase()
+                            )
+                          )
+                        }
+                      />
+                      <div class="flex items-center justify-left h-11 mb-1 ml-1">
+                        <div class="px-0 z-50">
+                          <label for="colFormLabel" class="col-form-label ">
+                            Date of Receipt
+                          </label>
+                          <DatePicker
+                            selected={startDate}
+                            onChange={(date) => setStartDate(date)}
+                            className="bg-blue-100"
+                            inputProps={{ readOnly: true }}
+                          />
+                        </div>
+                      </div>
+                    </div>
 
-                <div class="flex items-center justify-left h-11 mb-1 ml-1">
-                  <div class="px-0 z-50">
-                    <label for="colFormLabel" class="col-form-label ">
-                      Date of Receipt
-                    </label>
-                    <DatePicker
-                      selected={startDate}
-                      onChange={(date) => setStartDate(date)}
-                      className="bg-blue-100"
-                    />
-                  </div>
-                </div>
-              </div>
+                    <div class="mb-0">
+                      <input
+                        type="invoice"
+                        class="form-control font-bold w-55 mb-2 mt-2 opacity-4"
+                        id="colFormLabel"
+                        placeholder="Invoice Number"
+                        onKeyDown={handleKeyDown}
+                        onChange={(e) => setInvoiceNumber(e.target.value)}
+                      />
+                    </div>
+                    <div>
+                      <div className="w-full bg-white dark:bg-slate-900 rounded-lg py-1 m-0 max-w-min px-1 whitespace-no-wrap">
+                        <div class="mb-0 mx-auto max-w-min">
+                          <table className="border border-black table-fixed max-w-min m-auto">
+                            <thead className="whitespace-no-wrap overflow-hidden max-w-fit truncate">
+                              <tr className="whitespace-no-wrap overflow-hidden max-w-fit px-2">
+                                <th className="px-15">Item</th>
+                                <th className="px-15">Price</th>
+                                <th
+                                  className="px-1"
+                                  colSpan={3}
+                                  style={{ width: "33.33%" }}
+                                >
+                                  <span className="pr-2 pl-4 border-r border-black">
+                                    You
+                                  </span>
+                                  <span className="px-2 border-r border-l border-black">
+                                    Split
+                                  </span>
+                                  <span className="pl-2 border-l border-black">
+                                    Them
+                                  </span>
+                                </th>
+                              </tr>
+                            </thead>
 
-              <div class="mb-0">
-                <input
-                  type="invoice"
-                  class="form-control font-bold w-55 mb-2 mt-2 opacity-4"
-                  id="colFormLabel"
-                  placeholder="Invoice Number"
-                  onChange={(e) => setInvoiceNumber(e.target.value)}
-                />
-              </div>
-                  <div>
-                    <div className="w-full bg-white dark:bg-slate-900 rounded-lg py-1 m-0 max-w-min px-1 whitespace-no-wrap">
-                      <div class="mb-0 mx-auto max-w-min">
-                        <table className="border border-black table-fixed max-w-min m-auto">
-                          <thead className="whitespace-no-wrap overflow-hidden max-w-fit truncate">
-                            <tr className="whitespace-no-wrap overflow-hidden max-w-fit px-2">
-                              <th className="px-15">Item</th>
-                              <th className="px-15">Price</th>
-                              <th
-                                className="px-1"
-                                colSpan={3}
-                                style={{ width: "33.33%" }}
-                              >
-                                <span className="pr-2 pl-4 border-r border-black">
-                                  You
-                                </span>
-                                <span className="px-2 border-r border-l border-black">
-                                  Split
-                                </span>
-                                <span className="pl-2 border-l border-black">
-                                  Them
-                                </span>
-                              </th>
-                            </tr>
-                          </thead>
-
-                          <tbody className="pt-5">
-                            <tr>
-                              <td>
-                                <input
-                                  type="amount"
-                                  className="form-control font-bold w-20 px-1 text-xs mb-1"
-                                  id="colFormLabel"
-                                  placeholder="Item Name"
-                                  value={name}
-                                  onChange={handleNameChange}
-                                />
-                              </td>
-                              <td>
-                                <input
-                                  type="amount"
-                                  className="form-control font-bold w-20 px-1 text-xs mb-1"
-                                  id="colFormLabel"
-                                  placeholder="Amount"
-                                  value={amount}
-                                  onChange={handleAmountChange}
-                                />
-                              </td>
-                              <td colSpan="3" className="px-2">
-                                <div style={{ width: "auto", margin: "auto" }}>
-                                  <Slider
-                                    defaultValue={55}
-                                    min={0}
-                                    max={100}
-                                    value={sliderValue}
-                                    step={55}
-                                    onChange={(value) =>
-                                      handleSliderChange(value)
-                                    }
-                                  />
-                                  {renderColumn()}
-                                </div>
-                              </td>
-                            </tr>
-
-                            <tr className="add-button text-black m-2 text-center items-center justify-center">
-                              <button
-                                className="add-button text-gray-500 m-2 text-2xl text-center items-center justify-center"
-                                onClick={() => {
-                                  handleReceiptSubmit(sliderValue);
-                                  handleSaveClick();
-                                }}
-                              >
-                                <IoMdAddCircleOutline />
-                              </button>
-                            </tr>
-                            {items.map((item, index) => (
-                              <tr
-                                key={index}
-                                className={
-                                  index % 2 === currentIndex % 2
-                                    ? "bg-blue-100"
-                                    : ""
-                                }
-                              >
+                            <tbody className="pt-5">
+                              <tr>
                                 <td>
-                                  {item.name.replace(/\b\w/g, (c) =>
-                                    c.toUpperCase()
-                                  )}
+                                  <input
+                                    type="amount"
+                                    className="form-control font-bold w-20 px-1 text-xs mb-1"
+                                    id="colFormLabel"
+                                    placeholder="Item Name"
+                                    value={name}
+                                    onKeyDown={handleKeyDown}
+                                    onChange={handleNameChange}
+                                  />
                                 </td>
-                                <td className="text-sm flex items-center mr-2">
-                                  <button
-                                    className="add-button text-gray-500 m-2 text-2xl text-center items-center justify-center"
-                                    onClick={() => handleDelete(index)}
-                                  >
-                                    <IoMdRemoveCircleOutline />
-                                  </button>
-                                  <span className="ml-2">${item.amount}</span>
+                                <td>
+                                  <input
+                                    type="amount"
+                                    className="form-control font-bold w-20 px-1 text-xs mb-1"
+                                    id="colFormLabel"
+                                    placeholder="Amount"
+                                    value={amount}
+                                    onKeyDown={handleKeyDown}
+                                    onChange={handleAmountChange}
+                                  />
                                 </td>
-                                <td colSpan={3}>
+                                <td colSpan="3" className="px-2">
                                   <div
-                                    style={{
-                                      width: "auto",
-                                      margin: "auto",
-                                      padding: "8px",
-                                    }}
+                                    style={{ width: "auto", margin: "auto" }}
                                   >
                                     <Slider
-                                      defaultValue={item.sliderValue}
+                                      defaultValue={55}
                                       min={0}
                                       max={100}
-                                      step={0}
-                                      disabled={true}
+                                      value={sliderValue}
+                                      step={55}
+                                      onChange={(value) =>
+                                        handleSliderChange(value)
+                                      }
                                     />
                                     {renderColumn()}
                                   </div>
                                 </td>
-                                <td></td>
-                                <td></td>
                               </tr>
-                            ))}
-                          </tbody>
-                          <tfoot className="bg-blue-200">
-                            <tr className="border-t border-gray-500 bg-blue-200">
-                              <td
-                                className="px-2 py-1 "
-                                style={{ width: "33.33%" }}
-                              >
-                                Total:
-                              </td>
-                              <td
-                                className="px-2 mr-2 py-1 text-right"
-                                style={{ width: "33.33%" }}
-                              >
-                                ${getTotal()}
-                              </td>
-                              <td
-                                className="text-center px-2 py-1 border-l border-gray-500 text-xs"
-                                style={{ width: "33.33%" }}
-                              >
-                                {youTotal}
-                              </td>
-                              <td
-                                className="text-center px-2 py-1 border-l border-gray-500 text-xs"
-                                style={{ width: "33.33%" }}
-                              >
-                                {splitTotal}
-                              </td>
-                              <td
-                                className="text-center px-2 py-1 border-l border-gray-500 text-xs"
-                                style={{ width: "33.33%" }}
-                              >
-                                {themTotal}
-                              </td>
-                            </tr>
-                          </tfoot>
-                        </table>
+
+                              <tr className="add-button text-black m-2 text-center items-center justify-center">
+                                <button
+                                  className="add-button text-gray-500 m-2 text-2xl text-center items-center justify-center"
+                                  onClick={() => {
+                                    handleReceiptSubmit(sliderValue);
+                                    handleSaveClick();
+                                  }}
+                                >
+                                  <IoMdAddCircleOutline />
+                                </button>
+                              </tr>
+                              {items.map((item, index) => (
+                                <tr
+                                  key={index}
+                                  className={
+                                    index % 2 === currentIndex % 2
+                                      ? "bg-blue-100"
+                                      : ""
+                                  }
+                                >
+                                  <td>
+                                    {item.name.replace(/\b\w/g, (c) =>
+                                      c.toUpperCase()
+                                    )}
+                                  </td>
+                                  <td className="text-sm flex items-center mr-2">
+                                    <button
+                                      className="add-button text-gray-500 m-2 text-2xl text-center items-center justify-center"
+                                      onClick={() => handleDelete(index)}
+                                    >
+                                      <IoMdRemoveCircleOutline />
+                                    </button>
+                                    <span className="ml-2">${item.amount}</span>
+                                  </td>
+                                  <td colSpan={3}>
+                                    <div
+                                      style={{
+                                        width: "auto",
+                                        margin: "auto",
+                                        padding: "8px",
+                                      }}
+                                    >
+                                      <Slider
+                                        defaultValue={item.sliderValue}
+                                        min={0}
+                                        max={100}
+                                        step={0}
+                                        disabled={true}
+                                      />
+                                      {renderColumn()}
+                                    </div>
+                                  </td>
+                                  <td></td>
+                                  <td></td>
+                                </tr>
+                              ))}
+                            </tbody>
+                            <tfoot className="bg-blue-200">
+                              <tr className="border-t border-gray-500 bg-blue-200">
+                                <td
+                                  className="px-2 py-1 "
+                                  style={{ width: "33.33%" }}
+                                >
+                                  Total:
+                                </td>
+                                <td
+                                  className="px-2 mr-2 py-1 text-right"
+                                  style={{ width: "33.33%" }}
+                                >
+                                  ${getTotal()}
+                                </td>
+                                <td
+                                  className="text-center px-2 py-1 border-l border-gray-500 text-xs"
+                                  style={{ width: "33.33%" }}
+                                >
+                                  {youTotal}
+                                </td>
+                                <td
+                                  className="text-center px-2 py-1 border-l border-gray-500 text-xs"
+                                  style={{ width: "33.33%" }}
+                                >
+                                  {splitTotal}
+                                </td>
+                                <td
+                                  className="text-center px-2 py-1 border-l border-gray-500 text-xs"
+                                  style={{ width: "33.33%" }}
+                                >
+                                  {themTotal}
+                                </td>
+                              </tr>
+                            </tfoot>
+                          </table>
+                        </div>
+                      </div>
+                      <div className="bg-white rounded-lg px-3 py-2 shadow-md mt-3 flex items-center justify-center">
+                        <label className="text-lg font-medium text-center">
+                          {selectedValue === "you" ? (
+                            <>
+                              {personName} owes you {personReceiptAmount}
+                            </>
+                          ) : (
+                            <>
+                              You owe {personName} $
+                              {parseFloat(personReceiptAmount).toFixed(2)}
+                            </>
+                          )}
+                        </label>
                       </div>
                     </div>
-                    <div className="bg-white rounded-lg px-3 py-2 shadow-md mt-3 flex items-center justify-center">
-                      <label className="text-lg font-medium text-center">
-                        {selectedValue === "you" ? (
-                          <>
-                            {personName} owes you {personReceiptAmount}
-                          </>
-                        ) : (
-                          <>
-                            You owe {personName} $
-                            {parseFloat(personReceiptAmount).toFixed(2)}
-                          </>
-                        )}
-                      </label>
+
+                    <div className="col-sm-10 ml-0 mr-0 flex flex-col items-center justify-center mt-3">
+                      <div>
+                        <Link to="/ReceiptInput/:id">
+                          <button className="mt-4 bg-blue-500 font-bold py-2 px-4 mb-5 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300">
+                            Add Another Receipt
+                          </button>
+                        </Link>
+                      </div>
+                      <div>
+                        <Link to="/SplitBill">
+                          <button
+                            className="bg-blue-500 font-bold py-2 px-4 mb-5 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
+                            onClick={() => getFinalTotal()}
+                          >
+                            Submit
+                          </button>
+                        </Link>
+                      </div>
                     </div>
-                  </div>
-                  
-                <div className="col-sm-10 ml-0 mr-0 flex flex-col items-center justify-center mt-3">
-                  <div>
-                    <Link to="/ReceiptInput/:id">
-                      <button className="mt-4 bg-blue-500 font-bold py-2 px-4 mb-5 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300">
-                        Add Another Receipt
-                      </button>
-                    </Link>
-                  </div>
-                  <div>
-                    <Link to="/SplitBill">
-                      <button
-                        className="bg-blue-500 font-bold py-2 px-4 mb-5 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
-                        onClick={() => getFinalTotal()}
-                      >
-                        Submit
-                      </button>
-                    </Link>
-                  </div>
-                </div>
                   </>
                 ) : (
                   ""

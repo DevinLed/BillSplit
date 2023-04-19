@@ -65,7 +65,9 @@ a:focus {
   position: relative;
   border-radius: 5px;
 }
-
+.max-six-digits {
+  max-width: 14ch;
+}
 .dropdown-input {
   padding: 5px;
   display: flex;
@@ -73,7 +75,13 @@ a:focus {
   justify-content: space-between;
   user-select: none;
 }
-
+.label-one-line {
+  white-space: nowrap;
+}
+.rounded-left {
+  border-top-left-radius: 0.25rem;
+  border-bottom-left-radius: 0.25rem;
+}
 .dropdown-menu {
   position: absolute;
   transform: translateY(4px);
@@ -122,9 +130,4 @@ a:focus {
 }
 .blue-background {
   background-color: lightblue;
-}
-#receiptcontainer{
-  align-items: center;
-  justify-content: center;
-  margin: auto;
 }

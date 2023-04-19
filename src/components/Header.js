@@ -148,7 +148,7 @@ export default function Header({
               <IoIosArrowBack />
             </button>
           </Link>
-          <h1 className="m-5">Enter Receipt Details</h1>
+          <h1 className="m-5">Enter Details</h1>
 
           <div class="dropdown">
             <button

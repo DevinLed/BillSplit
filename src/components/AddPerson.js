@@ -1,5 +1,7 @@
-import React from "react";
+import {React, useRef} from "react";
 import { BrowserRouter, Switch, Route, Routes, Link } from "react-router-dom";
+
+
 
 export default function AddPerson({
   personName,
@@ -17,15 +19,21 @@ export default function AddPerson({
   setValue,
   addNum,
   personReceiptAmount,
-}) {
+}) 
+{
+
+  function handleKeyDown(e) {
+    if (e.key === "Enter") {
+      e.target.blur();
+    }
+  }
   return (
     <>
       <div className="p-8 justify-center items-center flex overflow-x-hidden overflow-y-hidden fixed inset-0 z-50 focus:outline-none">
-  <div className="relative w-auto my-6 mx-auto max-w-md">
-    <div className="border-8 border-black-500 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-      <div className="flex items-center justify-evenly p-3 border-b border-solid border-slate-200 rounded-t">
-        <h3 className="text-2xl font-semibold">Add A Person</h3>
-        
+        <div className="relative w-auto my-6 mx-auto max-w-md">
+          <div className="border-8 border-black-500 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+            <div className="flex items-center justify-evenly p-3 border-b border-solid border-slate-200 rounded-t">
+              <h3 className="text-2xl font-semibold">Add A Person</h3>
             </div>
             {/*body*/}
 
@@ -82,29 +90,23 @@ export default function AddPerson({
                   />
                 </div>
               </div>
-
-              <div class="form-group row">
-                <label for="colFormLabel" class="flex col-sm-10 col-form-label">
+              <div class="form-group row mb-0">
+                <label
+                  for="colFormLabel"
+                  class="col-sm-2 col-form-label label-one-line"
+                >
                   Starting balance?
                 </label>
-                <div class="input-group mb-3 items-center justify-center">
-                  <div class="input-group-prepend ml-10">
-                    <span class="input-group-text">$</span>
-                  </div>
+                <div class="input-group mb-3">
+                  <span class="input-group-text">$</span>
                   <input
                     type="text"
-                    className="form-control w-24 mr-20"
-                    aria-label="Amount (to the nearest dollar)"
-                    placeholder="0.00"
-                    value={personOwing}
+                    class="form-control max-six-digits rounded-left"
+                    onKeyDown={handleKeyDown}
                     onChange={(e) => setPersonOwing(e.target.value)}
                   />
                 </div>
               </div>
-
-
-
-              
             </div>
             {/*footer*/}
             <div className="flex items-center  justify-content-between align-items-center pb-6 px-6 border-t border-solid border-slate-200 rounded-b">
