@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect,onBlur } from "react";
 import Switch from "react-switch";
 import { useParams } from "react-router-dom";
 import AddPerson from "./AddPerson";
@@ -288,7 +288,7 @@ export default function ReceiptInput({
                           setShowTable(true);
                         }}
                       >
-                        You
+                        Me
                       </button>
                       <button
                         className={`bg-blue-500 text-white font-bold py-1 px-2 rounded-r border-l m-0 ${
@@ -310,10 +310,9 @@ export default function ReceiptInput({
                     <div class="col-sm-10 mb-0 mt-3">
                       <input
                         type="amount"
-                        class="form-control font-bold mb-5 h-10"
+                        class="form-control font-bold mb-5 h-10 text-center"
                         id="colFormLabel"
                         placeholder="Merchant Name"
-                        value={merchantName}
                         onKeyDown={handleKeyDown}
                         onChange={(e) =>
                           setMerchantName(
@@ -323,25 +322,25 @@ export default function ReceiptInput({
                           )
                         }
                       />
-                      <div class="flex items-center justify-left h-11 mb-1 ml-1">
-                        <div class="px-0 z-50">
-                          <label for="colFormLabel" class="col-form-label ">
+                      <div class="flex items-center justify-left h-11 mt-3 ">
+                        <div class="mt-3 mb-3 z-50 text-center">
+                          <label for="colFormLabel" class="col-form-label text-center ">
                             Date of Receipt
                           </label>
                           <DatePicker
                             selected={startDate}
                             onChange={(date) => setStartDate(date)}
-                            className="bg-blue-100"
-                            inputProps={{ readOnly: true }}
+                            className="bg-blue-100 text-center"
+                            onBlur={(e) => e.target.blur()}
                           />
                         </div>
                       </div>
                     </div>
 
-                    <div class="mb-0">
+                    <div class="m-3">
                       <input
                         type="invoice"
-                        class="form-control font-bold w-55 mb-2 mt-2 opacity-4"
+                        class="form-control font-bold w-55 mb-2 mt-2 opacity-4 text-center"
                         id="colFormLabel"
                         placeholder="Invoice Number"
                         onKeyDown={handleKeyDown}
@@ -362,7 +361,7 @@ export default function ReceiptInput({
                                   style={{ width: "33.33%" }}
                                 >
                                   <span className="pr-2 pl-4 border-r border-black">
-                                    You
+                                    Me
                                   </span>
                                   <span className="px-2 border-r border-l border-black">
                                     Split
@@ -529,8 +528,9 @@ export default function ReceiptInput({
 
                     <div className="col-sm-10 ml-0 mr-0 flex flex-col items-center justify-center mt-3">
                       <div>
-                        <Link to="/ReceiptInput/:id">
-                          <button className="mt-4 bg-blue-500 font-bold py-2 px-4 mb-5 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300">
+                        <Link to={`/ReceiptInput/${id}`}>
+                          <button className="mt-4 bg-blue-500 font-bold py-2 px-4 mb-5 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300" 
+                            onClick={() => {getFinalTotal(); setSelectMethodManual(false); setSelectPersonReceipt(true);}}>
                             Add Another Receipt
                           </button>
                         </Link>

@@ -98,14 +98,19 @@ export default function AddPerson({
                   Starting balance?
                 </label>
                 <div class="input-group mb-3">
-                  <span class="input-group-text">$</span>
-                  <input
-                    type="text"
-                    class="form-control max-six-digits rounded-left"
-                    onKeyDown={handleKeyDown}
-                    onChange={(e) => setPersonOwing(e.target.value)}
-                  />
-                </div>
+  <span class="input-group-text ml-11">$</span>
+  <input
+    type="text"
+    class="form-control max-six-digits rounded-left"
+    onKeyDown={handleKeyDown}
+    onChange={(e) => {
+      const value = e.target.value;
+      if (!isNaN(value) && value !== '') {
+        setPersonOwing(parseFloat(value).toFixed(2));
+      }
+    }}
+  />
+</div>
               </div>
             </div>
             {/*footer*/}
