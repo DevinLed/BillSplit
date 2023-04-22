@@ -1,7 +1,5 @@
-import {React, useRef} from "react";
+import { React, useRef, useState } from "react";
 import { BrowserRouter, Switch, Route, Routes, Link } from "react-router-dom";
-
-
 
 export default function AddPerson({
   personName,
@@ -18,15 +16,15 @@ export default function AddPerson({
   value,
   setValue,
   addNum,
-  personReceiptAmount,
-}) 
-{
-
+  personReceiptAmount
+}) {
   function handleKeyDown(e) {
     if (e.key === "Enter") {
       e.target.blur();
     }
   }
+  const [errorPopup, setErrorPopup] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
   return (
     <>
       <div className="p-8 justify-center items-center flex overflow-x-hidden overflow-y-hidden fixed inset-0 z-50 focus:outline-none">
@@ -48,7 +46,6 @@ export default function AddPerson({
                     class="form-control w-2/3"
                     id="colFormLabel"
                     placeholder="Name"
-                    value={personName}
                     onChange={(e) =>
                       setPersonName(
                         e.target.value.charAt(0).toUpperCase() +
@@ -98,19 +95,27 @@ export default function AddPerson({
                   Starting balance?
                 </label>
                 <div class="input-group mb-3">
-  <span class="input-group-text ml-11">$</span>
-  <input
-    type="text"
-    class="form-control max-six-digits rounded-left"
-    onKeyDown={handleKeyDown}
-    onChange={(e) => {
-      const value = e.target.value;
-      if (!isNaN(value) && value !== '') {
-        setPersonOwing(parseFloat(value).toFixed(2));
-      }
-    }}
-  />
-</div>
+                  <span class="input-group-text ml-11">$</span>
+                  <input
+                    type="text"
+                    class="form-control max-six-digits rounded-left"
+                    onKeyDown={handleKeyDown}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      if (isNaN(value) || value === "") {
+                        setErrorPopup(false);
+                        setErrorMsg("Please enter a valid number");
+                      } else {
+                        setErrorPopup(true);
+                        setPersonOwing(parseFloat(value).toFixed(2));
+                        setErrorMsg("");
+                      }
+                    }}
+                  />
+                </div>
+                <div class="error-msg" style={{ color: "red" }}>
+                  {errorMsg}
+                </div>
               </div>
             </div>
             {/*footer*/}
@@ -124,7 +129,10 @@ export default function AddPerson({
               <button
                 className="justify-center mt-3 ml-2 bg-blue-500 font-bold py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
                 onClick={(e) => {
-                  handleSubmit(e);
+                  if (errorPopup) {
+                    handleSubmit(e);
+                  } else {
+                  }
                 }}
               >
                 Save

@@ -44,7 +44,11 @@ function App() {
   const [startDate, setStartDate] = useState(new Date());
   const [personReceiptAmount, setPersonReceiptAmount] = useState("");
   const [value] = useState("");
+  const phoneNumberRegex = /^\(\d{3}\)\d{3}-\d{4}$/;
 
+  function validatePhoneNumber(phoneNumber) {
+    return phoneNumberRegex.test(phoneNumber);
+  }
   const addNum = (id, val, val2) => {
     let newList = list;
     let a = parseInt(val, 0);
@@ -121,7 +125,6 @@ function App() {
     setPersonEmail(editingRow.personEmail);
     setPersonOwing(editingRow.personOwing);
   };
-
 
   return (
     <>
@@ -220,13 +223,20 @@ function App() {
               value={value}
               hasReceipt={hasReceipt}
               setHasReceipt={setHasReceipt}
+              phoneNumberRegex={phoneNumberRegex}
             />
           }
         />
 
         <Route path="/History" element={<History />} />
 
-        <Route path="/AddPerson" element={<AddPerson />} />
+        <Route
+          path="/AddPerson"
+          element={
+            <AddPerson
+            />
+          }
+        />
         <Route path="/EditPerson" element={<EditPerson />} />
       </Routes>
     </>
