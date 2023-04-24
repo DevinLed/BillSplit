@@ -21,6 +21,59 @@ export default function EditPerson({
   setList,
   setIsEditing,
 }) {
+  function handleKeyDown(e) {
+    if (e.key === "Enter") {
+      e.target.blur();
+    }
+  }const [isValidPhoneNumber, setIsValidPhoneNumber] = useState(true);
+  const [isValidEmail, setIsValidEmail] = useState(true);
+  const [errorBalance, setErrorBalance] = useState(true);
+  const [errorPhone, setErrorPhone] = useState(true);
+  const [errorEmail, setErrorEmail] = useState(true);
+  const [errorMsg, setErrorMsg] = useState("");
+  const [submissionError, setSubmissionError] = useState(true);
+
+  const handlePhoneNumberChange = (event) => {
+    const inputValue = event.target.value;
+    let formattedValue = inputValue;
+    const phoneNumberRegex = /^[0-9]{10}$/; // matches a phone number in the format of XXX-XXX-XXXX
+    const isValid = phoneNumberRegex.test(inputValue);
+    const containsOnlyDigits = /^\d+$/.test(inputValue); // checks if the input contains only digits
+    setIsValidPhoneNumber(isValid && containsOnlyDigits);
+    setErrorPhone(false);
+
+    // Check if the input is a valid phone number after the 10th digit is typed
+    if (inputValue.length >= 10 && isValid && containsOnlyDigits) {
+      setErrorPhone(true); // sets error if the input is not a valid phone number or contains non-digits
+      console.log("phone accepted");
+    } else {
+      setIsValidPhoneNumber(false);
+      setErrorPhone(false);
+      console.log("error in phone input");
+    }
+
+    setPersonPhone(formattedValue);
+  };
+  const handleEmailChange = (event) => {
+    const inputEmail = event.target.value;
+    setPersonEmail(inputEmail);
+    setErrorEmail(false);
+
+    // Check if email contains "@"
+    if (inputEmail.includes("@")) {
+      setIsValidEmail(true);
+      setErrorEmail(true);
+      console.log("email verified");
+    } else {
+      setIsValidEmail(false);
+    }
+  };
+  function handleKeyDown(e) {
+    if (e.key === "Enter") {
+      e.target.blur();
+    }
+  }
+
   return (
     <>
         <div className="p-8 justify-center items-center flex overflow-x-hidden overflow-y-hidden fixed inset-0 z-50 focus:outline-none">
@@ -50,64 +103,91 @@ export default function EditPerson({
                   </div>
                 </div>
 
-                <div class="form-group row">
-                  <label for="colFormLabel" class="col-sm-2 col-form-label">
-                    Phone
-                  </label>
-                  <div class="col-sm-10">
-                    <input
-                      type="phone"
-                      class="form-control"
-                      id="colFormLabel"
-                      placeholder="Phone Number"
-                      value={personPhone}
-                      onChange={(e) => setPersonPhone(e.target.value)}
-                    />
-                  </div>
-                </div>
+                <div class="form-group row mb-3">
+                <label for="colFormLabel" class="col-sm-2 col-form-label">
+                  Phone
+                </label>
+                <div class="col-sm-10">
+                  <input
+                    type="phone"
+                    class="form-control w-2/3 mb-2"
+                    id="colFormLabel"
+                    placeholder="Phone Number"
+                    value={personPhone}
+                    onChange={handlePhoneNumberChange}
+                  />
 
-                <div class="form-group row">
-                  <label for="colFormLabel" class="col-sm-2 col-form-label">
-                    Email
-                  </label>
-                  <div class="col-sm-10">
-                    <input
-                      type="email"
-                      class="form-control"
-                      placeholder="Email"
-                      value={personEmail}
-                      onChange={(e) => setPersonEmail(e.target.value)}
-                    />
-                  </div>
+                  {personPhone.length >= 10 && !isValidPhoneNumber && (
+                    <span style={{ color: "red" }}>
+                      Please enter a valid phone number.
+                    </span>
+                  )}
                 </div>
+              </div>
 
-                <div class="form-group row">
-                  <label
-                    for="colFormLabel"
-                    class="flex col-sm-10 col-form-label"
-                  >
-                    Balance?
-                  </label>
-                  <div class="input-group mb-3">
-                    <div class="input-group-prepend ml-20">
-                      <span class="input-group-text">$</span>
-                    </div>
-                    <input
-                      type="text"
-                      class="form-control mr-20"
-                      aria-label="Amount (to the nearest dollar)"
-                      placeholder="0.00"
-                      value={personOwing}
-                      onChange={(e) => setPersonOwing(e.target.value)}
-                    />
-                  </div>
-                  <div className="flex items-center m-auto justify-center align-items-center ">
+              <div class="form-group row mb-3">
+                <label for="colFormLabel" class="col-sm-2 col-form-label">
+                  Email
+                </label>
+                <div class="col-sm-10">
+                  <input
+                    type="email"
+                    class="form-control w-2/3 mb-2"
+                    id="colFormLabel"
+                    placeholder="Email"
+                    value={personEmail}
+                    onChange={handleEmailChange}
+                  />
+
+                  {personEmail.length >= 4 && !isValidEmail && (
+                    <p style={{ color: "red" }}>
+                      Please enter a valid email address.
+                    </p>
+                  )}
+                </div>
+              </div>
+
+                <div class="form-group row mb-0">
+                <label
+                  for="colFormLabel"
+                  class="col-sm-2 col-form-label label-one-line"
+                >
+                  Balance?
+                </label>
+                <div class="input-group mb-3">
+                  <span class="input-group-text ml-11">$</span>
+                  <input
+                    type="text"
+                    class="form-control max-six-digits rounded-left"
+                    value={personOwing}
+                    onKeyDown={handleKeyDown}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      const isValid = /^\d*$/.test(value); // check if the value contains only digits
+
+                      if (isValid) {
+                        setErrorBalance(true);
+                        setPersonOwing(value);
+                        setErrorMsg("");
+                        console.log("balance verified");
+                      } else {
+                        setErrorBalance(false);
+                        setErrorMsg("Please enter a valid number");
+                        setErrorBalance(true);
+                      }
+                    }}
+                  />
+                </div>
+                <div class="flex items-center items-center m-auto justify-center  error-msg h-5" style={{ color: "red" }}>
+                  {errorMsg}
+                </div>
+                  <div className="flex items-center m-auto justify-center align-items-center px-10 ">
                     <div>
                       <button
                         type="submit"
                         className="justify-center align-items-center mt-3 ml-2 bg-gray-500 font-bold py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
                         onClick={(e) => {
-                                  setPersonOwing(0.00);}}
+                                  setPersonOwing("0.00");setErrorBalance(true);}}
                       >
                         Reset balance
                       </button>
@@ -121,13 +201,23 @@ export default function EditPerson({
                   type="submit"
                   className="justify-center mt-3 ml-2 bg-blue-500 font-bold py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
                   onClick={(e) => {
-                    handleSubmit(e);
-                    setEditPerson(false);
+                    if (errorBalance && errorPhone & errorEmail) {
+                      handleSubmit(e);
+                      setEditPerson(false);
+                    } 
+                    else{
+                      
+                    setSubmissionError(false);
+                    }
                   }}
-                >
+                                  >
                   Save
                 </button>
-              </div>
+              </div>{!submissionError ? (
+                    <p class="items-center justify-center mx-auto"style={{ color: "red" }}>
+                      Please complete all fields correctly.
+                    </p>
+                  ) : <div/>}
             </div>
           </div>
         </div>

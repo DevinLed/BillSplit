@@ -16,15 +16,67 @@ export default function AddPerson({
   value,
   setValue,
   addNum,
-  personReceiptAmount
+  personReceiptAmount,
 }) {
+  const [isValidPhoneNumber, setIsValidPhoneNumber] = useState(false);
+  const [isValidEmail, setIsValidEmail] = useState(false);
+  const [errorBalance, setErrorBalance] = useState(false);
+  const [errorPhone, setErrorPhone] = useState(false);
+  const [errorEmail, setErrorEmail] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+  const [formSubmitted, setFormSubmitted] = useState(false);
+  const [submissionError, setSubmissionError] = useState(true);
+
+  const handlePhoneNumberChange = (event) => {
+    const inputValue = event.target.value;
+    let formattedValue = inputValue;
+    const phoneNumberRegex = /^[0-9]{10}$/; // matches a phone number in the format of XXX-XXX-XXXX
+    const isValid = phoneNumberRegex.test(inputValue);
+    const containsOnlyDigits = /^\d+$/.test(inputValue); // checks if the input contains only digits
+    setIsValidPhoneNumber(isValid && containsOnlyDigits);
+    setErrorPhone(false);
+
+    // Check if the input is a valid phone number after the 10th digit is typed
+    if (inputValue.length >= 10 && isValid && containsOnlyDigits) {
+      setErrorPhone(true); // sets error if the input is not a valid phone number or contains non-digits
+      console.log("phone accepted");
+    } else {
+      setIsValidPhoneNumber(false);
+      setErrorPhone(false);
+      console.log("error in phone input");
+    }
+
+    setPersonPhone(formattedValue);
+  };
+  const handleEmailChange = (event) => {
+    const inputEmail = event.target.value;
+    setPersonEmail(inputEmail);
+    setErrorEmail(false);
+
+    // Check if email contains "@"
+    if (inputEmail.includes("@")) {
+      setIsValidEmail(true);
+      setErrorEmail(true);
+      console.log("email verified");
+    } else {
+      setIsValidEmail(false);
+    }
+  };
+  function resetForm() {
+    setPersonName("");
+    setPersonPhone("");
+    setPersonEmail("");
+    setPersonOwing(0);
+    setErrorPhone(false);
+    setErrorEmail(false);
+    setErrorBalance(false);
+    setErrorMsg("");
+  }
   function handleKeyDown(e) {
     if (e.key === "Enter") {
       e.target.blur();
     }
   }
-  const [errorPopup, setErrorPopup] = useState(false);
-  const [errorMsg, setErrorMsg] = useState("");
   return (
     <>
       <div className="p-8 justify-center items-center flex overflow-x-hidden overflow-y-hidden fixed inset-0 z-50 focus:outline-none">
@@ -46,6 +98,7 @@ export default function AddPerson({
                     class="form-control w-2/3"
                     id="colFormLabel"
                     placeholder="Name"
+                    value={formSubmitted ? "" : personName}
                     onChange={(e) =>
                       setPersonName(
                         e.target.value.charAt(0).toUpperCase() +
@@ -56,37 +109,50 @@ export default function AddPerson({
                 </div>
               </div>
 
-              <div class="form-group row mb-0">
+              <div class="form-group row mb-3">
                 <label for="colFormLabel" class="col-sm-2 col-form-label">
                   Phone
                 </label>
                 <div class="col-sm-10">
                   <input
                     type="phone"
-                    class="form-control w-2/3"
+                    class="form-control w-2/3 mb-2"
                     id="colFormLabel"
                     placeholder="Phone Number"
-                    value={personPhone}
-                    onChange={(e) => setPersonPhone(e.target.value)}
+                    value={formSubmitted ? "" : personPhone}
+                    onChange={handlePhoneNumberChange}
                   />
+
+                  {personPhone.length >= 10 && !isValidPhoneNumber && (
+                    <span style={{ color: "red" }}>
+                      Please enter a valid phone number.
+                    </span>
+                  )}
                 </div>
               </div>
 
-              <div class="form-group row mb-0">
+              <div class="form-group row mb-3">
                 <label for="colFormLabel" class="col-sm-2 col-form-label">
                   Email
                 </label>
                 <div class="col-sm-10">
                   <input
                     type="email"
-                    class="form-control w-2/3"
+                    class="form-control w-2/3 mb-2"
                     id="colFormLabel"
                     placeholder="Email"
-                    value={personEmail}
-                    onChange={(e) => setPersonEmail(e.target.value)}
+                    value={formSubmitted ? "" : personEmail}
+                    onChange={handleEmailChange}
                   />
+
+                  {personEmail.length >= 4 && !isValidEmail && (
+                    <p style={{ color: "red" }}>
+                      Please enter a valid email address.
+                    </p>
+                  )}
                 </div>
               </div>
+
               <div class="form-group row mb-0">
                 <label
                   for="colFormLabel"
@@ -102,42 +168,63 @@ export default function AddPerson({
                     onKeyDown={handleKeyDown}
                     onChange={(e) => {
                       const value = e.target.value;
-                      if (isNaN(value) || value === "") {
-                        setErrorPopup(false);
-                        setErrorMsg("Please enter a valid number");
-                      } else {
-                        setErrorPopup(true);
-                        setPersonOwing(parseFloat(value).toFixed(2));
+                      const isValid = /^\d*$/.test(value); // check if the value contains only digits
+
+                      if (isValid) {
+                        setErrorBalance(true);
+                        setPersonOwing(parseFloat(value));
                         setErrorMsg("");
+                        console.log("balance verified");
+                      } else {
+                        setErrorBalance(false);
+                        setErrorMsg("Please enter a valid number");
                       }
                     }}
                   />
                 </div>
-                <div class="error-msg" style={{ color: "red" }}>
+                <div
+                  class="flex items-center items-center m-auto justify-center  error-msg h-5"
+                  style={{ color: "red" }}
+                >
                   {errorMsg}
                 </div>
               </div>
             </div>
+            
             {/*footer*/}
             <div className="flex items-center  justify-content-between align-items-center pb-6 px-6 border-t border-solid border-slate-200 rounded-b">
               <button
                 className="justify-center mt-3 bg-blue-500 font-bold py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
-                onClick={() => setAddPerson(false)}
+                onClick={(e) => {
+                  setAddPerson(false);
+                  setFormSubmitted(true);
+
+                  resetForm();
+                }}
               >
                 Close
               </button>
               <button
                 className="justify-center mt-3 ml-2 bg-blue-500 font-bold py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
                 onClick={(e) => {
-                  if (errorPopup) {
+                  if (errorBalance & errorPhone & errorEmail) {
                     handleSubmit(e);
+                    setFormSubmitted(true);
+                    resetForm();
                   } else {
+                    console.log("nop");
+                    setSubmissionError(false);
                   }
                 }}
               >
                 Save
               </button>
-            </div>
+              
+            </div>{!submissionError ? (
+                    <p class="items-center justify-center mx-auto"style={{ color: "red" }}>
+                      Please complete all fields correctly.
+                    </p>
+                  ) : <div/>}
           </div>
         </div>
       </div>
