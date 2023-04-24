@@ -164,18 +164,21 @@ export default function EditPerson({
                     onChange={(e) => {
                       const value = e.target.value;
                       const isValid = /^\d*$/.test(value); // check if the value contains only digits
-
-                      if (isValid) {
-                        setErrorBalance(true);
-                        setPersonOwing(value);
-                        setErrorMsg("");
-                        console.log("balance verified");
-                      } else {
+                      const regex = /^[-\d{1,5}.\d{0,2}]*$/;
+                      if (regex.test(value)) {
+                        console.log("test");
+                          setErrorBalance(true);
+                          setPersonOwing(value);
+                          setErrorMsg("");
+                          console.log("balance verified");
+                          if(isNaN){
+                            setPersonOwing("0.00");
+                          }
+                      }
+                      else{
                         setErrorBalance(false);
                         setErrorMsg("Please enter a valid number");
-                        setErrorBalance(true);
-                      }
-                    }}
+                                          }}}
                   />
                 </div>
                 <div class="flex items-center items-center m-auto justify-center  error-msg h-5" style={{ color: "red" }}>
