@@ -44,11 +44,7 @@ function App() {
   const [startDate, setStartDate] = useState(new Date());
   const [personReceiptAmount, setPersonReceiptAmount] = useState("");
   const [value] = useState("");
-  const phoneNumberRegex = /^\(\d{3}\)\d{3}-\d{4}$/;
-
-  function validatePhoneNumber(phoneNumber) {
-    return phoneNumberRegex.test(phoneNumber);
-  }
+ 
   const addNum = (id, val, val2) => {
     let newList = list;
     let a = parseInt(val, 0);
@@ -76,23 +72,6 @@ function App() {
   };
 
   const handleSubmit = (e) => {
-    const newItems = {
-      personName,
-      personPhone,
-      personEmail,
-      personOwing,
-
-      id: uuidv4(),
-    };
-    setPersonName("");
-    setPersonPhone("");
-    setPersonEmail("");
-    setPersonOwing("");
-    setAddPerson(false);
-    setList([...list, newItems]);
-    setIsEditing(false);
-  };
-  const handleEditSubmit = (e) => {
     const newItems = {
       personName,
       personPhone,
@@ -211,7 +190,6 @@ function App() {
               setPersonPhone={setPersonPhone}
               setPersonOwing={setPersonOwing}
               handleSubmit={handleSubmit}
-              handleEditSubmit={handleEditSubmit}
               setPersonState={setPersonState}
               personState={personState}
               setIsSelected={setIsSelected}
@@ -223,7 +201,6 @@ function App() {
               value={value}
               hasReceipt={hasReceipt}
               setHasReceipt={setHasReceipt}
-              phoneNumberRegex={phoneNumberRegex}
             />
           }
         />
@@ -233,7 +210,7 @@ function App() {
         <Route
           path="/AddPerson"
           element={
-            <AddPerson
+            <AddPerson 
             />
           }
         />

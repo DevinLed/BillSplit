@@ -223,7 +223,6 @@ export default function ReceiptInput({
       subNum(id, personOwing, personReceiptAmount);
     }
   };
-
   return (
     <>
       {selectPersonReceipt ? (
@@ -331,7 +330,7 @@ export default function ReceiptInput({
                             selected={startDate}
                             onChange={(date) => setStartDate(date)}
                             className="bg-blue-100 text-center"
-                            onBlur={(e) => e.target.blur()}
+                            onFocus={e => e.target.blur()}
                           />
                         </div>
                       </div>
@@ -394,7 +393,17 @@ export default function ReceiptInput({
                                     placeholder="Amount"
                                     value={amount}
                                     onKeyDown={handleKeyDown}
-                                    onChange={handleAmountChange}
+                                    onChange={(e) => {
+                                      const value = e.target.value;
+                                      const isValid = /^\d*$/.test(value); // check if the value contains only digits
+                
+                                      if (isValid) {
+                                        setAmount(parseFloat(value));
+                                        console.log("amount verified");
+                                      } else {
+                                        console.log("amount not verified");
+                                      }
+                                    }}
                                   />
                                 </td>
                                 <td colSpan="3" className="px-2">
