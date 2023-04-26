@@ -53,7 +53,7 @@ export default function SplitBill({
                           color: personOwing < 0 ? "black" : "white",
                         }}
                       >
-                       ${value ? (value) : (personOwing)}
+                       ${value ? (parseFloat(value).toFixed(2)) : (parseFloat(personOwing).toFixed(2))}
                       </span>
                     </li>
                   </Link>

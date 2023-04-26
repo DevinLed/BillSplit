@@ -26,6 +26,19 @@ export default function AddPerson({
   const [errorMsg, setErrorMsg] = useState("");
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [submissionError, setSubmissionError] = useState(true);
+  const [showInput, setShowInput] = useState(false);
+  const [inputWidth, setInputWidth] = useState(0);
+  function handleKeyDown(event) {
+    // Handle key events
+  }
+
+  function handleYesButtonClick() {
+    setShowInput(true);
+    setInputWidth(document.querySelector(".form-control").offsetWidth);
+  }
+  function handleNoButtonClick() {
+    setShowInput(false);
+  }
 
   const handlePhoneNumberChange = (event) => {
     const inputValue = event.target.value;
@@ -99,11 +112,11 @@ export default function AddPerson({
                     id="colFormLabel"
                     placeholder="Name"
                     value={formSubmitted ? "" : personName}
-                    onChange={(e) =>
+                    onChange={(e) =>{
                       setPersonName(
                         e.target.value.charAt(0).toUpperCase() +
                           e.target.value.slice(1)
-                      )
+                      );setErrorBalance(true);}
                     }
                   />
                 </div>
@@ -160,38 +173,66 @@ export default function AddPerson({
                 >
                   Starting balance?
                 </label>
-                <div class="input-group mb-3">
-                  <span class="input-group-text ml-11">$</span>
-                  <input
-                    type="text"
-                    class="form-control max-six-digits rounded-left"
-                    onKeyDown={handleKeyDown}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      const isValid = /^\d*$/.test(value); // check if the value contains only digits
-                      const regex = /^[-\d{1,5}.\d{0,2}]*$/;
-                      if (regex.test(value)) {
-                        console.log("test");
-                          setErrorBalance(true);
-                          setPersonOwing(value);
-                          setErrorMsg("");
-                          console.log("balance verified");
-                      }
-                      else{
-                        setErrorBalance(false);
-                        setErrorMsg("Please enter a valid number");
-                                          }}}
-                  />
+              </div>
+              <div className="form-group row mt-1 mb-3 align-items-center">
+                <div className="col-md-3 mb-3 mb-md-0">
+                  <button
+                    className="btn btn-primary btn-block"
+                    onClick={(e)=>{handleNoButtonClick(e);setErrorBalance(true);}}
+                    disabled={!showInput}
+                  >
+                    No
+                  </button>
                 </div>
-                <div
-                  class="flex items-center items-center m-auto justify-center  error-msg h-5"
-                  style={{ color: "red" }}
-                >
-                  {errorMsg}
+                
+                <div className="col-md-3 ">
+                  <button
+                    className="btn btn-primary btn-block"
+                    onClick={handleYesButtonClick}
+                    disabled={showInput}
+                  >
+                    Yes
+                  </button>
                 </div>
+                <div className="col-md-6 mb-3 mb-md-0">
+                  {showInput && (
+                    <div className="input-group">
+                      <span className="input-group-text">$</span>
+                      <input
+                        type="text"
+                        className={`form-control max-six-digits rounded-start ${
+                          errorBalance ? "is-invalid" : ""
+                        }`}
+                        onKeyDown={handleKeyDown}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          const isValid = /^\d*$/.test(value);
+                          const regex = /^[-\d{1,5}.\d{0,2}]*$/;
+                          if (regex.test(value)) {
+                            setErrorBalance(true);
+                            setPersonOwing(value);
+                            setErrorMsg("");
+                          } else {
+                            setErrorBalance(false);
+                            setErrorMsg("Please enter a valid number");
+                          }
+                        }}
+                        style={{ borderColor: "lightblue" }}
+                      />
+                    </div>
+                  )}
+                </div>
+                {errorMsg && (
+                  <div
+                    className="flex items-center items-center m-auto justify-center error-msg h-5"
+                    style={{ color: "red" }}
+                  >
+                    {errorMsg}
+                  </div>
+                )}
               </div>
             </div>
-            
+
             {/*footer*/}
             <div className="flex items-center  justify-content-between align-items-center pb-6 px-6 border-t border-solid border-slate-200 rounded-b">
               <button
@@ -220,12 +261,17 @@ export default function AddPerson({
               >
                 Save
               </button>
-              
-            </div>{!submissionError ? (
-                    <p class="items-center justify-center mx-auto"style={{ color: "red" }}>
-                      Please complete all fields correctly.
-                    </p>
-                  ) : <div/>}
+            </div>
+            {!submissionError ? (
+              <p
+                class="items-center justify-center mx-auto"
+                style={{ color: "red" }}
+              >
+                Please complete all fields correctly.
+              </p>
+            ) : (
+              <div />
+            )}
           </div>
         </div>
       </div>

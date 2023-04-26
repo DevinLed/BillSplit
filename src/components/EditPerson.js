@@ -1,7 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { confirmAlert } from 'react-confirm-alert'; // Import
+import { confirmAlert } from "react-confirm-alert"; // Import
 import { BrowserRouter, Switch, Route, Routes, Link } from "react-router-dom";
 
 export default function EditPerson({
@@ -25,7 +25,8 @@ export default function EditPerson({
     if (e.key === "Enter") {
       e.target.blur();
     }
-  }const [isValidPhoneNumber, setIsValidPhoneNumber] = useState(true);
+  }
+  const [isValidPhoneNumber, setIsValidPhoneNumber] = useState(true);
   const [isValidEmail, setIsValidEmail] = useState(true);
   const [errorBalance, setErrorBalance] = useState(true);
   const [errorPhone, setErrorPhone] = useState(true);
@@ -76,34 +77,34 @@ export default function EditPerson({
 
   return (
     <>
-        <div className="p-8 justify-center items-center flex overflow-x-hidden overflow-y-hidden fixed inset-0 z-50 focus:outline-none">
-          <div className="relative w-auto my-6 mx-auto max-w-sm">
-            {/*content*/}
-            <div className="border-8 border-black-500 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-              {/*header*/}
-              <div className="flex items-center justify-evenly p-3 border-b border-solid border-slate-200 rounded-t">
-                <h3 className="text-2xl font-semibold">Edit Person</h3>
-              </div>
-              {/*body*/}
+      <div className="p-8 justify-center items-center flex overflow-x-hidden overflow-y-hidden fixed inset-0 z-50 focus:outline-none">
+        <div className="relative w-auto my-6 mx-auto max-w-sm">
+          {/*content*/}
+          <div className="border-8 border-black-500 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+            {/*header*/}
+            <div className="flex items-center justify-evenly p-3 border-b border-solid border-slate-200 rounded-t">
+              <h3 className="text-2xl font-semibold">Edit Person</h3>
+            </div>
+            {/*body*/}
 
-              <div className="relative p-6 flex-auto">
-                <div class="form-group row">
-                  <label for="colFormLabel" class="col-sm-2 col-form-label">
-                    Name
-                  </label>
-                  <div class="col-sm-10 mb-0">
-                    <input
-                      type="name"
-                      class="form-control"
-                      id="colFormLabel"
-                      placeholder="Name"
-                      value={personName}
-                      onChange={(e) => setPersonName(e.target.value)}
-                    />
-                  </div>
+            <div className="relative p-6 flex-auto">
+              <div class="form-group row">
+                <label for="colFormLabel" class="col-sm-2 col-form-label">
+                  Name
+                </label>
+                <div class="col-sm-10 mb-0">
+                  <input
+                    type="name"
+                    class="form-control"
+                    id="colFormLabel"
+                    placeholder="Name"
+                    value={personName}
+                    onChange={(e) => setPersonName(e.target.value)}
+                  />
                 </div>
+              </div>
 
-                <div class="form-group row mb-3">
+              <div class="form-group row mb-3">
                 <label for="colFormLabel" class="col-sm-2 col-form-label">
                   Phone
                 </label>
@@ -147,7 +148,7 @@ export default function EditPerson({
                 </div>
               </div>
 
-                <div class="form-group row mb-0">
+              <div class="form-group row mb-0">
                 <label
                   for="colFormLabel"
                   class="col-sm-2 col-form-label label-one-line"
@@ -157,73 +158,84 @@ export default function EditPerson({
                 <div class="input-group mb-3">
                   <span class="input-group-text ml-11">$</span>
                   <input
-                    type="text"
-                    class="form-control max-six-digits rounded-left"
-                    value={personOwing}
-                    onKeyDown={handleKeyDown}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      const isValid = /^\d*$/.test(value); // check if the value contains only digits
-                      const regex = /^[-\d{1,5}.\d{0,2}]*$/;
-                      if (regex.test(value)) {
-                        console.log("test");
-                          setErrorBalance(true);
-                          setPersonOwing(value);
-                          setErrorMsg("");
-                          console.log("balance verified");
-                          if(isNaN){
-                            setPersonOwing("0.00");
-                          }
-                      }
-                      else{
-                        setErrorBalance(false);
-                        setErrorMsg("Please enter a valid number");
-                                          }}}
-                  />
+  type="text"
+  className="form-control max-six-digits rounded-left"
+  onKeyDown={handleKeyDown}
+  value={personOwing}
+  onClick={(e) => {
+    e.target.select();
+  }}
+  onChange={(e) => {
+    const value = e.target.value;
+    setPersonOwing(value);
+    const isValid = /^\d*$/.test(value); // check if the value contains only digits
+    const regex = /^[-\d{1,5}.\d{0,2}]*$/;
+    if (regex.test(value)) {
+      setErrorBalance(true);
+      setPersonOwing(value);
+      setErrorMsg("");
+      if (isNaN(value)) {
+        setPersonOwing("0.00");
+      }
+    } else {
+      setErrorBalance(false);
+      setErrorMsg("Please enter a valid number");
+    }
+  }}
+/>
                 </div>
-                <div class="flex items-center items-center m-auto justify-center  error-msg h-5" style={{ color: "red" }}>
+                <div
+                  class="flex items-center items-center m-auto justify-center  error-msg h-5"
+                  style={{ color: "red" }}
+                >
                   {errorMsg}
                 </div>
-                  <div className="flex items-center m-auto justify-center align-items-center px-10 ">
-                    <div>
-                      <button
-                        type="submit"
-                        className="justify-center align-items-center mt-3 ml-2 bg-gray-500 font-bold py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
-                        onClick={(e) => {
-                                  setPersonOwing("0.00");setErrorBalance(true);}}
-                      >
-                        Reset balance
-                      </button>
-                    </div>
+                <div className="flex items-center m-auto justify-center align-items-center px-10 ">
+                  <div>
+                    <button
+                      type="submit"
+                      className="justify-center align-items-center mt-3 ml-2 bg-gray-500 font-bold py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
+                      onClick={(e) => {
+                        setPersonOwing("0.00");
+                        setErrorBalance(true);
+                      }}
+                    >
+                      Reset balance
+                    </button>
                   </div>
                 </div>
               </div>
-              {/*footer*/}
-              <div className="flex items-center  justify-center align-items-center pb-6 px-6 border-t border-solid border-slate-200 rounded-b">
-                <button
-                  type="submit"
-                  className="justify-center mt-3 ml-2 bg-blue-500 font-bold py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
-                  onClick={(e) => {
-                    if (errorBalance && errorPhone & errorEmail) {
-                      handleSubmit(e);
-                      setEditPerson(false);
-                    } 
-                    else{
-                      
-                    setSubmissionError(false);
-                    }
-                  }}
-                                  >
-                  Save
-                </button>
-              </div>{!submissionError ? (
-                    <p class="items-center justify-center mx-auto"style={{ color: "red" }}>
-                      Please complete all fields correctly.
-                    </p>
-                  ) : <div/>}
             </div>
+            {/*footer*/}
+            <div className="flex items-center  justify-center align-items-center pb-6 px-6 border-t border-solid border-slate-200 rounded-b">
+              <button
+                type="submit"
+                className="justify-center mt-3 ml-2 bg-blue-500 font-bold py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
+                onClick={(e) => {
+                  if (errorBalance && errorPhone & errorEmail) {
+                    handleSubmit(e);
+                    setEditPerson(false);
+                  } else {
+                    setSubmissionError(false);
+                  }
+                }}
+              >
+                Save
+              </button>
+            </div>
+            {!submissionError ? (
+              <p
+                class="items-center justify-center mx-auto"
+                style={{ color: "red" }}
+              >
+                Please complete all fields correctly.
+              </p>
+            ) : (
+              <div />
+            )}
           </div>
         </div>
+      </div>
     </>
   );
 }
