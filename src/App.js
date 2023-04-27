@@ -53,6 +53,7 @@ function App() {
     const storedReceipts = localStorage.getItem("receipts");
     if (storedReceipts) {
       setReceipts(JSON.parse(storedReceipts));
+      
     }
   }, []);
 
@@ -62,10 +63,6 @@ function App() {
     setReceipts(newReceipts);
     // Save receipts to localStorage
     localStorage.setItem("receipts", JSON.stringify(newReceipts));
-  };
-
-  const handleAddReceipt = (receipt) => {
-    setReceipts([...receipts, receipt]);
   };
 
   const addNum = (id, val, val2) => {
@@ -232,7 +229,7 @@ function App() {
         <Route
           path="/History"
           element={
-            <History receipts={receipts}
+            <History receipts={receipts} personName={personName} personOwing={personOwing} personReceiptAmount={personReceiptAmount}
             />
           }
         />

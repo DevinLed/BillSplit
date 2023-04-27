@@ -224,12 +224,6 @@ export default function ReceiptInput({
     
     if (selectedValue === "you") {
       addNum(id, personOwing, personReceiptAmount);
-      const receipt = {
-        them: {personName},
-        amount: {personReceiptAmount},
-      };
-      const historyInstance = new History(); // create an instance of the History component
-      historyInstance.addReceipt(receipt);
     } else {
       subNum(id, personOwing, personReceiptAmount);
     }
