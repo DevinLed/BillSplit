@@ -7,6 +7,7 @@ import { v4 as uuidv4 } from "uuid";
 import SplitBill from "./SplitBill";
 import Footer from "./Footer";
 import "../index.css";
+import History from "./History";
 import {
   Route,
   Routes,
@@ -56,6 +57,7 @@ export default function ReceiptInput({
   hasReceipt,
   setHasReceipt,
   handleValueChange,
+  
 }) {
   const [selectPersonReceipt, setSelectPersonReceipt] = useState(true);
 
@@ -126,6 +128,7 @@ export default function ReceiptInput({
   const handleAmountChange = (event) => {
     setAmount(event.target.value);
   };
+
 
   const handleReceiptSubmit = (sliderValue) => {
     if (!name || !amount) {
@@ -217,8 +220,16 @@ export default function ReceiptInput({
   };
 
   const getFinalTotal = () => {
+    
+    
     if (selectedValue === "you") {
       addNum(id, personOwing, personReceiptAmount);
+      const receipt = {
+        them: {personName},
+        amount: {personReceiptAmount},
+      };
+      const historyInstance = new History(); // create an instance of the History component
+      historyInstance.addReceipt(receipt);
     } else {
       subNum(id, personOwing, personReceiptAmount);
     }
@@ -233,7 +244,7 @@ export default function ReceiptInput({
 
               <div className="flex flex-col items-center justify-center">
                 <h1>Split a bill with {personName}</h1>
-                <p>Currently Owes: {personOwing}</p>
+                <p>Currently Owes: {parseFloat(personOwing).toFixed(2)}</p>
                 <ul class="list-group items-center justify-center">
                   <Link
                     class="btn btn-primary btn-lg mt-5"
@@ -395,10 +406,10 @@ export default function ReceiptInput({
                                     onKeyDown={handleKeyDown}
                                     onChange={(e) => {
                                       const value = e.target.value;
-                                      const isValid = /^\d*$/.test(value); // check if the value contains only digits
+                                      const isValid = /^\d+(\.\d{0,2})?$/.test(value); // check if the value contains only digits
                 
                                       if (isValid) {
-                                        setAmount(parseFloat(value));
+                                        setAmount(value);
                                         console.log("amount verified");
                                       } else {
                                         console.log("amount not verified");

@@ -44,7 +44,30 @@ function App() {
   const [startDate, setStartDate] = useState(new Date());
   const [personReceiptAmount, setPersonReceiptAmount] = useState("");
   const [value] = useState("");
- 
+
+  // History tab work
+  const [receipts, setReceipts] = useState([]);
+
+  useEffect(() => {
+    // Get receipts from localStorage on mount
+    const storedReceipts = localStorage.getItem("receipts");
+    if (storedReceipts) {
+      setReceipts(JSON.parse(storedReceipts));
+    }
+  }, []);
+
+  const addReceipt = (receipt) => {
+    // Add new receipt to receipts array
+    const newReceipts = [receipt, ...receipts.slice(0, 9)];
+    setReceipts(newReceipts);
+    // Save receipts to localStorage
+    localStorage.setItem("receipts", JSON.stringify(newReceipts));
+  };
+
+  const handleAddReceipt = (receipt) => {
+    setReceipts([...receipts, receipt]);
+  };
+
   const addNum = (id, val, val2) => {
     let newList = list;
     let a = parseInt(val, 0);
@@ -114,6 +137,7 @@ function App() {
           path="/ReceiptInput/:id"
           element={
             <ReceiptInput
+              addReceipt={addReceipt}
               addPerson={addPerson}
               setAddPerson={setAddPerson}
               selectPerson={selectPerson}
@@ -205,15 +229,15 @@ function App() {
           }
         />
 
-        <Route path="/History" element={<History />} />
-
         <Route
-          path="/AddPerson"
+          path="/History"
           element={
-            <AddPerson 
+            <History receipts={receipts}
             />
           }
         />
+
+        <Route path="/AddPerson" element={<AddPerson />} />
         <Route path="/EditPerson" element={<EditPerson />} />
       </Routes>
     </>

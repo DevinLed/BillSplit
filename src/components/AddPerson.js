@@ -178,7 +178,7 @@ export default function AddPerson({
                 <div className="col-md-3 mb-3 mb-md-0">
                   <button
                     className="btn btn-primary btn-block"
-                    onClick={(e)=>{handleNoButtonClick(e);setErrorBalance(true);}}
+                    onClick={(e)=>{handleNoButtonClick(e);setErrorBalance(true);setPersonOwing("0.00");}}
                     disabled={!showInput}
                   >
                     No
@@ -200,9 +200,17 @@ export default function AddPerson({
                       <span className="input-group-text">$</span>
                       <input
                         type="text"
+                        placeholder={value
+                          ? parseFloat(value).toFixed(2)
+                          : parseFloat(personOwing).toString() === "NaN"
+                          ? "0.00"
+                          : parseFloat(personOwing).toFixed(2)}
                         className={`form-control max-six-digits rounded-start ${
                           errorBalance ? "is-invalid" : ""
                         }`}
+                        onClick={(e) => {
+                          e.target.select();
+                        }}
                         onKeyDown={handleKeyDown}
                         onChange={(e) => {
                           const value = e.target.value;

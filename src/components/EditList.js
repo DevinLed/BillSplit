@@ -59,8 +59,12 @@ export default function EditList({
                           backgroundColor: personOwing < 0 ? "red" : "",
                           color: personOwing < 0 ? "black" : "white",
                         }}
-                      >
-                        ${(personOwing)}
+                      >$
+                        {value
+                          ? parseFloat(value).toFixed(2)
+                          : parseFloat(personOwing).toString() === "NaN"
+                          ? "0.00"
+                          : parseFloat(personOwing).toFixed(2)}
                       </span>
                     </li>
                   </button>

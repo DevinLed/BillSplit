@@ -27,7 +27,6 @@ export default function SplitBill({
   setValue,
   addNum,
   personReceiptAmount,
-  
 }) {
   const [selectPersonList, setSelectPersonList] = useState(true);
 
@@ -37,12 +36,14 @@ export default function SplitBill({
         <Header selectPersonList={selectPersonList} />
         <div className="flex flex-col items-center justify-center">
           {/*Table generator for people added*/}
-          {list.map(({ id, personName, personOwing}) => (
+          {list.map(({ id, personName, personOwing }) => (
             <React.Fragment key={id}>
               {personName.length ? (
                 <ul class="list-group m-0">
-                  <Link to={`/ReceiptInput/${id}`} onClick={() => 
-                          selectPerson(id)}>
+                  <Link
+                    to={`/ReceiptInput/${id}`}
+                    onClick={() => selectPerson(id)}
+                  >
                     <li class="outline-none text-primary focus:outline-none list-group-item d-flex l-500 justify-content-between align-items-center">
                       {personName}
 
@@ -53,7 +54,12 @@ export default function SplitBill({
                           color: personOwing < 0 ? "black" : "white",
                         }}
                       >
-                       ${value ? (parseFloat(value).toFixed(2)) : (parseFloat(personOwing).toFixed(2))}
+                        $
+                        {value
+                          ? parseFloat(value).toFixed(2)
+                          : parseFloat(personOwing).toString() === "NaN"
+                          ? "0.00"
+                          : parseFloat(personOwing).toFixed(2)}
                       </span>
                     </li>
                   </Link>
@@ -90,12 +96,11 @@ export default function SplitBill({
             setValue={setValue}
             addNum={addNum}
             personReceiptAmount={personReceiptAmount}
-            
           ></AddPerson>
         ) : (
           ""
         )}
-      <Footer/>
+        <Footer />
       </main>
     </>
   );
