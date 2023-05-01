@@ -37,7 +37,7 @@ function App() {
   const [list, setList] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [isSelected, setIsSelected] = useState(false);
-  
+
   const [formSubmitted, setFormSubmitted] = useState(false);
 
   // Calendar for manual receipt entry
@@ -48,10 +48,8 @@ function App() {
   const [value] = useState("");
 
   // History tab work
- const [displayAdd, setDisplayAdd] = useState(true);
- const [selectedValue, setSelectedValue] = useState("you");
-
-
+  const [displayAdd, setDisplayAdd] = useState(true);
+  const [selectedValue, setSelectedValue] = useState("you");
 
   const addNum = (id, val, val2) => {
     let newList = list;
@@ -116,12 +114,17 @@ function App() {
     setPersonEmail(editingRow.personEmail);
     setPersonOwing(editingRow.personOwing);
   };
-  
+
   const [receipts, setReceipts] = useState([]);
   const addReceipt = (personName, personReceiptAmount) => {
     const newReceipts = [...receipts];
-    newReceipts.push({ personName, personReceiptAmount });
+    newReceipts.push({
+      personName,
+      personReceiptAmount,
+      displayAdd: true, // add a displayAdd property and set it to true
+    });
     setReceipts(newReceipts);
+    setDisplayAdd(true); // set displayAdd state to true
   };
   return (
     <>
@@ -166,7 +169,7 @@ function App() {
               setReceipts={setReceipts}
               displayAdd={displayAdd}
               setDisplayAdd={setDisplayAdd}
-              selectedValue={selectedValue} 
+              selectedValue={selectedValue}
               setSelectedValue={setSelectedValue}
             />
           }
@@ -196,7 +199,8 @@ function App() {
               personReceiptAmount={personReceiptAmount}
               hasReceipt={hasReceipt}
               setHasReceipt={setHasReceipt}
-              formSubmitted={formSubmitted} setFormSubmitted={setFormSubmitted}
+              formSubmitted={formSubmitted}
+              setFormSubmitted={setFormSubmitted}
             />
           }
         />
@@ -234,15 +238,28 @@ function App() {
         <Route
           path="/History"
           element={
-            <History personName={personName} personOwing={personOwing} personReceiptAmount={personReceiptAmount} 
-            addReceipt={addReceipt}
-            receipts={receipts}
-            setReceipts={setReceipts}
+            <History
+              personName={personName}
+              personOwing={personOwing}
+              personReceiptAmount={personReceiptAmount}
+              addReceipt={addReceipt}
+              receipts={receipts}
+              displayAdd={displayAdd}
+              setReceipts={setReceipts}
+              selectedValue={selectedValue}
             />
           }
         />
 
-        <Route path="/AddPerson" element={<AddPerson formSubmitted={formSubmitted} setFormSubmitted={setFormSubmitted}/>} />
+        <Route
+          path="/AddPerson"
+          element={
+            <AddPerson
+              formSubmitted={formSubmitted}
+              setFormSubmitted={setFormSubmitted}
+            />
+          }
+        />
         <Route path="/EditPerson" element={<EditPerson />} />
       </Routes>
     </>
