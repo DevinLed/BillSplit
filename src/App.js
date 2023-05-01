@@ -121,10 +121,9 @@ function App() {
     newReceipts.push({
       personName,
       personReceiptAmount,
-      displayAdd: true, // add a displayAdd property and set it to true
+      displayAdd, // add a displayAdd property and set it to true
     });
     setReceipts(newReceipts);
-    setDisplayAdd(true); // set displayAdd state to true
   };
   return (
     <>

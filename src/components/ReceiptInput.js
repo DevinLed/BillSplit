@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect, onBlur } from "react";
 import Switch from "react-switch";
 import { useParams } from "react-router-dom";
+import html2canvas from 'html2canvas';
 import AddPerson from "./AddPerson";
 import Header from "./Header";
 import { v4 as uuidv4 } from "uuid";
@@ -86,13 +87,19 @@ export default function ReceiptInput({
   const [receiptSubmitted, setReceiptSubmitted] = useState(false);
   const [totalToAdd, setTotalToAdd] = useState("");
 
+  const [imageUrl, setImageUrl] = useState(null);
+  const captureScreen = () => {
+    const receiptDiv = document.getElementById('receipt-div');
+    html2canvas(receiptDiv).then((canvas) => {
+      const imgData = canvas.toDataURL();
+      setImageUrl(imgData);
+    });
+  };
   const [defValue, setDefValue] = useState(55);
 
   const [selected, setSelected] = useState(null);
   const handleButton1Click = () => {
     setSelected(1);
-    
-    setDisplayAdd(true);
   };
   function handleKeyDown(e) {
     if (e.key === "Enter") {
@@ -585,6 +592,7 @@ export default function ReceiptInput({
                             onClick={(e) => {
                               getFinalTotal();
                               handleHistorySubmit(e);
+                              captureScreen();
                             }}
                           >
                             Submit

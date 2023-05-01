@@ -158,31 +158,30 @@ export default function EditPerson({
                 <div class="input-group mb-3">
                   <span class="input-group-text ml-11">$</span>
                   <input
-  type="text"
-  className="form-control max-six-digits rounded-left"
-  onKeyDown={handleKeyDown}
-  value={personOwing}
-  onClick={(e) => {
-    e.target.select();
-  }}
-  onChange={(e) => {
-    const value = e.target.value;
-    setPersonOwing(value);
-    const isValid = /^\d*$/.test(value); // check if the value contains only digits
-    const regex = /^[-\d{1,5}.\d{0,2}]*$/;
-    if (regex.test(value)) {
-      setErrorBalance(true);
-      setPersonOwing(value);
-      setErrorMsg("");
-      if (isNaN(value)) {
-        setPersonOwing("0.00");
-      }
-    } else {
-      setErrorBalance(false);
-      setErrorMsg("Please enter a valid number");
-    }
-  }}
-/>
+                    type="text"
+                    className="form-control max-six-digits rounded-left"
+                    onKeyDown={handleKeyDown}
+                    value={personOwing}
+                    onClick={(e) => {
+                      e.target.select();
+                    }}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      setPersonOwing(value);
+                      const regex = /^[-\d{1,5}\.\d{0,2}]*$/;
+                      if (regex.test(value)) {
+                        setErrorBalance(true);
+                        setPersonOwing(value);
+                        setErrorMsg("");
+                        if (isNaN(value)) {
+                          setPersonOwing("0.00");
+                        }
+                      } else {
+                        setErrorBalance(false);
+                        setErrorMsg("Please enter a valid number");
+                      }
+                    }}
+                  />
                 </div>
                 <div
                   class="flex items-center items-center m-auto justify-center  error-msg h-5"
