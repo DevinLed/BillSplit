@@ -27,6 +27,8 @@ export default function SplitBill({
   setValue,
   addNum,
   personReceiptAmount,
+  formSubmitted, 
+  setFormSubmitted
 }) {
   const [selectPersonList, setSelectPersonList] = useState(true);
 
@@ -71,7 +73,7 @@ export default function SplitBill({
           ))}
           <button
             className="mt-4 bg-blue-500 font-bold py-2 px-4 mb-5 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
-            onClick={() => setAddPerson(true)}
+            onClick={() => {setAddPerson(true);setFormSubmitted(true);}}
           >
             Add Person
           </button>
@@ -96,6 +98,7 @@ export default function SplitBill({
             setValue={setValue}
             addNum={addNum}
             personReceiptAmount={personReceiptAmount}
+            setFormSubmitted={setFormSubmitted}
           ></AddPerson>
         ) : (
           ""

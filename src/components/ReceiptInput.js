@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect,onBlur } from "react";
+import React, { useRef, useState, useEffect, onBlur } from "react";
 import Switch from "react-switch";
 import { useParams } from "react-router-dom";
 import AddPerson from "./AddPerson";
@@ -38,7 +38,6 @@ export default function ReceiptInput({
   setPersonEmail,
   setPersonPhone,
   setPersonOwing,
-  handleSubmit,
   setPersonState,
   personState,
   setIsSelected,
@@ -57,7 +56,14 @@ export default function ReceiptInput({
   hasReceipt,
   setHasReceipt,
   handleValueChange,
-  
+  value,
+  addReceipt,
+  receipts,
+  setReceipts,
+  displayAdd, 
+  setDisplayAdd,
+  selectedValue, 
+  setSelectedValue
 }) {
   const [selectPersonReceipt, setSelectPersonReceipt] = useState(true);
 
@@ -68,7 +74,6 @@ export default function ReceiptInput({
   const [name, setName] = useState("");
   const [amount, setAmount] = useState("");
   const [addToValue, setAddToValue] = useState(false);
-  const [selectedValue, setSelectedValue] = useState("you");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [sliderValue, setSliderValue] = useState(55);
   const [youValue, setYouValue] = useState(0);
@@ -86,6 +91,8 @@ export default function ReceiptInput({
   const [selected, setSelected] = useState(null);
   const handleButton1Click = () => {
     setSelected(1);
+    
+    setDisplayAdd(true);
   };
   function handleKeyDown(e) {
     if (e.key === "Enter") {
@@ -128,7 +135,6 @@ export default function ReceiptInput({
   const handleAmountChange = (event) => {
     setAmount(event.target.value);
   };
-
 
   const handleReceiptSubmit = (sliderValue) => {
     if (!name || !amount) {
@@ -218,10 +224,10 @@ export default function ReceiptInput({
 
     return parseFloat(total).toFixed(2);
   };
-
+  const handleHistorySubmit = (e) => {
+    addReceipt(personName, personReceiptAmount);
+  };
   const getFinalTotal = () => {
-    
-    
     if (selectedValue === "you") {
       addNum(id, personOwing, personReceiptAmount);
     } else {
@@ -238,7 +244,14 @@ export default function ReceiptInput({
 
               <div className="flex flex-col items-center justify-center">
                 <h1>Split a bill with {personName}</h1>
-                <p>Currently Owes: {parseFloat(personOwing).toFixed(2)}</p>
+                <p>
+                  Currently Owes: $
+                  {value
+                    ? parseFloat(value).toFixed(2)
+                    : parseFloat(personOwing).toString() === "NaN"
+                    ? "0.00"
+                    : parseFloat(personOwing).toFixed(2)}
+                </p>
                 <ul class="list-group items-center justify-center">
                   <Link
                     class="btn btn-primary btn-lg mt-5"
@@ -272,7 +285,7 @@ export default function ReceiptInput({
             <div className="flex flex-col items-center justify-center mt-0">
               <Header selectMethodManual={selectMethodManual} />
 
-              <div class="flex flex-col items-center max-w-min justify-center bg-grey dark:bg-slate-900 rounded-lg px-6 py-6 ring-slate-900/5">
+              <div class="flex flex-col items-center l-36  justify-center bg-grey dark:bg-slate-900 rounded-lg px-6 py-6 ring-slate-900/5">
                 <div className="max-w-fit">
                   <label
                     htmlFor="payment"
@@ -295,16 +308,18 @@ export default function ReceiptInput({
                         Me
                       </button>
                       <button
-                        className={`bg-blue-500 text-white font-bold py-1 px-2 rounded-r border-l m-0 ${
+                        className={`bg-blue-500 text-white font-bold py-1 px-3 rounded-r border-l m-0 ${
                           selected === 2 ? "bg-blue-700" : ""
-                        } h-8 w-16`}
+                        } h-8 min-w-16 max-w-24 overflow-hidden`}
                         onClick={() => {
                           handleButton2Click();
                           setSelectedValue("them");
                           setShowTable(true);
                         }}
                       >
-                        {personName}
+                        {personName.length > 12
+                          ? personName.slice(0, 12) + "..."
+                          : personName}
                       </button>
                     </div>
                   </label>
@@ -328,14 +343,17 @@ export default function ReceiptInput({
                       />
                       <div class="flex items-center justify-left h-11 mt-3 ">
                         <div class="mt-3 mb-3 z-50 text-center">
-                          <label for="colFormLabel" class="col-form-label text-center ">
+                          <label
+                            for="colFormLabel"
+                            class="col-form-label text-center "
+                          >
                             Date of Receipt
                           </label>
                           <DatePicker
                             selected={startDate}
                             onChange={(date) => setStartDate(date)}
                             className="bg-blue-100 text-center"
-                            onFocus={e => e.target.blur()}
+                            onFocus={(e) => e.target.blur()}
                           />
                         </div>
                       </div>
@@ -400,8 +418,10 @@ export default function ReceiptInput({
                                     onKeyDown={handleKeyDown}
                                     onChange={(e) => {
                                       const value = e.target.value;
-                                      const isValid = /^\d+(\.\d{0,2})?$/.test(value); // check if the value contains only digits
-                
+                                      const isValid = /^\d+(\.\d{0,2})?$/.test(
+                                        value
+                                      ); // check if the value contains only digits
+
                                       if (isValid) {
                                         setAmount(value);
                                         console.log("amount verified");
@@ -528,7 +548,8 @@ export default function ReceiptInput({
                         <label className="text-lg font-medium text-center">
                           {selectedValue === "you" ? (
                             <>
-                              {personName} owes you {personReceiptAmount}
+                              {personName} owes you $
+                              {parseFloat(personReceiptAmount).toFixed(2)}
                             </>
                           ) : (
                             <>
@@ -543,17 +564,28 @@ export default function ReceiptInput({
                     <div className="col-sm-10 ml-0 mr-0 flex flex-col items-center justify-center mt-3">
                       <div>
                         <Link to={`/ReceiptInput/${id}`}>
-                          <button className="mt-4 bg-blue-500 font-bold py-2 px-4 mb-5 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300" 
-                            onClick={() => {getFinalTotal(); setSelectMethodManual(false); setSelectPersonReceipt(true);}}>
+                          <button
+                            className="mt-4 bg-blue-500 font-bold py-2 px-4 mb-5 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
+                            onClick={() => {
+                              getFinalTotal();
+                              setSelectMethodManual(false);
+                              setSelectPersonReceipt(true);
+                            }}
+                          >
                             Add Another Receipt
                           </button>
                         </Link>
                       </div>
+
                       <div>
                         <Link to="/SplitBill">
                           <button
+                            type="submit"
                             className="bg-blue-500 font-bold py-2 px-4 mb-5 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
-                            onClick={() => getFinalTotal()}
+                            onClick={(e) => {
+                              getFinalTotal();
+                              handleHistorySubmit(e);
+                            }}
                           >
                             Submit
                           </button>

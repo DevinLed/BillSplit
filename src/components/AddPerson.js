@@ -1,5 +1,5 @@
-import { React, useRef, useState } from "react";
-import { BrowserRouter, Switch, Route, Routes, Link } from "react-router-dom";
+import { React, useState, useEffect } from "react";
+import History from "./History";
 
 export default function AddPerson({
   personName,
@@ -17,6 +17,8 @@ export default function AddPerson({
   setValue,
   addNum,
   personReceiptAmount,
+  formSubmitted,
+  setFormSubmitted,
 }) {
   const [isValidPhoneNumber, setIsValidPhoneNumber] = useState(false);
   const [isValidEmail, setIsValidEmail] = useState(false);
@@ -24,10 +26,10 @@ export default function AddPerson({
   const [errorPhone, setErrorPhone] = useState(false);
   const [errorEmail, setErrorEmail] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
-  const [formSubmitted, setFormSubmitted] = useState(false);
   const [submissionError, setSubmissionError] = useState(true);
   const [showInput, setShowInput] = useState(false);
   const [inputWidth, setInputWidth] = useState(0);
+  const [isLoaded, setIsLoaded] = useState(true);
   function handleKeyDown(event) {
     // Handle key events
   }
@@ -85,51 +87,56 @@ export default function AddPerson({
     setErrorBalance(false);
     setErrorMsg("");
   }
-  function handleKeyDown(e) {
-    if (e.key === "Enter") {
-      e.target.blur();
-    }
-  }
+  useEffect(() => {
+    setPersonName("");
+    setPersonPhone("");
+    setPersonEmail("");
+    setPersonOwing(""); // reset the input value to an empty string when the component mounts
+  }, []);
   return (
     <>
       <div className="p-8 justify-center items-center flex overflow-x-hidden overflow-y-hidden fixed inset-0 z-50 focus:outline-none">
-        <div className="relative w-auto my-6 mx-auto max-w-md">
-          <div className="border-8 border-black-500 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+        <div className="relative w-auto my-6 mx-auto max-w-md flex justify-center items-center">
+          <div className="border-8 border-black-500 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none ">
             <div className="flex items-center justify-evenly p-3 border-b border-solid border-slate-200 rounded-t">
               <h3 className="text-2xl font-semibold">Add A Person</h3>
             </div>
-            {/*body*/}
 
-            <div className="relative p-6 flex-auto">
-              <div class="form-group row mb-0">
-                <label for="colFormLabel" class="col-sm-2 col-form-label">
-                  Name
-                </label>
-                <div class="col-sm-10 mb-0">
+            <div className="relative p-6 flex-auto justify-center items-center">
+              <div className="text-center">
+                <div class="form-group row mb-3">
+                  <label
+                    for="colFormLabel"
+                    class="col-sm-2 col-form-label mr-2"
+                  >
+                    Name
+                  </label>
                   <input
                     type="name"
-                    class="form-control w-2/3"
+                    class="form-control w-2/3 ml-2 mb-2"
                     id="colFormLabel"
                     placeholder="Name"
-                    value={formSubmitted ? "" : personName}
-                    onChange={(e) =>{
+                    value={personName}
+                    onChange={(e) => {
                       setPersonName(
                         e.target.value.charAt(0).toUpperCase() +
                           e.target.value.slice(1)
-                      );setErrorBalance(true);}
-                    }
+                      );
+                      setErrorBalance(true);
+                    }}
                   />
                 </div>
-              </div>
 
-              <div class="form-group row mb-3">
-                <label for="colFormLabel" class="col-sm-2 col-form-label">
-                  Phone
-                </label>
-                <div class="col-sm-10">
+                <div class="form-group row mb-3">
+                  <label
+                    for="colFormLabel"
+                    class="col-sm-2 col-form-label mr-2"
+                  >
+                    Phone
+                  </label>
                   <input
                     type="phone"
-                    class="form-control w-2/3 mb-2"
+                    class="form-control w-2/3 mb-2 ml-2"
                     id="colFormLabel"
                     placeholder="Phone Number"
                     value={formSubmitted ? "" : personPhone}
@@ -142,16 +149,17 @@ export default function AddPerson({
                     </span>
                   )}
                 </div>
-              </div>
 
-              <div class="form-group row mb-3">
-                <label for="colFormLabel" class="col-sm-2 col-form-label">
-                  Email
-                </label>
-                <div class="col-sm-10">
+                <div class="form-group row mb-3">
+                  <label
+                    for="colFormLabel"
+                    class="col-sm-2 col-form-label mr-2"
+                  >
+                    Email
+                  </label>
                   <input
                     type="email"
-                    class="form-control w-2/3 mb-2"
+                    class="form-control w-2/3 mb-2 ml-2"
                     id="colFormLabel"
                     placeholder="Email"
                     value={formSubmitted ? "" : personEmail}
@@ -164,80 +172,85 @@ export default function AddPerson({
                     </p>
                   )}
                 </div>
-              </div>
 
-              <div class="form-group row mb-0">
-                <label
-                  for="colFormLabel"
-                  class="col-sm-2 col-form-label label-one-line"
-                >
-                  Starting balance?
-                </label>
-              </div>
-              <div className="form-group row mt-1 mb-3 align-items-center">
-                <div className="col-md-3 mb-3 mb-md-0">
-                  <button
-                    className="btn btn-primary btn-block"
-                    onClick={(e)=>{handleNoButtonClick(e);setErrorBalance(true);setPersonOwing("0.00");}}
-                    disabled={!showInput}
+                <div class="form-group row mb-0 text-center justify-center items-center">
+                  <label
+                    for="colFormLabel"
+                    class="col-form-label label-one-line"
                   >
-                    No
-                  </button>
+                    Starting balance?
+                  </label>
                 </div>
-                
-                <div className="col-md-3 ">
-                  <button
-                    className="btn btn-primary btn-block"
-                    onClick={handleYesButtonClick}
-                    disabled={showInput}
-                  >
-                    Yes
-                  </button>
-                </div>
-                <div className="col-md-6 mb-3 mb-md-0">
-                  {showInput && (
-                    <div className="input-group">
-                      <span className="input-group-text">$</span>
-                      <input
-                        type="text"
-                        placeholder={value
-                          ? parseFloat(value).toFixed(2)
-                          : parseFloat(personOwing).toString() === "NaN"
-                          ? "0.00"
-                          : parseFloat(personOwing).toFixed(2)}
-                        className={`form-control max-six-digits rounded-start ${
-                          errorBalance ? "is-invalid" : ""
-                        }`}
-                        onClick={(e) => {
-                          e.target.select();
-                        }}
-                        onKeyDown={handleKeyDown}
-                        onChange={(e) => {
-                          const value = e.target.value;
-                          const isValid = /^\d*$/.test(value);
-                          const regex = /^[-\d{1,5}.\d{0,2}]*$/;
-                          if (regex.test(value)) {
-                            setErrorBalance(true);
-                            setPersonOwing(value);
-                            setErrorMsg("");
-                          } else {
-                            setErrorBalance(false);
-                            setErrorMsg("Please enter a valid number");
+                <div className="form-group row mt-1 mb-3 d-flex justify-content-center align-items-center">
+                  <div className="col-md-3 mb-3 mb-md-0">
+                    <button
+                      className="btn btn-primary btn-block"
+                      onClick={(e) => {
+                        handleNoButtonClick(e);
+                        setErrorBalance(true);
+                        setPersonOwing("0.00");
+                      }}
+                      disabled={!showInput}
+                    >
+                      No
+                    </button>
+                  </div>
+
+                  <div className="col-md-3 ">
+                    <button
+                      className="btn btn-primary btn-block"
+                      onClick={handleYesButtonClick}
+                      disabled={showInput}
+                    >
+                      Yes
+                    </button>
+                  </div>
+                  <div className="col-md-6 mb-3 mb-md-0">
+                    {showInput && (
+                      <div className="input-group">
+                        <span className="input-group-text">$</span>
+                        <input
+                          type="text"
+                          placeholder={
+                            value
+                              ? parseFloat(value).toFixed(2)
+                              : parseFloat(personOwing).toString() === "NaN"
+                              ? "0.00"
+                              : parseFloat(personOwing).toFixed(2)
                           }
-                        }}
-                        style={{ borderColor: "lightblue" }}
-                      />
+                          className={`form-control max-six-digits rounded-start ${
+                            errorBalance ? "is-invalid" : ""
+                          }`}
+                          onClick={(e) => {
+                            e.target.select();
+                          }}
+                          onKeyDown={handleKeyDown}
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            const regex = /^[-\d{1,5}.\d{0,2}]*$/;
+                            if (regex.test(value)) {
+                              setErrorBalance(true);
+                              setPersonOwing(value);
+                              setErrorMsg("");
+                            } else {
+                              setErrorBalance(false);
+                              setErrorMsg("Please enter a valid number");
+                            }
+                          }}
+                          style={{ borderColor: "lightblue" }}
+                        />
+                      </div>
+                    )}
+                  </div>
+                  {errorMsg && (
+                    <div
+                      className="flex items-center items-center m-auto justify-center error-msg h-5"
+                      style={{ color: "red" }}
+                    >
+                      {errorMsg}
                     </div>
                   )}
                 </div>
-                {errorMsg && (
-                  <div
-                    className="flex items-center items-center m-auto justify-center error-msg h-5"
-                    style={{ color: "red" }}
-                  >
-                    {errorMsg}
-                  </div>
-                )}
               </div>
             </div>
 

@@ -37,6 +37,8 @@ function App() {
   const [list, setList] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [isSelected, setIsSelected] = useState(false);
+  
+  const [formSubmitted, setFormSubmitted] = useState(false);
 
   // Calendar for manual receipt entry
   const [merchantName, setMerchantName] = useState("");
@@ -46,24 +48,10 @@ function App() {
   const [value] = useState("");
 
   // History tab work
-  const [receipts, setReceipts] = useState([]);
+ const [displayAdd, setDisplayAdd] = useState(true);
+ const [selectedValue, setSelectedValue] = useState("you");
 
-  useEffect(() => {
-    // Get receipts from localStorage on mount
-    const storedReceipts = localStorage.getItem("receipts");
-    if (storedReceipts) {
-      setReceipts(JSON.parse(storedReceipts));
-      
-    }
-  }, []);
 
-  const addReceipt = (receipt) => {
-    // Add new receipt to receipts array
-    const newReceipts = [receipt, ...receipts.slice(0, 9)];
-    setReceipts(newReceipts);
-    // Save receipts to localStorage
-    localStorage.setItem("receipts", JSON.stringify(newReceipts));
-  };
 
   const addNum = (id, val, val2) => {
     let newList = list;
@@ -76,6 +64,8 @@ function App() {
       }
     }
     setList(newList);
+    setDisplayAdd(true);
+    console.log("this is to add");
   };
 
   const subNum = (id, val, val2) => {
@@ -89,6 +79,8 @@ function App() {
       }
     }
     setList(newList);
+    setDisplayAdd(false);
+    console.log("this is to sub");
   };
 
   const handleSubmit = (e) => {
@@ -124,7 +116,13 @@ function App() {
     setPersonEmail(editingRow.personEmail);
     setPersonOwing(editingRow.personOwing);
   };
-
+  
+  const [receipts, setReceipts] = useState([]);
+  const addReceipt = (personName, personReceiptAmount) => {
+    const newReceipts = [...receipts];
+    newReceipts.push({ personName, personReceiptAmount });
+    setReceipts(newReceipts);
+  };
   return (
     <>
       <Routes>
@@ -134,7 +132,6 @@ function App() {
           path="/ReceiptInput/:id"
           element={
             <ReceiptInput
-              addReceipt={addReceipt}
               addPerson={addPerson}
               setAddPerson={setAddPerson}
               selectPerson={selectPerson}
@@ -164,6 +161,13 @@ function App() {
               setPersonReceiptAmount={setPersonReceiptAmount}
               addNum={addNum}
               subNum={subNum}
+              addReceipt={addReceipt}
+              receipts={receipts}
+              setReceipts={setReceipts}
+              displayAdd={displayAdd}
+              setDisplayAdd={setDisplayAdd}
+              selectedValue={selectedValue} 
+              setSelectedValue={setSelectedValue}
             />
           }
         />
@@ -192,6 +196,7 @@ function App() {
               personReceiptAmount={personReceiptAmount}
               hasReceipt={hasReceipt}
               setHasReceipt={setHasReceipt}
+              formSubmitted={formSubmitted} setFormSubmitted={setFormSubmitted}
             />
           }
         />
@@ -229,12 +234,15 @@ function App() {
         <Route
           path="/History"
           element={
-            <History receipts={receipts} personName={personName} personOwing={personOwing} personReceiptAmount={personReceiptAmount}
+            <History personName={personName} personOwing={personOwing} personReceiptAmount={personReceiptAmount} 
+            addReceipt={addReceipt}
+            receipts={receipts}
+            setReceipts={setReceipts}
             />
           }
         />
 
-        <Route path="/AddPerson" element={<AddPerson />} />
+        <Route path="/AddPerson" element={<AddPerson formSubmitted={formSubmitted} setFormSubmitted={setFormSubmitted}/>} />
         <Route path="/EditPerson" element={<EditPerson />} />
       </Routes>
     </>
