@@ -1,59 +1,35 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import Header from "./Header";
 import Footer from "./Footer";
 import ReceiptInput from "./ReceiptInput";
-import html2canvas from 'html2canvas';
 
-export default function History({
-  receipts,
-  displayAdd,
-  setDisplayAdd,
-  selectedValue,
-}) {
+export default function History({ receipts, displayAdd, setDisplayAdd, selectedValue }) {
   const { id } = useParams();
-  const [historyList, setHistoryList] = useState([]);
-  const [imageUrl, setImageUrl] = useState(null);
-  const receiptInputRef = useRef(null);
 
-  useEffect(() => {
-    const list = receipts.slice(-10).map((receipt) => {
+  const receiptList = useMemo(() => {
+    return receipts.slice(-10).map((receipt, index) => {
       const personOwes = receipt.personReceiptAmount < 0;
-
+      const personOwesText = personOwes ? "they owe" : "you owe";
+      const selectedValueText = selectedValue === "you" ? "you" : "they";
+<ReceiptInput selectedValue={selectedValue}/>
       return (
         <li
           className={`py-2 ${
             personOwes ? "border-red-500" : "border-blue-500"
           }`}
-          key={receipt.id}
+          key={index}
         >
           You submitted a receipt with {receipt.personName}, where{" "}
-          {selectedValue === "you"
-            ? personOwes
-              ? "they owe"
-              : "you owe"
-            : personOwes
-            ? "you owe"
-            : "they owe"}{" "}
+          {personOwesText}{" "}
           <span className="font-bold">
-            {personOwes ? "-$" : "$"}
+            {selectedValueText === "you" ? "$" : "-$"}
             {Math.abs(parseFloat(receipt.personReceiptAmount)).toFixed(2)}
           </span>
-          .
-          <button
-            className="ml-2 px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-            onClick={async () => {
-              const canvas = await html2canvas(receiptInputRef.current);
-              const dataUrl = canvas.toDataURL();
-              setImageUrl(dataUrl);
-            }}
-          >
-            Take Screenshot
-          </button>
+          {selectedValueText === "you" ? " to them." : " from them."}
         </li>
       );
     });
-    setHistoryList(list);
   }, [receipts, selectedValue]);
 
   return (
@@ -62,23 +38,8 @@ export default function History({
         <Header showHistory={true} />
         <div className="flex flex-col items-center justify-center">
           <div className="bg-white rounded-lg px-3 py-2 shadow-md flex items-center justify-center mb-2">
-            <ul>{historyList}</ul>
+            <ul>{receiptList}</ul>
           </div>
-          <div ref={receiptInputRef}>
-            {displayAdd && (
-              <ReceiptInput
-                setDisplayAdd={setDisplayAdd}
-                selectedValue={selectedValue}
-              />
-            )}
-          </div>
-          {imageUrl && (
-            <img
-              src={imageUrl}
-              alt="Screenshot"
-              onClick={() => setImageUrl(null)}
-            />
-          )}
         </div>
         <Footer />
       </main>
