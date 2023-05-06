@@ -50,7 +50,7 @@ export default function Home() {
                   setPersonEdit={setPersonEdit}
                 ></Header>
                 <ul>
-                  <li>
+                  <li className="flex items-center justify-center">
                     <Link to="/SplitBill">
                       <button
                         className="justify-center mt-5 bg-blue-500 font-bold py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
@@ -59,7 +59,7 @@ export default function Home() {
                       </button>
                     </Link>
                   </li>
-                  <li>
+                  <li className="flex items-center justify-center">
                     <Link to="/EditList">
                       <button
                         className="mt-5 bg-blue-500 font-bold py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
@@ -69,7 +69,7 @@ export default function Home() {
                     </Link>
                   </li>
 
-                  <li>
+                  <li className="flex items-center justify-center">
                     <Link to="/History">
                       <button
                         className="mt-5 bg-blue-500 font-bold py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
@@ -78,7 +78,7 @@ export default function Home() {
                       </button>
                     </Link>
                   </li>
-                  <li>
+                  <li className="flex items-center justify-center">
                     <button
                       onClick={() => {
                         toggleTheme();

@@ -50,7 +50,14 @@ function App() {
   // History tab work
   const [displayAdd, setDisplayAdd] = useState(true);
   const [selectedValue, setSelectedValue] = useState("you");
+  const [history, setHistory] = useState([]);
+  const [displayMerchant, setDisplayMerchant] = useState(false);
+  const [displayDate, setDisplayDate] = useState(false);
+  const [displayInvoice, setDisplayInvoice] = useState(false);
 
+  const handleAdd = (newEntry) => {
+    setHistory([...history, newEntry]);
+  };
   const addNum = (id, val, val2) => {
     let newList = list;
     let a = parseInt(val, 0);
@@ -87,13 +94,13 @@ function App() {
       personPhone,
       personEmail,
       personOwing,
-
       id: uuidv4(),
     };
     setPersonName("");
     setPersonPhone("");
     setPersonEmail("");
     setPersonOwing("");
+    setSelectedValue("");
     setAddPerson(false);
     setList([...list, newItems]);
     setIsEditing(false);
@@ -116,12 +123,18 @@ function App() {
   };
 
   const [receipts, setReceipts] = useState([]);
-  const addReceipt = (personName, personReceiptAmount) => {
+  const addReceipt = (personName, personReceiptAmount, selectedValue, merchantName, startDate, invoiceNumber, displayMerchant, displayDate, displayInvoice ) => {
     const newReceipts = [...receipts];
     newReceipts.push({
       personName,
       personReceiptAmount,
-      displayAdd, // add a displayAdd property and set it to true
+      selectedValue,
+      merchantName, 
+      startDate, 
+      invoiceNumber,
+      displayMerchant,
+      displayDate,
+      displayInvoice
     });
     setReceipts(newReceipts);
   };
@@ -170,6 +183,13 @@ function App() {
               setDisplayAdd={setDisplayAdd}
               selectedValue={selectedValue}
               setSelectedValue={setSelectedValue}
+              handleAdd={handleAdd} 
+              displayMerchant={displayMerchant}
+              setDisplayMerchant={setDisplayMerchant} 
+              displayDate={displayDate}
+              setDisplayDate={setDisplayDate}
+              displayInvoice={displayInvoice}
+              setDisplayInvoice={setDisplayInvoice}
             />
           }
         />
@@ -243,9 +263,19 @@ function App() {
               personReceiptAmount={personReceiptAmount}
               addReceipt={addReceipt}
               receipts={receipts}
+              merchantName={merchantName}
+              startDate={startDate}
+              invoiceNumber={invoiceNumber}
               displayAdd={displayAdd}
               setReceipts={setReceipts}
               selectedValue={selectedValue}
+              history={history}
+              displayMerchant={displayMerchant}
+              setDisplayMerchant={setDisplayMerchant} 
+              displayDate={displayDate}
+              setDisplayDate={setDisplayDate}
+              displayInvoice={displayInvoice}
+              setDisplayInvoice={setDisplayInvoice}
             />
           }
         />

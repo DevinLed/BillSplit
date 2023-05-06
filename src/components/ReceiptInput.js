@@ -63,7 +63,13 @@ export default function ReceiptInput({
   displayAdd, 
   setDisplayAdd,
   selectedValue, 
-  setSelectedValue
+  setSelectedValue,
+  displayMerchant, 
+  displayDate, 
+  displayInvoice,
+  setDisplayMerchant, 
+  setDisplayDate, 
+  setDisplayInvoice  
 }) {
   const [selectPersonReceipt, setSelectPersonReceipt] = useState(true);
 
@@ -92,6 +98,14 @@ export default function ReceiptInput({
   const handleButton1Click = () => {
     setSelected(1);
   };
+
+
+  function resetReceiptForm() {
+    setMerchantName("");
+    setInvoiceNumber("");
+    setStartDate(new Date());
+  
+  }
   function handleKeyDown(e) {
     if (e.key === "Enter") {
       e.target.blur();
@@ -223,7 +237,7 @@ export default function ReceiptInput({
     return parseFloat(total).toFixed(2);
   };
   const handleHistorySubmit = (e) => {
-    addReceipt(personName, personReceiptAmount);
+    addReceipt(personName, personReceiptAmount, selectedValue, merchantName, startDate, invoiceNumber, displayMerchant, displayDate, displayInvoice );
   };
   const getFinalTotal = () => {
     if (selectedValue === "you") {
@@ -301,6 +315,9 @@ export default function ReceiptInput({
                           handleButton1Click();
                           setSelectedValue("you");
                           setShowTable(true);
+                          setDisplayMerchant(false);
+                          setDisplayDate(false);
+                          setDisplayInvoice(false);
                         }}
                       >
                         Me
@@ -338,6 +355,7 @@ export default function ReceiptInput({
                             )
                           )
                         }
+                        onClick={() => setDisplayMerchant(true)}
                       />
                       <div class="flex items-center justify-left h-11 mt-3 ">
                         <div class="mt-3 mb-3 z-50 text-center">
@@ -352,6 +370,8 @@ export default function ReceiptInput({
                             onChange={(date) => setStartDate(date)}
                             className="bg-blue-100 text-center"
                             onFocus={(e) => e.target.blur()}
+                            dateFormat="dd/MM/yyyy"
+                            onClick={() => setDisplayDate(true)}
                           />
                         </div>
                       </div>
@@ -365,6 +385,7 @@ export default function ReceiptInput({
                         placeholder="Invoice Number"
                         onKeyDown={handleKeyDown}
                         onChange={(e) => setInvoiceNumber(e.target.value)}
+                        onClick={() => setDisplayInvoice(true)}
                       />
                     </div>
                     <div>
@@ -564,10 +585,12 @@ export default function ReceiptInput({
                         <Link to={`/ReceiptInput/${id}`}>
                           <button
                             className="mt-4 bg-blue-500 font-bold py-2 px-4 mb-5 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
-                            onClick={() => {
+                            onClick={(e) => {
                               getFinalTotal();
                               setSelectMethodManual(false);
                               setSelectPersonReceipt(true);
+                              handleHistorySubmit(e);
+                              resetReceiptForm()
                             }}
                           >
                             Add Another Receipt
@@ -583,6 +606,7 @@ export default function ReceiptInput({
                             onClick={(e) => {
                               getFinalTotal();
                               handleHistorySubmit(e);
+                              resetReceiptForm()
                             }}
                           >
                             Submit
