@@ -40,9 +40,9 @@ export default function EditList({
           {list.map(({ id, personName, personPhone, personEmail, personOwing }) => (
             <React.Fragment key={id}>
               {personName.length ? (
-                <ul class="list-group m-0">
+                <ul className="list-group m-0">
                   <button
-                    class="outline-none text-primary focus:outline-none"
+                    className="outline-none text-primary focus:outline-none"
                     onClick={() => {
                       selectPerson(id);
                       editRow(id);
@@ -50,16 +50,16 @@ export default function EditList({
                       setEditPerson(true);
                     }}
                   >
-                    <li class="list-group-item d-flex l-500 justify-content-between align-items-center">
+                    <li className="list-group-item d-flex l-500 justify-content-between align-items-center">
                       {personName}
 
                       <span
-                        class="badge badge-primary badge-pill"
+                        className="badge badge-primary badge-pill"
                         style={{
                           backgroundColor: personOwing < 0 ? "red" : "",
                           color: personOwing < 0 ? "black" : "white",
                         }}
-                      >$
+                      >
                         {value
                           ? parseFloat(value).toFixed(2)
                           : parseFloat(personOwing).toString() === "NaN"

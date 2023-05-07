@@ -16,6 +16,7 @@ import {
   Navigate,
   Redirect,
 } from "react-router-dom";
+import "../darkMode.css";
 
 import DatePicker from "react-datepicker";
 
@@ -69,7 +70,9 @@ export default function ReceiptInput({
   displayInvoice,
   setDisplayMerchant, 
   setDisplayDate, 
-  setDisplayInvoice  
+  setDisplayInvoice, 
+  isReceiptSubmitted, 
+  setIsReceiptSubmitted
 }) {
   const [selectPersonReceipt, setSelectPersonReceipt] = useState(true);
 
@@ -264,9 +267,9 @@ export default function ReceiptInput({
                     ? "0.00"
                     : parseFloat(personOwing).toFixed(2)}
                 </p>
-                <ul class="list-group items-center justify-center">
+                <ul className="list-group items-center justify-center">
                   <Link
-                    class="btn btn-primary btn-lg mt-5"
+                    className="btn btn-primary btn-lg mt-5"
                     onClick={(e) => {
                       setSelectMethodManual(true);
                       setSelectPersonReceipt(false);
@@ -276,7 +279,7 @@ export default function ReceiptInput({
                   </Link>
                   <li>
                     <button
-                      class="btn btn-primary btn-lg mt-5 mb-5"
+                      className="btn btn-primary btn-lg mt-5 mb-5"
                       type="submit"
                     >
                       Picture
@@ -297,7 +300,7 @@ export default function ReceiptInput({
             <div className="flex flex-col items-center justify-center mt-0">
               <Header selectMethodManual={selectMethodManual} />
 
-              <div class="flex flex-col items-center l-36  justify-center bg-grey dark:bg-slate-900 rounded-lg px-6 py-6 ring-slate-900/5">
+              <div className="flex flex-col items-center l-36  justify-center bg-grey dark:bg-slate-900 rounded-lg px-6 py-6 ring-slate-900/5">
                 <div className="max-w-fit">
                   <label
                     htmlFor="payment"
@@ -341,10 +344,10 @@ export default function ReceiptInput({
                 </div>
                 {showTable ? (
                   <>
-                    <div class="col-sm-10 mb-0 mt-3">
+                    <div className="col-sm-10 mb-0 mt-3">
                       <input
                         type="amount"
-                        class="form-control font-bold mb-5 h-10 text-center"
+                        className="form-control font-bold mb-5 h-10 text-center"
                         id="colFormLabel"
                         placeholder="Merchant Name"
                         onKeyDown={handleKeyDown}
@@ -357,15 +360,16 @@ export default function ReceiptInput({
                         }
                         onClick={() => setDisplayMerchant(true)}
                       />
-                      <div class="flex items-center justify-left h-11 mt-3 ">
-                        <div class="mt-3 mb-3 z-50 text-center">
+                      <div className="flex items-center justify-left h-11 mt-3 ">
+                        <div className="mt-3 mb-3 z-50 text-center">
                           <label
-                            for="colFormLabel"
-                            class="col-form-label text-center "
+                            htmlFor="colFormLabel"
+                            className="col-form-label text-center text-black"
                           >
                             Date of Receipt
                           </label>
                           <DatePicker
+                            defaultValue="Date of Receipt"
                             selected={startDate}
                             onChange={(date) => setStartDate(date)}
                             className="bg-blue-100 text-center"
@@ -377,10 +381,10 @@ export default function ReceiptInput({
                       </div>
                     </div>
 
-                    <div class="m-3">
+                    <div className="m-3">
                       <input
                         type="invoice"
-                        class="form-control font-bold w-55 mb-2 mt-2 opacity-4 text-center"
+                        className="form-control font-bold w-55 mb-2 mt-2 opacity-4 text-center"
                         id="colFormLabel"
                         placeholder="Invoice Number"
                         onKeyDown={handleKeyDown}
@@ -390,24 +394,24 @@ export default function ReceiptInput({
                     </div>
                     <div>
                       <div className="w-full bg-white dark:bg-slate-900 rounded-lg py-1 m-0 max-w-min px-1 whitespace-no-wrap">
-                        <div class="mb-0 mx-auto max-w-min">
+                        <div className="mb-0 mx-auto max-w-min">
                           <table className="border border-black table-fixed max-w-min m-auto">
                             <thead className="whitespace-no-wrap overflow-hidden max-w-fit truncate">
                               <tr className="whitespace-no-wrap overflow-hidden max-w-fit px-2">
-                                <th className="px-15">Item</th>
-                                <th className="px-15">Price</th>
+                                <th className="px-15 text-black">Item</th>
+                                <th className="px-15 text-black">Price</th>
                                 <th
                                   className="px-1"
                                   colSpan={3}
                                   style={{ width: "33.33%" }}
                                 >
-                                  <span className="pr-2 pl-4 border-r border-black">
+                                  <span className="pr-2 pl-4 border-r border-black text-black">
                                     Me
                                   </span>
-                                  <span className="px-2 border-r border-l border-black">
+                                  <span className="px-2 border-r border-l border-black text-black">
                                     Split
                                   </span>
-                                  <span className="pl-2 border-l border-black">
+                                  <span className="pl-2 border-l border-black text-black">
                                     Them
                                   </span>
                                 </th>
@@ -489,7 +493,7 @@ export default function ReceiptInput({
                                       : ""
                                   }
                                 >
-                                  <td>
+                                  <td className=" text-black">
                                     {item.name.replace(/\b\w/g, (c) =>
                                       c.toUpperCase()
                                     )}
@@ -501,7 +505,7 @@ export default function ReceiptInput({
                                     >
                                       <IoMdRemoveCircleOutline />
                                     </button>
-                                    <span className="ml-2">${item.amount}</span>
+                                    <span className="ml-2 text-black">${item.amount}</span>
                                   </td>
                                   <td colSpan={3}>
                                     <div
@@ -529,31 +533,31 @@ export default function ReceiptInput({
                             <tfoot className="bg-blue-200">
                               <tr className="border-t border-gray-500 bg-blue-200">
                                 <td
-                                  className="px-2 py-1 "
+                                  className="px-2 py-1 text-black"
                                   style={{ width: "33.33%" }}
                                 >
                                   Total:
                                 </td>
                                 <td
-                                  className="px-2 mr-2 py-1 text-right"
+                                  className="px-2 mr-2 py-1 text-right  text-black"
                                   style={{ width: "33.33%" }}
                                 >
                                   ${getTotal()}
                                 </td>
                                 <td
-                                  className="text-center px-2 py-1 border-l border-gray-500 text-xs"
+                                  className="text-center px-2 py-1 border-l border-gray-500 text-xs  text-black"
                                   style={{ width: "33.33%" }}
                                 >
                                   {youTotal}
                                 </td>
                                 <td
-                                  className="text-center px-2 py-1 border-l border-gray-500 text-xs"
+                                  className="text-center px-2 py-1 border-l border-gray-500 text-xs  text-black"
                                   style={{ width: "33.33%" }}
                                 >
                                   {splitTotal}
                                 </td>
                                 <td
-                                  className="text-center px-2 py-1 border-l border-gray-500 text-xs"
+                                  className="text-center px-2 py-1 border-l border-gray-500 text-xs  text-black"
                                   style={{ width: "33.33%" }}
                                 >
                                   {themTotal}
@@ -591,6 +595,7 @@ export default function ReceiptInput({
                               setSelectPersonReceipt(true);
                               handleHistorySubmit(e);
                               resetReceiptForm()
+                              setIsReceiptSubmitted(true);
                             }}
                           >
                             Add Another Receipt
@@ -607,6 +612,7 @@ export default function ReceiptInput({
                               getFinalTotal();
                               handleHistorySubmit(e);
                               resetReceiptForm()
+                              setIsReceiptSubmitted(true);
                             }}
                           >
                             Submit

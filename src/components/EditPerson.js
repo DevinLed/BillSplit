@@ -20,6 +20,7 @@ export default function EditPerson({
   list,
   setList,
   setIsEditing,
+  formSubmitted,
 }) {
   function handleKeyDown(e) {
     if (e.key === "Enter") {
@@ -83,38 +84,48 @@ export default function EditPerson({
           <div className="border-8 border-black-500 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
             {/*header*/}
             <div className="flex items-center justify-evenly p-3 border-b border-solid border-slate-200 rounded-t">
-              <h3 className="text-2xl font-semibold">Edit Person</h3>
+              <h3 className="text-2xl font-semibold text-black">Edit Person</h3>
             </div>
             {/*body*/}
 
-            <div className="relative p-6 flex-auto">
-              <div class="form-group row">
-                <label for="colFormLabel" class="col-sm-2 col-form-label">
-                  Name
-                </label>
-                <div class="col-sm-10 mb-0">
+            <div className="relative p-6 flex-auto justify-center items-center">
+              <div className="text-center">
+                <div className="form-group row mb-3  flex justify-center items-center">
+                  <label
+                    htmlFor="colFormLabel"
+                    className="col-sm-2 col-form-label mr-2"
+                  >
+                    Name
+                  </label>
                   <input
                     type="name"
-                    class="form-control"
+                    className="form-control w-2/4 ml-2 mb-2"
                     id="colFormLabel"
                     placeholder="Name"
                     value={personName}
-                    onChange={(e) => setPersonName(e.target.value)}
+                    onChange={(e) => {
+                      setPersonName(
+                        e.target.value.charAt(0).toUpperCase() +
+                          e.target.value.slice(1)
+                      );
+                      setErrorBalance(true);
+                    }}
                   />
                 </div>
-              </div>
 
-              <div class="form-group row mb-3">
-                <label for="colFormLabel" class="col-sm-2 col-form-label">
-                  Phone
-                </label>
-                <div class="col-sm-10">
+                <div className="form-group row mb-3 flex justify-center items-center">
+                  <label
+                    htmlFor="colFormLabel"
+                    className="col-sm-2 col-form-label mr-2"
+                  >
+                    Phone
+                  </label>
                   <input
                     type="phone"
-                    class="form-control w-2/3 mb-2"
+                    className="form-control w-2/4 mb-2 ml-2"
                     id="colFormLabel"
                     placeholder="Phone Number"
-                    value={personPhone}
+                    value={formSubmitted ? "" : personPhone}
                     onChange={handlePhoneNumberChange}
                   />
 
@@ -124,19 +135,20 @@ export default function EditPerson({
                     </span>
                   )}
                 </div>
-              </div>
 
-              <div class="form-group row mb-3">
-                <label for="colFormLabel" class="col-sm-2 col-form-label">
-                  Email
-                </label>
-                <div class="col-sm-10">
+                <div className="form-group row mb-3 flex justify-center items-center">
+                  <label
+                    htmlFor="colFormLabel"
+                    className="col-sm-2 col-form-label mr-2"
+                  >
+                    Email
+                  </label>
                   <input
                     type="email"
-                    class="form-control w-2/3 mb-2"
+                    className="form-control w-2/4 mb-2 ml-2"
                     id="colFormLabel"
                     placeholder="Email"
-                    value={personEmail}
+                    value={formSubmitted ? "" : personEmail}
                     onChange={handleEmailChange}
                   />
 
@@ -146,61 +158,67 @@ export default function EditPerson({
                     </p>
                   )}
                 </div>
-              </div>
 
-              <div class="form-group row mb-0">
-                <label
-                  for="colFormLabel"
-                  class="col-sm-2 col-form-label label-one-line"
-                >
-                  Balance?
-                </label>
-                <div class="input-group mb-3">
-                  <span class="input-group-text ml-11">$</span>
-                  <input
-                    type="text"
-                    className="form-control max-six-digits rounded-left"
-                    onKeyDown={handleKeyDown}
-                    value={personOwing}
-                    onClick={(e) => {
-                      e.target.select();
-                    }}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      setPersonOwing(value);
-                      const regex = /^[-\d{1,5}\.\d{0,2}]*$/;
-                      if (regex.test(value)) {
-                        setErrorBalance(true);
-                        setPersonOwing(value);
-                        setErrorMsg("");
-                        if (isNaN(value)) {
+                <div className="form-group row mb-0 text-center justify-center items-center">
+                  <label
+                    htmlFor="colFormLabel"
+                    className="col-form-label label-one-line"
+                  >
+                    Balance?
+                  </label>
+                </div>
+
+                <div className="form-group row mb-0 flex justify-center items-center">
+                  <div className="flex justify-center items-center">
+                    <div className="input-group mb-3 flex justify-center items-center">
+                      <span className="input-group-text ml-9">$</span>
+                      <input
+                        type="text"
+                        className="form-control max-six-digits rounded-left w-1/3"
+                        onKeyDown={handleKeyDown}
+                        value={personOwing}
+                        onClick={(e) => {
+                          e.target.select();
+                        }}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          setPersonOwing(value);
+                          const regex = /^[-\d{1,5}\.\d{0,2}]*$/;
+                          if (regex.test(value)) {
+                            setErrorBalance(true);
+                            setPersonOwing(value);
+                            setErrorMsg("");
+                            if (isNaN(value)) {
+                              setPersonOwing("0.00");
+                            }
+                          } else {
+                            setErrorBalance(false);
+                            setErrorMsg("Please enter a valid number");
+                          }
+                        }}
+                      />
+                    </div>
+                  </div>
+
+                  <div
+                    className="flex items-center justify-center error-msg h-5"
+                    style={{ color: "red" }}
+                  >
+                    {errorMsg}
+                  </div>
+                  <div className="flex items-center justify-center px-10">
+                    <div>
+                      <button
+                        type="submit"
+                        className="justify-center align-items-center mt-3 ml-2 bg-gray-500 font-bold py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
+                        onClick={(e) => {
                           setPersonOwing("0.00");
-                        }
-                      } else {
-                        setErrorBalance(false);
-                        setErrorMsg("Please enter a valid number");
-                      }
-                    }}
-                  />
-                </div>
-                <div
-                  class="flex items-center items-center m-auto justify-center  error-msg h-5"
-                  style={{ color: "red" }}
-                >
-                  {errorMsg}
-                </div>
-                <div className="flex items-center m-auto justify-center align-items-center px-10 ">
-                  <div>
-                    <button
-                      type="submit"
-                      className="justify-center align-items-center mt-3 ml-2 bg-gray-500 font-bold py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
-                      onClick={(e) => {
-                        setPersonOwing("0.00");
-                        setErrorBalance(true);
-                      }}
-                    >
-                      Reset balance
-                    </button>
+                          setErrorBalance(true);
+                        }}
+                      >
+                        Reset balance
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -224,7 +242,7 @@ export default function EditPerson({
             </div>
             {!submissionError ? (
               <p
-                class="items-center justify-center mx-auto"
+                className="items-center justify-center mx-auto"
                 style={{ color: "red" }}
               >
                 Please complete all fields correctly.

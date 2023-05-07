@@ -99,21 +99,21 @@ export default function AddPerson({
         <div className="relative w-auto my-6 mx-auto max-w-md flex justify-center items-center">
           <div className="border-8 border-black-500 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none ">
             <div className="flex items-center justify-evenly p-3 border-b border-solid border-slate-200 rounded-t">
-              <h3 className="text-2xl font-semibold">Add A Person</h3>
+              <h3 className="text-2xl font-semibold text-black">Add A Person</h3>
             </div>
 
             <div className="relative p-6 flex-auto justify-center items-center">
               <div className="text-center">
-                <div class="form-group row mb-3">
+                <div className="form-group row mb-3  flex justify-center items-center">
                   <label
-                    for="colFormLabel"
-                    class="col-sm-2 col-form-label mr-2"
+                    htmlFor="colFormLabel"
+                    className="col-sm-2 col-form-label mr-2"
                   >
                     Name
                   </label>
                   <input
                     type="name"
-                    class="form-control w-2/3 ml-2 mb-2"
+                    className="form-control w-2/4 ml-2 mb-2"
                     id="colFormLabel"
                     placeholder="Name"
                     value={personName}
@@ -127,16 +127,16 @@ export default function AddPerson({
                   />
                 </div>
 
-                <div class="form-group row mb-3">
+                <div className="form-group row mb-3 flex justify-center items-center">
                   <label
-                    for="colFormLabel"
-                    class="col-sm-2 col-form-label mr-2"
+                    htmlFor="colFormLabel"
+                    className="col-sm-2 col-form-label mr-2"
                   >
                     Phone
                   </label>
                   <input
                     type="phone"
-                    class="form-control w-2/3 mb-2 ml-2"
+                    className="form-control w-2/4 mb-2 ml-2"
                     id="colFormLabel"
                     placeholder="Phone Number"
                     value={formSubmitted ? "" : personPhone}
@@ -150,16 +150,16 @@ export default function AddPerson({
                   )}
                 </div>
 
-                <div class="form-group row mb-3">
+                <div className="form-group row mb-3 flex justify-center items-center">
                   <label
-                    for="colFormLabel"
-                    class="col-sm-2 col-form-label mr-2"
+                    htmlFor="colFormLabel"
+                    className="col-sm-2 col-form-label mr-2"
                   >
                     Email
                   </label>
                   <input
                     type="email"
-                    class="form-control w-2/3 mb-2 ml-2"
+                    className="form-control w-2/4 mb-2 ml-2"
                     id="colFormLabel"
                     placeholder="Email"
                     value={formSubmitted ? "" : personEmail}
@@ -173,16 +173,16 @@ export default function AddPerson({
                   )}
                 </div>
 
-                <div class="form-group row mb-0 text-center justify-center items-center">
+                <div className="form-group row mb-0 text-center justify-center items-center">
                   <label
-                    for="colFormLabel"
-                    class="col-form-label label-one-line"
+                    htmlFor="colFormLabel"
+                    className="col-form-label label-one-line"
                   >
                     Starting balance?
                   </label>
                 </div>
-                <div className="form-group row mt-1 mb-3 d-flex justify-content-center align-items-center">
-                  <div className="col-md-3 mb-3 mb-md-0">
+                <div className="form-group row mt-1 mb-3 justify-content-center align-items-center">
+                  <div className="col-md-3 mb-3 mb-md-0 d-flex justify-content-center">
                     <button
                       className="btn btn-primary btn-block"
                       onClick={(e) => {
@@ -195,8 +195,9 @@ export default function AddPerson({
                       No
                     </button>
                   </div>
-
-                  <div className="col-md-3 ">
+                </div>
+                <div className="form-group row mt-1 mb-3 justify-content-center align-items-center">
+                  <div className="col-md-3 d-flex justify-content-center">
                     <button
                       className="btn btn-primary btn-block"
                       onClick={handleYesButtonClick}
@@ -205,52 +206,54 @@ export default function AddPerson({
                       Yes
                     </button>
                   </div>
-                  <div className="col-md-6 mb-3 mb-md-0">
-                    {showInput && (
-                      <div className="input-group">
-                        <span className="input-group-text">$</span>
-                        <input
-                          type="text"
-                          placeholder={
-                            value
-                              ? parseFloat(value).toFixed(2)
-                              : parseFloat(personOwing).toString() === "NaN"
-                              ? "0.00"
-                              : parseFloat(personOwing).toFixed(2)
+                </div>
+                <div className="form-group row mt-1 mb-3 justify-content-center align-items-center">
+                <div className="col-md-6 mb-3 mb-md-0">
+                  {showInput && (
+                    <div className="input-group">
+                      <span className="input-group-text">$</span>
+                      <input
+                        type="text"
+                        placeholder={
+                          value
+                            ? parseFloat(value).toFixed(2)
+                            : parseFloat(personOwing).toString() === "NaN"
+                            ? "0.00"
+                            : parseFloat(personOwing).toFixed(2)
+                        }
+                        className={`form-control max-six-digits rounded-start ${
+                          errorBalance ? "is-invalid" : ""
+                        }`}
+                        onClick={(e) => {
+                          e.target.select();
+                        }}
+                        onKeyDown={handleKeyDown}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          const regex = /^[-\d{1,5}.\d{0,2}]*$/;
+                          if (regex.test(value)) {
+                            setErrorBalance(true);
+                            setPersonOwing(value);
+                            setErrorMsg("");
+                          } else {
+                            setErrorBalance(false);
+                            setErrorMsg("Please enter a valid number");
                           }
-                          className={`form-control max-six-digits rounded-start ${
-                            errorBalance ? "is-invalid" : ""
-                          }`}
-                          onClick={(e) => {
-                            e.target.select();
-                          }}
-                          onKeyDown={handleKeyDown}
-                          onChange={(e) => {
-                            const value = e.target.value;
-                            const regex = /^[-\d{1,5}.\d{0,2}]*$/;
-                            if (regex.test(value)) {
-                              setErrorBalance(true);
-                              setPersonOwing(value);
-                              setErrorMsg("");
-                            } else {
-                              setErrorBalance(false);
-                              setErrorMsg("Please enter a valid number");
-                            }
-                          }}
-                          style={{ borderColor: "lightblue" }}
-                        />
-                      </div>
-                    )}
-                  </div>
-                  {errorMsg && (
-                    <div
-                      className="flex items-center items-center m-auto justify-center error-msg h-5"
-                      style={{ color: "red" }}
-                    >
-                      {errorMsg}
+                        }}
+                        style={{ borderColor: "lightblue" }}
+                      />
                     </div>
                   )}
                 </div>
+                </div>
+                {errorMsg && (
+                  <div
+                    className="flex items-center items-center m-auto justify-center error-msg h-5"
+                    style={{ color: "red" }}
+                  >
+                    {errorMsg}
+                  </div>
+                )}
               </div>
             </div>
 
@@ -285,7 +288,7 @@ export default function AddPerson({
             </div>
             {!submissionError ? (
               <p
-                class="items-center justify-center mx-auto"
+                className="items-center justify-center mx-auto"
                 style={{ color: "red" }}
               >
                 Please complete all fields correctly.

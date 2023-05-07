@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import Header from "./Header";
 import Footer from "./Footer";
 
-export default function History({ receipts }) {
+export default function History({ receipts, isReceiptSubmitted, setIsReceiptSubmitted }) {
   const { id } = useParams();
 
   const receiptList = useMemo(() => {
@@ -61,8 +61,9 @@ export default function History({ receipts }) {
       <main className="mt-5 p-0 pt-3 xs:max-w-xl sm:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl bg-white-500 rounded shadow">
         <Header showHistory={true} />
         <div className="flex flex-col items-center justify-center">
-          <div className="bg-white rounded-lg px-3 py-2 shadow-md mb-4 mx-auto">
-            {receiptList}
+          <div className="rounded-lg px-3 py-2 shadow-md mb-4 mx-auto">
+            {isReceiptSubmitted ? receiptList : "There are no no receipts in history."}
+            
           </div>
         </div>
         <Footer />

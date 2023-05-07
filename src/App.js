@@ -24,6 +24,11 @@ import "./darkMode.css";
 import "./index.css";
 
 function App() {
+
+
+  
+  const [isDarkModeOn, setIsDarkModeOn] = useState(false);
+  
   // Menus for edit person and edit group
   const [addPerson, setAddPerson] = useState(false);
   const [editPerson, setEditPerson] = useState(false);
@@ -54,6 +59,7 @@ function App() {
   const [displayMerchant, setDisplayMerchant] = useState(false);
   const [displayDate, setDisplayDate] = useState(false);
   const [displayInvoice, setDisplayInvoice] = useState(false);
+  const [isReceiptSubmitted, setIsReceiptSubmitted] = useState(false);
 
   const handleAdd = (newEntry) => {
     setHistory([...history, newEntry]);
@@ -190,6 +196,8 @@ function App() {
               setDisplayDate={setDisplayDate}
               displayInvoice={displayInvoice}
               setDisplayInvoice={setDisplayInvoice}
+              isReceiptSubmitted={isReceiptSubmitted}
+              setIsReceiptSubmitted={setIsReceiptSubmitted}
             />
           }
         />
@@ -250,6 +258,7 @@ function App() {
               value={value}
               hasReceipt={hasReceipt}
               setHasReceipt={setHasReceipt}
+              formSubmitted={formSubmitted}
             />
           }
         />
@@ -276,6 +285,8 @@ function App() {
               setDisplayDate={setDisplayDate}
               displayInvoice={displayInvoice}
               setDisplayInvoice={setDisplayInvoice}
+              isReceiptSubmitted={isReceiptSubmitted}
+              setIsReceiptSubmitted={setIsReceiptSubmitted}
             />
           }
         />

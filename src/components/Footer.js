@@ -6,9 +6,9 @@ export default function Footer() {
   return (
     <>
       <div className="flex justify-center mt-5">
-        <footer className="fixed bottom-0 w-full">
+        <footer className="fixed bottom-0 w-full thank">
           <div className="outro">
-            <div className="thank">
+            <div>
               <p>
                 App created by Devin for Get Coding | Created using React and
                 JSX | Check out my{" "}
