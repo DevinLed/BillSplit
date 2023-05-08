@@ -21,6 +21,7 @@ export default function EditPerson({
   setList,
   setIsEditing,
   formSubmitted,
+  theme,
 }) {
   function handleKeyDown(e) {
     if (e.key === "Enter") {
@@ -81,7 +82,13 @@ export default function EditPerson({
       <div className="p-8 justify-center items-center flex overflow-x-hidden overflow-y-hidden fixed inset-0 z-50 focus:outline-none">
         <div className="relative w-auto my-6 mx-auto max-w-sm">
           {/*content*/}
-          <div className="border-8 border-black-500 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+          <div
+            className={
+              theme === "dark"
+                ? "bg-black border-8 border-black-500 rounded-lg shadow-lg relative flex flex-col w-full outline-none focus:outline-none"
+                : "bg-gray-300 border-8 border-black-500 rounded-lg shadow-lg relative flex flex-col w-full outline-none focus:outline-none"
+            }
+          >
             {/*header*/}
             <div className="flex items-center justify-evenly p-3 border-b border-solid border-slate-200 rounded-t">
               <h3 className="text-2xl font-semibold text-black">Edit Person</h3>
@@ -176,7 +183,7 @@ export default function EditPerson({
                         type="text"
                         className="form-control max-six-digits rounded-left w-1/3"
                         onKeyDown={handleKeyDown}
-                        value={personOwing}
+                        placeholder={parseFloat(personOwing).toFixed(2)}
                         onClick={(e) => {
                           e.target.select();
                         }}

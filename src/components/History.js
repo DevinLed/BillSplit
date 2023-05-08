@@ -17,14 +17,14 @@ export default function History({ receipts, isReceiptSubmitted, setIsReceiptSubm
             
             <div className="flex justify-center items-center mt-2">
               {receipt.merchantName && (
-                <p className="text-sm text-gray-600">
+                <p>
                   {`${receipt.merchantName}`}
                 </p>
               )}
             </div>
             
             <div className="flex justify-center items-center mt-2">
-              <p className="text-gray-600 text-sm">
+              <p className="text-sm">
                 {receipt.startDate.toLocaleDateString("en-US")}
               </p>
             </div>
@@ -45,7 +45,7 @@ export default function History({ receipts, isReceiptSubmitted, setIsReceiptSubm
           <div className="flex justify-center items-center mt-2">
             {receipt.invoiceNumber && (
               <div>
-                <p className="text-sm text-gray-600 mb-2">
+                <p className="text-sm mb-2">
                   {`Invoice Number: ${receipt.invoiceNumber}`}
                 </p>
               </div>
@@ -62,7 +62,7 @@ export default function History({ receipts, isReceiptSubmitted, setIsReceiptSubm
         <Header showHistory={true} />
         <div className="flex flex-col items-center justify-center">
           <div className="rounded-lg px-3 py-2 shadow-md mb-4 mx-auto">
-            {isReceiptSubmitted ? receiptList : "There are no no receipts in history."}
+            {isReceiptSubmitted ? receiptList : "There are no receipts in history."}
             
           </div>
         </div>

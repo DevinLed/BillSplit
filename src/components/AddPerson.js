@@ -19,6 +19,7 @@ export default function AddPerson({
   personReceiptAmount,
   formSubmitted,
   setFormSubmitted,
+  theme,
 }) {
   const [isValidPhoneNumber, setIsValidPhoneNumber] = useState(false);
   const [isValidEmail, setIsValidEmail] = useState(false);

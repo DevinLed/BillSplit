@@ -59,7 +59,7 @@ export default function EditList({
                           backgroundColor: personOwing < 0 ? "red" : "",
                           color: personOwing < 0 ? "black" : "white",
                         }}
-                      >
+                      >$
                         {value
                           ? parseFloat(value).toFixed(2)
                           : parseFloat(personOwing).toString() === "NaN"

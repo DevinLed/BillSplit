@@ -127,6 +127,22 @@ function App() {
     setPersonEmail(editingRow.personEmail);
     setPersonOwing(editingRow.personOwing);
   };
+// dark mode theme switching
+  const [theme, setTheme] = useState(localStorage.getItem("theme"));
+  const toggleTheme = () => {
+    if (theme === "light") {
+      setTheme("dark");
+    } else {
+      setTheme("light");
+    }
+  };
+  // useEffect to track dark mode
+  useEffect(() => {
+    localStorage.setItem("theme", theme);
+    document.body.className = theme;
+  }, [theme]);
+
+
 
   const [receipts, setReceipts] = useState([]);
   const addReceipt = (personName, personReceiptAmount, selectedValue, merchantName, startDate, invoiceNumber, displayMerchant, displayDate, displayInvoice ) => {
@@ -148,7 +164,7 @@ function App() {
     <>
       <Routes>
         <Route path="/" element={<Navigate to="/Home" />} />
-        <Route path="/Home" element={<Home />} />
+        <Route path="/Home" element={<Home theme={theme} setTheme={setTheme} toggleTheme={toggleTheme}/>} />
         <Route
           path="/ReceiptInput/:id"
           element={
@@ -259,6 +275,7 @@ function App() {
               hasReceipt={hasReceipt}
               setHasReceipt={setHasReceipt}
               formSubmitted={formSubmitted}
+              theme={theme}
             />
           }
         />
@@ -297,10 +314,11 @@ function App() {
             <AddPerson
               formSubmitted={formSubmitted}
               setFormSubmitted={setFormSubmitted}
+              theme={theme}
             />
           }
         />
-        <Route path="/EditPerson" element={<EditPerson />} />
+        <Route path="/EditPerson" element={<EditPerson theme={theme}/>} />
       </Routes>
     </>
   );
