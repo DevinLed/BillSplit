@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 import Header from "./Header";
 import Footer from "./Footer";
 
-export default function Home() {
+export default function Home({theme, setTheme, toggleTheme}) {
 
 
     const [startBill, setStartBill] = useState(true);
@@ -17,24 +17,11 @@ export default function Home() {
 
   // For Dark/Bright mode. Keeps mode storage for page refresh.
   
-    const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
-    const toggleTheme = () => {
-      if (theme === "light") {
-        setTheme("dark");
-      } else {
-        setTheme("light");
-      }
-    };
-    // useEffect to track dark mode
-    useEffect(() => {
-      localStorage.setItem("theme", theme);
-      document.body.className = theme;
-    }, [theme]);
     // Text switch for dark mode button
     const [buttonText, setButtonText] = useState("Dark Mode");
     const changeText = (text) => setButtonText(text);
   
-  // Main screen menu selection - 5 buttons: Start Bill, Edit Person, Edit Group, History, Darkmode
+  // Main screen menu selection - 4 buttons: Start Bill, Edit Person, History, Darkmode
   return (
     <>
     
@@ -96,7 +83,7 @@ export default function Home() {
                 </ul>
               </div>
         </div>
-      <Footer/>
+      <Footer theme={theme}/>
       </main>
     </>
   )

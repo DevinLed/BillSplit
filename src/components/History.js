@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import Header from "./Header";
 import Footer from "./Footer";
 
-export default function History({ receipts, isReceiptSubmitted, setIsReceiptSubmitted }) {
+export default function History({ theme, receipts, isReceiptSubmitted, setIsReceiptSubmitted }) {
   const { id } = useParams();
 
   const receiptList = useMemo(() => {
@@ -66,7 +66,6 @@ export default function History({ receipts, isReceiptSubmitted, setIsReceiptSubm
             
           </div>
         </div>
-        <Footer />
       </main>
     </>
   );

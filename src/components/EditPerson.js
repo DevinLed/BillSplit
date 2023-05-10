@@ -85,8 +85,8 @@ export default function EditPerson({
           <div
             className={
               theme === "dark"
-                ? "bg-black border-8 border-black-500 rounded-lg shadow-lg relative flex flex-col w-full outline-none focus:outline-none"
-                : "bg-gray-300 border-8 border-black-500 rounded-lg shadow-lg relative flex flex-col w-full outline-none focus:outline-none"
+                ? "bg-gray-500 border-8 border-black-500 rounded-lg shadow-lg relative flex flex-col w-full outline-none focus:outline-none"
+                : "bg-white border-8 border-black-500 rounded-lg shadow-lg relative flex flex-col w-full outline-none focus:outline-none"
             }
           >
             {/*header*/}
@@ -183,7 +183,11 @@ export default function EditPerson({
                         type="text"
                         className="form-control max-six-digits rounded-left w-1/3"
                         onKeyDown={handleKeyDown}
-                        placeholder={parseFloat(personOwing).toFixed(2)}
+                        placeholder={
+                          personOwing
+                            ? parseFloat(personOwing).toFixed(2)
+                            : "0.00 "
+                        }
                         onClick={(e) => {
                           e.target.select();
                         }}

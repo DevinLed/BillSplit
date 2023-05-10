@@ -5,7 +5,6 @@ import AddPerson from "./AddPerson";
 import Header from "./Header";
 import { v4 as uuidv4 } from "uuid";
 import SplitBill from "./SplitBill";
-import Footer from "./Footer";
 import "../index.css";
 import History from "./History";
 import {
@@ -72,7 +71,8 @@ export default function ReceiptInput({
   setDisplayDate, 
   setDisplayInvoice, 
   isReceiptSubmitted, 
-  setIsReceiptSubmitted
+  setIsReceiptSubmitted,
+  theme
 }) {
   const [selectPersonReceipt, setSelectPersonReceipt] = useState(true);
 
@@ -288,7 +288,6 @@ export default function ReceiptInput({
                 </ul>
               </div>
             </div>
-            <Footer />
           </main>
         </>
       ) : (

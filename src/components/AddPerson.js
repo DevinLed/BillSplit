@@ -98,7 +98,10 @@ export default function AddPerson({
     <>
       <div className="p-8 justify-center items-center flex overflow-x-hidden overflow-y-hidden fixed inset-0 z-50 focus:outline-none">
         <div className="relative w-auto my-6 mx-auto max-w-md flex justify-center items-center">
-          <div className="border-8 border-black-500 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none ">
+          <div className={
+              theme === "dark"
+                ? "bg-gray-500 border-8 border-black-500 rounded-lg shadow-lg relative flex flex-col w-full outline-none focus:outline-none":
+                "bg-white border-8 border-black-500 rounded-lg shadow-lg relative flex flex-col w-full outline-none focus:outline-none"}>
             <div className="flex items-center justify-evenly p-3 border-b border-solid border-slate-200 rounded-t">
               <h3 className="text-2xl font-semibold text-black">Add A Person</h3>
             </div>

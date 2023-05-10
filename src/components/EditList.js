@@ -28,7 +28,8 @@ export default function EditList({
   editRow,
   list,
   value,
-  setValue
+  setValue, 
+  theme
 }) {
   const [selectEditPersonList, setEditSelectPersonList] = useState(true);
   return (
@@ -98,6 +99,7 @@ export default function EditList({
             setPersonState={setPersonState}
             personState={personState}
             setIsSelected={setIsSelected}
+            theme={theme}
           ></AddPerson>
         ) : (
           ""
@@ -120,11 +122,11 @@ export default function EditList({
             personState={personState}
             setIsSelected={setIsSelected}
             setEditPerson={setEditPerson}
+            theme={theme}
           ></EditPerson>
         ) : (
           ""
         )}
-      <Footer/>
       </main>
     </>
   );

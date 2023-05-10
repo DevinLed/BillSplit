@@ -3,7 +3,6 @@ import { v4 as uuidv4 } from "uuid";
 import { BrowserRouter, Switch, Route, Routes, Link } from "react-router-dom";
 import AddPerson from "./AddPerson";
 import Header from "./Header";
-import Footer from "./Footer";
 
 export default function SplitBill({
   addPerson,
@@ -28,7 +27,8 @@ export default function SplitBill({
   addNum,
   personReceiptAmount,
   formSubmitted, 
-  setFormSubmitted
+  setFormSubmitted,
+  theme
 }) {
   const [selectPersonList, setSelectPersonList] = useState(true);
 
@@ -99,11 +99,11 @@ export default function SplitBill({
             addNum={addNum}
             personReceiptAmount={personReceiptAmount}
             setFormSubmitted={setFormSubmitted}
+            theme={theme}
           ></AddPerson>
         ) : (
           ""
         )}
-        <Footer />
       </main>
     </>
   );

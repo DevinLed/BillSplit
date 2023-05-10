@@ -132,8 +132,10 @@ function App() {
   const toggleTheme = () => {
     if (theme === "light") {
       setTheme("dark");
+      console.log("now in dark mode");
     } else {
       setTheme("light");
+      console.log("now in lite mode");
     }
   };
   // useEffect to track dark mode
@@ -214,6 +216,7 @@ function App() {
               setDisplayInvoice={setDisplayInvoice}
               isReceiptSubmitted={isReceiptSubmitted}
               setIsReceiptSubmitted={setIsReceiptSubmitted}
+              theme={theme}
             />
           }
         />
@@ -244,6 +247,7 @@ function App() {
               setHasReceipt={setHasReceipt}
               formSubmitted={formSubmitted}
               setFormSubmitted={setFormSubmitted}
+              theme={theme}
             />
           }
         />
@@ -304,6 +308,7 @@ function App() {
               setDisplayInvoice={setDisplayInvoice}
               isReceiptSubmitted={isReceiptSubmitted}
               setIsReceiptSubmitted={setIsReceiptSubmitted}
+              theme={theme}
             />
           }
         />
