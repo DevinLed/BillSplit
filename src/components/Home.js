@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 import Header from "./Header";
 import Footer from "./Footer";
 
-export default function Home({theme, setTheme, toggleTheme}) {
+export default function Home({theme, setTheme, toggleTheme, accessedApp, setAccessedApp}) {
 
 
     const [startBill, setStartBill] = useState(true);
@@ -20,6 +20,9 @@ export default function Home({theme, setTheme, toggleTheme}) {
     // Text switch for dark mode button
     const [buttonText, setButtonText] = useState("Dark Mode");
     const changeText = (text) => setButtonText(text);
+
+    
+    
   
   // Main screen menu selection - 4 buttons: Start Bill, Edit Person, History, Darkmode
   return (
@@ -75,10 +78,21 @@ export default function Home({theme, setTheme, toggleTheme}) {
                           changeText("Dark Mode");
                         }
                       }}
-                      className="mt-5 mb-5 bg-black text-white font-bold py-2 px-4 rounded shadow border-2 border-black hover:text-white-500 transition-all duration-300"
+                      className="mt-5 mb-10 bg-black text-white font-bold py-2 px-4 rounded shadow border-2 border-black hover:text-white-500 transition-all duration-300"
                     >
                       {buttonText}
                     </button>
+                  </li>
+                  <li className="flex items-center justify-center">
+                    
+                  <Link to="/LandingPage">
+                      <button
+                      
+                        className="mt-5 mb-5 bg-blue-500 font-bold py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
+                       >
+                        Home Page
+                      </button>
+                      </Link>
                   </li>
                 </ul>
               </div>

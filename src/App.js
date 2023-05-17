@@ -11,6 +11,7 @@ import { v4 as uuidv4 } from "uuid";
 import EditPerson from "./components/EditPerson";
 import SplitBill from "./components/SplitBill";
 import History from "./components/History";
+import LandingPage from "./components/LandingPage";
 import AddPerson from "./components/AddPerson";
 import Home from "./components/Home";
 import Header from "./components/Header";
@@ -24,11 +25,8 @@ import "./darkMode.css";
 import "./index.css";
 
 function App() {
-
-
-  
   const [isDarkModeOn, setIsDarkModeOn] = useState(false);
-  
+
   // Menus for edit person and edit group
   const [addPerson, setAddPerson] = useState(false);
   const [editPerson, setEditPerson] = useState(false);
@@ -60,6 +58,13 @@ function App() {
   const [displayDate, setDisplayDate] = useState(false);
   const [displayInvoice, setDisplayInvoice] = useState(false);
   const [isReceiptSubmitted, setIsReceiptSubmitted] = useState(false);
+
+  // Landing page
+  const [accessedApp, setAccessedApp] = useState(false);
+
+  const handleAccessApp = () => {
+    setAccessedApp(true);
+  };
 
   const handleAdd = (newEntry) => {
     setHistory([...history, newEntry]);
@@ -127,7 +132,7 @@ function App() {
     setPersonEmail(editingRow.personEmail);
     setPersonOwing(editingRow.personOwing);
   };
-// dark mode theme switching
+  // dark mode theme switching
   const [theme, setTheme] = useState(localStorage.getItem("theme"));
   const toggleTheme = () => {
     if (theme === "light") {
@@ -144,29 +149,49 @@ function App() {
     document.body.className = theme;
   }, [theme]);
 
-
-
   const [receipts, setReceipts] = useState([]);
-  const addReceipt = (personName, personReceiptAmount, selectedValue, merchantName, startDate, invoiceNumber, displayMerchant, displayDate, displayInvoice ) => {
+  const addReceipt = (
+    personName,
+    personReceiptAmount,
+    selectedValue,
+    merchantName,
+    startDate,
+    invoiceNumber,
+    displayMerchant,
+    displayDate,
+    displayInvoice
+  ) => {
     const newReceipts = [...receipts];
     newReceipts.push({
       personName,
       personReceiptAmount,
       selectedValue,
-      merchantName, 
-      startDate, 
+      merchantName,
+      startDate,
       invoiceNumber,
       displayMerchant,
       displayDate,
-      displayInvoice
+      displayInvoice,
     });
     setReceipts(newReceipts);
   };
   return (
     <>
       <Routes>
-        <Route path="/" element={<Navigate to="/Home" />} />
-        <Route path="/Home" element={<Home theme={theme} setTheme={setTheme} toggleTheme={toggleTheme}/>} />
+        <Route
+          path="/Home"
+          element={
+            <Home
+              theme={theme}
+              setTheme={setTheme}
+              toggleTheme={toggleTheme}
+              handleAccessApp={handleAccessApp}
+            />
+          }
+        />
+        <Route path="/LandingPage" element={<LandingPage theme={theme}/>} />
+        <Route path="/" element={<Navigate to="/LandingPage" />} />
+
         <Route
           path="/ReceiptInput/:id"
           element={
@@ -207,9 +232,9 @@ function App() {
               setDisplayAdd={setDisplayAdd}
               selectedValue={selectedValue}
               setSelectedValue={setSelectedValue}
-              handleAdd={handleAdd} 
+              handleAdd={handleAdd}
               displayMerchant={displayMerchant}
-              setDisplayMerchant={setDisplayMerchant} 
+              setDisplayMerchant={setDisplayMerchant}
               displayDate={displayDate}
               setDisplayDate={setDisplayDate}
               displayInvoice={displayInvoice}
@@ -301,7 +326,7 @@ function App() {
               selectedValue={selectedValue}
               history={history}
               displayMerchant={displayMerchant}
-              setDisplayMerchant={setDisplayMerchant} 
+              setDisplayMerchant={setDisplayMerchant}
               displayDate={displayDate}
               setDisplayDate={setDisplayDate}
               displayInvoice={displayInvoice}
@@ -323,7 +348,7 @@ function App() {
             />
           }
         />
-        <Route path="/EditPerson" element={<EditPerson theme={theme}/>} />
+        <Route path="/EditPerson" element={<EditPerson theme={theme} />} />
       </Routes>
     </>
   );
