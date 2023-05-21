@@ -1,5 +1,7 @@
 import { React, useState, useEffect } from "react";
 import History from "./History";
+import { IoMdCheckmark } from "react-icons/io";
+import "../index.css";
 
 export default function AddPerson({
   personName,
@@ -145,18 +147,13 @@ export default function AddPerson({
                   </label>
                   <input
                     type="phone"
-                    className="form-control mb-2 ml-2 w-2/4"
+                    className={`form-control mb-2 ml-2 w-2/4 ${isValidPhoneNumber ? 'valid' : 'invalid'} ${personPhone.length >= 10 && !isValidPhoneNumber ? 'red' : ''}`}
                     id="colFormLabel"
                     placeholder="Phone Number"
                     value={formSubmitted ? "" : personPhone}
                     onChange={handlePhoneNumberChange}
                   />
 
-                  {personPhone.length >= 10 && !isValidPhoneNumber && (
-                    <span style={{ color: "red" }}>
-                      Please enter a valid phone number.
-                    </span>
-                  )}
                 </div>
 
                 <div className="form-group row mb-3 flex items-center justify-center">
@@ -168,18 +165,13 @@ export default function AddPerson({
                   </label>
                   <input
                     type="email"
-                    className="form-control mb-2 ml-2 w-2/4"
+                    
+                    className={`form-control mb-2 ml-2 w-2/4 ${isValidEmail ? 'valid' : 'invalid'} `}
                     id="colFormLabel"
                     placeholder="Email"
                     value={formSubmitted ? "" : personEmail}
                     onChange={handleEmailChange}
                   />
-
-                  {personEmail.length >= 4 && !isValidEmail && (
-                    <p style={{ color: "red" }}>
-                      Please enter a valid email address.
-                    </p>
-                  )}
                 </div>
 
                 <div className="form-group row mb-0 items-center justify-center text-center">

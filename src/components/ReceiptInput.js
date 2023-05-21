@@ -24,7 +24,11 @@ import "rc-slider/assets/index.css";
 import "react-datepicker/dist/react-datepicker.css";
 import { FaPlus, FaTrash } from "react-icons/fa";
 import { GrSubtractCircle } from "react-icons/gr";
-import { IoMdAddCircleOutline, IoMdRemoveCircleOutline } from "react-icons/io";
+import {
+  IoMdAddCircleOutline,
+  IoMdRemoveCircleOutline,
+  IoMdCheckmark,
+} from "react-icons/io";
 
 export default function ReceiptInput({
   addPerson,
@@ -60,19 +64,19 @@ export default function ReceiptInput({
   addReceipt,
   receipts,
   setReceipts,
-  displayAdd, 
+  displayAdd,
   setDisplayAdd,
-  selectedValue, 
+  selectedValue,
   setSelectedValue,
-  displayMerchant, 
-  displayDate, 
+  displayMerchant,
+  displayDate,
   displayInvoice,
-  setDisplayMerchant, 
-  setDisplayDate, 
-  setDisplayInvoice, 
-  isReceiptSubmitted, 
+  setDisplayMerchant,
+  setDisplayDate,
+  setDisplayInvoice,
+  isReceiptSubmitted,
   setIsReceiptSubmitted,
-  theme
+  theme,
 }) {
   const [selectPersonReceipt, setSelectPersonReceipt] = useState(true);
 
@@ -102,12 +106,10 @@ export default function ReceiptInput({
     setSelected(1);
   };
 
-
   function resetReceiptForm() {
     setMerchantName("");
     setInvoiceNumber("");
     setStartDate(new Date());
-  
   }
   function handleKeyDown(e) {
     if (e.key === "Enter") {
@@ -165,27 +167,24 @@ export default function ReceiptInput({
     ]);
     switch (sliderValue) {
       case 0: {
-        let a = parseInt(amount);
-        let b = parseInt(youTotal);
+        let a = parseFloat(amount).toFixed(2);
+        let b = parseFloat(youTotal).toFixed(2);
         let value = a + b;
-        setYouTotal(value);
-        console.log(value);
+        setYouTotal(parseFloat(value).toFixed(2));
         break;
       }
       case 55: {
-        let a = parseInt(amount);
-        let b = parseInt(splitTotal);
+        let a = parseFloat(amount);
+        let b = parseFloat(splitTotal);
         let value = a + b;
-        setSplitTotal(value);
-        console.log(value);
+        setSplitTotal(value.toFixed(2));
         break;
       }
       case 100: {
-        let a = parseInt(amount);
-        let b = parseInt(themTotal);
+        let a = parseFloat(amount).toFixed(2);
+        let b = parseFloat(themTotal).toFixed(2);
         let value = a + b;
-        setThemTotal(value);
-        console.log(value);
+        setThemTotal(parseFloat(value).toFixed(2));
         break;
       }
       default:
@@ -225,7 +224,7 @@ export default function ReceiptInput({
   const getTotal = () => {
     let total = 0;
     for (const item of items) {
-      total += parseInt(item.amount);
+      total += parseFloat(item.amount);
     }
 
     let splitValue = parseFloat(splitTotal / 2).toFixed(2);
@@ -239,23 +238,34 @@ export default function ReceiptInput({
 
     return parseFloat(total).toFixed(2);
   };
+  
   const handleHistorySubmit = (e) => {
-    addReceipt(personName, personReceiptAmount, selectedValue, merchantName, startDate, invoiceNumber, displayMerchant, displayDate, displayInvoice );
+    addReceipt(
+      personName,
+      personReceiptAmount,
+      selectedValue,
+      merchantName,
+      startDate,
+      invoiceNumber,
+      displayMerchant,
+      displayDate,
+      displayInvoice
+    );
   };
   const getFinalTotal = () => {
     if (selectedValue === "you") {
+      console.log(personReceiptAmount);
       addNum(id, personOwing, personReceiptAmount);
-      console.log("tested");
     } else {
+      console.log(personReceiptAmount);
       subNum(id, personOwing, personReceiptAmount);
-      console.log("tested");
     }
   };
   return (
     <>
       {selectPersonReceipt ? (
         <>
-          <main className="mt-5 p-0 pt-3 xs:max-w-xl sm:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl bg-white-500 rounded shadow">
+          <main className="xs:max-w-xl bg-white-500 mt-5 rounded p-0 pt-3 shadow sm:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl">
             <div className="flex flex-col items-center justify-center">
               <Header selectPersonReceipt={selectPersonReceipt} />
 
@@ -297,22 +307,22 @@ export default function ReceiptInput({
       )}
       {selectMethodManual ? (
         <>
-          <main className="mt-5 p-0 pt-3 xs:max-w-xl sm:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl bg-white-500 rounded shadow">
-            <div className="flex flex-col items-center justify-center mt-0">
+          <main className="xs:max-w-xl bg-white-500 mt-5 rounded p-0 pt-3 shadow sm:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl">
+            <div className="mt-0 flex flex-col items-center justify-center">
               <Header selectMethodManual={selectMethodManual} />
 
-              <div className="flex flex-col items-center l-36  justify-center bg-grey dark:bg-slate-900 rounded-lg px-6 py-6 ring-slate-900/5">
+              <div className="l-36 bg-grey flex flex-col  items-center justify-center rounded-lg px-6 py-6 ring-slate-900/5 dark:bg-slate-900">
                 <div className="max-w-fit">
                   <label
                     htmlFor="payment"
-                    className="form-control flex items-center justify-left mt-0 px-2"
+                    className="form-control justify-left mt-0 flex items-center px-2"
                   >
                     <div className="whitespace-no-wrap w-22 pl-2 ">
                       Who paid?
                     </div>
                     <div className="inline-flex px-2">
                       <button
-                        className={`bg-blue-500 text-white font-bold py-1 px-2 rounded-l m-0 ${
+                        className={`m-0 rounded-l bg-blue-500 py-1 px-2 font-bold text-white ${
                           selected === 1 ? "bg-blue-700" : ""
                         } h-8 w-16`}
                         onClick={() => {
@@ -327,9 +337,9 @@ export default function ReceiptInput({
                         Me
                       </button>
                       <button
-                        className={`bg-blue-500 text-white font-bold py-1 px-3 rounded-r border-l m-0 ${
+                        className={`m-0 rounded-r border-l bg-blue-500 py-1 px-3 font-bold text-white ${
                           selected === 2 ? "bg-blue-700" : ""
-                        } h-8 min-w-16 max-w-24 overflow-hidden`}
+                        } min-w-16 max-w-24 h-8 overflow-hidden`}
                         onClick={() => {
                           handleButton2Click();
                           setSelectedValue("them");
@@ -348,7 +358,7 @@ export default function ReceiptInput({
                     <div className="col-sm-10 mb-0 mt-3">
                       <input
                         type="amount"
-                        className="form-control font-bold mb-5 h-10 text-center"
+                        className="form-control mb-5 h-10 text-center font-bold"
                         id="colFormLabel"
                         placeholder="Merchant Name"
                         onKeyDown={handleKeyDown}
@@ -361,8 +371,8 @@ export default function ReceiptInput({
                         }
                         onClick={() => setDisplayMerchant(true)}
                       />
-                      <div className="flex items-center justify-left h-11 mt-3 ">
-                        <div className="mt-3 mb-3 z-50 text-center">
+                      <div className="justify-left mt-3 flex h-11 items-center ">
+                        <div className="z-50 mt-3 mb-3 text-center">
                           <label
                             htmlFor="colFormLabel"
                             className="col-form-label text-center text-black"
@@ -385,7 +395,7 @@ export default function ReceiptInput({
                     <div className="m-3">
                       <input
                         type="invoice"
-                        className="form-control font-bold w-55 mb-2 mt-2 opacity-4 text-center"
+                        className="form-control w-55 opacity-4 mb-2 mt-2 text-center font-bold"
                         id="colFormLabel"
                         placeholder="Invoice Number"
                         onKeyDown={handleKeyDown}
@@ -394,11 +404,11 @@ export default function ReceiptInput({
                       />
                     </div>
                     <div>
-                      <div className="w-full bg-white dark:bg-slate-900 rounded-lg py-1 m-0 max-w-min px-1 whitespace-no-wrap">
-                        <div className="mb-0 mx-auto max-w-min">
-                          <table className="border border-black table-fixed max-w-min m-auto">
-                            <thead className="whitespace-no-wrap overflow-hidden max-w-fit truncate">
-                              <tr className="whitespace-no-wrap overflow-hidden max-w-fit px-2">
+                      <div className="whitespace-no-wrap m-0 w-full max-w-min rounded-lg bg-white py-1 px-1 dark:bg-slate-900">
+                        <div className="mx-auto mb-0 max-w-min">
+                          <table className="m-auto max-w-min table-fixed border border-black">
+                            <thead className="whitespace-no-wrap max-w-fit overflow-hidden truncate">
+                              <tr className="whitespace-no-wrap max-w-fit overflow-hidden px-2">
                                 <th className="px-15 text-black">Item</th>
                                 <th className="px-15 text-black">Price</th>
                                 <th
@@ -406,13 +416,13 @@ export default function ReceiptInput({
                                   colSpan={3}
                                   style={{ width: "33.33%" }}
                                 >
-                                  <span className="pr-2 pl-4 border-r border-black text-black">
+                                  <span className="border-r border-black pr-2 pl-4 text-black">
                                     Me
                                   </span>
-                                  <span className="px-2 border-r border-l border-black text-black">
+                                  <span className="border-r border-l border-black px-2 text-black">
                                     Split
                                   </span>
-                                  <span className="pl-2 border-l border-black text-black">
+                                  <span className="border-l border-black pl-2 text-black">
                                     Them
                                   </span>
                                 </th>
@@ -424,7 +434,7 @@ export default function ReceiptInput({
                                 <td>
                                   <input
                                     type="amount"
-                                    className="form-control font-bold w-20 px-1 text-xs mb-1"
+                                    className="form-control mb-1 w-20 px-1 text-xs font-bold"
                                     id="colFormLabel"
                                     placeholder="Item Name"
                                     value={name}
@@ -435,7 +445,7 @@ export default function ReceiptInput({
                                 <td>
                                   <input
                                     type="amount"
-                                    className="form-control font-bold w-20 px-1 text-xs mb-1"
+                                    className="form-control mb-1 w-20 px-1 text-xs font-bold"
                                     id="colFormLabel"
                                     placeholder="Amount"
                                     value={amount}
@@ -444,9 +454,10 @@ export default function ReceiptInput({
                                       const value = e.target.value;
                                       const isValid = /^\d+(\.\d{0,2})?$/.test(
                                         value
-                                      ); // check if the value contains only digits
+                                      );
 
-                                      if (isValid) {
+                                      if (isValid || value === "") {
+                                        // Allow empty value
                                         setAmount(value);
                                         console.log("amount verified");
                                       } else {
@@ -474,9 +485,9 @@ export default function ReceiptInput({
                                 </td>
                               </tr>
 
-                              <tr className="add-button text-black m-2 text-center items-center justify-center">
+                              <tr className="add-button m-2 items-center justify-center text-center text-black">
                                 <button
-                                  className="add-button text-gray-500 m-2 text-2xl text-center items-center justify-center"
+                                  className="add-button m-2 items-center justify-center text-center text-2xl text-gray-500"
                                   onClick={() => {
                                     handleReceiptSubmit(sliderValue);
                                     handleSaveClick();
@@ -499,14 +510,16 @@ export default function ReceiptInput({
                                       c.toUpperCase()
                                     )}
                                   </td>
-                                  <td className="text-sm flex items-center mr-2">
+                                  <td className="mr-2 flex items-center text-sm">
                                     <button
-                                      className="add-button text-gray-500 m-2 text-2xl text-center items-center justify-center"
+                                      className="add-button m-2 items-center justify-center text-center text-2xl text-gray-500"
                                       onClick={() => handleDelete(index)}
                                     >
                                       <IoMdRemoveCircleOutline />
                                     </button>
-                                    <span className="ml-2 text-black">${item.amount}</span>
+                                    <span className="ml-2 text-black">
+                                      ${item.amount}
+                                    </span>
                                   </td>
                                   <td colSpan={3}>
                                     <div
@@ -540,36 +553,36 @@ export default function ReceiptInput({
                                   Total:
                                 </td>
                                 <td
-                                  className="px-2 mr-2 py-1 text-right  text-black"
+                                  className="mr-2 px-2 py-1 text-right  text-black"
                                   style={{ width: "33.33%" }}
                                 >
                                   ${getTotal()}
                                 </td>
                                 <td
-                                  className="text-center px-2 py-1 border-l border-gray-500 text-xs  text-black"
+                                  className="border-l border-gray-500 px-2 py-1 text-center text-xs  text-black"
                                   style={{ width: "33.33%" }}
                                 >
-                                  {youTotal}
+                                  {parseFloat(youTotal).toFixed(2)}
                                 </td>
                                 <td
-                                  className="text-center px-2 py-1 border-l border-gray-500 text-xs  text-black"
+                                  className="border-l border-gray-500 px-2 py-1 text-center text-xs  text-black"
                                   style={{ width: "33.33%" }}
                                 >
-                                  {splitTotal}
+                                  {parseFloat(splitTotal).toFixed(2)}
                                 </td>
                                 <td
-                                  className="text-center px-2 py-1 border-l border-gray-500 text-xs  text-black"
+                                  className="border-l border-gray-500 px-2 py-1 text-center text-xs  text-black"
                                   style={{ width: "33.33%" }}
                                 >
-                                  {themTotal}
+                                  {parseFloat(themTotal).toFixed(2)}
                                 </td>
                               </tr>
                             </tfoot>
                           </table>
                         </div>
                       </div>
-                      <div className="bg-white rounded-lg px-3 py-2 shadow-md mt-3 flex items-center justify-center">
-                        <label className="text-lg font-medium text-center">
+                      <div className="mt-3 flex items-center justify-center rounded-lg bg-white px-3 py-2 shadow-md">
+                        <label className="text-center text-lg font-medium">
                           {selectedValue === "you" ? (
                             <>
                               {personName} owes you $
@@ -585,17 +598,17 @@ export default function ReceiptInput({
                       </div>
                     </div>
 
-                    <div className="col-sm-10 ml-0 mr-0 flex flex-col items-center justify-center mt-3">
+                    <div className="col-sm-10 ml-0 mr-0 mt-3 flex flex-col items-center justify-center">
                       <div>
                         <Link to={`/ReceiptInput/${id}`}>
                           <button
-                            className="mt-4 bg-blue-500 font-bold py-2 px-4 mb-5 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
+                            className="mt-4 mb-5 rounded border-2 border-blue-500 bg-blue-500 py-2 px-4 font-bold shadow transition-all duration-300 hover:bg-white"
                             onClick={(e) => {
                               getFinalTotal();
                               setSelectMethodManual(false);
                               setSelectPersonReceipt(true);
                               handleHistorySubmit(e);
-                              resetReceiptForm()
+                              resetReceiptForm();
                               setIsReceiptSubmitted(true);
                             }}
                           >
@@ -608,11 +621,11 @@ export default function ReceiptInput({
                         <Link to="/SplitBill">
                           <button
                             type="submit"
-                            className="bg-blue-500 font-bold py-2 px-4 mb-5 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
+                            className="mb-5 rounded border-2 border-blue-500 bg-blue-500 py-2 px-4 font-bold shadow transition-all duration-300 hover:bg-white"
                             onClick={(e) => {
                               getFinalTotal();
                               handleHistorySubmit(e);
-                              resetReceiptForm()
+                              resetReceiptForm();
                               setIsReceiptSubmitted(true);
                             }}
                           >

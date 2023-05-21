@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { confirmAlert } from "react-confirm-alert"; // Import
 import { BrowserRouter, Switch, Route, Routes, Link } from "react-router-dom";
+import "./../index.css"
 
 export default function EditPerson({
   personName,
@@ -129,18 +130,19 @@ export default function EditPerson({
                   </label>
                   <input
                     type="phone"
-                    className="form-control w-2/4 mb-2 ml-2"
+                    className={`form-control mb-2 ml-2 w-2/4 ${
+                      isValidPhoneNumber ? "valid" : "invalid"
+                    } ${
+                      personPhone.length >= 10 && !isValidPhoneNumber
+                        ? "red"
+                        : ""
+                    }`}
                     id="colFormLabel"
                     placeholder="Phone Number"
                     value={formSubmitted ? "" : personPhone}
                     onChange={handlePhoneNumberChange}
                   />
 
-                  {personPhone.length >= 10 && !isValidPhoneNumber && (
-                    <span style={{ color: "red" }}>
-                      Please enter a valid phone number.
-                    </span>
-                  )}
                 </div>
 
                 <div className="form-group row mb-3 flex justify-center items-center">
@@ -152,19 +154,17 @@ export default function EditPerson({
                   </label>
                   <input
                     type="email"
-                    className="form-control w-2/4 mb-2 ml-2"
+                    
+                    className={`form-control mb-2 ml-2 w-2/4 ${
+                      isValidEmail ? "valid" : "invalid"
+                    } `}
                     id="colFormLabel"
                     placeholder="Email"
                     value={formSubmitted ? "" : personEmail}
                     onChange={handleEmailChange}
                   />
 
-                  {personEmail.length >= 4 && !isValidEmail && (
-                    <p style={{ color: "red" }}>
-                      Please enter a valid email address.
-                    </p>
-                  )}
-                </div>
+                                 </div>
 
                 <div className="form-group row mb-0 text-center justify-center items-center">
                   <label

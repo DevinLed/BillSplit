@@ -71,26 +71,27 @@ function App() {
   };
   const addNum = (id, val, val2) => {
     let newList = list;
-    let a = parseInt(val, 0);
-    let b = parseInt(val2, 0);
+    let a = parseFloat(val, 0);
+    let b = parseFloat(val2, 0);
     let value = a + b;
     for (let i = 0; i < newList.length; i++) {
       if (newList[i].id === id) {
-        newList[i].personOwing = value;
+        newList[i].personOwing = parseFloat(value).toFixed(2);
       }
     }
     setList(newList);
     setDisplayAdd(true);
+    console.log("this is to add")
   };
 
   const subNum = (id, val, val2) => {
     let newList = list;
-    let a = parseInt(val, 0);
-    let b = parseInt(val2, 0);
+    let a = parseFloat(val, 0);
+    let b = parseFloat(val2, 0);
     let value = a - b;
     for (let i = 0; i < newList.length; i++) {
       if (newList[i].id === id) {
-        newList[i].personOwing = value;
+        newList[i].personOwing = parseFloat(value).toFixed(2);
       }
     }
     setList(newList);

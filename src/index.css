@@ -1,3 +1,9 @@
+
+
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
@@ -132,7 +138,8 @@ a:focus {
 }
 .blue-background {
   background-color: lightblue;
-}.input-group {
+}
+.input-group {
   position: relative;
   overflow: hidden;
 }
@@ -144,4 +151,51 @@ a:focus {
 
 .input-group.slide-in {
   transform: translateX(100%);
+}
+.error-message {
+  color: red;
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-out {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.fade-in-out-animation {
+  animation: fade-in-out 0.5s ease-in-out infinite alternate;
+}
+.form-control:focus.valid {
+  color: #495057;
+  background-color: #fff;
+  border-color: green;
+  outline: 0;
+  box-shadow: 0 0 0 .2rem rgb(138, 192, 138);
+}
+
+.form-control:focus.invalid {
+  color: #495057;
+  background-color: #fff;
+  border-color: #80bdff;
+  outline: 0;
+  box-shadow: 0 0 0 .2rem rgba(0, 123, 255, .25);
+}
+.form-control:focus.red {
+  color: #495057;
+  background-color: #fff;
+  border-color: red;
+  outline: 0;
+  box-shadow: 0 0 0 .2rem rgba(255, 0, 0, .25);
 }
