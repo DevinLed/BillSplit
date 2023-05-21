@@ -82,7 +82,7 @@ export default function AddPerson({
     setPersonName("");
     setPersonPhone("");
     setPersonEmail("");
-    setPersonOwing(0);
+    setPersonOwing("");
     setErrorPhone(false);
     setErrorEmail(false);
     setErrorBalance(false);
@@ -92,23 +92,28 @@ export default function AddPerson({
     setPersonName("");
     setPersonPhone("");
     setPersonEmail("");
-    setPersonOwing(""); // reset the input value to an empty string when the component mounts
+    setPersonOwing("0.00"); // reset the input value to an empty string when the component mounts
   }, []);
   return (
     <>
-      <div className="p-8 justify-center items-center flex overflow-x-hidden overflow-y-hidden fixed inset-0 z-50 focus:outline-none">
-        <div className="relative w-auto my-6 mx-auto max-w-md flex justify-center items-center">
-          <div className={
+      <div className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-hidden p-8 focus:outline-none">
+        <div className="relative my-6 mx-auto flex w-auto max-w-md items-center justify-center">
+          <div
+            className={
               theme === "dark"
-                ? "bg-gray-500 border-8 border-black-500 rounded-lg shadow-lg relative flex flex-col w-full outline-none focus:outline-none":
-                "bg-white border-8 border-black-500 rounded-lg shadow-lg relative flex flex-col w-full outline-none focus:outline-none"}>
-            <div className="flex items-center justify-evenly p-3 border-b border-solid border-slate-200 rounded-t">
-              <h3 className="text-2xl font-semibold text-black">Add A Person</h3>
+                ? "border-black-500 relative flex w-full flex-col rounded-lg border-8 bg-gray-500 shadow-lg outline-none focus:outline-none"
+                : "border-black-500 relative flex w-full flex-col rounded-lg border-8 bg-white shadow-lg outline-none focus:outline-none"
+            }
+          >
+            <div className="flex items-center justify-evenly rounded-t border-b border-solid border-slate-200 p-3">
+              <h3 className="text-2xl font-semibold text-black">
+                Add A Person
+              </h3>
             </div>
 
-            <div className="relative p-6 flex-auto justify-center items-center">
+            <div className="relative flex-auto items-center justify-center p-6">
               <div className="text-center">
-                <div className="form-group row mb-3  flex justify-center items-center">
+                <div className="form-group row mb-3  flex items-center justify-center">
                   <label
                     htmlFor="colFormLabel"
                     className="col-sm-2 col-form-label mr-2"
@@ -117,7 +122,7 @@ export default function AddPerson({
                   </label>
                   <input
                     type="name"
-                    className="form-control w-2/4 ml-2 mb-2"
+                    className="form-control ml-2 mb-2 w-2/4"
                     id="colFormLabel"
                     placeholder="Name"
                     value={personName}
@@ -131,7 +136,7 @@ export default function AddPerson({
                   />
                 </div>
 
-                <div className="form-group row mb-3 flex justify-center items-center">
+                <div className="form-group row mb-3 flex items-center justify-center">
                   <label
                     htmlFor="colFormLabel"
                     className="col-sm-2 col-form-label mr-2"
@@ -140,7 +145,7 @@ export default function AddPerson({
                   </label>
                   <input
                     type="phone"
-                    className="form-control w-2/4 mb-2 ml-2"
+                    className="form-control mb-2 ml-2 w-2/4"
                     id="colFormLabel"
                     placeholder="Phone Number"
                     value={formSubmitted ? "" : personPhone}
@@ -154,7 +159,7 @@ export default function AddPerson({
                   )}
                 </div>
 
-                <div className="form-group row mb-3 flex justify-center items-center">
+                <div className="form-group row mb-3 flex items-center justify-center">
                   <label
                     htmlFor="colFormLabel"
                     className="col-sm-2 col-form-label mr-2"
@@ -163,7 +168,7 @@ export default function AddPerson({
                   </label>
                   <input
                     type="email"
-                    className="form-control w-2/4 mb-2 ml-2"
+                    className="form-control mb-2 ml-2 w-2/4"
                     id="colFormLabel"
                     placeholder="Email"
                     value={formSubmitted ? "" : personEmail}
@@ -177,7 +182,7 @@ export default function AddPerson({
                   )}
                 </div>
 
-                <div className="form-group row mb-0 text-center justify-center items-center">
+                <div className="form-group row mb-0 items-center justify-center text-center">
                   <label
                     htmlFor="colFormLabel"
                     className="col-form-label label-one-line"
@@ -185,11 +190,11 @@ export default function AddPerson({
                     Starting balance?
                   </label>
                 </div>
-                <div className="form-group row mt-1 mb-3 justify-content-center align-items-center">
-                  <div className="col-md-3 mb-3 mb-md-0 d-flex justify-content-center">
+                <div className="form-group row justify-content-center align-items-center mt-1 mb-3">
+                  <div className="col-md-3 mb-md-0 d-flex justify-content-center mb-3">
                     <button
                       className="btn btn-primary btn-block"
-                      onClick={(e) => {
+                      onClick ={(e) => {
                         handleNoButtonClick(e);
                         setErrorBalance(true);
                         setPersonOwing("0.00");
@@ -200,7 +205,7 @@ export default function AddPerson({
                     </button>
                   </div>
                 </div>
-                <div className="form-group row mt-1 mb-3 justify-content-center align-items-center">
+                <div className="form-group row justify-content-center align-items-center mt-1 mb-3">
                   <div className="col-md-3 d-flex justify-content-center">
                     <button
                       className="btn btn-primary btn-block"
@@ -211,48 +216,48 @@ export default function AddPerson({
                     </button>
                   </div>
                 </div>
-                <div className="form-group row mt-1 mb-3 justify-content-center align-items-center">
-                <div className="col-md-6 mb-3 mb-md-0">
-                  {showInput && (
-                    <div className="input-group">
-                      <span className="input-group-text">$</span>
-                      <input
-                        type="text"
-                        placeholder={
-                          value
-                            ? parseFloat(value).toFixed(2)
-                            : parseFloat(personOwing).toString() === "NaN"
-                            ? "0.00"
-                            : parseFloat(personOwing).toFixed(2)
-                        }
-                        className={`form-control max-six-digits rounded-start ${
-                          errorBalance ? "is-invalid" : ""
-                        }`}
-                        onClick={(e) => {
-                          e.target.select();
-                        }}
-                        onKeyDown={handleKeyDown}
-                        onChange={(e) => {
-                          const value = e.target.value;
-                          const regex = /^[-\d{1,5}.\d{0,2}]*$/;
-                          if (regex.test(value)) {
-                            setErrorBalance(true);
-                            setPersonOwing(value);
-                            setErrorMsg("");
-                          } else {
-                            setErrorBalance(false);
-                            setErrorMsg("Please enter a valid number");
+                <div className="form-group row justify-content-center align-items-center mt-1 mb-3">
+                  <div className="col-md-6 mb-md-0 mb-3">
+                    {showInput && (
+                      <div className="input-group">
+                        <span className="input-group-text">$</span>
+                        <input
+                          type="text"
+                          placeholder={
+                            value
+                              ? parseFloat(value).toFixed(2)
+                              : parseFloat(personOwing).toString() === "NaN"
+                              ? "0.00"
+                              : parseFloat(personOwing).toFixed(2)
                           }
-                        }}
-                        style={{ borderColor: "lightblue" }}
-                      />
-                    </div>
-                  )}
-                </div>
+                          className={`form-control max-six-digits rounded-start ${
+                            errorBalance ? "is-invalid" : ""
+                          }`}
+                          onClick={(e) => {
+                            e.target.select();
+                          }}
+                          onKeyDown={handleKeyDown}
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            const regex = /^[-\d{1,5}.\d{0,2}]*$/;
+                            if (regex.test(value)) {
+                              setErrorBalance(true);
+                              setPersonOwing(value);
+                              setErrorMsg("");
+                            } else {
+                              setErrorBalance(false);
+                              setErrorMsg("Please enter a valid number");
+                            }
+                          }}
+                          style={{ borderColor: "lightblue" }}
+                        />
+                      </div>
+                    )}
+                  </div>
                 </div>
                 {errorMsg && (
                   <div
-                    className="flex items-center items-center m-auto justify-center error-msg h-5"
+                    className="error-msg m-auto flex h-5 items-center items-center justify-center"
                     style={{ color: "red" }}
                   >
                     {errorMsg}
@@ -262,9 +267,9 @@ export default function AddPerson({
             </div>
 
             {/*footer*/}
-            <div className="flex items-center  justify-content-between align-items-center pb-6 px-6 border-t border-solid border-slate-200 rounded-b">
+            <div className="justify-content-between align-items-center  flex items-center rounded-b border-t border-solid border-slate-200 px-6 pb-6">
               <button
-                className="justify-center mt-3 bg-blue-500 font-bold py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
+                className="mt-3 justify-center rounded border-2 border-blue-500 bg-blue-500 py-2 px-4 font-bold shadow transition-all duration-300 hover:bg-white"
                 onClick={(e) => {
                   setAddPerson(false);
                   setFormSubmitted(true);
@@ -275,7 +280,7 @@ export default function AddPerson({
                 Close
               </button>
               <button
-                className="justify-center mt-3 ml-2 bg-blue-500 font-bold py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
+                className="mt-3 ml-2 justify-center rounded border-2 border-blue-500 bg-blue-500 py-2 px-4 font-bold shadow transition-all duration-300 hover:bg-white"
                 onClick={(e) => {
                   if (errorBalance & errorPhone & errorEmail) {
                     handleSubmit(e);
@@ -292,7 +297,7 @@ export default function AddPerson({
             </div>
             {!submissionError ? (
               <p
-                className="items-center justify-center mx-auto"
+                className="mx-auto items-center justify-center"
                 style={{ color: "red" }}
               >
                 Please complete all fields correctly.

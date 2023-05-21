@@ -25,6 +25,7 @@ export default function SplitBill({
   value,
   setValue,
   addNum,
+  subNum,
   personReceiptAmount,
   formSubmitted, 
   setFormSubmitted,
@@ -97,6 +98,7 @@ export default function SplitBill({
             value={value}
             setValue={setValue}
             addNum={addNum}
+            subNum={subNum}
             personReceiptAmount={personReceiptAmount}
             setFormSubmitted={setFormSubmitted}
             theme={theme}

@@ -81,7 +81,6 @@ function App() {
     }
     setList(newList);
     setDisplayAdd(true);
-    console.log("this is to add");
   };
 
   const subNum = (id, val, val2) => {

@@ -245,8 +245,10 @@ export default function ReceiptInput({
   const getFinalTotal = () => {
     if (selectedValue === "you") {
       addNum(id, personOwing, personReceiptAmount);
+      console.log("tested");
     } else {
       subNum(id, personOwing, personReceiptAmount);
+      console.log("tested");
     }
   };
   return (
