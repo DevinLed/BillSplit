@@ -1,11 +1,11 @@
 import React, { useRef, useState, useEffect, onBlur, useCamera } from "react";
 import Switch from "react-switch";
 import { useParams } from "react-router-dom";
-import ReceiptScanner from "./ReceiptScanner";
 import axios from "axios";
 import { Camera } from "react-html5-camera-photo";
 import "react-html5-camera-photo/build/css/index.css";
 import AddPerson from "./AddPerson";
+import loading from "../img/loading.gif";
 import Header from "./Header";
 import { v4 as uuidv4 } from "uuid";
 import SplitBill from "./SplitBill";
@@ -98,14 +98,17 @@ export default function ReceiptInput({
 
   const handleReceiptTotal = (total) => {
     setReceiptTotal(total);
-    // Do further processing with the total amount, such as storing it in the component's state or sending it to an API.
   };
   const handleCapturePhoto = (dataUri) => {
     setPhotoData(dataUri);
   };
   const [photoData, setPhotoData] = useState(null);
   const [pictureTotal, setPictureTotal] = useState("");
+  const [showImage, setShowImage] = useState(false);
+  const [displayPictureInfo, setDisplayPictureInfo] = useState(false);
+  const [obtainedInfo, setObtainedInfo ] = useState(null);
   const handleCameraSubmit = async () => {
+    setShowImage(true);
     try {
       const data = new FormData();
       data.append("document", photoData);
@@ -124,14 +127,22 @@ export default function ReceiptInput({
         config
       );
       const responseData = await response.json();
+      setObtainedInfo(responseData.document.inference.prediction.line_items.map((item) => item));
+      setDisplayPictureInfo(true);
+      const totalAmount =
+        responseData.document.inference.prediction.total_amount.value;
+      setMerchantName(
+        responseData.document.inference.prediction.supplier_name.value
+      );
+      if (merchantName === null) {
+        setDisplayMerchant(false);
+      }
+      console.log(responseData.document);
 
-      // Assuming the response structure has changed
-      const totalAmount = responseData.document.inference.prediction.total_amount.value;
-        console.log(responseData.document.inference.prediction.total_amount.value);
-        
-setPictureTotal(totalAmount);
-        
+      setPictureTotal(totalAmount);
+      setShowImage(false);
       
+
       // Handle the response data as per your requirements
     } catch (error) {
       console.error("Error processing image:", error);
@@ -711,108 +722,195 @@ setPictureTotal(totalAmount);
           <main className="xs:max-w-xl bg-white-500 mt-5 rounded p-0 pt-3 shadow sm:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl">
             <div className="mt-0 flex flex-col items-center justify-center">
               <Header selectMethodPicture={selectMethodPicture} />
-
-              <div className="l-36 bg-grey flex flex-col  items-center justify-center rounded-lg px-6 py-6 ring-slate-900/5 dark:bg-slate-900">
-                <div className="max-w-fit">
-                  <label
-                    htmlFor="payment"
-                    className="form-control justify-left mt-0 flex items-center px-2"
-                  >
-                    <div className="whitespace-no-wrap w-22 pl-2 ">
-                      Who paid?
-                    </div>
-                    <div className="inline-flex px-2">
-                      <button
-                        className={`m-0 rounded-l bg-blue-500 py-1 px-2 font-bold text-white ${
-                          selected === 1 ? "bg-blue-700" : ""
-                        } h-8 w-16`}
-                        onClick={() => {
-                          handleButton1Click();
-                          setSelectedValue("you");
-                          setShowTable(true);
-                          setDisplayMerchant(false);
-                          setDisplayDate(false);
-                          setDisplayInvoice(false);
-                        }}
-                      >
-                        Me
-                      </button>
-                      <button
-                        className={`m-0 rounded-r border-l bg-blue-500 py-1 px-3 font-bold text-white ${
-                          selected === 2 ? "bg-blue-700" : ""
-                        } min-w-16 max-w-24 h-8 overflow-hidden`}
-                        onClick={() => {
-                          handleButton2Click();
-                          setSelectedValue("them");
-                          setShowTable(true);
-                        }}
-                      >
-                        {personName.length > 12
-                          ? personName.slice(0, 12) + "..."
-                          : personName}
-                      </button>
-                    </div>
-                  </label>
+              {showImage ? (
+                <div
+                  className={`fade full-page ${
+                    showImage ? "show full-page" : ""
+                  }`}
+                >
+                  <img src={loading} alt="Receipt Animation" />
                 </div>
-                {showTable ? (
-                  <>
-                    <div>
-                      <Camera
-                        idealFacingMode="environment"
-                        onTakePhoto={(dataUri) => handleCapturePhoto(dataUri)}
-                      />
-                      
-                    <div className="col-sm-10 ml-0 mr-0 mt-3 flex flex-col items-center justify-center">
-                      <button
-                        className="ml-auto mr-auto mt-4 mb-5 items-center justify-center rounded border-2 border-blue-500 bg-blue-500 py-2 px-4 font-bold shadow transition-all duration-300 hover:bg-white"
-                        onClick={handleCameraSubmit}
+              ) : (
+                <>
+                  <div className="l-36 bg-grey flex flex-col  items-center justify-center rounded-lg px-6 py-6 ring-slate-900/5 dark:bg-slate-900">
+                    <div className="max-w-fit">
+                      <label
+                        htmlFor="payment"
+                        className="form-control justify-left mt-0 flex items-center px-2"
                       >
-                        Capture picture info
-                      </button>
-                      </div>
-                    </div>
-                    <div className="col-sm-10 ml-0 mr-0 mt-3 flex flex-col items-center justify-center">
-                      <span>Total from Picture: $ {pictureTotal}</span>
-                      <div>
-                        <Link to={`/ReceiptInput/${id}`}>
+                        <div className="whitespace-no-wrap w-22 pl-2 ">
+                          Who paid?
+                        </div>
+                        <div className="inline-flex px-2">
                           <button
-                            className="mt-4 mb-5 rounded border-2 border-blue-500 bg-blue-500 py-2 px-4 font-bold shadow transition-all duration-300 hover:bg-white"
-                            onClick={(e) => {
-                              getFinalTotal();
-                              setSelectMethodManual(false);
-                              setSelectPersonReceipt(true);
-                              handleHistorySubmit(e);
-                              resetReceiptForm();
-                              setIsReceiptSubmitted(true);
+                            className={`m-0 rounded-l bg-blue-500 py-1 px-2 font-bold text-white ${
+                              selected === 1 ? "bg-blue-700" : ""
+                            } h-8 w-16`}
+                            onClick={() => {
+                              handleButton1Click();
+                              setSelectedValue("you");
+                              setShowTable(true);
+                              setDisplayMerchant(false);
+                              setDisplayDate(false);
+                              setDisplayInvoice(false);
                             }}
                           >
-                            Add Another Receipt
+                            Me
                           </button>
-                        </Link>
-                      </div>
+                          <button
+                            className={`m-0 rounded-r border-l bg-blue-500 py-1 px-3 font-bold text-white ${
+                              selected === 2 ? "bg-blue-700" : ""
+                            } min-w-16 max-w-24 h-8 overflow-hidden`}
+                            onClick={() => {
+                              handleButton2Click();
+                              setSelectedValue("them");
+                              setShowTable(true);
+                            }}
+                          >
+                            {personName.length > 12
+                              ? personName.slice(0, 12) + "..."
+                              : personName}
+                          </button>
+                        </div>
+                      </label>
+                    </div>
+                    {showTable ? (
+                      <>
+                        <div>
+                          <Camera
+                            idealFacingMode="environment"
+                            onTakePhoto={(dataUri) =>
+                              handleCapturePhoto(dataUri)
+                            }
+                          />
 
-                      <div>
-                        <Link to="/SplitBill">
-                          <button
-                            type="submit"
-                            className="mb-5 rounded border-2 border-blue-500 bg-blue-500 py-2 px-4 font-bold shadow transition-all duration-300 hover:bg-white"
-                            onClick={(e) => {
-                              getFinalTotal();
-                              handleHistorySubmit(e);
-                              resetReceiptForm();
-                              setIsReceiptSubmitted(true);
-                            }}
-                          >
-                            Submit
-                          </button>
-                        </Link>
+                          <div className="col-sm-10 ml-0 mr-0 mt-3 flex flex-col items-center justify-center">
+                            <button
+                              className="ml-auto mr-auto mt-4 mb-5 items-center justify-center rounded border-2 border-blue-500 bg-blue-500 py-2 px-4 font-bold shadow transition-all duration-300 hover:bg-white"
+                              onClick={handleCameraSubmit}
+                            >
+                              Capture picture info
+                            </button>
+                          </div>
+                        </div>
+                        {displayPictureInfo ? (
+                          <>
+                            <div className="col-sm-10 ml-0 mr-0 mt-3 flex flex-col items-center justify-center">
+                              <div className="col-sm-10 mb-0 mt-3">
+                                <input
+                                  type="amount"
+                                  className="form-control mb-5 h-10 text-center font-bold"
+                                  id="colFormLabel"
+                                  placeholder={merchantName}
+                                  onKeyDown={handleKeyDown}
+                                  onChange={(e) =>
+                                    setMerchantName(
+                                      e.target.value.replace(/\b\w/g, (c) =>
+                                        c.toUpperCase()
+                                      )
+                                    )
+                                  }
+                                />
+                                <div className="justify-left mt-3 flex h-11 items-center ">
+                                  <div className="z-50 mt-3 mb-3 text-center">
+                                    <label
+                                      htmlFor="colFormLabel"
+                                      className="col-form-label text-center text-black"
+                                    >
+                                      Date of Receipt
+                                    </label>
+                                    <DatePicker
+                                      defaultValue="Date of Receipt"
+                                      selected={startDate}
+                                      onChange={(date) => setStartDate(date)}
+                                      className="bg-blue-100 text-center"
+                                      onFocus={(e) => e.target.blur()}
+                                      dateFormat="dd/MM/yyyy"
+                                      onClick={() => setDisplayDate(true)}
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="mt-3 flex items-center justify-center rounded-lg bg-white px-3 py-2 shadow-md">
+                        <label className="text-center text-lg font-medium">
+                          Receipt Total: ${pictureTotal}
+                        </label>
                       </div>
-                    </div>
-                  </>
-                ) : (
-                  ""
-                )}
-              </div>
+                              {obtainedInfo.map((item, index) => (
+                                <tr
+                                  key={index}
+                                  className={
+                                    index % 2 === currentIndex % 2
+                                      ? "bg-blue-100"
+                                      : ""
+                                  }
+                                >
+                                  <td className=" text-black">
+                                    {item.description.replace(/\b\w/g, (c) =>
+                                      c.toUpperCase()
+                                    )}
+                                  </td>
+                                  <td className="mr-2 flex items-center text-sm">
+                                    <button
+                                      className="add-button m-2 items-center justify-center text-center text-2xl text-gray-500"
+                                      onClick={() => handleDelete(index)}
+                                    >
+                                      <IoMdRemoveCircleOutline />
+                                    </button>
+                                    <span className="ml-2 text-black">
+                                      ${item.total_amount}
+                                    </span>
+                                  </td>
+                                  <td></td>
+                                  <td></td>
+                                </tr>
+                              ))}
+                              <div>
+                                <Link to={`/ReceiptInput/${id}`}>
+                                  <button
+                                    className="mt-4 mb-5 rounded border-2 border-blue-500 bg-blue-500 py-2 px-4 font-bold shadow transition-all duration-300 hover:bg-white"
+                                    onClick={(e) => {
+                                      getFinalTotal();
+                                      setSelectMethodManual(false);
+                                      setSelectPersonReceipt(true);
+                                      handleHistorySubmit(e);
+                                      resetReceiptForm();
+                                      setIsReceiptSubmitted(true);
+                                    }}
+                                  >
+                                    Add Another Receipt
+                                  </button>
+                                </Link>
+                              </div>
+
+                              <div>
+                                <Link to="/SplitBill">
+                                  <button
+                                    type="submit"
+                                    className="mb-5 rounded border-2 border-blue-500 bg-blue-500 py-2 px-4 font-bold shadow transition-all duration-300 hover:bg-white"
+                                    onClick={(e) => {
+                                      getFinalTotal();
+                                      handleHistorySubmit(e);
+                                      resetReceiptForm();
+                                      setIsReceiptSubmitted(true);
+                                    }}
+                                  >
+                                    Submit
+                                  </button>
+                                </Link>
+                              </div>
+                            </div>
+                          </>
+                        ) : (
+                          ""
+                        )}
+                      </>
+                    ) : (
+                      ""
+                    )}
+                  </div>
+                </>
+              )}
             </div>
           </main>
         </>

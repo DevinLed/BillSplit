@@ -189,7 +189,7 @@ export default function Header({
               <IoIosArrowBack />
             </button>
           </Link>
-          <h1 className="m-5">Take a picture and confirm</h1>
+          <h1 className="m-5">Upload Picture</h1>
 
           <div className="dropdown">
             <button
