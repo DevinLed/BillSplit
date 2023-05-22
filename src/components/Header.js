@@ -17,7 +17,8 @@ export default function Header({
   setSelectPersonReceipt,
   selectPersonList,
   selectEditPersonList,
-  selectMethodManual
+  selectMethodManual,
+  selectMethodPicture
 }) {
   return (
     <>
@@ -152,6 +153,43 @@ export default function Header({
             </button>
           </Link>
           <h1 className="m-5">Enter Details</h1>
+
+          <div className="dropdown">
+            <button
+              className="text-black hover:text-black mr-2"
+              type="button"
+              id="dropdownMenu2"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              <AiOutlineMenu />
+            </button>
+            <div className="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2">
+              <Link to="/SplitBill">
+                <button className="dropdown-item">New Receipt</button>
+              </Link>
+              <Link to="/EditList">
+                <button className="dropdown-item">Edit Person</button>
+              </Link>
+
+              <Link to="/History">
+                <button className="dropdown-item">History</button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      ) : (
+        ""
+      )}
+      {selectMethodPicture ? (
+          <div className="flex items-stretch font-bold h-10 align-items-center w-full items-center text-2xl mb-5 justify-between border-t-2 border-b-2 " id="headbar">
+          <Link to="/SplitBill">
+            <button className="text-black hover:text-black ml-2">
+              <IoIosArrowBack />
+            </button>
+          </Link>
+          <h1 className="m-5">Take a picture and confirm</h1>
 
           <div className="dropdown">
             <button

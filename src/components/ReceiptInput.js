@@ -96,7 +96,7 @@ export default function ReceiptInput({
     setPhotoData(dataUri);
   };
   const [photoData, setPhotoData] = useState(null);
-  const [pictureTotal, setPictureTotal] = useState(null);
+  const [pictureTotal, setPictureTotal] = useState("");
   const handleCameraSubmit = async () => {
     try {
       const response = await axios.post(
@@ -690,9 +690,10 @@ export default function ReceiptInput({
       
       
       <>
+      
           <main className="xs:max-w-xl bg-white-500 mt-5 rounded p-0 pt-3 shadow sm:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl">
             <div className="mt-0 flex flex-col items-center justify-center">
-              <Header selectMethodManual={selectMethodManual} />
+              <Header selectMethodPicture={selectMethodPicture} />
 
               <div className="l-36 bg-grey flex flex-col  items-center justify-center rounded-lg px-6 py-6 ring-slate-900/5 dark:bg-slate-900">
                 <div className="max-w-fit">
