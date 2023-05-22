@@ -1,6 +1,10 @@
 import React, { useRef, useState, useEffect, onBlur } from "react";
 import Switch from "react-switch";
 import { useParams } from "react-router-dom";
+import ReceiptScanner from './ReceiptScanner';
+import axios from 'axios';
+import Camera from 'react-html5-camera-photo';
+import 'react-html5-camera-photo/build/css/index.css';
 import AddPerson from "./AddPerson";
 import Header from "./Header";
 import { v4 as uuidv4 } from "uuid";
@@ -81,6 +85,38 @@ export default function ReceiptInput({
   const [selectPersonReceipt, setSelectPersonReceipt] = useState(true);
 
   const [selectMethodManual, setSelectMethodManual] = useState(false);
+  const [selectMethodPicture, setSelectMethodPicture] = useState(false);
+  
+  const [receiptTotal, setReceiptTotal] = useState(null);
+  const handleReceiptTotal = (total) => {
+    setReceiptTotal(total);
+    // Do further processing with the total amount, such as storing it in the component's state or sending it to an API.
+  };
+  const handleCapturePhoto = (dataUri) => {
+    setPhotoData(dataUri);
+  };
+  const [photoData, setPhotoData] = useState(null);
+  const handleCameraSubmit = async () => {
+    try {
+      const response = await axios.post(
+        'https://api.mindee.net/v1/products/mindee/expense_receipts/v5/predict',
+        { image: photoData },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer 561e58edb1c93ab9fec230c1439fbf48',
+          },
+        }
+      );
+  
+      const expenseReportData = response.data;
+      // Handle the response data as per your requirements
+      console.log(expenseReportData);
+    } catch (error) {
+      console.error('Error processing image:', error);
+    }
+  };
+
   const { id } = useParams();
   const [receiptList, setReceiptList] = useState([]);
   const [items, setItems] = useState([]);
@@ -293,6 +329,10 @@ export default function ReceiptInput({
                     <button
                       className="btn btn-primary btn-lg mt-5 mb-5"
                       type="submit"
+                      onClick={(e) => {
+                        setSelectMethodPicture(true);
+                        setSelectPersonReceipt(false);
+                      }}
                     >
                       Picture
                     </button>
@@ -645,6 +685,116 @@ export default function ReceiptInput({
       ) : (
         ""
       )}
+      {selectMethodPicture ? ( 
+      
+      
+      <>
+          <main className="xs:max-w-xl bg-white-500 mt-5 rounded p-0 pt-3 shadow sm:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl">
+            <div className="mt-0 flex flex-col items-center justify-center">
+              <Header selectMethodManual={selectMethodManual} />
+
+              <div className="l-36 bg-grey flex flex-col  items-center justify-center rounded-lg px-6 py-6 ring-slate-900/5 dark:bg-slate-900">
+                <div className="max-w-fit">
+                  <label
+                    htmlFor="payment"
+                    className="form-control justify-left mt-0 flex items-center px-2"
+                  >
+                    <div className="whitespace-no-wrap w-22 pl-2 ">
+                      Who paid?
+                    </div>
+                    <div className="inline-flex px-2">
+                      <button
+                        className={`m-0 rounded-l bg-blue-500 py-1 px-2 font-bold text-white ${
+                          selected === 1 ? "bg-blue-700" : ""
+                        } h-8 w-16`}
+                        onClick={() => {
+                          handleButton1Click();
+                          setSelectedValue("you");
+                          setShowTable(true);
+                          setDisplayMerchant(false);
+                          setDisplayDate(false);
+                          setDisplayInvoice(false);
+                        }}
+                      >
+                        Me
+                      </button>
+                      <button
+                        className={`m-0 rounded-r border-l bg-blue-500 py-1 px-3 font-bold text-white ${
+                          selected === 2 ? "bg-blue-700" : ""
+                        } min-w-16 max-w-24 h-8 overflow-hidden`}
+                        onClick={() => {
+                          handleButton2Click();
+                          setSelectedValue("them");
+                          setShowTable(true);
+                        }}
+                      >
+                        {personName.length > 12
+                          ? personName.slice(0, 12) + "..."
+                          : personName}
+                      </button>
+                    </div>
+                  </label>
+                </div>
+                {showTable ? (
+                  <>
+
+<div>
+    <Camera
+      idealFacingMode="environment"
+      onTakePhoto={(dataUri) => handleCapturePhoto(dataUri)}
+    />
+    <button onClick={handleCameraSubmit}>Submit</button>
+  </div>
+                    <div className="col-sm-10 ml-0 mr-0 mt-3 flex flex-col items-center justify-center">
+                      <div>
+                        <Link to={`/ReceiptInput/${id}`}>
+                          <button
+                            className="mt-4 mb-5 rounded border-2 border-blue-500 bg-blue-500 py-2 px-4 font-bold shadow transition-all duration-300 hover:bg-white"
+                            onClick={(e) => {
+                              getFinalTotal();
+                              setSelectMethodManual(false);
+                              setSelectPersonReceipt(true);
+                              handleHistorySubmit(e);
+                              resetReceiptForm();
+                              setIsReceiptSubmitted(true);
+                            }}
+                          >
+                            Add Another Receipt
+                          </button>
+                        </Link>
+                      </div>
+
+                      <div>
+                        <Link to="/SplitBill">
+                          <button
+                            type="submit"
+                            className="mb-5 rounded border-2 border-blue-500 bg-blue-500 py-2 px-4 font-bold shadow transition-all duration-300 hover:bg-white"
+                            onClick={(e) => {
+                              getFinalTotal();
+                              handleHistorySubmit(e);
+                              resetReceiptForm();
+                              setIsReceiptSubmitted(true);
+                            }}
+                          >
+                            Submit
+                          </button>
+                        </Link>
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  ""
+                )}
+              </div>
+            </div>
+          </main>
+        </>
+      
+      
+      
+      
+      )
+    : ("")}
     </>
   );
 }
