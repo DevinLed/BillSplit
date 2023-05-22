@@ -1,10 +1,10 @@
-import React, { useRef, useState, useEffect, onBlur } from "react";
+import React, { useRef, useState, useEffect, onBlur, useCamera } from "react";
 import Switch from "react-switch";
 import { useParams } from "react-router-dom";
-import ReceiptScanner from './ReceiptScanner';
-import axios from 'axios';
-import { Camera } from 'react-html5-camera-photo';
-import 'react-html5-camera-photo/build/css/index.css';
+import ReceiptScanner from "./ReceiptScanner";
+import axios from "axios";
+import { Camera } from "react-html5-camera-photo";
+import "react-html5-camera-photo/build/css/index.css";
 import AddPerson from "./AddPerson";
 import Header from "./Header";
 import { v4 as uuidv4 } from "uuid";
@@ -86,8 +86,16 @@ export default function ReceiptInput({
 
   const [selectMethodManual, setSelectMethodManual] = useState(false);
   const [selectMethodPicture, setSelectMethodPicture] = useState(false);
-  
-  const [receiptTotal, setReceiptTotal] = useState(null);
+
+  const [receiptTotal, setReceiptTotal] = useState("");
+  const axios = require("axios");
+  const FormData = require("form-data");
+
+  const apiKey = "561e58edb1c93ab9fec230c1439fbf48";
+  const account = "mindee";
+  const endpoint = "expense_receipts";
+  const version = "5.0";
+
   const handleReceiptTotal = (total) => {
     setReceiptTotal(total);
     // Do further processing with the total amount, such as storing it in the component's state or sending it to an API.
@@ -99,22 +107,34 @@ export default function ReceiptInput({
   const [pictureTotal, setPictureTotal] = useState("");
   const handleCameraSubmit = async () => {
     try {
-      const response = await axios.post(
-        'https://api.mindee.net/v1/products/mindee/expense_receipts/v5/predict',
-        { image: photoData },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Bearer 561e58edb1c93ab9fec230c1439fbf48',
-          },
-        }
+      const data = new FormData();
+      data.append("document", photoData);
+
+      const headers = new Headers();
+      headers.append("Authorization", `Token ${apiKey}`);
+
+      const config = {
+        method: "POST",
+        headers,
+        body: data,
+      };
+
+      const response = await fetch(
+        `https://api.mindee.net/v1/products/${account}/${endpoint}/v${version}/predict`,
+        config
       );
-  
+      const responseData = await response.json();
+
+      // Assuming the response structure has changed
+      const totalAmount = responseData.document.inference.prediction.total_amount.value;
+        console.log(responseData.document.inference.prediction.total_amount.value);
+        
+setPictureTotal(totalAmount);
+        
       
-      setPictureTotal(response.data.invoice.total_amount);
       // Handle the response data as per your requirements
     } catch (error) {
-      console.error('Error processing image:', error);
+      console.error("Error processing image:", error);
     }
   };
 
@@ -275,7 +295,7 @@ export default function ReceiptInput({
 
     return parseFloat(total).toFixed(2);
   };
-  
+
   const handleHistorySubmit = (e) => {
     addReceipt(
       personName,
@@ -686,11 +706,8 @@ export default function ReceiptInput({
       ) : (
         ""
       )}
-      {selectMethodPicture ? ( 
-      
-      
-      <>
-      
+      {selectMethodPicture ? (
+        <>
           <main className="xs:max-w-xl bg-white-500 mt-5 rounded p-0 pt-3 shadow sm:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl">
             <div className="mt-0 flex flex-col items-center justify-center">
               <Header selectMethodPicture={selectMethodPicture} />
@@ -739,17 +756,23 @@ export default function ReceiptInput({
                 </div>
                 {showTable ? (
                   <>
-
-<div>
-    <Camera
-      idealFacingMode="environment"
-      onTakePhoto={(dataUri) => handleCapturePhoto(dataUri)}
-    />
-    <button onClick={handleCameraSubmit}>Submit</button>
-  </div>
-                    <div className="col-sm-10 ml-0 mr-0 mt-3 flex flex-col items-center justify-center">
+                    <div>
+                      <Camera
+                        idealFacingMode="environment"
+                        onTakePhoto={(dataUri) => handleCapturePhoto(dataUri)}
+                      />
                       
-                    <span>Total from Picture: {pictureTotal}</span>
+                    <div className="col-sm-10 ml-0 mr-0 mt-3 flex flex-col items-center justify-center">
+                      <button
+                        className="ml-auto mr-auto mt-4 mb-5 items-center justify-center rounded border-2 border-blue-500 bg-blue-500 py-2 px-4 font-bold shadow transition-all duration-300 hover:bg-white"
+                        onClick={handleCameraSubmit}
+                      >
+                        Capture picture info
+                      </button>
+                      </div>
+                    </div>
+                    <div className="col-sm-10 ml-0 mr-0 mt-3 flex flex-col items-center justify-center">
+                      <span>Total from Picture: $ {pictureTotal}</span>
                       <div>
                         <Link to={`/ReceiptInput/${id}`}>
                           <button
@@ -793,12 +816,9 @@ export default function ReceiptInput({
             </div>
           </main>
         </>
-      
-      
-      
-      
-      )
-    : ("")}
+      ) : (
+        ""
+      )}
     </>
   );
 }
