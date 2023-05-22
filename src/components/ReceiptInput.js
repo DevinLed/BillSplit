@@ -106,7 +106,7 @@ export default function ReceiptInput({
   const [pictureTotal, setPictureTotal] = useState("");
   const [showImage, setShowImage] = useState(false);
   const [displayPictureInfo, setDisplayPictureInfo] = useState(false);
-  const [obtainedInfo, setObtainedInfo ] = useState(null);
+  const [obtainedInfo, setObtainedInfo ] = useState([]);
   const handleCameraSubmit = async () => {
     setShowImage(true);
     try {
@@ -302,6 +302,14 @@ export default function ReceiptInput({
       setPersonReceiptAmount(parseFloat(splitValue) + parseFloat(themValue));
     } else if (selectedValue === "them") {
       setPersonReceiptAmount(parseFloat(splitValue) + parseFloat(youValue));
+    }
+
+    return parseFloat(total).toFixed(2);
+  };
+  const getPictureTotal = () => {
+    let total = 0;
+    for (const item of items) {
+      total += parseFloat(item.total_amount);
     }
 
     return parseFloat(total).toFixed(2);
@@ -831,11 +839,98 @@ export default function ReceiptInput({
                                   </div>
                                 </div>
                               </div>
-                              <div className="mt-3 flex items-center justify-center rounded-lg bg-white px-3 py-2 shadow-md">
-                        <label className="text-center text-lg font-medium">
-                          Receipt Total: ${pictureTotal}
-                        </label>
-                      </div>
+                              <div className="whitespace-no-wrap m-0 mt-3 w-full max-w-min rounded-lg bg-white py-1 px-1 dark:bg-slate-900">
+                        <div className="mx-auto mb-0 max-w-min">
+                      <table className="m-auto max-w-min table-fixed border border-black">
+                            <thead className="whitespace-no-wrap max-w-fit overflow-hidden truncate">
+                              <tr className="whitespace-no-wrap max-w-fit overflow-hidden px-2">
+                                <th className="px-15 text-black">Item</th>
+                                <th className="px-15 text-black">Price</th>
+                                <th
+                                  className="px-1"
+                                  colSpan={3}
+                                  style={{ width: "33.33%" }}
+                                >
+                                  <span className="border-r border-black pr-2 pl-4 text-black">
+                                    Me
+                                  </span>
+                                  <span className="border-r border-l border-black px-2 text-black">
+                                    Split
+                                  </span>
+                                  <span className="border-l border-black pl-2 text-black">
+                                    Them
+                                  </span>
+                                </th>
+                              </tr>
+                            </thead>
+
+                            <tbody className="pt-5">
+                              <tr>
+                                <td>
+                                  <input
+                                    type="amount"
+                                    className="form-control mb-1 w-20 px-1 text-xs font-bold"
+                                    id="colFormLabel"
+                                    placeholder="Item Name"
+                                    value={name}
+                                    onKeyDown={handleKeyDown}
+                                    onChange={handleNameChange}
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    type="amount"
+                                    className="form-control mb-1 w-20 px-1 text-xs font-bold"
+                                    id="colFormLabel"
+                                    placeholder="Amount"
+                                    value={amount}
+                                    onKeyDown={handleKeyDown}
+                                    onChange={(e) => {
+                                      const value = e.target.value;
+                                      const isValid = /^\d+(\.\d{0,2})?$/.test(
+                                        value
+                                      );
+
+                                      if (isValid || value === "") {
+                                        // Allow empty value
+                                        setAmount(value);
+                                        console.log("amount verified");
+                                      } else {
+                                        console.log("amount not verified");
+                                      }
+                                    }}
+                                  />
+                                </td>
+                                <td colSpan="3" className="px-2">
+                                  <div
+                                    style={{ width: "auto", margin: "auto" }}
+                                  >
+                                    <Slider
+                                      defaultValue={55}
+                                      min={0}
+                                      max={100}
+                                      value={sliderValue}
+                                      step={55}
+                                      onChange={(value) =>
+                                        handleSliderChange(value)
+                                      }
+                                    />
+                                    {renderColumn()}
+                                  </div>
+                                </td>
+                              </tr>
+
+                              <tr className="add-button m-2 items-center justify-center text-center text-black">
+                                <button
+                                  className="add-button m-2 items-center justify-center text-center text-2xl text-gray-500"
+                                  onClick={() => {
+                                    handleReceiptSubmit(sliderValue);
+                                    handleSaveClick();
+                                  }}
+                                >
+                                  <IoMdAddCircleOutline />
+                                </button>
+                              </tr>
                               {obtainedInfo.map((item, index) => (
                                 <tr
                                   key={index}
@@ -858,13 +953,56 @@ export default function ReceiptInput({
                                       <IoMdRemoveCircleOutline />
                                     </button>
                                     <span className="ml-2 text-black">
-                                      ${item.total_amount}
+                                      ${parseFloat(item.total_amount).toFixed(2)}
                                     </span>
                                   </td>
                                   <td></td>
                                   <td></td>
                                 </tr>
                               ))}
+                            </tbody>
+                            <tfoot className="bg-blue-200">
+                              <tr className="border-t border-gray-500 bg-blue-200">
+                                <td
+                                  className="px-2 py-1 text-black"
+                                  style={{ width: "33.33%" }}
+                                >
+                                  Total:
+                                </td>
+                                <td
+                                  className="mr-2 px-2 py-1 text-right  text-black"
+                                  style={{ width: "33.33%" }}
+                                >
+                                  ${getPictureTotal()}
+                                </td>
+                                <td
+                                  className="border-l border-gray-500 px-2 py-1 text-center text-xs  text-black"
+                                  style={{ width: "33.33%" }}
+                                >
+                                  {parseFloat(youTotal).toFixed(2)}
+                                </td>
+                                <td
+                                  className="border-l border-gray-500 px-2 py-1 text-center text-xs  text-black"
+                                  style={{ width: "33.33%" }}
+                                >
+                                  {parseFloat(splitTotal).toFixed(2)}
+                                </td>
+                                <td
+                                  className="border-l border-gray-500 px-2 py-1 text-center text-xs  text-black"
+                                  style={{ width: "33.33%" }}
+                                >
+                                  {parseFloat(themTotal).toFixed(2)}
+                                </td>
+                              </tr>
+                            </tfoot>
+                          </table>
+                          </div></div>
+                          
+                          <div className="mt-3 flex items-center justify-center rounded-lg bg-white px-3 py-2 shadow-md">
+                        <label className="text-center text-lg font-medium">
+                          Receipt Total: ${pictureTotal}
+                        </label>
+                      </div>
                               <div>
                                 <Link to={`/ReceiptInput/${id}`}>
                                   <button
