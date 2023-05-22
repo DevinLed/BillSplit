@@ -3,7 +3,7 @@ import Switch from "react-switch";
 import { useParams } from "react-router-dom";
 import ReceiptScanner from './ReceiptScanner';
 import axios from 'axios';
-import Camera from 'react-html5-camera-photo';
+import { Camera } from 'react-html5-camera-photo';
 import 'react-html5-camera-photo/build/css/index.css';
 import AddPerson from "./AddPerson";
 import Header from "./Header";
@@ -96,6 +96,7 @@ export default function ReceiptInput({
     setPhotoData(dataUri);
   };
   const [photoData, setPhotoData] = useState(null);
+  const [pictureTotal, setPictureTotal] = useState(null);
   const handleCameraSubmit = async () => {
     try {
       const response = await axios.post(
@@ -109,9 +110,9 @@ export default function ReceiptInput({
         }
       );
   
-      const expenseReportData = response.data;
+      
+      setPictureTotal(response.data.invoice.total_amount);
       // Handle the response data as per your requirements
-      console.log(expenseReportData);
     } catch (error) {
       console.error('Error processing image:', error);
     }
@@ -746,6 +747,8 @@ export default function ReceiptInput({
     <button onClick={handleCameraSubmit}>Submit</button>
   </div>
                     <div className="col-sm-10 ml-0 mr-0 mt-3 flex flex-col items-center justify-center">
+                      
+                    <span>Total from Picture: {pictureTotal}</span>
                       <div>
                         <Link to={`/ReceiptInput/${id}`}>
                           <button
