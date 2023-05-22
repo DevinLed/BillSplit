@@ -1,13 +1,14 @@
 {
   "files": {
     "main.css": "/BillSplit/static/css/main.65be2c42.css",
-    "main.js": "/BillSplit/static/js/main.43860d8b.js",
+    "main.js": "/BillSplit/static/js/main.d721e7b8.js",
+    "static/media/axios.cjs": "/BillSplit/static/media/axios.436a7e034b14dbca2a54.cjs",
     "index.html": "/BillSplit/index.html",
     "main.65be2c42.css.map": "/BillSplit/static/css/main.65be2c42.css.map",
-    "main.43860d8b.js.map": "/BillSplit/static/js/main.43860d8b.js.map"
+    "main.d721e7b8.js.map": "/BillSplit/static/js/main.d721e7b8.js.map"
   },
   "entrypoints": [
     "static/css/main.65be2c42.css",
-    "static/js/main.43860d8b.js"
+    "static/js/main.d721e7b8.js"
   ]
 }
