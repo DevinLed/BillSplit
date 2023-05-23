@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/BillSplit/static/css/main.fcfbfe38.css",
+    "main.css": "/BillSplit/static/css/main.47bf1c03.css",
     "main.js": "/BillSplit/static/js/main.7826d99e.js",
     "static/media/loading.gif": "/BillSplit/static/media/loading.fb3ac051d734cc1da021.gif",
     "static/media/axios.cjs": "/BillSplit/static/media/axios.436a7e034b14dbca2a54.cjs",
     "index.html": "/BillSplit/index.html",
-    "main.fcfbfe38.css.map": "/BillSplit/static/css/main.fcfbfe38.css.map",
+    "main.47bf1c03.css.map": "/BillSplit/static/css/main.47bf1c03.css.map",
     "main.7826d99e.js.map": "/BillSplit/static/js/main.7826d99e.js.map"
   },
   "entrypoints": [
-    "static/css/main.fcfbfe38.css",
+    "static/css/main.47bf1c03.css",
     "static/js/main.7826d99e.js"
   ]
 }
