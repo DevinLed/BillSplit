@@ -158,7 +158,15 @@ export default function ReceiptInput({
       console.error("Error processing image:", error);
     }
   };
-
+  useEffect(() => {
+    setObtainedInfo((prevInfo) =>
+      prevInfo.map((item) => ({
+        ...item,
+        sliderValue: item.sliderValue || 55,
+      }))
+    );
+  }, []);
+  
   const { id } = useParams();
   const [receiptList, setReceiptList] = useState([]);
   const [items, setItems] = useState([]);
@@ -174,6 +182,9 @@ export default function ReceiptInput({
   const [youTotal, setYouTotal] = useState(0);
   const [splitTotal, setSplitTotal] = useState(0);
   const [themTotal, setThemTotal] = useState(0);
+  const [youPictureTotal, setYouPictureTotal] = useState(0);
+  const [splitPictureTotal, setSplitPictureTotal] = useState(0);
+  const [themPictureTotal, setThemPictureTotal] = useState(0);
   const [receiptSubmitted, setReceiptSubmitted] = useState(false);
   const [totalToAdd, setTotalToAdd] = useState("");
 
@@ -356,6 +367,16 @@ export default function ReceiptInput({
     );
   };
   const getFinalTotal = () => {
+    if (selectedValue === "you") {
+      console.log(personReceiptAmount);
+      addNum(id, personOwing, personReceiptAmount);
+    } else {
+      console.log(personReceiptAmount);
+      subNum(id, personOwing, personReceiptAmount);
+    }
+  };
+  
+  const getFinalPictureTotal = () => {
     if (selectedValue === "you") {
       console.log(personReceiptAmount);
       addNum(id, personOwing, personReceiptAmount);
@@ -1035,19 +1056,19 @@ export default function ReceiptInput({
                                       className="border-l border-gray-500 px-2 py-1 text-center text-xs  text-black"
                                       style={{ width: "33.33%" }}
                                     >
-                                      {parseFloat(youTotal).toFixed(2)}
+                                      {parseFloat(youPictureTotal).toFixed(2)}
                                     </td>
                                     <td
                                       className="border-l border-gray-500 px-2 py-1 text-center text-xs  text-black"
                                       style={{ width: "33.33%" }}
                                     >
-                                      {parseFloat(splitTotal).toFixed(2)}
+                                      {parseFloat(splitPictureTotal).toFixed(2)}
                                     </td>
                                     <td
                                       className="border-l border-gray-500 px-2 py-1 text-center text-xs  text-black"
                                       style={{ width: "33.33%" }}
                                     >
-                                      {parseFloat(themTotal).toFixed(2)}
+                                      {parseFloat(themPictureTotal).toFixed(2)}
                                     </td>
                                     <td></td>
                                     <td></td>
@@ -1067,7 +1088,7 @@ export default function ReceiptInput({
                               <button
                                 className="mt-4 mb-5 rounded border-2 border-blue-500 bg-blue-500 py-2 px-4 font-bold shadow transition-all duration-300 hover:bg-white"
                                 onClick={(e) => {
-                                  getFinalTotal();
+                                  getFinalPictureTotal();
                                   setSelectMethodManual(false);
                                   setSelectPersonReceipt(true);
                                   handleHistorySubmit(e);
