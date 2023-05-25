@@ -165,6 +165,14 @@ export default function ReceiptInput({
         sliderValue: item.sliderValue || 55,
       }))
     );
+  
+    if (getPictureTotal() !== pictureTotal) {
+      setGetPictureTotalPopup(true);
+      setGetPictureTotalMessage("Missing items...");
+    } else {
+      setGetPictureTotalPopup(false);
+      setGetPictureTotalMessage("");
+    }
   }, []);
   
   const { id } = useParams();
@@ -185,6 +193,9 @@ export default function ReceiptInput({
   const [youPictureTotal, setYouPictureTotal] = useState(0);
   const [splitPictureTotal, setSplitPictureTotal] = useState(0);
   const [themPictureTotal, setThemPictureTotal] = useState(0);
+  const [getPictureTotalPopup, setGetPictureTotalPopup] = useState(false);
+  const [getPictureTotalMessage, setGetPictureTotalMessage] = useState("");
+
   const [receiptSubmitted, setReceiptSubmitted] = useState(false);
   const [totalToAdd, setTotalToAdd] = useState("");
 
@@ -220,6 +231,31 @@ export default function ReceiptInput({
       };
       return updatedInfo;
     });
+    switch (sliderValue) {
+      case 0: {
+        let a = parseFloat(amount).toFixed(2);
+        let b = parseFloat(youPictureTotal).toFixed(2);
+        let value = a + b;
+        setYouPictureTotal(parseFloat(value).toFixed(2));
+        break;
+      }
+      case 55: {
+        let a = parseFloat(amount);
+        let b = parseFloat(splitPictureTotal);
+        let value = a + b;
+        setSplitPictureTotal(value.toFixed(2));
+        break;
+      }
+      case 100: {
+        let a = parseFloat(amount).toFixed(2);
+        let b = parseFloat(themPictureTotal).toFixed(2);
+        let value = a + b;
+        setThemPictureTotal(parseFloat(value).toFixed(2));
+        break;
+      }
+      default:
+        break;
+    }
   };
   const renderYouColumn = () => {
     return <div>{}</div>;
@@ -341,9 +377,9 @@ export default function ReceiptInput({
     for (const item of obtainedInfo) {
       total += parseFloat(item.total_amount);
     }
-    let splitValue = parseFloat(splitTotal / 2).toFixed(2);
-    let themValue = parseFloat(themTotal).toFixed(2);
-    let youValue = parseFloat(youTotal).toFixed(2);
+    let splitValue = parseFloat(splitPictureTotal / 2).toFixed(2);
+    let themValue = parseFloat(themPictureTotal).toFixed(2);
+    let youValue = parseFloat(youPictureTotal).toFixed(2);
     if (selectedValue === "you") {
       setPersonReceiptAmount(parseFloat(splitValue) + parseFloat(themValue));
     } else if (selectedValue === "them") {
@@ -1039,6 +1075,11 @@ export default function ReceiptInput({
                                   ))}
                                 </tbody>
                                 <tfoot className="bg-blue-200">
+                                  <tr>  {getPictureTotalPopup && (
+        <div className="popup">
+          <p>{getPictureTotalMessage}</p>
+        </div>
+      )}</tr>
                                   <tr className="border-t border-gray-500 bg-blue-200">
                                     <td
                                       className="px-2 py-1 text-black"
