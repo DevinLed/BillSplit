@@ -328,6 +328,50 @@ export default function ReceiptInput({
     setAmount("");
     setCurrentIndex(currentIndex + 1);
   };
+
+  const handleReceiptPictureSubmit = (sliderValue) => {
+    if (!name || !amount) {
+      return;
+    }
+    setObtainedInfo([
+      ...obtainedInfo,
+      {
+        name: name,
+        amount: parseFloat(amount).toFixed(2),
+        sliderValue: sliderValue,
+      },
+    ]);
+    switch (sliderValue) {
+      case 0: {
+        let a = parseFloat(amount).toFixed(2);
+        let b = parseFloat(youPictureTotal).toFixed(2);
+        let value = a + b;
+        setYouPictureTotal(parseFloat(value).toFixed(2));
+        break;
+      }
+      case 55: {
+        let a = parseFloat(amount);
+        let b = parseFloat(splitPictureTotal);
+        let value = a + b;
+        setSplitPictureTotal(value.toFixed(2));
+        break;
+      }
+      case 100: {
+        let a = parseFloat(amount).toFixed(2);
+        let b = parseFloat(themPictureTotal).toFixed(2);
+        let value = a + b;
+        setThemPictureTotal(parseFloat(value).toFixed(2));
+        break;
+      }
+      default:
+        break;
+    }
+    setName("");
+    setAmount("");
+    setCurrentIndex(currentIndex + 1);
+  };
+
+
   const handleSaveClick = () => {
     setSliderValue(55); // Update the default value with the current value
   };
@@ -1010,7 +1054,7 @@ export default function ReceiptInput({
                                     <button
                                       className="add-button m-2 items-center justify-center text-center text-2xl text-gray-500"
                                       onClick={() => {
-                                        handleReceiptSubmit(sliderValue);
+                                        handleReceiptPictureSubmit(sliderValue);
                                         handleSaveClick();
                                       }}
                                     >
