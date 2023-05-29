@@ -152,6 +152,7 @@ export default function ReceiptInput({
       setPictureTotal(totalAmount);
       setShowImage(false);
       setPhotoData(photoData);
+      setSplitPictureTotal(totalAmount);
 
       // Handle the response data as per your requirements
     } catch (error) {
@@ -165,7 +166,7 @@ export default function ReceiptInput({
         sliderValue: item.sliderValue || 55,
       }))
     );
-  
+
     if (getPictureTotal() !== pictureTotal) {
       setGetPictureTotalPopup(true);
       setGetPictureTotalMessage("Missing items...");
@@ -174,7 +175,7 @@ export default function ReceiptInput({
       setGetPictureTotalMessage("");
     }
   }, []);
-  
+
   const { id } = useParams();
   const [receiptList, setReceiptList] = useState([]);
   const [items, setItems] = useState([]);
@@ -195,6 +196,8 @@ export default function ReceiptInput({
   const [themPictureTotal, setThemPictureTotal] = useState(0);
   const [getPictureTotalPopup, setGetPictureTotalPopup] = useState(false);
   const [getPictureTotalMessage, setGetPictureTotalMessage] = useState("");
+  
+const combinedArray = [...items, ...obtainedInfo];
 
   const [receiptSubmitted, setReceiptSubmitted] = useState(false);
   const [totalToAdd, setTotalToAdd] = useState("");
@@ -222,7 +225,7 @@ export default function ReceiptInput({
   const handleSliderChange = (value) => {
     setSliderValue(value);
   };
-  const handlePictureSliderChange = (index, value) => {
+  const handlePictureSliderChange = (index, value, item) => {
     setObtainedInfo((prevInfo) => {
       const updatedInfo = [...prevInfo];
       updatedInfo[index] = {
@@ -231,32 +234,59 @@ export default function ReceiptInput({
       };
       return updatedInfo;
     });
-    switch (sliderValue) {
+
+    let updatedYouPictureTotal = parseFloat(youPictureTotal);
+    let updatedSplitPictureTotal = parseFloat(splitPictureTotal);
+    let updatedThemPictureTotal = parseFloat(themPictureTotal);
+
+    const amount = parseFloat(item.total_amount);
+
+    const previousValue =
+      item.sliderValue !== undefined ? item.sliderValue : 55;
+    const previousAmount = item.previousAmount || amount;
+
+    switch (previousValue) {
       case 0: {
-        let a = parseFloat(amount).toFixed(2);
-        let b = parseFloat(youPictureTotal).toFixed(2);
-        let value = a + b;
-        setYouPictureTotal(parseFloat(value).toFixed(2));
+        updatedYouPictureTotal -= previousAmount;
         break;
       }
       case 55: {
-        let a = parseFloat(amount);
-        let b = parseFloat(splitPictureTotal);
-        let value = a + b;
-        setSplitPictureTotal(value.toFixed(2));
+        updatedSplitPictureTotal -= previousAmount;
         break;
       }
       case 100: {
-        let a = parseFloat(amount).toFixed(2);
-        let b = parseFloat(themPictureTotal).toFixed(2);
-        let value = a + b;
-        setThemPictureTotal(parseFloat(value).toFixed(2));
+        updatedThemPictureTotal -= previousAmount;
         break;
       }
       default:
         break;
     }
+
+    switch (value) {
+      case 0: {
+        updatedYouPictureTotal += amount;
+        break;
+      }
+      case 55: {
+        updatedSplitPictureTotal += amount;
+        break;
+      }
+      case 100: {
+        updatedThemPictureTotal += amount;
+        break;
+      }
+      default:
+        break;
+    }
+
+    item.previousAmount = amount;
+    item.sliderValue = value;
+
+    setYouPictureTotal(updatedYouPictureTotal.toFixed(2));
+    setSplitPictureTotal(updatedSplitPictureTotal.toFixed(2));
+    setThemPictureTotal(updatedThemPictureTotal.toFixed(2));
   };
+
   const renderYouColumn = () => {
     return <div>{}</div>;
   };
@@ -333,48 +363,46 @@ export default function ReceiptInput({
     if (!name || !amount) {
       return;
     }
-    setObtainedInfo([
-      ...obtainedInfo,
+    const parsedAmount = parseFloat(amount).toFixed(2);
+
+    setObtainedInfo((prevInfo) => [
+      ...prevInfo,
       {
         name: name,
-        amount: parseFloat(amount).toFixed(2),
+        amount: parsedAmount,
         sliderValue: sliderValue,
       },
     ]);
+
     switch (sliderValue) {
-      case 0: {
-        let a = parseFloat(amount).toFixed(2);
-        let b = parseFloat(youPictureTotal).toFixed(2);
-        let value = a + b;
-        setYouPictureTotal(parseFloat(value).toFixed(2));
+      case 0:
+        setYouPictureTotal((prevTotal) =>
+          (parseFloat(prevTotal) + parseFloat(parsedAmount)).toFixed(2)
+        );
         break;
-      }
-      case 55: {
-        let a = parseFloat(amount);
-        let b = parseFloat(splitPictureTotal);
-        let value = a + b;
-        setSplitPictureTotal(value.toFixed(2));
+      case 55:
+        setSplitPictureTotal((prevTotal) =>
+          (parseFloat(prevTotal) + parseFloat(parsedAmount)).toFixed(2)
+        );
         break;
-      }
-      case 100: {
-        let a = parseFloat(amount).toFixed(2);
-        let b = parseFloat(themPictureTotal).toFixed(2);
-        let value = a + b;
-        setThemPictureTotal(parseFloat(value).toFixed(2));
+      case 100:
+        setThemPictureTotal((prevTotal) =>
+          (parseFloat(prevTotal) + parseFloat(parsedAmount)).toFixed(2)
+        );
         break;
-      }
       default:
         break;
     }
+
     setName("");
     setAmount("");
     setCurrentIndex(currentIndex + 1);
   };
 
-
   const handleSaveClick = () => {
     setSliderValue(55); // Update the default value with the current value
   };
+
   const handleDelete = (index) => {
     const newItems = [...items];
     const deletedItem = newItems.splice(index, 1)[0]; // remove the deleted item from the list and get its details
@@ -399,6 +427,36 @@ export default function ReceiptInput({
 
     setItems(newItems);
   };
+  const handlePictureDelete = (index) => {
+    const newObtainedInfo = [...obtainedInfo];
+    const deletedItem = newObtainedInfo.splice(index, 1)[0]; // remove the deleted item from the list and get its details
+
+    // update the corresponding total based on the deleted item's sliderValue
+    switch (deletedItem.sliderValue) {
+      case 0: {
+        setYouPictureTotal(
+          (prevTotal) => prevTotal - parseFloat(deletedItem.total_amount)
+        );
+        break;
+      }
+      case 55: {
+        setSplitPictureTotal(
+          (prevTotal) => prevTotal - parseFloat(deletedItem.total_amount)
+        );
+        break;
+      }
+      case 100: {
+        setThemPictureTotal(
+          (prevTotal) => prevTotal - parseFloat(deletedItem.total_amount)
+        );
+        break;
+      }
+      default:
+        break;
+    }
+
+    setObtainedInfo(newObtainedInfo);
+  };
   const getTotal = () => {
     let total = 0;
     for (const item of items) {
@@ -421,16 +479,15 @@ export default function ReceiptInput({
     for (const item of obtainedInfo) {
       total += parseFloat(item.total_amount);
     }
-    let splitValue = parseFloat(splitPictureTotal / 2).toFixed(2);
-    let themValue = parseFloat(themPictureTotal).toFixed(2);
-    let youValue = parseFloat(youPictureTotal).toFixed(2);
+    let splitValue = parseFloat(splitPictureTotal / 2);
+    let themValue = parseFloat(themPictureTotal);
+    let youValue = parseFloat(youPictureTotal);
     if (selectedValue === "you") {
-      setPersonReceiptAmount(parseFloat(splitValue) + parseFloat(themValue));
+      setPersonReceiptAmount(splitValue + themValue);
     } else if (selectedValue === "them") {
-      setPersonReceiptAmount(parseFloat(splitValue) + parseFloat(youValue));
+      setPersonReceiptAmount(splitValue + youValue);
     }
-    console.log(total);
-    return parseFloat(total).toFixed(2);
+    return total.toFixed(2);
   };
 
   const handleHistorySubmit = (e) => {
@@ -455,7 +512,7 @@ export default function ReceiptInput({
       subNum(id, personOwing, personReceiptAmount);
     }
   };
-  
+
   const getFinalPictureTotal = () => {
     if (selectedValue === "you") {
       console.log(personReceiptAmount);
@@ -992,138 +1049,129 @@ export default function ReceiptInput({
                                   </tr>
                                 </thead>
 
-                                <tbody className="pt-5">
-                                  <tr>
-                                    <td>
-                                      <input
-                                        type="amount"
-                                        className="form-control mb-1 w-20 px-1 text-xs font-bold"
-                                        id="colFormLabel"
-                                        placeholder="Item Name"
-                                        value={name}
-                                        onKeyDown={handleKeyDown}
-                                        onChange={handleNameChange}
-                                      />
-                                    </td>
-                                    <td>
-                                      <input
-                                        type="amount"
-                                        className="form-control mb-1 w-20 px-1 text-xs font-bold"
-                                        id="colFormLabel"
-                                        placeholder="Amount"
-                                        value={amount}
-                                        onKeyDown={handleKeyDown}
-                                        onChange={(e) => {
-                                          const value = e.target.value;
-                                          const isValid =
-                                            /^\d+(\.\d{0,2})?$/.test(value);
+                                <tr>
+                                  <td>
+                                    <input
+                                      type="amount"
+                                      className="form-control mb-1 w-20 px-1 text-xs font-bold"
+                                      id="colFormLabel"
+                                      placeholder="Item Name"
+                                      value={name}
+                                      onKeyDown={handleKeyDown}
+                                      onChange={handleNameChange}
+                                    />
+                                  </td>
+                                  <td>
+                                    <input
+                                      type="amount"
+                                      className="form-control mb-1 w-20 px-1 text-xs font-bold"
+                                      id="colFormLabel"
+                                      placeholder="Amount"
+                                      value={amount}
+                                      onKeyDown={handleKeyDown}
+                                      onChange={(e) => {
+                                        const value = e.target.value;
+                                        const isValid =
+                                          /^\d+(\.\d{0,2})?$/.test(value);
 
-                                          if (isValid || value === "") {
-                                            // Allow empty value
-                                            setAmount(value);
-                                            console.log("amount verified");
-                                          } else {
-                                            console.log("amount not verified");
-                                          }
-                                        }}
-                                      />
-                                    </td>
-                                    <td colSpan="3" className="px-2">
-                                      <div
-                                        style={{
-                                          width: "auto",
-                                          margin: "auto",
-                                        }}
-                                      >
-                                        <Slider
-                                          defaultValue={55}
-                                          min={0}
-                                          max={100}
-                                          value={sliderValue}
-                                          step={55}
-                                          onChange={(value) =>
-                                            handleSliderChange(value)
-                                          }
-                                        />
-                                        {renderColumn()}
-                                      </div>
-                                    </td>
-                                  </tr>
-
-                                  <tr className="add-button m-2 items-center justify-center text-center text-black">
-                                    <button
-                                      className="add-button m-2 items-center justify-center text-center text-2xl text-gray-500"
-                                      onClick={() => {
-                                        handleReceiptPictureSubmit(sliderValue);
-                                        handleSaveClick();
+                                        if (isValid || value === "") {
+                                          // Allow empty value
+                                          setAmount(value);
+                                          console.log("amount verified");
+                                        } else {
+                                          console.log("amount not verified");
+                                        }
+                                      }}
+                                    />
+                                  </td>
+                                  <td colSpan="3" className="px-2">
+                                    <div
+                                      style={{
+                                        width: "auto",
+                                        margin: "auto",
                                       }}
                                     >
-                                      <IoMdAddCircleOutline />
-                                    </button>
-                                  </tr>
-                                  {obtainedInfo.map((item, index) => (
-                                    <tr
-                                      key={index}
-                                      className={
-                                        index % 2 === currentIndex % 2
-                                          ? "bg-blue-100"
-                                          : ""
-                                      }
-                                    >
-                                      <td className=" text-black">
-                                        {item.description.replace(
-                                          /\b\w/g,
-                                          (c) => c.toUpperCase()
-                                        )}
-                                      </td>
-                                      <td className="mr-2 flex items-center text-sm">
-                                        <button
-                                          className="add-button m-2 items-center justify-center text-center text-2xl text-gray-500"
-                                          onClick={() => handleDelete(index)}
-                                        >
-                                          <IoMdRemoveCircleOutline />
-                                        </button>
-                                        <span className="ml-2 text-black">
-                                          $
-                                          {parseFloat(
-                                            item.total_amount
-                                          ).toFixed(2)}
-                                        </span>
-                                      </td>{" "}
-                                      <td colSpan="3" className="px-2">
-                                        <div
-                                          style={{
-                                            width: "auto",
-                                            margin: "auto",
-                                          }}
-                                        >
-                                          <Slider
-                                            defaultValue={55} // Set default value to 55 if not present
-                                            min={0}
-                                            max={100}
-                                            step={55}
-                                            value={item.sliderValue}
-                                            onChange={(value) =>
-                                              handlePictureSliderChange(
-                                                index,
-                                                value
-                                              )
-                                            }
-                                          />
-                                          {renderColumn()}
-                                        </div>
-                                      </td>
-                                      <td></td>
-                                      <td></td>
-                                    </tr>
-                                  ))}
+                                      <Slider
+                                        defaultValue={55}
+                                        min={0}
+                                        max={100}
+                                        value={sliderValue}
+                                        step={55}
+                                        onChange={(value) =>
+                                          handleSliderChange(value)
+                                        }
+                                      />
+                                      {renderColumn()}
+                                    </div>
+                                  </td>
+                                </tr>
+
+                                <tr className="add-button m-2 items-center justify-center text-center text-black">
+                                  <button
+                                    className="add-button m-2 items-center justify-center text-center text-2xl text-gray-500"
+                                    onClick={() => {
+                                      handleReceiptPictureSubmit(sliderValue);
+                                      handleSaveClick();
+                                    }}
+                                  >
+                                    <IoMdAddCircleOutline />
+                                  </button>
+                                </tr>
+                                <tbody className="pt-5">
+                                {combinedArray.map((item, index) => (
+          <tr
+            key={index}
+            className={index % 2 === currentIndex % 2 ? "bg-blue-100" : ""}
+          >
+            <td className="text-black">
+              {item.name ? item.name.replace(/\b\w/g, (c) => c.toUpperCase()) : item.description.replace(/\b\w/g, (c) => c.toUpperCase())}
+            </td>
+            <td className="mr-2 flex items-center text-sm">
+              <button
+                className="add-button m-2 items-center justify-center text-center text-2xl text-gray-500"
+                onClick={() => handleDelete(index)}
+              >
+                <IoMdRemoveCircleOutline />
+              </button>
+              <span className="ml-2 text-black">
+                {item.amount ? `$${item.amount}` : `$${parseFloat(item.total_amount).toFixed(2)}`}
+              </span>
+            </td>
+            <td colSpan={3}>
+              <div
+                style={{
+                  width: "auto",
+                  margin: "auto",
+                  padding: "8px",
+                }}
+              >
+               <Slider
+                  defaultValue={item.sliderValue || 55}
+                  min={0}
+                  max={100}
+                  step={55}
+                  value={item.sliderValue}
+                  onChange={(value) =>
+                    handlePictureSliderChange(index, value, item)
+                  }
+                />
+                {renderColumn()}
+              </div>
+            </td>
+            <td></td>
+            <td></td>
+          </tr>
+        ))}
                                 </tbody>
                                 <tfoot className="bg-blue-200">
-                                  <tr>  {getPictureTotalPopup && (
-        <div className="popup">
-          <p>{getPictureTotalMessage}</p>
-        </div>
-      )}</tr>
+                                  <tr>
+                                    {" "}
+                                    {getPictureTotalPopup && (
+                                      <div className="popup">
+                                        <p>{getPictureTotalMessage}</p>
+                                      </div>
+                                    )}
+                                  </tr>
                                   <tr className="border-t border-gray-500 bg-blue-200">
                                     <td
                                       className="px-2 py-1 text-black"
@@ -1135,7 +1183,7 @@ export default function ReceiptInput({
                                       className="mr-2 px-2 py-1 text-right  text-black"
                                       style={{ width: "33.33%" }}
                                     >
-                                      ${getPictureTotal()}
+                                      ${pictureTotal}
                                     </td>
                                     <td
                                       className="border-l border-gray-500 px-2 py-1 text-center text-xs  text-black"
