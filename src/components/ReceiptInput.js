@@ -196,8 +196,8 @@ export default function ReceiptInput({
   const [themPictureTotal, setThemPictureTotal] = useState(0);
   const [getPictureTotalPopup, setGetPictureTotalPopup] = useState(false);
   const [getPictureTotalMessage, setGetPictureTotalMessage] = useState("");
-  
-const combinedArray = [...items, ...obtainedInfo];
+  const combinedArray = ([...items, ...obtainedInfo]);
+
 
   const [receiptSubmitted, setReceiptSubmitted] = useState(false);
   const [totalToAdd, setTotalToAdd] = useState("");
@@ -428,9 +428,9 @@ const combinedArray = [...items, ...obtainedInfo];
     setItems(newItems);
   };
   const handlePictureDelete = (index) => {
-    const newObtainedInfo = [...obtainedInfo];
-    const deletedItem = newObtainedInfo.splice(index, 1)[0]; // remove the deleted item from the list and get its details
-
+    const newCombinedArray = [...combinedArray];
+    const deletedItem = newCombinedArray.splice(index, 1)[0]; // remove the deleted item from the list and get its details
+  
     // update the corresponding total based on the deleted item's sliderValue
     switch (deletedItem.sliderValue) {
       case 0: {
@@ -454,8 +454,7 @@ const combinedArray = [...items, ...obtainedInfo];
       default:
         break;
     }
-
-    setObtainedInfo(newObtainedInfo);
+  
   };
   const getTotal = () => {
     let total = 0;
@@ -1129,7 +1128,7 @@ const combinedArray = [...items, ...obtainedInfo];
             <td className="mr-2 flex items-center text-sm">
               <button
                 className="add-button m-2 items-center justify-center text-center text-2xl text-gray-500"
-                onClick={() => handleDelete(index)}
+                onClick={() => handlePictureDelete(index)}
               >
                 <IoMdRemoveCircleOutline />
               </button>

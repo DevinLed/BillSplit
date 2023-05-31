@@ -44,7 +44,11 @@ export default function AddPerson({
   function handleNoButtonClick() {
     setShowInput(false);
   }
-
+  function handleKeyDown(e) {
+    if (e.key === "Enter") {
+      e.target.blur();
+    }
+  }
   const handlePhoneNumberChange = (event) => {
     const inputValue = event.target.value;
     let formattedValue = inputValue;
@@ -147,13 +151,18 @@ export default function AddPerson({
                   </label>
                   <input
                     type="phone"
-                    className={`form-control mb-2 ml-2 w-2/4 ${isValidPhoneNumber ? 'valid' : 'invalid'} ${personPhone.length >= 10 && !isValidPhoneNumber ? 'red' : ''}`}
+                    className={`form-control mb-2 ml-2 w-2/4 ${
+                      isValidPhoneNumber ? "valid" : "invalid"
+                    } ${
+                      personPhone.length >= 10 && !isValidPhoneNumber
+                        ? "red"
+                        : ""
+                    }`}
                     id="colFormLabel"
                     placeholder="Phone Number"
                     value={formSubmitted ? "" : personPhone}
                     onChange={handlePhoneNumberChange}
                   />
-
                 </div>
 
                 <div className="form-group row mb-3 flex items-center justify-center">
@@ -165,10 +174,12 @@ export default function AddPerson({
                   </label>
                   <input
                     type="email"
-                    
-                    className={`form-control mb-2 ml-2 w-2/4 ${isValidEmail ? 'valid' : 'invalid'} `}
+                    className={`form-control mb-2 ml-2 w-2/4 ${
+                      isValidEmail ? "valid" : "invalid"
+                    } `}
                     id="colFormLabel"
                     placeholder="Email"
+                    onKeyDown={handleKeyDown}
                     value={formSubmitted ? "" : personEmail}
                     onChange={handleEmailChange}
                   />
@@ -186,7 +197,7 @@ export default function AddPerson({
                   <div className="col-md-3 mb-md-0 d-flex justify-content-center mb-3">
                     <button
                       className="btn btn-primary btn-block"
-                      onClick ={(e) => {
+                      onClick={(e) => {
                         handleNoButtonClick(e);
                         setErrorBalance(true);
                         setPersonOwing("0.00");
