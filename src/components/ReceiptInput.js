@@ -112,6 +112,7 @@ export default function ReceiptInput({
   const [obtainedSliderInfo, setObtainedSliderInfo] = useState([]);
   const [displayPictureInfo, setDisplayPictureInfo] = useState(false);
   const [obtainedInfo, setObtainedInfo] = useState([]);
+  const [isAddedManually, setIsAddedManually] = useState(false);
   const handleCameraSubmit = async () => {
     setPhotoData(loading);
     setShowImage(true);
@@ -196,8 +197,7 @@ export default function ReceiptInput({
   const [themPictureTotal, setThemPictureTotal] = useState(0);
   const [getPictureTotalPopup, setGetPictureTotalPopup] = useState(false);
   const [getPictureTotalMessage, setGetPictureTotalMessage] = useState("");
-  const combinedArray = ([...items, ...obtainedInfo]);
-
+  const combinedArray = [...items, ...obtainedInfo];
 
   const [receiptSubmitted, setReceiptSubmitted] = useState(false);
   const [totalToAdd, setTotalToAdd] = useState("");
@@ -430,7 +430,7 @@ export default function ReceiptInput({
   const handlePictureDelete = (index) => {
     const newCombinedArray = [...combinedArray];
     const deletedItem = newCombinedArray.splice(index, 1)[0]; // remove the deleted item from the list and get its details
-  
+
     // update the corresponding total based on the deleted item's sliderValue
     switch (deletedItem.sliderValue) {
       case 0: {
@@ -454,7 +454,6 @@ export default function ReceiptInput({
       default:
         break;
     }
-  
   };
   const getTotal = () => {
     let total = 0;
@@ -1111,56 +1110,84 @@ export default function ReceiptInput({
                                     onClick={() => {
                                       handleReceiptPictureSubmit(sliderValue);
                                       handleSaveClick();
+                                      
+                                    setIsAddedManually(true);
                                     }}
                                   >
                                     <IoMdAddCircleOutline />
                                   </button>
                                 </tr>
                                 <tbody className="pt-5">
-                                {combinedArray.map((item, index) => (
-          <tr
-            key={index}
-            className={index % 2 === currentIndex % 2 ? "bg-blue-100" : ""}
-          >
-            <td className="text-black">
-              {item.name ? item.name.replace(/\b\w/g, (c) => c.toUpperCase()) : item.description.replace(/\b\w/g, (c) => c.toUpperCase())}
-            </td>
-            <td className="mr-2 flex items-center text-sm">
-              <button
-                className="add-button m-2 items-center justify-center text-center text-2xl text-gray-500"
-                onClick={() => handlePictureDelete(index)}
-              >
-                <IoMdRemoveCircleOutline />
-              </button>
-              <span className="ml-2 text-black">
-                {item.amount ? `$${item.amount}` : `$${parseFloat(item.total_amount).toFixed(2)}`}
-              </span>
-            </td>
-            <td colSpan={3}>
-              <div
-                style={{
-                  width: "auto",
-                  margin: "auto",
-                  padding: "8px",
-                }}
-              >
-               <Slider
-                  defaultValue={item.sliderValue || 55}
-                  min={0}
-                  max={100}
-                  step={55}
-                  value={item.sliderValue}
-                  onChange={(value) =>
-                    handlePictureSliderChange(index, value, item)
-                  }
-                />
-                {renderColumn()}
-              </div>
-            </td>
-            <td></td>
-            <td></td>
-          </tr>
-        ))}
+                                  {combinedArray.map((item, index) => (
+                                    <tr
+                                      key={index}
+                                      className={
+                                        index % 2 === currentIndex % 2
+                                          ? "bg-blue-100"
+                                          : ""
+                                      }
+                                    >
+                                      <td className="text-black">
+                                        {item.name
+                                          ? item.name.replace(/\b\w/g, (c) =>
+                                              c.toUpperCase()
+                                            )
+                                          : item.description.replace(
+                                              /\b\w/g,
+                                              (c) => c.toUpperCase()
+                                            )}
+                                      </td>
+                                      <td className="mr-2 flex items-center text-sm">
+                                        <button
+                                          className="add-button m-2 items-center justify-center text-center text-2xl text-gray-500"
+                                          onClick={() =>
+                                            handlePictureDelete(index)
+                                          }
+                                        >
+                                          <IoMdRemoveCircleOutline />
+                                        </button>
+                                        <span className="ml-2 text-black">
+                                          {item.amount
+                                            ? `$${item.amount}`
+                                            : `$${parseFloat(
+                                                item.total_amount
+                                              ).toFixed(2)}`}
+                                        </span>
+                                      </td>
+                                      <td colSpan={3}>
+                                        <div
+                                          style={{
+                                            width: "auto",
+                                            margin: "auto",
+                                            padding: "8px",
+                                          }}
+                                        >
+                                          {item.isAddedManually ? (
+          <Slider
+            defaultValue={item.sliderValue || 55} // Set the default value to 0
+            min={0}
+            max={100}
+            step={0} // Set the step to 0 to disable slider interaction
+            disabled // Disable the slider
+          />
+        ) : (
+          <Slider
+            defaultValue={item.sliderValue || 55}
+            min={0}
+            max={100}
+            step={55}
+            value={item.sliderValue}
+            onChange={(value) => handlePictureSliderChange(index, value, item)}
+          />
+        )}
+
+                                          {renderColumn()}
+                                        </div>
+                                      </td>
+                                      <td></td>
+                                      <td></td>
+                                    </tr>
+                                  ))}
                                 </tbody>
                                 <tfoot className="bg-blue-200">
                                   <tr>
