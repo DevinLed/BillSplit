@@ -166,6 +166,7 @@ export default function ReceiptInput({
         ...item,
         sliderValue: item.sliderValue || 55,
       }))
+      
     );
 
     if (getPictureTotal() !== pictureTotal) {
@@ -197,7 +198,7 @@ export default function ReceiptInput({
   const [themPictureTotal, setThemPictureTotal] = useState(0);
   const [getPictureTotalPopup, setGetPictureTotalPopup] = useState(false);
   const [getPictureTotalMessage, setGetPictureTotalMessage] = useState("");
-  const combinedArray = [...items, ...obtainedInfo];
+  const combinedArray = ([...items, ...obtainedInfo]);
 
   const [receiptSubmitted, setReceiptSubmitted] = useState(false);
   const [totalToAdd, setTotalToAdd] = useState("");
@@ -1110,8 +1111,8 @@ export default function ReceiptInput({
                                     onClick={() => {
                                       handleReceiptPictureSubmit(sliderValue);
                                       handleSaveClick();
-                                      
-                                    setIsAddedManually(true);
+
+                                      setIsAddedManually(true);
                                     }}
                                   >
                                     <IoMdAddCircleOutline />
@@ -1163,23 +1164,33 @@ export default function ReceiptInput({
                                           }}
                                         >
                                           {item.isAddedManually ? (
-          <Slider
-            defaultValue={item.sliderValue || 55} // Set the default value to 0
-            min={0}
-            max={100}
-            step={0} // Set the step to 0 to disable slider interaction
-            disabled // Disable the slider
-          />
-        ) : (
-          <Slider
-            defaultValue={item.sliderValue || 55}
-            min={0}
-            max={100}
-            step={55}
-            value={item.sliderValue}
-            onChange={(value) => handlePictureSliderChange(index, value, item)}
-          />
-        )}
+                                            <Slider
+                                              defaultValue={
+                                                item.sliderValue || 55
+                                              } // Set the default value to 0
+                                              min={0}
+                                              max={100}
+                                              step={0} // Set the step to 0 to disable slider interaction
+                                              disabled // Disable the slider
+                                            />
+                                          ) : (
+                                            <Slider
+                                              defaultValue={
+                                                item.sliderValue || 55
+                                              }
+                                              min={0}
+                                              max={100}
+                                              step={55}
+                                              value={item.sliderValue}
+                                              onChange={(value) =>
+                                                handlePictureSliderChange(
+                                                  index,
+                                                  value,
+                                                  item
+                                                )
+                                              }
+                                            />
+                                          )}
 
                                           {renderColumn()}
                                         </div>
