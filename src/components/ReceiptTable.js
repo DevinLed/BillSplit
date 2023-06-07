@@ -1,59 +1,51 @@
-import React from 'react'
+import React, { useRef, useState, useEffect, onBlur, useCamera } from "react";
+import Switch from "react-switch";
+import { useParams } from "react-router-dom";
+import axios from "axios";
+import { Camera } from "react-html5-camera-photo";
+import "react-html5-camera-photo/build/css/index.css";
+import AddPerson from "./AddPerson";
+import loading from "../img/loading.gif";
+import Header from "./Header";
+import { v4 as uuidv4 } from "uuid";
+import SplitBill from "./SplitBill";
+import "../index.css";
+import History from "./History";
+import {
+  Route,
+  Routes,
+  Link,
+  path,
+  Navigate,
+  Redirect,
+} from "react-router-dom";
+import "../darkMode.css";
 
-export default function ReceiptTable() {
+import DatePicker from "react-datepicker";
+
+import Slider from "rc-slider";
+import "rc-slider/assets/index.css";
+import "react-datepicker/dist/react-datepicker.css";
+import { FaPlus, FaTrash } from "react-icons/fa";
+import { GrSubtractCircle } from "react-icons/gr";
+import {
+  IoMdAddCircleOutline,
+  IoMdRemoveCircleOutline,
+  IoMdCheckmark,
+} from "react-icons/io";
+
+
+export default function ReceiptTable({name, handleNameChange, amount, setAmount, sliderValue, handleSliderChange, renderColumn, handleReceiptSubmit, handleSaveClick, items, 
+    currentIndex, handleDelete, getTotal, youTotal, splitTotal, themTotal}) {
+        function handleKeyDown(e) {
+            if (e.key === "Enter") {
+              e.target.blur();
+            }
+          }
+  
   return (
     <>
-    <div className="col-sm-10 mb-0 mt-3">
-      <input
-        type="amount"
-        className="form-control mb-5 h-10 text-center font-bold"
-        id="colFormLabel"
-        placeholder="Merchant Name"
-        onKeyDown={handleKeyDown}
-        onChange={(e) =>
-          setMerchantName(
-            e.target.value.replace(/\b\w/g, (c) =>
-              c.toUpperCase()
-            )
-          )
-        }
-        onClick={() => setDisplayMerchant(true)}
-      />
-      <div className="justify-left mt-3 flex h-11 items-center ">
-        <div className="z-50 mt-3 mb-3 text-center">
-          <label
-            htmlFor="colFormLabel"
-            className="col-form-label text-center text-black"
-          >
-            Date of Receipt
-          </label>
-          <DatePicker
-            defaultValue="Date of Receipt"
-            selected={startDate}
-            onChange={(date) => setStartDate(date)}
-            className="bg-blue-100 text-center"
-            onFocus={(e) => e.target.blur()}
-            dateFormat="dd/MM/yyyy"
-            onClick={() => setDisplayDate(true)}
-          />
-        </div>
-      </div>
-    </div>
-
-    <div className="m-3">
-      <input
-        type="invoice"
-        className="form-control w-55 opacity-4 mb-2 mt-2 text-center font-bold"
-        id="colFormLabel"
-        placeholder="Invoice Number"
-        onKeyDown={handleKeyDown}
-        onChange={(e) => setInvoiceNumber(e.target.value)}
-        onClick={() => setDisplayInvoice(true)}
-      />
-    </div>
-    <div>
-      <div className="whitespace-no-wrap m-0 w-full max-w-min rounded-lg bg-white py-1 px-1 dark:bg-slate-900">
-        <div className="mx-auto mb-0 max-w-min">
+    
           <table className="m-auto max-w-min table-fixed border border-black">
             <thead className="whitespace-no-wrap max-w-fit overflow-hidden truncate">
               <tr className="whitespace-no-wrap max-w-fit overflow-hidden px-2">
@@ -227,61 +219,6 @@ export default function ReceiptTable() {
               </tr>
             </tfoot>
           </table>
-        </div>
-      </div>
-      <div className="mt-3 flex items-center justify-center rounded-lg bg-white px-3 py-2 shadow-md">
-        <label className="text-center text-lg font-medium">
-          {selectedValue === "you" ? (
-            <>
-              {personName} owes you $
-              {parseFloat(personReceiptAmount).toFixed(2)}
-            </>
-          ) : (
-            <>
-              You owe {personName} $
-              {parseFloat(personReceiptAmount).toFixed(2)}
-            </>
-          )}
-        </label>
-      </div>
-    </div>
-
-    <div className="col-sm-10 ml-0 mr-0 mt-3 flex flex-col items-center justify-center">
-      <div>
-        <Link to={`/ReceiptInput/${id}`}>
-          <button
-            className="mt-4 mb-5 rounded border-2 border-blue-500 bg-blue-500 py-2 px-4 font-bold shadow transition-all duration-300 hover:bg-white"
-            onClick={(e) => {
-              getFinalTotal();
-              setSelectMethodManual(false);
-              setSelectPersonReceipt(true);
-              handleHistorySubmit(e);
-              resetReceiptForm();
-              setIsReceiptSubmitted(true);
-            }}
-          >
-            Add Another Receipt
-          </button>
-        </Link>
-      </div>
-
-      <div>
-        <Link to="/SplitBill">
-          <button
-            type="submit"
-            className="mb-5 rounded border-2 border-blue-500 bg-blue-500 py-2 px-4 font-bold shadow transition-all duration-300 hover:bg-white"
-            onClick={(e) => {
-              getFinalTotal();
-              handleHistorySubmit(e);
-              resetReceiptForm();
-              setIsReceiptSubmitted(true);
-            }}
-          >
-            Submit
-          </button>
-        </Link>
-      </div>
-    </div>
   </>
   )
 }
