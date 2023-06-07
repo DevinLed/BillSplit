@@ -685,11 +685,12 @@ export default function ReceiptInput({
 
 
 
-                          <ReceiptTable  name={name} handleNameChange={handleNameChange} amount={amount} setAmount={setAmount} sliderValue={sliderValue}
+                        <ReceiptTable name={name} handleNameChange={handleNameChange} amount={amount} setAmount={setAmount} sliderValue={sliderValue}
                           handleSliderChange = {handleSliderChange} renderColumn={renderColumn} handleReceiptSubmit={handleReceiptSubmit} handleSaveClick={handleSaveClick} items={items} 
-                          currentIndex={currentIndex} handleDelete={handleDelete} getTotal={getTotal} youTotal={youTotal} themTotal={themTotal} splitTotal={splitTotal}
-                          
-                          />
+                          currentIndex={currentIndex} handleDelete={handleDelete} getTotal={getTotal} youTotal={youTotal} themTotal={themTotal} splitTotal={splitTotal} handleReceiptPictureSubmit={handleReceiptPictureSubmit}
+                          setIsAddedManually={setIsAddedManually} combinedArray={combinedArray} handlePictureDelete={handlePictureDelete} handlePictureSliderChange={handlePictureSliderChange} getPictureTotalPopup={getPictureTotalPopup}
+                          getPictureTotalMessage={getPictureTotalMessage} pictureTotal={pictureTotal} youPictureTotal={youPictureTotal} splitPictureTotal={splitPictureTotal} themPictureTotal={themPictureTotal}
+                          setObtainedInfo={setObtainedInfo} obtainedInfo={obtainedInfo}  getPictureTotal={getPictureTotal} setGetPictureTotalPopup={setGetPictureTotalPopup} setGetPictureTotalMessage={setGetPictureTotalMessage} />
 
 
 
@@ -901,7 +902,7 @@ export default function ReceiptInput({
                           currentIndex={currentIndex} handleDelete={handleDelete} getTotal={getTotal} youTotal={youTotal} themTotal={themTotal} splitTotal={splitTotal} handleReceiptPictureSubmit={handleReceiptPictureSubmit}
                           setIsAddedManually={setIsAddedManually} combinedArray={combinedArray} handlePictureDelete={handlePictureDelete} handlePictureSliderChange={handlePictureSliderChange} getPictureTotalPopup={getPictureTotalPopup}
                           getPictureTotalMessage={getPictureTotalMessage} pictureTotal={pictureTotal} youPictureTotal={youPictureTotal} splitPictureTotal={splitPictureTotal} themPictureTotal={themPictureTotal}
-                          />
+                          setObtainedInfo={setObtainedInfo} obtainedInfo={obtainedInfo}  getPictureTotal={getPictureTotal} setGetPictureTotalPopup={setGetPictureTotalPopup} setGetPictureTotalMessage={setGetPictureTotalMessage} />
 
 
 

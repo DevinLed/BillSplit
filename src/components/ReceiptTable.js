@@ -65,30 +65,13 @@ export default function ReceiptTable({
   themPictureTotal,
   setObtainedInfo,
   getPictureTotal,
-  setGetPictureTotalPopup,
-  setGetPictureTotalMessage
+  setGetPictureTotalPopup
 }) {
   function handleKeyDown(e) {
     if (e.key === "Enter") {
       e.target.blur();
     }
   }
-  useEffect(() => {
-    setObtainedInfo((prevInfo) =>
-      prevInfo.map((item) => ({
-        ...item,
-        sliderValue: item.sliderValue || 55,
-      }))
-    );
-
-    if (getPictureTotal() !== pictureTotal) {
-      setGetPictureTotalPopup(true);
-      setGetPictureTotalMessage("Missing items...");
-    } else {
-      setGetPictureTotalPopup(false);
-      setGetPictureTotalMessage("");
-    }
-  }, []);
 
   return (
     <>

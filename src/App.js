@@ -23,6 +23,7 @@ import "react-datepicker/dist/react-datepicker.css";
 
 import "./darkMode.css";
 import "./index.css";
+import ReceiptTable from "./components/ReceiptTable";
 
 function App() {
   const [isDarkModeOn, setIsDarkModeOn] = useState(false);
@@ -345,6 +346,61 @@ function App() {
               formSubmitted={formSubmitted}
               setFormSubmitted={setFormSubmitted}
               theme={theme}
+            />
+          }
+        />
+          <Route
+          path="/ReceiptTable"
+          element={
+            <ReceiptTable
+              formSubmitted={formSubmitted}
+              setFormSubmitted={setFormSubmitted}
+              theme={theme}
+              addPerson={addPerson}
+              setAddPerson={setAddPerson}
+              selectPerson={selectPerson}
+              personName={personName}
+              personEmail={personEmail}
+              personPhone={personPhone}
+              personOwing={personOwing}
+              setPersonName={setPersonName}
+              setPersonEmail={setPersonEmail}
+              setPersonPhone={setPersonPhone}
+              setPersonOwing={setPersonOwing}
+              handleSubmit={handleSubmit}
+              setPersonState={setPersonState}
+              personState={personState}
+              setIsSelected={setIsSelected}
+              list={list}
+              value={value}
+              hasReceipt={hasReceipt}
+              setHasReceipt={setHasReceipt}
+              startDate={startDate}
+              setStartDate={setStartDate}
+              merchantName={merchantName}
+              setMerchantName={setMerchantName}
+              invoiceNumber={invoiceNumber}
+              setInvoiceNumber={setInvoiceNumber}
+              personReceiptAmount={personReceiptAmount}
+              setPersonReceiptAmount={setPersonReceiptAmount}
+              addNum={addNum}
+              subNum={subNum}
+              addReceipt={addReceipt}
+              receipts={receipts}
+              setReceipts={setReceipts}
+              displayAdd={displayAdd}
+              setDisplayAdd={setDisplayAdd}
+              selectedValue={selectedValue}
+              setSelectedValue={setSelectedValue}
+              handleAdd={handleAdd}
+              displayMerchant={displayMerchant}
+              setDisplayMerchant={setDisplayMerchant}
+              displayDate={displayDate}
+              setDisplayDate={setDisplayDate}
+              displayInvoice={displayInvoice}
+              setDisplayInvoice={setDisplayInvoice}
+              isReceiptSubmitted={isReceiptSubmitted}
+              setIsReceiptSubmitted={setIsReceiptSubmitted}
             />
           }
         />
