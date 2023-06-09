@@ -176,6 +176,11 @@ function App() {
     });
     setReceipts(newReceipts);
   };
+  //Receipt input vals
+  
+  const [youPictureTotal, setYouPictureTotal] = useState(0);
+  const [splitPictureTotal, setSplitPictureTotal] = useState(0);
+  const [themPictureTotal, setThemPictureTotal] = useState(0);
   return (
     <>
       <Routes>
@@ -243,6 +248,13 @@ function App() {
               isReceiptSubmitted={isReceiptSubmitted}
               setIsReceiptSubmitted={setIsReceiptSubmitted}
               theme={theme}
+              youPictureTotal={youPictureTotal}
+              splitPictureTotal={splitPictureTotal}
+              themPictureTotal={themPictureTotal}
+              setYouPictureTotal={setYouPictureTotal}
+              setSplitPictureTotal={setSplitPictureTotal}
+              setThemPictureTotal={setThemPictureTotal}
+              
             />
           }
         />
@@ -401,6 +413,12 @@ function App() {
               setDisplayInvoice={setDisplayInvoice}
               isReceiptSubmitted={isReceiptSubmitted}
               setIsReceiptSubmitted={setIsReceiptSubmitted}
+              youPictureTotal={youPictureTotal}
+              splitPictureTotal={splitPictureTotal}
+              themPictureTotal={themPictureTotal}
+              setYouPictureTotal={setYouPictureTotal}
+              setSplitPictureTotal={setSplitPictureTotal}
+              setThemPictureTotal={setThemPictureTotal}
             />
           }
         />

@@ -82,6 +82,12 @@ export default function ReceiptInput({
   isReceiptSubmitted,
   setIsReceiptSubmitted,
   theme,
+  youPictureTotal,
+  splitPictureTotal,
+  themPictureTotal,
+  setYouPictureTotal,
+  setSplitPictureTotal,
+  setThemPictureTotal
 }) {
   const [selectPersonReceipt, setSelectPersonReceipt] = useState(true);
 
@@ -106,7 +112,7 @@ export default function ReceiptInput({
     setShowRedoButton(true);
   };
   const [photoData, setPhotoData] = useState(null);
-  const [pictureTotal, setPictureTotal] = useState("");
+  const [pictureTotal, setPictureTotal] = useState(0);
   const [showImage, setShowImage] = useState(false);
   const [showCameraImage, setShowCameraImage] = useState(false);
   const [showRedoButton, setShowRedoButton] = useState(false);
@@ -161,22 +167,6 @@ export default function ReceiptInput({
       console.error("Error processing image:", error);
     }
   };
-  useEffect(() => {
-    setObtainedInfo((prevInfo) =>
-      prevInfo.map((item) => ({
-        ...item,
-        sliderValue: item.sliderValue || 55,
-      }))
-    );
-
-    if (getPictureTotal() !== pictureTotal) {
-      setGetPictureTotalPopup(true);
-      setGetPictureTotalMessage("Missing items...");
-    } else {
-      setGetPictureTotalPopup(false);
-      setGetPictureTotalMessage("");
-    }
-  }, []);
 
   const { id } = useParams();
   const [receiptList, setReceiptList] = useState([]);
@@ -185,7 +175,6 @@ export default function ReceiptInput({
   const [amount, setAmount] = useState("");
   const [addToValue, setAddToValue] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [sliderValue, setSliderValue] = useState(55);
   const [youValue, setYouValue] = useState(0);
   const [splitValue, setSplitValue] = useState(0);
   const [themValue, setThemValue] = useState(0);
@@ -193,9 +182,6 @@ export default function ReceiptInput({
   const [youTotal, setYouTotal] = useState(0);
   const [splitTotal, setSplitTotal] = useState(0);
   const [themTotal, setThemTotal] = useState(0);
-  const [youPictureTotal, setYouPictureTotal] = useState(0);
-  const [splitPictureTotal, setSplitPictureTotal] = useState(0);
-  const [themPictureTotal, setThemPictureTotal] = useState(0);
   const [getPictureTotalPopup, setGetPictureTotalPopup] = useState(false);
   const [getPictureTotalMessage, setGetPictureTotalMessage] = useState("");
   const combinedArray = [...items, ...obtainedInfo];
@@ -222,92 +208,6 @@ export default function ReceiptInput({
   }
   const handleButton2Click = () => {
     setSelected(2);
-  };
-  const handleSliderChange = (value) => {
-    setSliderValue(value);
-  };
-  const handlePictureSliderChange = (index, value, item) => {
-    setObtainedInfo((prevInfo) => {
-      const updatedInfo = [...prevInfo];
-      updatedInfo[index] = {
-        ...updatedInfo[index],
-        sliderValue: value,
-      };
-      return updatedInfo;
-    });
-
-    let updatedYouPictureTotal = parseFloat(youPictureTotal);
-    let updatedSplitPictureTotal = parseFloat(splitPictureTotal);
-    let updatedThemPictureTotal = parseFloat(themPictureTotal);
-
-    const amount = parseFloat(item.total_amount);
-
-    const previousValue =
-      item.sliderValue !== undefined ? item.sliderValue : 55;
-    const previousAmount = item.previousAmount || amount;
-
-    switch (previousValue) {
-      case 0: {
-        updatedYouPictureTotal -= previousAmount;
-        break;
-      }
-      case 55: {
-        updatedSplitPictureTotal -= previousAmount;
-        break;
-      }
-      case 100: {
-        updatedThemPictureTotal -= previousAmount;
-        break;
-      }
-      default:
-        break;
-    }
-
-    switch (value) {
-      case 0: {
-        updatedYouPictureTotal += amount;
-        break;
-      }
-      case 55: {
-        updatedSplitPictureTotal += amount;
-        break;
-      }
-      case 100: {
-        updatedThemPictureTotal += amount;
-        break;
-      }
-      default:
-        break;
-    }
-
-    item.previousAmount = amount;
-    item.sliderValue = value;
-
-    setYouPictureTotal(updatedYouPictureTotal.toFixed(2));
-    setSplitPictureTotal(updatedSplitPictureTotal.toFixed(2));
-    setThemPictureTotal(updatedThemPictureTotal.toFixed(2));
-  };
-
-  const renderYouColumn = () => {
-    return <div>{}</div>;
-  };
-
-  const renderSplitColumn = () => {
-    return <div>{}</div>;
-  };
-
-  const renderPersonNameColumn = () => {
-    return <div>{}</div>;
-  };
-
-  const renderColumn = () => {
-    if (sliderValue <= 33) {
-      return renderYouColumn();
-    } else if (sliderValue <= 66) {
-      return renderSplitColumn();
-    } else {
-      return renderPersonNameColumn();
-    }
   };
 
   const handleNameChange = (event) => {
@@ -400,10 +300,6 @@ export default function ReceiptInput({
     setCurrentIndex(currentIndex + 1);
   };
 
-  const handleSaveClick = () => {
-    setSliderValue(55); // Update the default value with the current value
-  };
-
   const handleDelete = (index) => {
     const newItems = [...items];
     const deletedItem = newItems.splice(index, 1)[0]; // remove the deleted item from the list and get its details
@@ -474,21 +370,22 @@ export default function ReceiptInput({
     return parseFloat(total).toFixed(2);
   };
   const getPictureTotal = () => {
-    let total = 0;
-    for (const item of obtainedInfo) {
-      total += parseFloat(item.total_amount);
-    }
-    let splitValue = parseFloat(splitPictureTotal / 2);
+    let total =
+      parseFloat(splitPictureTotal) +
+      parseFloat(themPictureTotal) +
+      parseFloat(youPictureTotal);
+
+    let splitValue = parseFloat(splitPictureTotal) / 2;
     let themValue = parseFloat(themPictureTotal);
     let youValue = parseFloat(youPictureTotal);
+
     if (selectedValue === "you") {
       setPersonReceiptAmount(splitValue + themValue);
     } else if (selectedValue === "them") {
       setPersonReceiptAmount(splitValue + youValue);
     }
-    return total.toFixed(2);
+    return parseFloat(total).toFixed(2);
   };
-
   const handleHistorySubmit = (e) => {
     addReceipt(
       personName,
@@ -521,6 +418,22 @@ export default function ReceiptInput({
       subNum(id, personOwing, personReceiptAmount);
     }
   };
+  
+  useEffect(() => {
+    setObtainedInfo((prevInfo) =>
+      prevInfo.map((item) => ({
+        ...item,
+        sliderValue: item.sliderValue || 55,
+      }))
+    );
+    if (getPictureTotal() !== pictureTotal) {
+      setGetPictureTotalPopup(true);
+      setGetPictureTotalMessage("Missing items...");
+    } else {
+      setGetPictureTotalPopup(false);
+      setGetPictureTotalMessage("");
+    }
+  }, []);
   return (
     <>
       {selectPersonReceipt ? (
@@ -668,62 +581,42 @@ export default function ReceiptInput({
                       />
                     </div>
                     <div>
-                      <div className="whitespace-no-wrap m-0 w-full max-w-min rounded-lg bg-white py-1 px-1 dark:bg-slate-900">
-                        <div className="mx-auto mb-0 max-w-min">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                        <ReceiptTable name={name} handleNameChange={handleNameChange} amount={amount} setAmount={setAmount} sliderValue={sliderValue}
-                          handleSliderChange = {handleSliderChange} renderColumn={renderColumn} handleReceiptSubmit={handleReceiptSubmit} handleSaveClick={handleSaveClick} items={items} 
-                          currentIndex={currentIndex} handleDelete={handleDelete} getTotal={getTotal} youTotal={youTotal} themTotal={themTotal} splitTotal={splitTotal} handleReceiptPictureSubmit={handleReceiptPictureSubmit}
-                          setIsAddedManually={setIsAddedManually} combinedArray={combinedArray} handlePictureDelete={handlePictureDelete} handlePictureSliderChange={handlePictureSliderChange} getPictureTotalPopup={getPictureTotalPopup}
-                          getPictureTotalMessage={getPictureTotalMessage} pictureTotal={pictureTotal} youPictureTotal={youPictureTotal} splitPictureTotal={splitPictureTotal} themPictureTotal={themPictureTotal}
-                          setObtainedInfo={setObtainedInfo} obtainedInfo={obtainedInfo}  getPictureTotal={getPictureTotal} setGetPictureTotalPopup={setGetPictureTotalPopup} setGetPictureTotalMessage={setGetPictureTotalMessage} />
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                        </div>
-                      </div>
-                      <div className="mt-3 flex items-center justify-center rounded-lg bg-white px-3 py-2 shadow-md">
-                        <label className="text-center text-lg font-medium">
-                          {selectedValue === "you" ? (
-                            <>
-                              {personName} owes you $
-                              {parseFloat(personReceiptAmount).toFixed(2)}
-                            </>
-                          ) : (
-                            <>
-                              You owe {personName} $
-                              {parseFloat(personReceiptAmount).toFixed(2)}
-                            </>
-                          )}
-                        </label>
-                      </div>
+                      <ReceiptTable
+                        name={name}
+                        handleNameChange={handleNameChange}
+                        amount={amount}
+                        setAmount={setAmount}
+                        handleReceiptSubmit={handleReceiptSubmit}
+                        items={items}
+                        currentIndex={currentIndex}
+                        handleDelete={handleDelete}
+                        getTotal={getTotal}
+                        getPictureTotal={getPictureTotal}
+                        youTotal={youTotal}
+                        themTotal={themTotal}
+                        splitTotal={splitTotal}
+                        handleReceiptPictureSubmit={handleReceiptPictureSubmit}
+                        setIsAddedManually={setIsAddedManually}
+                        combinedArray={combinedArray}
+                        handlePictureDelete={handlePictureDelete}
+                        getPictureTotalPopup={getPictureTotalPopup}
+                        getPictureTotalMessage={getPictureTotalMessage}
+                        pictureTotal={pictureTotal}
+                        youPictureTotal={youPictureTotal}
+                        splitPictureTotal={splitPictureTotal}
+                        themPictureTotal={themPictureTotal}
+                        obtainedInfo={obtainedInfo}
+                        setObtainedInfo={setObtainedInfo}
+                        setGetPictureTotalPopup={setGetPictureTotalPopup}
+                        setGetPictureTotalMessage={setGetPictureTotalMessage}
+                        selectMethodManual={selectMethodManual}
+                        setThemPictureTotal={setThemPictureTotal}
+                        setSplitPictureTotal={setSplitPictureTotal}
+                        setYouPictureTotal={setYouPictureTotal}
+                        selectedValue={selectedValue}
+                        personName={personName}
+                        personReceiptAmount={personReceiptAmount}
+                      />
                     </div>
 
                     <div className="col-sm-10 ml-0 mr-0 mt-3 flex flex-col items-center justify-center">
@@ -887,39 +780,58 @@ export default function ReceiptInput({
                               </div>
                             </div>
                           </div>
-                          <div className="whitespace-no-wrap m-0 mt-3 w-full max-w-min rounded-lg bg-white py-1 px-1 dark:bg-slate-900">
-                            <div className="mx-auto mb-0 max-w-min">
 
-
-
-
-
-
-
-
-                              <ReceiptTable name={name} handleNameChange={handleNameChange} amount={amount} setAmount={setAmount} sliderValue={sliderValue}
-                          handleSliderChange = {handleSliderChange} renderColumn={renderColumn} handleReceiptSubmit={handleReceiptSubmit} handleSaveClick={handleSaveClick} items={items} 
-                          currentIndex={currentIndex} handleDelete={handleDelete} getTotal={getTotal} youTotal={youTotal} themTotal={themTotal} splitTotal={splitTotal} handleReceiptPictureSubmit={handleReceiptPictureSubmit}
-                          setIsAddedManually={setIsAddedManually} combinedArray={combinedArray} handlePictureDelete={handlePictureDelete} handlePictureSliderChange={handlePictureSliderChange} getPictureTotalPopup={getPictureTotalPopup}
-                          getPictureTotalMessage={getPictureTotalMessage} pictureTotal={pictureTotal} youPictureTotal={youPictureTotal} splitPictureTotal={splitPictureTotal} themPictureTotal={themPictureTotal}
-                          setObtainedInfo={setObtainedInfo} obtainedInfo={obtainedInfo}  getPictureTotal={getPictureTotal} setGetPictureTotalPopup={setGetPictureTotalPopup} setGetPictureTotalMessage={setGetPictureTotalMessage} />
-
-
-
-
-
-
-
-
-
-                            </div>
+                          <div className="m-3">
+                            <input
+                              type="invoice"
+                              className="form-control w-55 opacity-4 mb-2 mt-2 text-center font-bold"
+                              id="colFormLabel"
+                              placeholder="Invoice Number"
+                              onKeyDown={handleKeyDown}
+                              onChange={(e) => setInvoiceNumber(e.target.value)}
+                              onClick={() => setDisplayInvoice(true)}
+                            />
+                          </div>
+                          <div>
+                            <ReceiptTable
+                              name={name}
+                              handleNameChange={handleNameChange}
+                              amount={amount}
+                              setAmount={setAmount}
+                              handleReceiptSubmit={handleReceiptSubmit}
+                              items={items}
+                              currentIndex={currentIndex}
+                              handleDelete={handleDelete}
+                              getTotal={getTotal}
+                              getPictureTotal={getPictureTotal}
+                              youTotal={youTotal}
+                              themTotal={themTotal}
+                              splitTotal={splitTotal}
+                              handleReceiptPictureSubmit={
+                                handleReceiptPictureSubmit
+                              }
+                              setIsAddedManually={setIsAddedManually}
+                              combinedArray={combinedArray}
+                              handlePictureDelete={handlePictureDelete}
+                              getPictureTotalPopup={getPictureTotalPopup}
+                              getPictureTotalMessage={getPictureTotalMessage}
+                              pictureTotal={pictureTotal}
+                              youPictureTotal={youPictureTotal}
+                              splitPictureTotal={splitPictureTotal}
+                              themPictureTotal={themPictureTotal}
+                              setObtainedInfo={setObtainedInfo}
+                              obtainedInfo={obtainedInfo}
+                              setGetPictureTotalPopup={setGetPictureTotalPopup}
+                              setGetPictureTotalMessage={
+                                setGetPictureTotalMessage
+                              }
+                              selectMethodPicture={selectMethodPicture}
+                              selectedValue={selectedValue}
+                              personName={personName}
+                              personReceiptAmount={personReceiptAmount}
+                            />
                           </div>
 
-                          <div className="mt-3 flex items-center justify-center rounded-lg bg-white px-3 py-2 shadow-md">
-                            <label className="text-center text-lg font-medium">
-                              Receipt Total: ${pictureTotal}
-                            </label>
-                          </div>
                           <div>
                             <Link to={`/ReceiptInput/${id}`}>
                               <button
