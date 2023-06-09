@@ -1,38 +1,14 @@
-import React, { useRef, useState, useEffect, onBlur, useCamera } from "react";
-import Switch from "react-switch";
-import { useParams } from "react-router-dom";
-import axios from "axios";
-import { Camera } from "react-html5-camera-photo";
+import React, { useState, useEffect, useCallback  } from "react";
 import "react-html5-camera-photo/build/css/index.css";
-import AddPerson from "./AddPerson";
-import loading from "../img/loading.gif";
-import Header from "./Header";
-import { v4 as uuidv4 } from "uuid";
-import SplitBill from "./SplitBill";
 import "../index.css";
-import History from "./History";
-import {
-  Route,
-  Routes,
-  Link,
-  path,
-  Navigate,
-  Redirect,
-} from "react-router-dom";
 import "../darkMode.css";
-
-import DatePicker from "react-datepicker";
 
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import "react-datepicker/dist/react-datepicker.css";
-import { FaPlus, FaTrash } from "react-icons/fa";
-import { GrSubtractCircle } from "react-icons/gr";
 import {
   IoMdAddCircleOutline,
   IoMdRemoveCircleOutline,
-  IoMdCheckmark,
-  IoMdTrash,
 } from "react-icons/io";
 
 export default function ReceiptTable({
@@ -72,6 +48,7 @@ export default function ReceiptTable({
   selectedValue,
   personName,
   personReceiptAmount,
+  onResetTotals
 }) {
   const [sliderValue, setSliderValue] = useState(55);
   function handleKeyDown(e) {
@@ -157,6 +134,9 @@ export default function ReceiptTable({
     setYouPictureTotal(updatedYouPictureTotal.toFixed(2));
     setSplitPictureTotal(updatedSplitPictureTotal.toFixed(2));
     setThemPictureTotal(updatedThemPictureTotal.toFixed(2));
+  };
+  const handleBackButtonClick = () => {
+    onResetTotals(); 
   };
   
   useEffect(() => {

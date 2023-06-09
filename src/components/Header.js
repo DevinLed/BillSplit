@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useState, useEffect } from "react"; 
 import { IoIosArrowBack } from "react-icons/io";
 import { AiOutlineMenu } from "react-icons/ai";
 import { Route, Routes, Link } from "react-router-dom";
@@ -18,12 +18,15 @@ export default function Header({
   selectPersonList,
   selectEditPersonList,
   selectMethodManual,
-  selectMethodPicture
+  selectMethodPicture,
+  resetReceiptForm,
+  resetValues,
+  handleResetTotals
 }) {
   return (
     <>
       {startBill ? (
-        <header className="mr-3 flex flex-col items-center text-2xl font-bold mb-5 xs:flex-row xs:justify-center md:flex-row md:justify-center xl:flex-row xl:justify-center">
+        <header className="xs:flex-row xs:justify-center mr-3 mb-5 flex flex-col items-center text-2xl font-bold md:flex-row md:justify-center xl:flex-row xl:justify-center">
           <h1>Bill Splitter</h1>
         </header>
       ) : (
@@ -31,9 +34,12 @@ export default function Header({
       )}
       {selectPersonList ? (
         <>
-        <div className="flex items-stretch font-bold h-10 align-items-center w-full items-center text-2xl mb-5 justify-between border-t-2 border-b-2 " id="headbar">
+          <div
+            className="align-items-center mb-5 flex h-10 w-full items-center items-stretch justify-between border-t-2 border-b-2 text-2xl font-bold "
+            id="headbar"
+          >
             <Link to="/Home">
-              <button className="text-black hover:text-black ml-2">
+              <button className="ml-2 text-black hover:text-black" onClick={() =>handleResetTotals()}>
                 <IoIosArrowBack />
               </button>
             </Link>
@@ -41,50 +47,9 @@ export default function Header({
             <h1 className="ml-2 mr-2">Select Person</h1>
 
             <div className="dropdown">
-  <button 
-    align="end"
-    className="text-black hover:text-black mr-2 right-0 "
-    type="button"
-    id="dropdownMenu2"
-    data-toggle="dropdown"
-    aria-haspopup="true"
-    aria-expanded="false"
-  >
-    <AiOutlineMenu />
-  </button>
-  <div className="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2">
-    <Link to="/EditList">
-      <button className="dropdown-item">Edit Person</button>
-    </Link>
-    <Link to="/History">
-      <button className="dropdown-item" type="button">
-        History
-      </button>
-    </Link>
-  </div>
-</div>
-          </div>
-        </>
-      ) : (
-        ""
-      )}
-
-      {selectEditPersonList ? (
-        <>
-          <div className="flex items-stretch font-bold h-10 align-items-center w-full items-center text-2xl mb-5 justify-between border-t-2 border-b-2 " id="headbar">
-
-            <Link to="/Home">
-              <button className="text-black hover:text-black ml-2">
-                <IoIosArrowBack />
-              </button>
-            </Link>
-
-            <h1 class="m-5">Edit Person</h1>
-
-
-            <div className="dropdown">
               <button
-                className="text-black hover:text-black mr-2"
+                align="end"
+                className="right-0 mr-2 text-black hover:text-black "
                 type="button"
                 id="dropdownMenu2"
                 data-toggle="dropdown"
@@ -93,7 +58,55 @@ export default function Header({
               >
                 <AiOutlineMenu />
               </button>
-              <div className="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2">
+              <div
+                className="dropdown-menu dropdown-menu-right"
+                aria-labelledby="dropdownMenu2"
+              >
+                <Link to="/EditList">
+                  <button className="dropdown-item">Edit Person</button>
+                </Link>
+                <Link to="/History">
+                  <button className="dropdown-item" type="button">
+                    History
+                  </button>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </>
+      ) : (
+        ""
+      )}
+
+      {selectEditPersonList ? (
+        <>
+          <div
+            className="align-items-center mb-5 flex h-10 w-full items-center items-stretch justify-between border-t-2 border-b-2 text-2xl font-bold "
+            id="headbar"
+          >
+            <Link to="/Home">
+              <button className="ml-2 text-black hover:text-black" >
+                <IoIosArrowBack />
+              </button>
+            </Link>
+
+            <h1 class="m-5">Edit Person</h1>
+
+            <div className="dropdown">
+              <button
+                className="mr-2 text-black hover:text-black"
+                type="button"
+                id="dropdownMenu2"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                <AiOutlineMenu />
+              </button>
+              <div
+                className="dropdown-menu dropdown-menu-right"
+                aria-labelledby="dropdownMenu2"
+              >
                 <Link to="/SplitBill">
                   <button className="dropdown-item">New Receipt</button>
                 </Link>
@@ -108,9 +121,12 @@ export default function Header({
         ""
       )}
       {selectPersonReceipt ? (
-          <div className="flex items-stretch font-bold h-10 align-items-center w-full items-center text-2xl mb-5 justify-between border-t-2 border-b-2 " id="headbar">
+        <div
+          className="align-items-center mb-5 flex h-10 w-full items-center items-stretch justify-between border-t-2 border-b-2 text-2xl font-bold "
+          id="headbar"
+        >
           <Link to="/SplitBIll">
-            <button className="text-black hover:text-black ml-2">
+            <button className="ml-2 text-black hover:text-black">
               <IoIosArrowBack />
             </button>
           </Link>
@@ -118,7 +134,7 @@ export default function Header({
 
           <div className="dropdown">
             <button
-              className="text-black hover:text-black mr-2"
+              className="mr-2 text-black hover:text-black"
               type="button"
               id="dropdownMenu2"
               data-toggle="dropdown"
@@ -127,7 +143,10 @@ export default function Header({
             >
               <AiOutlineMenu />
             </button>
-            <div className="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2">
+            <div
+              className="dropdown-menu dropdown-menu-right"
+              aria-labelledby="dropdownMenu2"
+            >
               <Link to="/SplitBill">
                 <button className="dropdown-item">New Receipt</button>
               </Link>
@@ -144,11 +163,14 @@ export default function Header({
       ) : (
         ""
       )}
-      
+
       {selectMethodManual ? (
-          <div className="flex items-stretch font-bold h-10 align-items-center w-full items-center text-2xl mb-5 justify-between border-t-2 border-b-2 " id="headbar">
+        <div
+          className="align-items-center mb-5 flex h-10 w-full items-center items-stretch justify-between border-t-2 border-b-2 text-2xl font-bold "
+          id="headbar"
+        >
           <Link to="/SplitBill">
-            <button className="text-black hover:text-black ml-2">
+            <button className="ml-2 text-black hover:text-black " onClick={() => handleResetTotals()}>
               <IoIosArrowBack />
             </button>
           </Link>
@@ -156,7 +178,7 @@ export default function Header({
 
           <div className="dropdown">
             <button
-              className="text-black hover:text-black mr-2"
+              className="mr-2 text-black hover:text-black"
               type="button"
               id="dropdownMenu2"
               data-toggle="dropdown"
@@ -165,7 +187,10 @@ export default function Header({
             >
               <AiOutlineMenu />
             </button>
-            <div className="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2">
+            <div
+              className="dropdown-menu dropdown-menu-right"
+              aria-labelledby="dropdownMenu2"
+            >
               <Link to="/SplitBill">
                 <button className="dropdown-item">New Receipt</button>
               </Link>
@@ -183,9 +208,12 @@ export default function Header({
         ""
       )}
       {selectMethodPicture ? (
-          <div className="flex items-stretch font-bold h-10 align-items-center w-full items-center text-2xl mb-5 justify-between border-t-2 border-b-2 " id="headbar">
+        <div
+          className="align-items-center mb-5 flex h-10 w-full items-center items-stretch justify-between border-t-2 border-b-2 text-2xl font-bold "
+          id="headbar"
+        >
           <Link to="/SplitBill">
-            <button className="text-black hover:text-black ml-2">
+            <button className="ml-2 text-black hover:text-black" onClick={() => handleResetTotals()}>
               <IoIosArrowBack />
             </button>
           </Link>
@@ -193,7 +221,7 @@ export default function Header({
 
           <div className="dropdown">
             <button
-              className="text-black hover:text-black mr-2"
+              className="mr-2 text-black hover:text-black"
               type="button"
               id="dropdownMenu2"
               data-toggle="dropdown"
@@ -202,7 +230,10 @@ export default function Header({
             >
               <AiOutlineMenu />
             </button>
-            <div className="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2">
+            <div
+              className="dropdown-menu dropdown-menu-right"
+              aria-labelledby="dropdownMenu2"
+            >
               <Link to="/SplitBill">
                 <button className="dropdown-item">New Receipt</button>
               </Link>
@@ -221,16 +252,19 @@ export default function Header({
       )}
       {showHistory ? (
         <>
-        <div className="flex items-stretch font-bold h-10 align-items-center w-full items-center text-2xl mb-5 justify-between border-t-2 border-b-2 " id="headbar">
+          <div
+            className="align-items-center mb-5 flex h-10 w-full items-center items-stretch justify-between border-t-2 border-b-2 text-2xl font-bold "
+            id="headbar"
+          >
             <Link to="/Home">
-              <button className="text-black hover:text-black ml-2">
+              <button className="ml-2 text-black hover:text-black">
                 <IoIosArrowBack />
               </button>
             </Link>
             <h1 className="m-5">History</h1>
             <div className="dropdown">
               <button
-                className="text-black hover:text-black mr-2"
+                className="mr-2 text-black hover:text-black"
                 type="button"
                 id="dropdownMenu2"
                 data-toggle="dropdown"
@@ -239,7 +273,10 @@ export default function Header({
               >
                 <AiOutlineMenu />
               </button>
-              <div className="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2">
+              <div
+                className="dropdown-menu dropdown-menu-right"
+                aria-labelledby="dropdownMenu2"
+              >
                 <Link to="/SplitBill">
                   <button className="dropdown-item">New Receipt</button>
                 </Link>

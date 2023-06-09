@@ -1,57 +1,21 @@
 import React, { useRef, useState, useEffect, onBlur, useCamera } from "react";
-import Switch from "react-switch";
 import { useParams } from "react-router-dom";
-import axios from "axios";
 import { Camera } from "react-html5-camera-photo";
 import "react-html5-camera-photo/build/css/index.css";
-import AddPerson from "./AddPerson";
 import loading from "../img/loading.gif";
 import Header from "./Header";
-import { v4 as uuidv4 } from "uuid";
-import SplitBill from "./SplitBill";
-import "../index.css";
-import History from "./History";
 import ReceiptTable from "./ReceiptTable";
-import {
-  Route,
-  Routes,
-  Link,
-  path,
-  Navigate,
-  Redirect,
-} from "react-router-dom";
+import { Link } from "react-router-dom";
 import "../darkMode.css";
 
 import DatePicker from "react-datepicker";
 
-import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import "react-datepicker/dist/react-datepicker.css";
-import { FaPlus, FaTrash } from "react-icons/fa";
-import { GrSubtractCircle } from "react-icons/gr";
-import {
-  IoMdAddCircleOutline,
-  IoMdRemoveCircleOutline,
-  IoMdCheckmark,
-} from "react-icons/io";
 
 export default function ReceiptInput({
-  addPerson,
-  setAddPerson,
-  selectPerson,
   personName,
-  personEmail,
-  personPhone,
   personOwing,
-  setPersonName,
-  setPersonEmail,
-  setPersonPhone,
-  setPersonOwing,
-  setPersonState,
-  personState,
-  setIsSelected,
-  list,
-  setEditPerson,
   startDate,
   setStartDate,
   merchantName,
@@ -62,15 +26,8 @@ export default function ReceiptInput({
   setPersonReceiptAmount,
   addNum,
   subNum,
-  hasReceipt,
-  setHasReceipt,
-  handleValueChange,
   value,
   addReceipt,
-  receipts,
-  setReceipts,
-  displayAdd,
-  setDisplayAdd,
   selectedValue,
   setSelectedValue,
   displayMerchant,
@@ -79,15 +36,13 @@ export default function ReceiptInput({
   setDisplayMerchant,
   setDisplayDate,
   setDisplayInvoice,
-  isReceiptSubmitted,
   setIsReceiptSubmitted,
-  theme,
   youPictureTotal,
   splitPictureTotal,
   themPictureTotal,
   setYouPictureTotal,
   setSplitPictureTotal,
-  setThemPictureTotal
+  setThemPictureTotal,
 }) {
   const [selectPersonReceipt, setSelectPersonReceipt] = useState(true);
 
@@ -95,7 +50,6 @@ export default function ReceiptInput({
   const [selectMethodPicture, setSelectMethodPicture] = useState(false);
 
   const [receiptTotal, setReceiptTotal] = useState("");
-  const axios = require("axios");
   const FormData = require("form-data");
 
   const apiKey = "561e58edb1c93ab9fec230c1439fbf48";
@@ -299,7 +253,14 @@ export default function ReceiptInput({
     setAmount("");
     setCurrentIndex(currentIndex + 1);
   };
-
+  const handleResetTotals = () => {
+    setObtainedInfo([]); // Reset obtainedInfo to an empty array
+    setYouPictureTotal(0);
+    setSplitPictureTotal(0);
+    setThemPictureTotal(0);
+    setPersonReceiptAmount(0);
+    console.log("i did ittt");
+  };
   const handleDelete = (index) => {
     const newItems = [...items];
     const deletedItem = newItems.splice(index, 1)[0]; // remove the deleted item from the list and get its details
@@ -418,7 +379,7 @@ export default function ReceiptInput({
       subNum(id, personOwing, personReceiptAmount);
     }
   };
-  
+
   useEffect(() => {
     setObtainedInfo((prevInfo) =>
       prevInfo.map((item) => ({
@@ -440,7 +401,10 @@ export default function ReceiptInput({
         <>
           <main className="xs:max-w-xl bg-white-500 mt-5 rounded p-0 pt-3 shadow sm:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl">
             <div className="flex flex-col items-center justify-center">
-              <Header selectPersonReceipt={selectPersonReceipt} />
+              <Header
+                selectPersonReceipt={selectPersonReceipt}
+                handleResetTotals={handleResetTotals}
+              />
 
               <div className="flex flex-col items-center justify-center">
                 <h1>Split a bill with {personName}</h1>
@@ -486,7 +450,10 @@ export default function ReceiptInput({
         <>
           <main className="xs:max-w-xl bg-white-500 mt-5 rounded p-0 pt-3 shadow sm:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl">
             <div className="mt-0 flex flex-col items-center justify-center">
-              <Header selectMethodManual={selectMethodManual} />
+              <Header
+                selectMethodManual={selectMethodManual}
+                handleResetTotals={handleResetTotals}
+              />
 
               <div className="l-36 bg-grey flex flex-col  items-center justify-center rounded-lg px-6 py-6 ring-slate-900/5 dark:bg-slate-900">
                 <div className="max-w-fit">
@@ -670,7 +637,10 @@ export default function ReceiptInput({
         <>
           <main className="xs:max-w-xl bg-white-500 mt-5 rounded p-0 pt-3 shadow sm:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl">
             <div className="mt-0 flex flex-col items-center justify-center">
-              <Header selectMethodPicture={selectMethodPicture} />
+              <Header
+                selectMethodPicture={selectMethodPicture}
+                handleResetTotals={handleResetTotals}
+              />
               <div className="l-36 bg-grey flex flex-col  items-center justify-center rounded-lg px-6 py-6 ring-slate-900/5 dark:bg-slate-900">
                 <div className="max-w-fit">
                   <label
