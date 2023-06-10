@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback  } from "react";
+import React, { useState, useEffect } from "react";
 import "react-html5-camera-photo/build/css/index.css";
 import "../index.css";
 import "../darkMode.css";
@@ -17,7 +17,6 @@ export default function ReceiptTable({
   amount,
   setAmount,
   handleReceiptSubmit,
-  handleSaveClick,
   items,
   currentIndex,
   handleDelete,
@@ -28,7 +27,6 @@ export default function ReceiptTable({
   handleReceiptPictureSubmit,
   setIsAddedManually,
   combinedArray,
-  handlePictureDelete,
   getPictureTotalPopup,
   getPictureTotalMessage,
   pictureTotal,
@@ -48,14 +46,136 @@ export default function ReceiptTable({
   selectedValue,
   personName,
   personReceiptAmount,
-  onResetTotals
+  onResetTotals,
+  setCombinedArray
 }) {
+    const handlePictureDelete = (index) => {
+        const deletedItem = combinedArray[index];
+        const amountToRemove = deletedItem.amount || deletedItem.total_amount;
+        const deletedSliderValue = deletedItem.sliderValue;
+      
+        // Remove the deleted item from the combinedArray
+        setCombinedArray((prevCombinedArray) =>
+          prevCombinedArray.filter((_, i) => i !== index)
+        );
+      
+        // Update the obtainedInfo array without the deleted item
+        setObtainedInfo((prevInfo) => {
+          const updatedInfo = prevInfo.filter((_, i) => i !== index);
+          return updatedInfo.map((info) => {
+            if (info.sliderValue !== undefined) {
+              return {
+                ...info,
+                sliderValue: info.sliderValue > deletedSliderValue
+                  ? info.sliderValue - 1
+                  : info.sliderValue,
+              };
+            }
+            return info;
+          });
+        });
+      
+        // Update the corresponding total based on the deleted item's sliderValue
+        switch (deletedSliderValue) {
+          case 0:
+            setYouPictureTotal((prevTotal) =>
+              (parseFloat(prevTotal) - parseFloat(amountToRemove)).toFixed(2)
+            );
+            break;
+          case 55:
+            setSplitPictureTotal((prevTotal) =>
+              (parseFloat(prevTotal) - parseFloat(amountToRemove)).toFixed(2)
+            );
+            break;
+          case 100:
+            setThemPictureTotal((prevTotal) =>
+              (parseFloat(prevTotal) - parseFloat(amountToRemove)).toFixed(2)
+            );
+            break;
+          case 35:
+            setYouPictureTotal((prevTotal) =>
+              (parseFloat(prevTotal) - parseFloat(amountToRemove)).toFixed(2)
+            );
+            setCombinedArray((prevCombinedArray) => {
+              return prevCombinedArray.map((item) => {
+                if (item.sliderValue === 35) {
+                  return {
+                    ...item,
+                    total_amount: (
+                      parseFloat(item.total_amount) - parseFloat(amountToRemove)
+                    ).toFixed(2),
+                  };
+                }
+                return item;
+              });
+            });
+            break;
+          case 75:
+            setSplitPictureTotal((prevTotal) =>
+              (parseFloat(prevTotal) - parseFloat(amountToRemove)).toFixed(2)
+            );
+            setCombinedArray((prevCombinedArray) => {
+              return prevCombinedArray.map((item) => {
+                if (item.sliderValue === 75) {
+                  return {
+                    ...item,
+                    total_amount: (
+                      parseFloat(item.total_amount) - parseFloat(amountToRemove)
+                    ).toFixed(2),
+                  };
+                }
+                return item;
+              });
+            });
+            break;
+          case 125:
+            setThemPictureTotal((prevTotal) =>
+              (parseFloat(prevTotal) - parseFloat(amountToRemove)).toFixed(2)
+            );
+            setCombinedArray((prevCombinedArray) => {
+              return prevCombinedArray.map((item) => {
+                if (item.sliderValue === 125) {
+                  return {
+                    ...item,
+                    total_amount: (
+                      parseFloat(item.total_amount) - parseFloat(amountToRemove)
+                    ).toFixed(2),
+                  };
+                }
+                return item;
+              });
+            });
+            break;
+          default:
+            const correspondingTotal = combinedArray.find(
+              (item) => item.sliderValue === deletedSliderValue
+            );
+            if (correspondingTotal) {
+              const updatedCombinedArray = combinedArray.map((item) => {
+                if (item.sliderValue === deletedSliderValue) {
+                  return {
+                    ...item,
+                    total_amount: (
+                      parseFloat(item.total_amount) - parseFloat(amountToRemove)
+                    ).toFixed(2),
+                  };
+                }
+                return item;
+              });
+      
+              setCombinedArray(updatedCombinedArray);
+            }
+            break;
+        }
+      };
+      
   const [sliderValue, setSliderValue] = useState(55);
-  function handleKeyDown(e) {
+
+  const handleKeyDown = (e) => {
     if (e.key === "Enter") {
       e.target.blur();
     }
-  }
+  };
 
   const renderColumn = () => {
     if (sliderValue <= 33) {
@@ -68,24 +188,26 @@ export default function ReceiptTable({
   };
 
   const renderYouColumn = () => {
-    return <div>{}</div>;
+    return <div>{/* Add your content for the "You" column here */}</div>;
   };
 
   const renderSplitColumn = () => {
-    return <div>{}</div>;
+    return <div>{/* Add your content for the "Split" column here */}</div>;
   };
 
   const renderPersonNameColumn = () => {
-    return <div>{}</div>;
+    return <div>{/* Add your content for the "Person Name" column here */}</div>;
   };
 
   const handleSliderChange = (value) => {
     setSliderValue(value);
   };
+
   const handlePictureSliderChange = (index, value, item) => {
     setObtainedInfo((prevInfo) => {
       const updatedInfo = [...prevInfo];
       updatedInfo[index] = {
+
         ...updatedInfo[index],
         sliderValue: value,
       };
@@ -135,9 +257,7 @@ export default function ReceiptTable({
     setSplitPictureTotal(updatedSplitPictureTotal.toFixed(2));
     setThemPictureTotal(updatedThemPictureTotal.toFixed(2));
   };
-  const handleBackButtonClick = () => {
-    onResetTotals(); 
-  };
+
   
   useEffect(() => {
     setObtainedInfo((prevInfo) =>
@@ -147,6 +267,15 @@ export default function ReceiptTable({
       }))
     );
   }, []);
+  
+  useEffect(() => {
+    if (Array.isArray(items) && Array.isArray(obtainedInfo)) {
+      setCombinedArray([...items, ...obtainedInfo]);
+    }
+  }, [items, obtainedInfo]);
+
+
+  
   return (
     <>
       <div className="whitespace-no-wrap m-0 w-full max-w-min rounded-lg bg-white py-1 px-1 dark:bg-slate-900">
@@ -229,8 +358,6 @@ export default function ReceiptTable({
                 className="add-button m-2 items-center justify-center text-center text-2xl text-gray-500"
                 onClick={() => {
                   handleReceiptPictureSubmit(sliderValue);
-                  handleSaveClick();
-
                   setIsAddedManually(true);
                 }}
               >
@@ -248,10 +375,8 @@ export default function ReceiptTable({
                   <td className="text-black">
                     {item.name
                       ? item.name.replace(/\b\w/g, (c) => c.toUpperCase())
-                      : item.description.replace(/\b\w/g, (c) =>
-                          c.toUpperCase()
-                        )}
-                  </td>
+                      : item.description && item.description.replace(/\b\w/g, (c) => c.toUpperCase())}
+                      </td>
                   <td className="mr-2 flex items-center text-sm">
                     <button
                       className="add-button m-2 items-center justify-center text-center text-2xl text-gray-500"

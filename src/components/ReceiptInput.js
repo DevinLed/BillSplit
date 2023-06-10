@@ -138,7 +138,8 @@ export default function ReceiptInput({
   const [themTotal, setThemTotal] = useState(0);
   const [getPictureTotalPopup, setGetPictureTotalPopup] = useState(false);
   const [getPictureTotalMessage, setGetPictureTotalMessage] = useState("");
-  const combinedArray = [...items, ...obtainedInfo];
+  const [combinedArray, setCombinedArray] = useState([]);
+
 
   const [receiptSubmitted, setReceiptSubmitted] = useState(false);
   const [totalToAdd, setTotalToAdd] = useState("");
@@ -259,7 +260,6 @@ export default function ReceiptInput({
     setSplitPictureTotal(0);
     setThemPictureTotal(0);
     setPersonReceiptAmount(0);
-    console.log("i did ittt");
   };
   const handleDelete = (index) => {
     const newItems = [...items];
@@ -285,34 +285,7 @@ export default function ReceiptInput({
 
     setItems(newItems);
   };
-  const handlePictureDelete = (index) => {
-    const newCombinedArray = [...combinedArray];
-    const deletedItem = newCombinedArray.splice(index, 1)[0]; // remove the deleted item from the list and get its details
 
-    // update the corresponding total based on the deleted item's sliderValue
-    switch (deletedItem.sliderValue) {
-      case 0: {
-        setYouPictureTotal(
-          (prevTotal) => prevTotal - parseFloat(deletedItem.total_amount)
-        );
-        break;
-      }
-      case 55: {
-        setSplitPictureTotal(
-          (prevTotal) => prevTotal - parseFloat(deletedItem.total_amount)
-        );
-        break;
-      }
-      case 100: {
-        setThemPictureTotal(
-          (prevTotal) => prevTotal - parseFloat(deletedItem.total_amount)
-        );
-        break;
-      }
-      default:
-        break;
-    }
-  };
   const getTotal = () => {
     let total = 0;
     for (const item of items) {
@@ -395,6 +368,7 @@ export default function ReceiptInput({
       setGetPictureTotalMessage("");
     }
   }, []);
+
   return (
     <>
       {selectPersonReceipt ? (
@@ -565,7 +539,8 @@ export default function ReceiptInput({
                         handleReceiptPictureSubmit={handleReceiptPictureSubmit}
                         setIsAddedManually={setIsAddedManually}
                         combinedArray={combinedArray}
-                        handlePictureDelete={handlePictureDelete}
+                        
+                        setCombinedArray={setCombinedArray}
                         getPictureTotalPopup={getPictureTotalPopup}
                         getPictureTotalMessage={getPictureTotalMessage}
                         pictureTotal={pictureTotal}
@@ -782,7 +757,7 @@ export default function ReceiptInput({
                               }
                               setIsAddedManually={setIsAddedManually}
                               combinedArray={combinedArray}
-                              handlePictureDelete={handlePictureDelete}
+                              setCombinedArray={setCombinedArray}
                               getPictureTotalPopup={getPictureTotalPopup}
                               getPictureTotalMessage={getPictureTotalMessage}
                               pictureTotal={pictureTotal}
