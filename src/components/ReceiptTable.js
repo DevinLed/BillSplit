@@ -6,10 +6,7 @@ import "../darkMode.css";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import "react-datepicker/dist/react-datepicker.css";
-import {
-  IoMdAddCircleOutline,
-  IoMdRemoveCircleOutline,
-} from "react-icons/io";
+import { IoMdAddCircleOutline, IoMdRemoveCircleOutline } from "react-icons/io";
 
 export default function ReceiptTable({
   name,
@@ -27,13 +24,10 @@ export default function ReceiptTable({
   handleReceiptPictureSubmit,
   setIsAddedManually,
   combinedArray,
-  getPictureTotalPopup,
-  getPictureTotalMessage,
   pictureTotal,
   obtainedInfo,
   setObtainedInfo,
   getPictureTotal,
-  setGetPictureTotalPopup,
   selectMethodManual,
   selectMethodPicture,
   setThemPictureTotal,
@@ -47,132 +41,40 @@ export default function ReceiptTable({
   personName,
   personReceiptAmount,
   onResetTotals,
-  setCombinedArray
+  setCombinedArray,
+  pictureTax,
+  pictureConfidence
 }) {
-    const handlePictureDelete = (index) => {
-        const deletedItem = combinedArray[index];
-        const amountToRemove = deletedItem.amount || deletedItem.total_amount;
-        const deletedSliderValue = deletedItem.sliderValue;
-      
-        // Remove the deleted item from the combinedArray
-        setCombinedArray((prevCombinedArray) =>
-          prevCombinedArray.filter((_, i) => i !== index)
-        );
-      
-        // Update the obtainedInfo array without the deleted item
-        setObtainedInfo((prevInfo) => {
-          const updatedInfo = prevInfo.filter((_, i) => i !== index);
-          return updatedInfo.map((info) => {
-            if (info.sliderValue !== undefined) {
-              return {
-                ...info,
-                sliderValue: info.sliderValue > deletedSliderValue
-                  ? info.sliderValue - 1
-                  : info.sliderValue,
-              };
-            }
-            return info;
-          });
-        });
-      
-        // Update the corresponding total based on the deleted item's sliderValue
-        switch (deletedSliderValue) {
-          case 0:
-            setYouPictureTotal((prevTotal) =>
-              (parseFloat(prevTotal) - parseFloat(amountToRemove)).toFixed(2)
-            );
-            break;
-          case 55:
-            setSplitPictureTotal((prevTotal) =>
-              (parseFloat(prevTotal) - parseFloat(amountToRemove)).toFixed(2)
-            );
-            break;
-          case 100:
-            setThemPictureTotal((prevTotal) =>
-              (parseFloat(prevTotal) - parseFloat(amountToRemove)).toFixed(2)
-            );
-            break;
-          case 35:
-            setYouPictureTotal((prevTotal) =>
-              (parseFloat(prevTotal) - parseFloat(amountToRemove)).toFixed(2)
-            );
-            setCombinedArray((prevCombinedArray) => {
-              return prevCombinedArray.map((item) => {
-                if (item.sliderValue === 35) {
-                  return {
-                    ...item,
-                    total_amount: (
-                      parseFloat(item.total_amount) - parseFloat(amountToRemove)
-                    ).toFixed(2),
-                  };
-                }
-                return item;
-              });
-            });
-            break;
-          case 75:
-            setSplitPictureTotal((prevTotal) =>
-              (parseFloat(prevTotal) - parseFloat(amountToRemove)).toFixed(2)
-            );
-            setCombinedArray((prevCombinedArray) => {
-              return prevCombinedArray.map((item) => {
-                if (item.sliderValue === 75) {
-                  return {
-                    ...item,
-                    total_amount: (
-                      parseFloat(item.total_amount) - parseFloat(amountToRemove)
-                    ).toFixed(2),
-                  };
-                }
-                return item;
-              });
-            });
-            break;
-          case 125:
-            setThemPictureTotal((prevTotal) =>
-              (parseFloat(prevTotal) - parseFloat(amountToRemove)).toFixed(2)
-            );
-            setCombinedArray((prevCombinedArray) => {
-              return prevCombinedArray.map((item) => {
-                if (item.sliderValue === 125) {
-                  return {
-                    ...item,
-                    total_amount: (
-                      parseFloat(item.total_amount) - parseFloat(amountToRemove)
-                    ).toFixed(2),
-                  };
-                }
-                return item;
-              });
-            });
-            break;
-          default:
-            const correspondingTotal = combinedArray.find(
-              (item) => item.sliderValue === deletedSliderValue
-            );
-            if (correspondingTotal) {
-              const updatedCombinedArray = combinedArray.map((item) => {
-                if (item.sliderValue === deletedSliderValue) {
-                  return {
-                    ...item,
-                    total_amount: (
-                      parseFloat(item.total_amount) - parseFloat(amountToRemove)
-                    ).toFixed(2),
-                  };
-                }
-                return item;
-              });
-      
-              setCombinedArray(updatedCombinedArray);
-            }
-            break;
+    const[hasBeenAccessed, setHasBeenAccessed] = useState(false);
+  const handlePictureDelete = (index) => {
+    const deletedItem = combinedArray[index];
+
+    // Update the obtainedInfo array without the deleted item
+    setObtainedInfo((prevInfo) => prevInfo.filter((_, i) => i !== index));
+
+    // Update the sliderValue of the remaining items, if necessary
+    setCombinedArray((prevCombinedArray) => {
+      const updatedArray = prevCombinedArray.map((item) => {
+        if (item.sliderValue !== undefined) {
+          return {
+            ...item,
+            sliderValue:
+              item.sliderValue > deletedItem.sliderValue
+                ? item.sliderValue - 1
+                : item.sliderValue,
+          };
         }
-      };
-      
+        return item;
+      });
+      return updatedArray.filter((_, i) => i !== index);
+    });
+  };
+
   const [sliderValue, setSliderValue] = useState(55);
 
-  const handleKeyDown = (e) => {
+  const handleKeyDown = (e, index) => {
     if (e.key === "Enter") {
+      e.preventDefault();
       e.target.blur();
     }
   };
@@ -186,34 +88,64 @@ export default function ReceiptTable({
       return renderPersonNameColumn();
     }
   };
-
   const renderYouColumn = () => {
-    return <div>{/* Add your content for the "You" column here */}</div>;
+    return (
+      <div className="flex h-full items-center justify-center">
+        {/* Add your content for the "You" column here */}
+      </div>
+    );
   };
 
   const renderSplitColumn = () => {
-    return <div>{/* Add your content for the "Split" column here */}</div>;
+    return (
+      <div className="flex h-full items-center justify-center">
+        {/* Add your content for the "Split" column here */}
+      </div>
+    );
   };
 
   const renderPersonNameColumn = () => {
-    return <div>{/* Add your content for the "Person Name" column here */}</div>;
+    return (
+      <div className="flex h-full items-center justify-center">
+        {/* Add your content for the "Person Name" column here */}
+      </div>
+    );
   };
 
   const handleSliderChange = (value) => {
     setSliderValue(value);
   };
 
+  const handleAmountChange = (value, index) => {
+    const newValue = value.replace(/^\$/, "");
+
+    let parsedValue = newValue.replace(/[^0-9.]/g, "");
+
+    const decimalIndex = parsedValue.indexOf(".");
+    if (decimalIndex !== -1) {
+      parsedValue =
+        parsedValue.slice(0, decimalIndex + 1) +
+        parsedValue.slice(decimalIndex + 1).replace(".", "");
+    }
+    const decimalSplit = parsedValue.split(".");
+    if (decimalSplit[1] && decimalSplit[1].length > 2) {
+      parsedValue = decimalSplit[0] + "." + decimalSplit[1].slice(0, 2);
+    }
+    const updatedCombinedArray = [...combinedArray];
+    updatedCombinedArray[index].amount = parsedValue || "0";
+    setCombinedArray(updatedCombinedArray);
+  };
+
   const handlePictureSliderChange = (index, value, item) => {
     setObtainedInfo((prevInfo) => {
       const updatedInfo = [...prevInfo];
       updatedInfo[index] = {
-
         ...updatedInfo[index],
         sliderValue: value,
       };
       return updatedInfo;
     });
-  
+
     const updatedObtainedInfo = obtainedInfo.map((info, i) => {
       if (i === index) {
         return {
@@ -224,14 +156,14 @@ export default function ReceiptTable({
       }
       return info;
     });
-  
+
     const updatedYouPictureTotal = updatedObtainedInfo.reduce((total, info) => {
       if (info.sliderValue === 0) {
         return total + parseFloat(info.amount); // Use info.amount instead of info.total_amount
       }
       return total;
     }, 0);
-  
+
     const updatedSplitPictureTotal = updatedObtainedInfo.reduce(
       (total, info) => {
         if (info.sliderValue === 55) {
@@ -241,7 +173,7 @@ export default function ReceiptTable({
       },
       0
     );
-  
+
     const updatedThemPictureTotal = updatedObtainedInfo.reduce(
       (total, info) => {
         if (info.sliderValue === 100) {
@@ -251,14 +183,13 @@ export default function ReceiptTable({
       },
       0
     );
-  
+
     setObtainedInfo(updatedObtainedInfo);
     setYouPictureTotal(updatedYouPictureTotal.toFixed(2));
     setSplitPictureTotal(updatedSplitPictureTotal.toFixed(2));
     setThemPictureTotal(updatedThemPictureTotal.toFixed(2));
   };
 
-  
   useEffect(() => {
     setObtainedInfo((prevInfo) =>
       prevInfo.map((item) => ({
@@ -267,15 +198,60 @@ export default function ReceiptTable({
       }))
     );
   }, []);
-  
+
   useEffect(() => {
     if (Array.isArray(items) && Array.isArray(obtainedInfo)) {
       setCombinedArray([...items, ...obtainedInfo]);
     }
   }, [items, obtainedInfo]);
 
+  useEffect(() => {
+    // Calculate the updated totals based on the remaining items in combinedArray
+    const updatedTotals = combinedArray.reduce(
+      (totals, item) => {
+        const amount =
+          item.amount !== undefined ? item.amount : item.total_amount;
+        const sliderValue =
+          item.sliderValue !== undefined ? item.sliderValue : 0;
+        switch (sliderValue) {
+          case 0:
+            totals.youTotal += parseFloat(amount);
+            break;
+          case 35:
+            totals.youTotal -= parseFloat(amount);
+            totals.splitTotal -= parseFloat(amount);
+            break;
+          case 55:
+            totals.splitTotal += parseFloat(amount);
+            break;
+          case 75:
+            totals.splitTotal -= parseFloat(amount);
+            totals.themTotal -= parseFloat(amount);
+            break;
+          case 100:
+            totals.themTotal += parseFloat(amount);
+            break;
+          case 125:
+            totals.themTotal -= parseFloat(amount);
+            break;
+          default:
+            break;
+        }
+        return totals;
+      },
+      { youTotal: 0, splitTotal: 0, themTotal: 0 }
+    );
 
-  
+    const total =
+      updatedTotals.youTotal +
+      updatedTotals.splitTotal +
+      updatedTotals.themTotal;
+
+    setYouPictureTotal(updatedTotals.youTotal.toFixed(2));
+    setSplitPictureTotal(updatedTotals.splitTotal.toFixed(2));
+    setThemPictureTotal(updatedTotals.themTotal.toFixed(2));
+  }, [combinedArray]);
+
   return (
     <>
       <div className="whitespace-no-wrap m-0 w-full max-w-min rounded-lg bg-white py-1 px-1 dark:bg-slate-900">
@@ -358,7 +334,7 @@ export default function ReceiptTable({
                 className="add-button m-2 items-center justify-center text-center text-2xl text-gray-500"
                 onClick={() => {
                   handleReceiptPictureSubmit(sliderValue);
-                  setIsAddedManually(true);
+                  setSliderValue(55);
                 }}
               >
                 <IoMdAddCircleOutline />
@@ -375,21 +351,49 @@ export default function ReceiptTable({
                   <td className="text-black">
                     {item.name
                       ? item.name.replace(/\b\w/g, (c) => c.toUpperCase())
-                      : item.description && item.description.replace(/\b\w/g, (c) => c.toUpperCase())}
-                      </td>
-                  <td className="mr-2 flex items-center text-sm">
+                      : item.description &&
+                        item.description.replace(/\b\w/g, (c) =>
+                          c.toUpperCase()
+                        )}
+                  </td>
+                  <td
+                    className="mr-2"
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      height: "100%",
+                    }}
+                  >
                     <button
                       className="add-button m-2 items-center justify-center text-center text-2xl text-gray-500"
                       onClick={() => handlePictureDelete(index)}
                     >
                       <IoMdRemoveCircleOutline />
                     </button>
-                    <span className="ml-2 text-black">
-                      {item.amount
-                        ? `$${item.amount}`
-                        : `$${parseFloat(item.total_amount).toFixed(2)}`}
-                    </span>
+                    <input
+                      type="text"
+                      className="my-0 ml-2 w-20 py-1 text-xs text-black"
+                      style={{
+                        border: item.confidence < 0.5 && !hasBeenAccessed ? "1px solid red" : "1px solid black",
+                      }}
+                      value={
+                        item.amount
+                          ? `$${item.amount}`
+                          : `$${parseFloat(item.total_amount).toFixed(2)}`
+                      }
+                      onChange={(e) => {
+                        if (!hasBeenAccessed) {
+                            setHasBeenAccessed(true);
+                          }
+                        handleAmountChange(
+                          e.target.value,
+                          index
+                        )(handleKeyDown(e, index));
+                        
+                      }}
+                    />
                   </td>
+
                   <td colSpan={3}>
                     <div
                       style={{
@@ -398,48 +402,83 @@ export default function ReceiptTable({
                         padding: "8px",
                       }}
                     >
-                      {item.isAddedManually ? (
-                        <Slider
-                          defaultValue={item.sliderValue || 55} // Set the default value to 0
-                          min={0}
-                          max={100}
-                          step={0} // Set the step to 0 to disable slider interaction
-                          disabled // Disable the slider
-                        />
-                      ) : (
-                        <Slider
-                          defaultValue={item.sliderValue || 55}
-                          min={0}
-                          max={100}
-                          step={55}
-                          value={item.sliderValue}
-                          onChange={(value) =>
-                            handlePictureSliderChange(index, value, item)
-                          }
-                        />
-                      )}
-
+                      <Slider
+                        defaultValue={item.sliderValue || 55}
+                        min={0}
+                        max={100}
+                        step={55}
+                        value={item.sliderValue}
+                        onChange={(value) =>
+                          handlePictureSliderChange(index, value, item)
+                        }
+                      />
                       {renderColumn()}
                     </div>
                   </td>
                   <td></td>
                   <td></td>
                 </tr>
+                
               ))}
+              
+              {pictureTax && (
+    <tr>
+      <td className="text-black">Taxes</td>
+      <td
+        className="mr-2"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          height: "100%",
+        }}
+      >
+        <button
+          className="add-button m-2 items-center justify-center text-center text-2xl text-gray-500"
+          onClick={() => handlePictureDelete(combinedArray.length)}
+        >
+          <IoMdRemoveCircleOutline />
+        </button>
+        <input
+          type="text"
+          className="my-0 ml-2 w-20 py-1 text-xs text-black"
+          style={{
+            border: pictureConfidence < 0.5 && !hasBeenAccessed ? "1px solid red" : "1px solid black",
+          }}
+          value={`$${pictureTax.toFixed(2)}`}
+          onChange={(e) => {
+            if (!hasBeenAccessed) {
+              setHasBeenAccessed(true);
+            }
+            handleAmountChange(e.target.value, combinedArray.length)(handleKeyDown(e, combinedArray.length));
+          }}
+        />
+      </td>
+      <td colSpan={3}>
+        <div
+          style={{
+            width: "auto",
+            margin: "auto",
+            padding: "8px",
+          }}
+        >
+          <Slider
+            defaultValue={55}
+            min={0}
+            max={100}
+            step={55}
+            value={sliderValue}
+            onChange={(value) => handleSliderChange(value)}
+          />
+          {renderColumn()}
+        </div>
+      </td>
+      <td></td>
+      <td></td>
+    </tr>
+  )}
+
             </tbody>
             <tfoot className="bg-blue-200">
-              {selectMethodPicture ? (
-                <tr>
-                  {" "}
-                  {getPictureTotalPopup && (
-                    <div className="popup">
-                      <p>{getPictureTotalMessage}</p>
-                    </div>
-                  )}
-                </tr>
-              ) : (
-                ""
-              )}
               <tr className="border-t border-gray-500 bg-blue-200">
                 <td
                   className="px-2 py-1 text-black"

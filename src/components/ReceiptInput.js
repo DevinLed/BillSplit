@@ -67,6 +67,8 @@ export default function ReceiptInput({
   };
   const [photoData, setPhotoData] = useState(null);
   const [pictureTotal, setPictureTotal] = useState(0);
+  const [pictureTax, setPictureTax] = useState(0);
+  const [pictureConfidence, setPictureConfidence] = useState(0);
   const [showImage, setShowImage] = useState(false);
   const [showCameraImage, setShowCameraImage] = useState(false);
   const [showRedoButton, setShowRedoButton] = useState(false);
@@ -74,53 +76,58 @@ export default function ReceiptInput({
   const [displayPictureInfo, setDisplayPictureInfo] = useState(false);
   const [obtainedInfo, setObtainedInfo] = useState([]);
   const [isAddedManually, setIsAddedManually] = useState(false);
-  const handleCameraSubmit = async () => {
-    setPhotoData(loading);
-    setShowImage(true);
-    try {
-      const data = new FormData();
-      data.append("document", photoData);
+ const handleCameraSubmit = async () => {
+  setPhotoData(loading);
+  setShowImage(true);
+  try {
+    const data = new FormData();
+    data.append("document", photoData);
 
-      const headers = new Headers();
-      headers.append("Authorization", `Token ${apiKey}`);
+    const headers = new Headers();
+    headers.append("Authorization", `Token ${apiKey}`);
 
-      const config = {
-        method: "POST",
-        headers,
-        body: data,
-      };
+    const config = {
+      method: "POST",
+      headers,
+      body: data,
+    };
 
-      const response = await fetch(
-        `https://api.mindee.net/v1/products/${account}/${endpoint}/v${version}/predict`,
-        config
-      );
-      const responseData = await response.json();
-      setObtainedInfo(
-        responseData.document.inference.prediction.line_items.map(
-          (item) => item
-        )
-      );
-      setDisplayPictureInfo(true);
-      const totalAmount =
-        responseData.document.inference.prediction.total_amount.value;
-      setMerchantName(
-        responseData.document.inference.prediction.supplier_name.value
-      );
-      if (merchantName === null) {
-        setDisplayMerchant(false);
-      }
-      console.log(responseData.document);
+    const response = await fetch(
+      `https://api.mindee.net/v1/products/${account}/${endpoint}/v${version}/predict`,
+      config
+    );
+    const responseData = await response.json();
+    const lineItems = responseData.document.inference.prediction.line_items.map(
+      (item) => ({
+        ...item,
+        confidence: item.confidence || 0, // Handle cases where confidence is missing
+      })
+    );
+    setObtainedInfo(lineItems);
+    setDisplayPictureInfo(true);
 
-      setPictureTotal(totalAmount);
-      setShowImage(false);
-      setPhotoData(photoData);
-      setSplitPictureTotal(totalAmount);
-
-      // Handle the response data as per your requirements
-    } catch (error) {
-      console.error("Error processing image:", error);
+    const totalAmount = responseData.document.inference.prediction.total_amount.value;
+    const taxAmount = responseData.document.inference.prediction.total_tax.value
+    const taxConfidence = responseData.document.inference.prediction.total_tax.confidence
+    setMerchantName(responseData.document.inference.prediction.supplier_name.value);
+    if (merchantName === null) {
+      setDisplayMerchant(false);
     }
-  };
+  
+    console.log(responseData.document);
+    setPictureConfidence(taxConfidence);
+    setPictureTax(taxAmount);
+    setPictureTotal(totalAmount);
+    setShowImage(false);
+    setPhotoData(photoData);
+    setSplitPictureTotal(totalAmount);
+
+    // Handle the response data as per your requirements
+  } catch (error) {
+    console.error("Error processing image:", error);
+  }
+};
+
 
   const { id } = useParams();
   const [receiptList, setReceiptList] = useState([]);
@@ -136,8 +143,6 @@ export default function ReceiptInput({
   const [youTotal, setYouTotal] = useState(0);
   const [splitTotal, setSplitTotal] = useState(0);
   const [themTotal, setThemTotal] = useState(0);
-  const [getPictureTotalPopup, setGetPictureTotalPopup] = useState(false);
-  const [getPictureTotalMessage, setGetPictureTotalMessage] = useState("");
   const [combinedArray, setCombinedArray] = useState([]);
 
 
@@ -307,6 +312,7 @@ export default function ReceiptInput({
     let total =
       parseFloat(splitPictureTotal) +
       parseFloat(themPictureTotal) +
+      parseFloat(pictureTax);
       parseFloat(youPictureTotal);
 
     let splitValue = parseFloat(splitPictureTotal) / 2;
@@ -360,15 +366,7 @@ export default function ReceiptInput({
         sliderValue: item.sliderValue || 55,
       }))
     );
-    if (getPictureTotal() !== pictureTotal) {
-      setGetPictureTotalPopup(true);
-      setGetPictureTotalMessage("Missing items...");
-    } else {
-      setGetPictureTotalPopup(false);
-      setGetPictureTotalMessage("");
-    }
   }, []);
-
   return (
     <>
       {selectPersonReceipt ? (
@@ -541,16 +539,12 @@ export default function ReceiptInput({
                         combinedArray={combinedArray}
                         
                         setCombinedArray={setCombinedArray}
-                        getPictureTotalPopup={getPictureTotalPopup}
-                        getPictureTotalMessage={getPictureTotalMessage}
                         pictureTotal={pictureTotal}
                         youPictureTotal={youPictureTotal}
                         splitPictureTotal={splitPictureTotal}
                         themPictureTotal={themPictureTotal}
                         obtainedInfo={obtainedInfo}
                         setObtainedInfo={setObtainedInfo}
-                        setGetPictureTotalPopup={setGetPictureTotalPopup}
-                        setGetPictureTotalMessage={setGetPictureTotalMessage}
                         selectMethodManual={selectMethodManual}
                         setThemPictureTotal={setThemPictureTotal}
                         setSplitPictureTotal={setSplitPictureTotal}
@@ -665,8 +659,8 @@ export default function ReceiptInput({
                         <div className="ml-0 mr-0 mt-3 flex flex-col items-center justify-center">
                           <img src={photoData} alt="Captured Receipt" />
                           <button
-                            className="ml-auto mr-auto mt-4 mb-5 items-center justify-center rounded border-2 border-blue-500 bg-blue-500 py-2 px-4 font-bold shadow transition-all duration-300 hover:bg-white"
-                            onClick={() => setShowCameraImage(false)}
+                            className="ml-auto mr-auto mt-4 mb-2 items-center justify-center rounded border-2 border-blue-500 bg-blue-500 py-2 px-4 font-bold shadow transition-all duration-300 hover:bg-white"
+                            onClick={(e) => (setShowCameraImage(false))(handleResetTotals(e))}
                           >
                             Redo picture
                           </button>
@@ -678,7 +672,7 @@ export default function ReceiptInput({
                         />
                       )}
 
-                      <div className="ml-0 mr-0 mt-3 flex flex-col items-center justify-center">
+                      <div className="ml-0 mr-0 mt-1 flex flex-col items-center justify-center">
                         <button
                           className="ml-auto mr-auto mt-4 mb-5 items-center justify-center rounded border-2 border-blue-500 bg-blue-500 py-2 px-4 font-bold shadow transition-all duration-300 hover:bg-white"
                           onClick={handleCameraSubmit}
@@ -758,22 +752,21 @@ export default function ReceiptInput({
                               setIsAddedManually={setIsAddedManually}
                               combinedArray={combinedArray}
                               setCombinedArray={setCombinedArray}
-                              getPictureTotalPopup={getPictureTotalPopup}
-                              getPictureTotalMessage={getPictureTotalMessage}
                               pictureTotal={pictureTotal}
                               youPictureTotal={youPictureTotal}
                               splitPictureTotal={splitPictureTotal}
                               themPictureTotal={themPictureTotal}
                               setObtainedInfo={setObtainedInfo}
                               obtainedInfo={obtainedInfo}
-                              setGetPictureTotalPopup={setGetPictureTotalPopup}
-                              setGetPictureTotalMessage={
-                                setGetPictureTotalMessage
-                              }
                               selectMethodPicture={selectMethodPicture}
                               selectedValue={selectedValue}
                               personName={personName}
                               personReceiptAmount={personReceiptAmount}
+                              selectMethodManual={selectMethodManual}
+                              setThemPictureTotal={setThemPictureTotal}
+                              setSplitPictureTotal={setSplitPictureTotal}
+                              setYouPictureTotal={setYouPictureTotal}
+                              pictureTax={pictureTax}
                             />
                           </div>
 
