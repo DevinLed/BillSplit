@@ -13,18 +13,10 @@ export default function ReceiptTable({
   handleNameChange,
   amount,
   setAmount,
-  handleReceiptSubmit,
   items,
   currentIndex,
-  handleDelete,
-  getTotal,
-  youTotal,
-  splitTotal,
-  themTotal,
   handleReceiptPictureSubmit,
-  setIsAddedManually,
   combinedArray,
-  pictureTotal,
   obtainedInfo,
   setObtainedInfo,
   getPictureTotal,
@@ -36,16 +28,16 @@ export default function ReceiptTable({
   youPictureTotal,
   splitPictureTotal,
   themPictureTotal,
-  selectPerson,
   selectedValue,
   personName,
   personReceiptAmount,
-  onResetTotals,
   setCombinedArray,
   pictureTax,
+  setPictureTax,
   pictureConfidence
 }) {
-    const[hasBeenAccessed, setHasBeenAccessed] = useState(false);
+    
+  const [hasBeenAccessed, setHasBeenAccessed] = useState(false);
   const handlePictureDelete = (index) => {
     const deletedItem = combinedArray[index];
 
@@ -217,22 +209,11 @@ export default function ReceiptTable({
           case 0:
             totals.youTotal += parseFloat(amount);
             break;
-          case 35:
-            totals.youTotal -= parseFloat(amount);
-            totals.splitTotal -= parseFloat(amount);
-            break;
           case 55:
             totals.splitTotal += parseFloat(amount);
             break;
-          case 75:
-            totals.splitTotal -= parseFloat(amount);
-            totals.themTotal -= parseFloat(amount);
-            break;
           case 100:
             totals.themTotal += parseFloat(amount);
-            break;
-          case 125:
-            totals.themTotal -= parseFloat(amount);
             break;
           default:
             break;
@@ -374,7 +355,10 @@ export default function ReceiptTable({
                       type="text"
                       className="my-0 ml-2 w-20 py-1 text-xs text-black"
                       style={{
-                        border: item.confidence < 0.5 && !hasBeenAccessed ? "1px solid red" : "1px solid black",
+                        border:
+                          item.confidence < 0.5 && !hasBeenAccessed
+                            ? "1px solid red"
+                            : "1px solid black",
                       }}
                       value={
                         item.amount
@@ -383,13 +367,12 @@ export default function ReceiptTable({
                       }
                       onChange={(e) => {
                         if (!hasBeenAccessed) {
-                            setHasBeenAccessed(true);
-                          }
+                          setHasBeenAccessed(true);
+                        }
                         handleAmountChange(
                           e.target.value,
-                          index
-                        )(handleKeyDown(e, index));
-                        
+                          combinedArray.length
+                        )(handleKeyDown(e, combinedArray.length));
                       }}
                     />
                   </td>
@@ -418,65 +401,75 @@ export default function ReceiptTable({
                   <td></td>
                   <td></td>
                 </tr>
-                
               ))}
-              
-              {pictureTax && (
-    <tr>
-      <td className="text-black">Taxes</td>
-      <td
-        className="mr-2"
-        style={{
-          display: "flex",
-          alignItems: "center",
-          height: "100%",
-        }}
-      >
-        <button
-          className="add-button m-2 items-center justify-center text-center text-2xl text-gray-500"
-          onClick={() => handlePictureDelete(combinedArray.length)}
-        >
-          <IoMdRemoveCircleOutline />
-        </button>
-        <input
-          type="text"
-          className="my-0 ml-2 w-20 py-1 text-xs text-black"
-          style={{
-            border: pictureConfidence < 0.5 && !hasBeenAccessed ? "1px solid red" : "1px solid black",
-          }}
-          value={`$${pictureTax.toFixed(2)}`}
-          onChange={(e) => {
-            if (!hasBeenAccessed) {
-              setHasBeenAccessed(true);
-            }
-            handleAmountChange(e.target.value, combinedArray.length)(handleKeyDown(e, combinedArray.length));
-          }}
-        />
-      </td>
-      <td colSpan={3}>
-        <div
-          style={{
-            width: "auto",
-            margin: "auto",
-            padding: "8px",
-          }}
-        >
-          <Slider
-            defaultValue={55}
-            min={0}
-            max={100}
-            step={55}
-            value={sliderValue}
-            onChange={(value) => handleSliderChange(value)}
-          />
-          {renderColumn()}
-        </div>
-      </td>
-      <td></td>
-      <td></td>
-    </tr>
-  )}
 
+              {pictureTax && (
+                <tr>
+                  <td className="text-black">Taxes</td>
+                  <td
+                    className="mr-2"
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      height: "100%",
+                    }}
+                  >
+                    <button
+                      className="add-button m-2 items-center justify-center text-center text-2xl text-gray-500"
+                      onClick={() => setPictureTax(0)}
+                    >
+                      <IoMdRemoveCircleOutline />
+                    </button>
+                    <input
+                      type="text"
+                      className="my-0 ml-2 w-20 py-1 text-xs text-black"
+                      style={{
+                        border:
+                        pictureConfidence < 0.5 && !hasBeenAccessed
+                            ? "1px solid red"
+                            : "1px solid black",
+                      }}
+                      value={`$${pictureTax.toFixed(2)}`}
+                      onChange={(e) => {
+                        if (!hasBeenAccessed) {
+                          setHasBeenAccessed(true);
+                        }
+                        handleAmountChange(
+                          e.target.value,
+                          combinedArray.length
+                        )(handleKeyDown(e, combinedArray.length));
+                      }}
+                    />
+                  </td>
+                  <td colSpan={3}>
+                    <div
+                      style={{
+                        width: "auto",
+                        margin: "auto",
+                        padding: "8px",
+                      }}
+                    >
+                      <Slider
+                        defaultValue={pictureTax.sliderValue || 55}
+                        min={0}
+                        max={100}
+                        step={55}
+                        value={pictureTax.sliderValue}
+                        onChange={(value) =>
+                          handlePictureSliderChange(
+                            combinedArray.length,
+                            value,
+                            pictureTax
+                          )
+                        }
+                      />
+                      {renderColumn()}
+                    </div>
+                  </td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              )}
             </tbody>
             <tfoot className="bg-blue-200">
               <tr className="border-t border-gray-500 bg-blue-200">

@@ -107,7 +107,7 @@ export default function ReceiptInput({
     setDisplayPictureInfo(true);
 
     const totalAmount = responseData.document.inference.prediction.total_amount.value;
-    const taxAmount = responseData.document.inference.prediction.total_tax.value
+    const taxAmount = responseData.document.inference.prediction.total_tax.value;
     const taxConfidence = responseData.document.inference.prediction.total_tax.confidence
     setMerchantName(responseData.document.inference.prediction.supplier_name.value);
     if (merchantName === null) {
@@ -116,7 +116,7 @@ export default function ReceiptInput({
   
     console.log(responseData.document);
     setPictureConfidence(taxConfidence);
-    setPictureTax(taxAmount);
+    setPictureTax(taxAmount || 0);
     setPictureTotal(totalAmount);
     setShowImage(false);
     setPhotoData(photoData);
@@ -312,7 +312,7 @@ export default function ReceiptInput({
     let total =
       parseFloat(splitPictureTotal) +
       parseFloat(themPictureTotal) +
-      parseFloat(pictureTax);
+      parseFloat(pictureTax) + 
       parseFloat(youPictureTotal);
 
     let splitValue = parseFloat(splitPictureTotal) / 2;
@@ -767,6 +767,8 @@ export default function ReceiptInput({
                               setSplitPictureTotal={setSplitPictureTotal}
                               setYouPictureTotal={setYouPictureTotal}
                               pictureTax={pictureTax}
+                              setPictureTax={setPictureTax}
+                              pictureConfidence={pictureConfidence}
                             />
                           </div>
 
