@@ -70,6 +70,8 @@ export default function ReceiptTable({
 
   const taxOwingPerc = taxOwing / parseFloat(getPictureTotal());
 
+  const taxActual = parseFloat(pictureTax) * parseFloat(taxOwingPerc);
+
   const handleKeyDown = (e, index) => {
     if (e.key === "Enter") {
       e.preventDefault();
@@ -166,7 +168,7 @@ export default function ReceiptTable({
       if (i === index) {
         return {
           ...info,
-          previousAmount: parseFloat(info.amount), // Use info.amount instead of info.total_amount
+          previousAmount: parseFloat(info.amount), 
           sliderValue: value,
         };
       }
@@ -175,7 +177,7 @@ export default function ReceiptTable({
 
     const updatedYouPictureTotal = updatedObtainedInfo.reduce((total, info) => {
       if (info.sliderValue === 0) {
-        return total + parseFloat(info.amount); // Use info.amount instead of info.total_amount
+        return total + parseFloat(info.amount); 
       }
       return total;
     }, 0);
@@ -183,7 +185,7 @@ export default function ReceiptTable({
     const updatedSplitPictureTotal = updatedObtainedInfo.reduce(
       (total, info) => {
         if (info.sliderValue === 55) {
-          return total + parseFloat(info.amount); // Use info.amount instead of info.total_amount
+          return total + parseFloat(info.amount); 
         }
         return total;
       },
@@ -538,11 +540,11 @@ export default function ReceiptTable({
         <label className="text-center text-lg font-medium">
           {selectedValue === "you" ? (
             <>
-              Taxes {personName} owes you: {parseFloat(taxOwingPerc).toFixed(2)}
+              Taxes {personName} owes you: {parseFloat(taxActual).toFixed(2)}
             </>
           ) : (
             <>
-              Taxes you owe {personName}: {parseFloat(taxOwingPerc).toFixed(2)}
+              Taxes you owe {personName}: {parseFloat(taxActual).toFixed(2)}
             </>
           )}
         </label>
