@@ -65,16 +65,10 @@ export default function ReceiptTable({
   const [sliderValue, setSliderValue] = useState(55);
 
   const taxOwing = (selectedValue === "you")
-  ? splitPictureTotal / 2 + youPictureTotal
-  : splitPictureTotal / 2 + themPictureTotal;
+  ? parseFloat(splitPictureTotal) / 2 + parseFloat(youPictureTotal)
+  : parseFloat(splitPictureTotal) / 2 + parseFloat(themPictureTotal);
 
   const taxOwingPerc = taxOwing / parseFloat(getPictureTotal());
-  const [taxAdditionResult, setTaxAdditionResult] = useState(0);
-  
-useEffect(() => {
-  const calculatedTaxAdditionResult = taxOwingPerc * pictureTax;
-  setTaxAdditionResult(calculatedTaxAdditionResult);
-}, [taxOwingPerc, pictureTax]);
 
   const handleKeyDown = (e, index) => {
     if (e.key === "Enter") {
@@ -496,7 +490,7 @@ useEffect(() => {
                             ? "1px solid red"
                             : "1px solid black",
                       }}
-                      value={`$${pictureTax.toFixed(2)}`}
+                      value={`$${pictureTax}`}
                       onChange={(e) => {
                         if (!hasBeenAccessed) {
                           setHasBeenAccessed(true);
@@ -544,11 +538,11 @@ useEffect(() => {
         <label className="text-center text-lg font-medium">
           {selectedValue === "you" ? (
             <>
-              Taxes {personName} owes you: {parseFloat(taxAdditionResult).toFixed(2)}
+              Taxes {personName} owes you: {parseFloat(taxOwingPerc).toFixed(2)}
             </>
           ) : (
             <>
-              Taxes you owe {personName}: {parseFloat(taxAdditionResult).toFixed(2)}
+              Taxes you owe {personName}: {parseFloat(taxOwingPerc).toFixed(2)}
             </>
           )}
         </label>
