@@ -64,6 +64,18 @@ export default function ReceiptTable({
 
   const [sliderValue, setSliderValue] = useState(55);
 
+  const taxOwing = (selectedValue === "you")
+  ? splitPictureTotal / 2 + youPictureTotal
+  : splitPictureTotal / 2 + themPictureTotal;
+
+  const taxOwingPerc = taxOwing / parseFloat(getPictureTotal());
+  const [taxAdditionResult, setTaxAdditionResult] = useState(0);
+  
+useEffect(() => {
+  const calculatedTaxAdditionResult = taxOwingPerc * pictureTax;
+  setTaxAdditionResult(calculatedTaxAdditionResult);
+}, [taxOwingPerc, pictureTax]);
+
   const handleKeyDown = (e, index) => {
     if (e.key === "Enter") {
       e.preventDefault();
@@ -126,6 +138,24 @@ export default function ReceiptTable({
     const updatedCombinedArray = [...combinedArray];
     updatedCombinedArray[index].amount = parsedValue || "0";
     setCombinedArray(updatedCombinedArray);
+  };
+  const handleTaxAmountChange = (value) => {
+    const newValue = value.replace(/^\$/, "");
+    let parsedValue = newValue.replace(/[^0-9.]/g, "");
+  
+    const decimalIndex = parsedValue.indexOf(".");
+    if (decimalIndex !== -1) {
+      parsedValue =
+        parsedValue.slice(0, decimalIndex + 1) +
+        parsedValue.slice(decimalIndex + 1).replace(".", "");
+    }
+    const decimalSplit = parsedValue.split(".");
+    if (decimalSplit[1] && decimalSplit[1].length > 2) {
+      parsedValue = decimalSplit[0] + "." + decimalSplit[1].slice(0, 2);
+    }
+  
+    // Update the state value of pictureTax
+    setPictureTax(parsedValue || "");
   };
 
   const handlePictureSliderChange = (index, value, item) => {
@@ -403,73 +433,6 @@ export default function ReceiptTable({
                 </tr>
               ))}
 
-              {pictureTax && (
-                <tr>
-                  <td className="text-black">Taxes</td>
-                  <td
-                    className="mr-2"
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      height: "100%",
-                    }}
-                  >
-                    <button
-                      className="add-button m-2 items-center justify-center text-center text-2xl text-gray-500"
-                      onClick={() => setPictureTax(0)}
-                    >
-                      <IoMdRemoveCircleOutline />
-                    </button>
-                    <input
-                      type="text"
-                      className="my-0 ml-2 w-20 py-1 text-xs text-black"
-                      style={{
-                        border:
-                        pictureConfidence < 0.5 && !hasBeenAccessed
-                            ? "1px solid red"
-                            : "1px solid black",
-                      }}
-                      value={`$${pictureTax.toFixed(2)}`}
-                      onChange={(e) => {
-                        if (!hasBeenAccessed) {
-                          setHasBeenAccessed(true);
-                        }
-                        handleAmountChange(
-                          e.target.value,
-                          combinedArray.length
-                        )(handleKeyDown(e, combinedArray.length));
-                      }}
-                    />
-                  </td>
-                  <td colSpan={3}>
-                    <div
-                      style={{
-                        width: "auto",
-                        margin: "auto",
-                        padding: "8px",
-                      }}
-                    >
-                      <Slider
-                        defaultValue={pictureTax.sliderValue || 55}
-                        min={0}
-                        max={100}
-                        step={55}
-                        value={pictureTax.sliderValue}
-                        onChange={(value) =>
-                          handlePictureSliderChange(
-                            combinedArray.length,
-                            value,
-                            pictureTax
-                          )
-                        }
-                      />
-                      {renderColumn()}
-                    </div>
-                  </td>
-                  <td></td>
-                  <td></td>
-                </tr>
-              )}
             </tbody>
             <tfoot className="bg-blue-200">
               <tr className="border-t border-gray-500 bg-blue-200">
@@ -506,6 +469,59 @@ export default function ReceiptTable({
                 <td></td>
                 <td></td>
               </tr>
+              
+              {pictureTax ? (
+                <tr className="bg-white">
+                  <td className="text-black">Tax</td>
+                  <td
+                    className="mr-2"
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      height: "100%",
+                    }}
+                  >
+                    <button
+                      className="add-button m-2 items-center justify-center text-center text-2xl text-gray-500"
+                      onClick={() => setPictureTax(0)}
+                    >
+                      <IoMdRemoveCircleOutline />
+                    </button>
+                    <input
+                      type="text"
+                      className="my-0 ml-2 w-20 py-1 text-xs text-black"
+                      style={{
+                        border:
+                        pictureConfidence < 0.5 && !hasBeenAccessed
+                            ? "1px solid red"
+                            : "1px solid black",
+                      }}
+                      value={`$${pictureTax.toFixed(2)}`}
+                      onChange={(e) => {
+                        if (!hasBeenAccessed) {
+                          setHasBeenAccessed(true);
+                        }
+                        handleTaxAmountChange(
+                          e.target.value
+                        );
+                      }}
+                    />
+                  </td>
+                  <td colSpan={3}>
+                    <div
+                      style={{
+                        width: "auto",
+                        margin: "auto",
+                        padding: "8px",
+                      }}
+                    >
+                      {renderColumn()}
+                    </div>
+                  </td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              ): ("")}
             </tfoot>
           </table>
         </div>
@@ -524,6 +540,19 @@ export default function ReceiptTable({
           )}
         </label>
       </div>
+      {pictureTax ? <div className="mt-3 flex items-center justify-center rounded-lg bg-white px-3 py-2 shadow-md">
+        <label className="text-center text-lg font-medium">
+          {selectedValue === "you" ? (
+            <>
+              Taxes {personName} owes you: {parseFloat(taxAdditionResult).toFixed(2)}
+            </>
+          ) : (
+            <>
+              Taxes you owe {personName}: {parseFloat(taxAdditionResult).toFixed(2)}
+            </>
+          )}
+        </label>
+      </div>:("")}
       <div className="mt-3 flex items-center justify-center rounded-lg bg-white px-3 py-2 shadow-md">
         <label className="text-center text-lg font-medium">
           Receipt Total: ${getPictureTotal()}
