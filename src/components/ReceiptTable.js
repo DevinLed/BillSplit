@@ -31,12 +31,31 @@ export default function ReceiptTable({
   selectedValue,
   personName,
   personReceiptAmount,
+  setPersonReceiptAmount,
   setCombinedArray,
   pictureTax,
   setPictureTax,
   pictureConfidence
 }) {
     
+  const finalTotal = () => {
+    let total =
+      parseFloat(splitPictureTotal) +
+      parseFloat(themPictureTotal) +
+      parseFloat(pictureTax) +
+      parseFloat(youPictureTotal);
+      
+      let splitValue = parseFloat(splitPictureTotal) / 2;
+      let themValue = parseFloat(themPictureTotal);
+      let youValue = parseFloat(youPictureTotal);
+  
+      if (selectedValue === "you") {
+        setPersonReceiptAmount(splitValue + themValue);
+      } else if (selectedValue === "them") {
+        setPersonReceiptAmount(splitValue + youValue);
+      }
+    return parseFloat(total).toFixed(2);
+  };
   const [hasBeenAccessed, setHasBeenAccessed] = useState(false);
   const handlePictureDelete = (index) => {
     const deletedItem = combinedArray[index];
@@ -62,11 +81,12 @@ export default function ReceiptTable({
     });
   };
 
+  
   const [sliderValue, setSliderValue] = useState(55);
 
   const taxOwing = (selectedValue === "you")
-  ? parseFloat(splitPictureTotal) / 2 + parseFloat(youPictureTotal)
-  : parseFloat(splitPictureTotal) / 2 + parseFloat(themPictureTotal);
+  ? parseFloat(splitPictureTotal) / 2 + parseFloat(themPictureTotal)
+  : parseFloat(splitPictureTotal) / 2 + parseFloat(youPictureTotal);
 
   const taxOwingPerc = taxOwing / parseFloat(getPictureTotal());
 
@@ -551,7 +571,7 @@ export default function ReceiptTable({
       </div>:("")}
       <div className="mt-3 flex items-center justify-center rounded-lg bg-white px-3 py-2 shadow-md">
         <label className="text-center text-lg font-medium">
-          Receipt Total: ${getPictureTotal()}
+          Receipt Total: ${finalTotal()}
         </label>
       </div>
     </>

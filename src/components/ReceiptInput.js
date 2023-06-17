@@ -307,6 +307,7 @@ export default function ReceiptInput({
     }
     return parseFloat(total).toFixed(2);
   };
+
   const handleHistorySubmit = (e) => {
     addReceipt(
       personName,
@@ -742,6 +743,7 @@ export default function ReceiptInput({
                               selectedValue={selectedValue}
                               personName={personName}
                               personReceiptAmount={personReceiptAmount}
+                              setPersonReceiptAmount={setPersonReceiptAmount}
                               selectMethodManual={selectMethodManual}
                               setThemPictureTotal={setThemPictureTotal}
                               setSplitPictureTotal={setSplitPictureTotal}
@@ -758,7 +760,7 @@ export default function ReceiptInput({
                                 className="mt-4 mb-5 rounded border-2 border-blue-500 bg-blue-500 py-2 px-4 font-bold shadow transition-all duration-300 hover:bg-white"
                                 onClick={(e) => {
                                   getFinalPictureTotal();
-                                  setSelectMethodManual(false);
+                                  setSelectMethodPicture(false);
                                   setSelectPersonReceipt(true);
                                   handleHistorySubmit(e);
                                   resetReceiptForm();
