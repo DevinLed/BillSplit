@@ -10,7 +10,6 @@ import { IoMdAddCircleOutline, IoMdRemoveCircleOutline } from "react-icons/io";
 
 export default function ReceiptTable({
   name,
-  handleNameChange,
   amount,
   setAmount,
   items,
@@ -20,8 +19,6 @@ export default function ReceiptTable({
   obtainedInfo,
   setObtainedInfo,
   getPictureTotal,
-  selectMethodManual,
-  selectMethodPicture,
   setThemPictureTotal,
   setSplitPictureTotal,
   setYouPictureTotal,
@@ -35,9 +32,13 @@ export default function ReceiptTable({
   setCombinedArray,
   pictureTax,
   setPictureTax,
-  pictureConfidence
+  pictureConfidence, 
+  setName
 }) {
-    
+  const handleNameChange = (event) => {
+    setName(event.target.value);
+  };
+
   const finalTotal = () => {
     let total =
       parseFloat(splitPictureTotal) +
@@ -232,7 +233,7 @@ export default function ReceiptTable({
     setObtainedInfo((prevInfo) =>
       prevInfo.map((item) => ({
         ...item,
-        sliderValue: item.sliderValue || 55,
+        sliderValue: 55,
       }))
     );
   }, []);
@@ -268,17 +269,16 @@ export default function ReceiptTable({
       },
       { youTotal: 0, splitTotal: 0, themTotal: 0 }
     );
-
+  
     const total =
       updatedTotals.youTotal +
       updatedTotals.splitTotal +
       updatedTotals.themTotal;
-
+  
     setYouPictureTotal(updatedTotals.youTotal.toFixed(2));
     setSplitPictureTotal(updatedTotals.splitTotal.toFixed(2));
     setThemPictureTotal(updatedTotals.themTotal.toFixed(2));
   }, [combinedArray]);
-
   return (
     <>
       <div className="whitespace-no-wrap m-0 w-full max-w-min rounded-lg bg-white py-1 px-1 dark:bg-slate-900">
@@ -407,18 +407,16 @@ export default function ReceiptTable({
                             : "1px solid black",
                       }}
                       value={
-                        item.amount
+                        item.amount && !isNaN(item.amount)
                           ? `$${item.amount}`
-                          : `$${parseFloat(item.total_amount).toFixed(2)}`
+                          : `$${parseFloat(item.total_amount).toFixed(2) || 0}`
                       }
                       onChange={(e) => {
                         if (!hasBeenAccessed) {
                           setHasBeenAccessed(true);
                         }
-                        handleAmountChange(
-                          e.target.value,
-                          combinedArray.length
-                        )(handleKeyDown(e, combinedArray.length));
+                        handleAmountChange(e.target.value, index)
+                        handleKeyDown(e, combinedArray.length);
                       }}
                     />
                   </td>

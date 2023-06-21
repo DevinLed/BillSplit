@@ -106,7 +106,7 @@ export default function ReceiptInput({
       setDisplayPictureInfo(true);
 
       const totalAmount =
-        responseData.document.inference.prediction.total_amount.value;
+        responseData.document.inference.prediction.total_amount.value || 0;
       const taxAmount =
         responseData.document.inference.prediction.total_tax.value;
       const taxConfidence =
@@ -172,10 +172,7 @@ export default function ReceiptInput({
     setSelected(2);
   };
 
-  const handleNameChange = (event) => {
-    setName(event.target.value);
-  };
-
+ 
   const handleReceiptSubmit = (sliderValue) => {
     if (!name || !amount) {
       return;
@@ -223,7 +220,7 @@ export default function ReceiptInput({
       return;
     }
     const parsedAmount = parseFloat(amount).toFixed(2);
-
+  
     setObtainedInfo((prevInfo) => [
       ...prevInfo,
       {
@@ -232,7 +229,7 @@ export default function ReceiptInput({
         sliderValue: sliderValue,
       },
     ]);
-
+  
     switch (sliderValue) {
       case 0:
         setYouPictureTotal((prevTotal) =>
@@ -252,7 +249,7 @@ export default function ReceiptInput({
       default:
         break;
     }
-
+  
     setName("");
     setAmount("");
     setCurrentIndex(currentIndex + 1);
@@ -504,7 +501,6 @@ export default function ReceiptInput({
                     <div>
                       <ReceiptTable
                         name={name}
-                        handleNameChange={handleNameChange}
                         amount={amount}
                         setAmount={setAmount}
                         handleReceiptSubmit={handleReceiptSubmit}
@@ -532,6 +528,8 @@ export default function ReceiptInput({
                         selectedValue={selectedValue}
                         personName={personName}
                         personReceiptAmount={personReceiptAmount}
+                        
+                        setName={setName}
                       />
                     </div>
 
@@ -716,7 +714,6 @@ export default function ReceiptInput({
                           <div>
                             <ReceiptTable
                               name={name}
-                              handleNameChange={handleNameChange}
                               amount={amount}
                               setAmount={setAmount}
                               handleReceiptSubmit={handleReceiptSubmit}
@@ -751,6 +748,7 @@ export default function ReceiptInput({
                               pictureTax={pictureTax}
                               setPictureTax={setPictureTax}
                               pictureConfidence={pictureConfidence}
+                              setName={setName}
                             />
                           </div>
 
