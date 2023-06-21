@@ -43,7 +43,7 @@ export default function ReceiptTable({
     let total =
       parseFloat(splitPictureTotal) +
       parseFloat(themPictureTotal) +
-      parseFloat(pictureTax) +
+      (parseFloat(pictureTax)||0) +
       parseFloat(youPictureTotal);
       
       let splitValue = parseFloat(splitPictureTotal) / 2;

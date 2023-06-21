@@ -359,14 +359,6 @@ export default function ReceiptInput({
 
               <div className="flex flex-col items-center justify-center">
                 <h1>Split a bill with {personName}</h1>
-                <p>
-                  Currently Owes: $
-                  {value
-                    ? parseFloat(value).toFixed(2)
-                    : parseFloat(personOwing).toString() === "NaN"
-                    ? "0.00"
-                    : parseFloat(personOwing).toFixed(2)}
-                </p>
                 <ul className="list-group items-center justify-center">
                   <Link
                     className="btn btn-primary btn-lg mt-5"
@@ -528,7 +520,7 @@ export default function ReceiptInput({
                         selectedValue={selectedValue}
                         personName={personName}
                         personReceiptAmount={personReceiptAmount}
-                        
+                        setPersonReceiptAmount={setPersonReceiptAmount}
                         setName={setName}
                       />
                     </div>
