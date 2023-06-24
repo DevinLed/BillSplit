@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 import Header from "./Header";
 import Footer from "./Footer";
 
-export default function Home({theme, setTheme, toggleTheme, accessedApp, setAccessedApp}) {
+export default function Home({theme, setTheme, toggleTheme, accessedApp, setAccessedApp, handleClearData}) {
 
 
     const [startBill, setStartBill] = useState(true);
@@ -93,6 +93,10 @@ export default function Home({theme, setTheme, toggleTheme, accessedApp, setAcce
                         Home Page
                       </button>
                       </Link>
+                  </li>
+                  <li onClick={() => handleClearData()} className="flex items-center justify-center">
+                  <button className="mt-5 bg-blue-500 font-bold py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
+                        onClick={() => handleClearData()}>Clear Data</button>
                   </li>
                 </ul>
               </div>

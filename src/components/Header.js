@@ -39,7 +39,7 @@ export default function Header({
             id="headbar"
           >
             <Link to="/Home">
-              <button className="ml-2 text-black hover:text-black" onClick={() =>handleResetTotals()}>
+              <button className="ml-2 text-black hover:text-black">
                 <IoIosArrowBack />
               </button>
             </Link>
@@ -213,7 +213,7 @@ export default function Header({
           id="headbar"
         >
           <Link to="/SplitBill">
-            <button className="ml-2 text-black hover:text-black" onClick={() => handleResetTotals()}>
+            <button className="ml-2 text-black hover:text-black" onClick={(e) => handleResetTotals(e)}>
               <IoIosArrowBack />
             </button>
           </Link>

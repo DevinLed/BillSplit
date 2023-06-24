@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import Header from "./Header";
 import Footer from "./Footer";
 
-export default function History({ theme, receipts, isReceiptSubmitted, setIsReceiptSubmitted }) {
+export default function History({ receipts }) {
   const { id } = useParams();
   const [selectedPerson, setSelectedPerson] = useState("");
 
@@ -32,14 +32,18 @@ export default function History({ theme, receipts, isReceiptSubmitted, setIsRece
                 )}
               </div>
 
-             
+              <div className="flex justify-center items-center mt-2">
+                <p className="text-sm">
+                  {receipt.startDate.toLocaleDateString("en-US")}
+                </p>
+              </div>
+           
             </div>
             <div className="flex justify-center items-center mt-2">
               <p className="text-sm">
                 {receipt.selectedValue === "you" ? "You are owed" : "You owe"}
               </p>
             </div>
-
             <div className="flex justify-center items-center">
               <p className="font-bold">
                 {`$${Math.abs(parseFloat(receipt.personReceiptAmount)).toFixed(2)}`}
@@ -57,6 +61,13 @@ export default function History({ theme, receipts, isReceiptSubmitted, setIsRece
           </div>
         );
       });
+  }, [filteredReceipts]);
+
+  const noReceiptsMessage = useMemo(() => {
+    if (filteredReceipts.length === 0) {
+      return <p>No receipts found.</p>;
+    }
+    return null;
   }, [filteredReceipts]);
 
   const personNames = useMemo(() => {
@@ -95,10 +106,10 @@ export default function History({ theme, receipts, isReceiptSubmitted, setIsRece
             </div>
 
             {receiptList.length > 0 ? (
-              receiptList
-            ) : (
-              <p>No receipts found for the selected person.</p>
-            )}
+            receiptList
+          ) : (
+            noReceiptsMessage
+          )}
           </div>
         </div>
       </main>

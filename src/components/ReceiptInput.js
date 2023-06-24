@@ -304,10 +304,10 @@ export default function ReceiptInput({
     }
     return parseFloat(total).toFixed(2);
   };
-
-  const handleHistorySubmit = (e) => {
-    addReceipt(
+  const handleHistorySubmit = () =>{
+    const newReceipt = {
       personName,
+      personOwing,
       personReceiptAmount,
       selectedValue,
       merchantName,
@@ -316,8 +316,11 @@ export default function ReceiptInput({
       displayMerchant,
       displayDate,
       displayInvoice
-    );
+    };
+
+    addReceipt(newReceipt);
   };
+
   const getFinalTotal = () => {
     if (selectedValue === "you") {
       console.log(personReceiptAmount);

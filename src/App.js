@@ -66,6 +66,12 @@ function App() {
   // Landing page
   const [accessedApp, setAccessedApp] = useState(false);
 
+  const handleClearData = () => {
+    localStorage.clear();
+    setList([]);
+    setReceipts([]);
+    setTheme("light");
+  };
   const handleAccessApp = () => {
     setAccessedApp(true);
   };
@@ -74,41 +80,38 @@ function App() {
     setHistory([...history, newEntry]);
   };
 
-  const setUpdatedReceipts = (newReceipts) => {
-    setReceipts(newReceipts);
-    localStorage.setItem('receipts', JSON.stringify(newReceipts));
+  const addNum = (id, val, val2) => {
+    setList((prevList) => {
+      const newList = prevList.map((item) => {
+        if (item.id === id) {
+          const a = parseFloat(item.personOwing, 0);
+          const b = parseFloat(val2, 0);
+          const value = a + b;
+          return { ...item, personOwing: parseFloat(value).toFixed(2) };
+        }
+        return item;
+      });
+      localStorage.setItem("list", JSON.stringify(newList));
+      return newList;
+    });
+    setDisplayAdd(true);
+    console.log("this is to add");
   };
   
-  const setUpdatedList = (newList) => {
-    setList(newList);
-    localStorage.setItem('list', JSON.stringify(newList));
-  };
-  const addNum = (id, val, val2) => {
-    let newList = list;
-    let a = parseFloat(val, 0);
-    let b = parseFloat(val2, 0);
-    let value = a + b;
-    for (let i = 0; i < newList.length; i++) {
-      if (newList[i].id === id) {
-        newList[i].personOwing = parseFloat(value).toFixed(2);
-      }
-    }
-    setList(newList);
-    setDisplayAdd(true);
-    console.log("this is to add")
-  };
-
   const subNum = (id, val, val2) => {
-    let newList = list;
-    let a = parseFloat(val, 0);
-    let b = parseFloat(val2, 0);
-    let value = a - b;
-    for (let i = 0; i < newList.length; i++) {
-      if (newList[i].id === id) {
-        newList[i].personOwing = parseFloat(value).toFixed(2);
-      }
-    }
-    setList(newList);
+    setList((prevList) => {
+      const newList = prevList.map((item) => {
+        if (item.id === id) {
+          const a = parseFloat(item.personOwing, 0);
+          const b = parseFloat(val2, 0);
+          const value = a - b;
+          return { ...item, personOwing: parseFloat(value).toFixed(2) };
+        }
+        return item;
+      });
+      localStorage.setItem("list", JSON.stringify(newList));
+      return newList;
+    });
     setDisplayAdd(false);
     console.log("this is to sub");
   };
@@ -127,7 +130,11 @@ function App() {
     setPersonOwing("");
     setSelectedValue("");
     setAddPerson(false);
-    setList([...list, newItems]);
+    setList((prevList) => {
+      const newList = [...prevList, newItems];
+      localStorage.setItem("list", JSON.stringify(newList));
+      return newList;
+    });
     setIsEditing(false);
   };
   const selectPerson = (id) => {
@@ -193,7 +200,7 @@ function App() {
   const addReceipt = (receipt) => {
     setReceipts((prevReceipts) => {
       const newReceipts = [...prevReceipts, receipt];
-      localStorage.setItem('receipts', JSON.stringify(newReceipts));
+      localStorage.setItem("receipts", JSON.stringify(newReceipts.map(JSON.stringify)));
       return newReceipts;
     });
   };
@@ -215,6 +222,7 @@ function App() {
               setTheme={setTheme}
               toggleTheme={toggleTheme}
               handleAccessApp={handleAccessApp}
+              handleClearData={handleClearData}
             />
           }
         />
@@ -359,6 +367,8 @@ function App() {
               invoiceNumber={invoiceNumber}
               displayAdd={displayAdd}
               setReceipts={setReceipts}
+              selectedPerson={selectedPerson}
+              setSelectedPerson={setSelectedPerson}
               selectedValue={selectedValue}
               history={history}
               displayMerchant={displayMerchant}
