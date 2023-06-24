@@ -38,7 +38,10 @@ function App() {
   const [personState, setPersonState] = useState("");
   const [selectedPerson, setSelectedPerson] = useState(false);
   const [hasReceipt, setHasReceipt] = useState(false);
-  const [list, setList] = useState([]);
+  const [list, setList] = useState(() => {
+    const storedList = localStorage.getItem('list');
+    return storedList ? JSON.parse(storedList) : [];
+  });
   const [isEditing, setIsEditing] = useState(false);
   const [isSelected, setIsSelected] = useState(false);
 
@@ -69,6 +72,16 @@ function App() {
 
   const handleAdd = (newEntry) => {
     setHistory([...history, newEntry]);
+  };
+
+  const setUpdatedReceipts = (newReceipts) => {
+    setReceipts(newReceipts);
+    localStorage.setItem('receipts', JSON.stringify(newReceipts));
+  };
+  
+  const setUpdatedList = (newList) => {
+    setList(newList);
+    localStorage.setItem('list', JSON.stringify(newList));
   };
   const addNum = (id, val, val2) => {
     let newList = list;
@@ -150,34 +163,44 @@ function App() {
     document.body.className = theme;
   }, [theme]);
 
-  const [receipts, setReceipts] = useState([]);
-  const addReceipt = (
-    personName,
-    personReceiptAmount,
-    selectedValue,
-    merchantName,
-    startDate,
-    invoiceNumber,
-    displayMerchant,
-    displayDate,
-    displayInvoice
-  ) => {
-    const newReceipts = [...receipts];
-    newReceipts.push({
-      personName,
-      personReceiptAmount,
-      selectedValue,
-      merchantName,
-      startDate,
-      invoiceNumber,
-      displayMerchant,
-      displayDate,
-      displayInvoice,
-    });
-    setReceipts(newReceipts);
-  };
-  //Receipt input vals
+  const [receipts, setReceipts] = useState(() => {
+    const storedReceipts = localStorage.getItem('receipts');
+    return storedReceipts ? JSON.parse(storedReceipts) : [];
+  });
+
   
+  useEffect(() => {
+    const storedReceipts = localStorage.getItem('receipts');
+    const storedList = localStorage.getItem('list');
+
+    if (storedReceipts) {
+      setReceipts(JSON.parse(storedReceipts));
+    }
+
+    if (storedList) {
+      setList(JSON.parse(storedList));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('receipts', JSON.stringify(receipts));
+  }, [receipts]);
+
+  useEffect(() => {
+    localStorage.setItem('list', JSON.stringify(list));
+  }, [list]);
+
+  const addReceipt = (receipt) => {
+    setReceipts((prevReceipts) => {
+      const newReceipts = [...prevReceipts, receipt];
+      localStorage.setItem('receipts', JSON.stringify(newReceipts));
+      return newReceipts;
+    });
+  };
+
+
+  //Receipt input vals
+
   const [youPictureTotal, setYouPictureTotal] = useState(0);
   const [splitPictureTotal, setSplitPictureTotal] = useState(0);
   const [themPictureTotal, setThemPictureTotal] = useState(0);

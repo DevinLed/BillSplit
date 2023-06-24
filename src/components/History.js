@@ -32,11 +32,7 @@ export default function History({ theme, receipts, isReceiptSubmitted, setIsRece
                 )}
               </div>
 
-              <div className="flex justify-center items-center mt-2">
-                <p className="text-sm">
-                  {receipt.startDate.toLocaleDateString("en-US")}
-                </p>
-              </div>
+             
             </div>
             <div className="flex justify-center items-center mt-2">
               <p className="text-sm">
