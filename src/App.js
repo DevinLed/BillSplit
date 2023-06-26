@@ -26,8 +26,6 @@ import "./index.css";
 import ReceiptTable from "./components/ReceiptTable";
 
 function App() {
-  const [isDarkModeOn, setIsDarkModeOn] = useState(false);
-
   // Menus for edit person and edit group
   const [addPerson, setAddPerson] = useState(false);
   const [editPerson, setEditPerson] = useState(false);
@@ -39,7 +37,7 @@ function App() {
   const [selectedPerson, setSelectedPerson] = useState(false);
   const [hasReceipt, setHasReceipt] = useState(false);
   const [list, setList] = useState(() => {
-    const storedList = localStorage.getItem('list');
+    const storedList = localStorage.getItem("list");
     return storedList ? JSON.parse(storedList) : [];
   });
   const [isEditing, setIsEditing] = useState(false);
@@ -97,7 +95,7 @@ function App() {
     setDisplayAdd(true);
     console.log("this is to add");
   };
-  
+
   const subNum = (id, val, val2) => {
     setList((prevList) => {
       const newList = prevList.map((item) => {
@@ -171,14 +169,13 @@ function App() {
   }, [theme]);
 
   const [receipts, setReceipts] = useState(() => {
-    const storedReceipts = localStorage.getItem('receipts');
+    const storedReceipts = localStorage.getItem("receipts");
     return storedReceipts ? JSON.parse(storedReceipts) : [];
   });
 
-  
   useEffect(() => {
-    const storedReceipts = localStorage.getItem('receipts');
-    const storedList = localStorage.getItem('list');
+    const storedReceipts = localStorage.getItem("receipts");
+    const storedList = localStorage.getItem("list");
 
     if (storedReceipts) {
       setReceipts(JSON.parse(storedReceipts));
@@ -190,23 +187,23 @@ function App() {
   }, []);
 
   useEffect(() => {
-    localStorage.setItem('receipts', JSON.stringify(receipts));
+    localStorage.setItem("receipts", JSON.stringify(receipts));
   }, [receipts]);
 
   useEffect(() => {
-    localStorage.setItem('list', JSON.stringify(list));
+    localStorage.setItem("list", JSON.stringify(list));
   }, [list]);
 
   const addReceipt = (receipt) => {
     setReceipts((prevReceipts) => {
       const newReceipts = [...prevReceipts, receipt];
-      localStorage.setItem("receipts", JSON.stringify(newReceipts.map(JSON.stringify)));
+      localStorage.setItem(
+        "receipts",
+        JSON.stringify(newReceipts.map(JSON.stringify))
+      );
       return newReceipts;
     });
   };
-
-
-  //Receipt input vals
 
   const [youPictureTotal, setYouPictureTotal] = useState(0);
   const [splitPictureTotal, setSplitPictureTotal] = useState(0);
@@ -226,7 +223,7 @@ function App() {
             />
           }
         />
-        <Route path="/LandingPage" element={<LandingPage theme={theme}/>} />
+        <Route path="/LandingPage" element={<LandingPage theme={theme} />} />
         <Route path="/" element={<Navigate to="/LandingPage" />} />
 
         <Route
@@ -285,7 +282,6 @@ function App() {
               setYouPictureTotal={setYouPictureTotal}
               setSplitPictureTotal={setSplitPictureTotal}
               setThemPictureTotal={setThemPictureTotal}
-              
             />
           }
         />
@@ -339,50 +335,17 @@ function App() {
               setPersonState={setPersonState}
               personState={personState}
               setIsSelected={setIsSelected}
-              list={list}
-              setIsEditing={setIsEditing}
               editPerson={editPerson}
               setEditPerson={setEditPerson}
               editRow={editRow}
+              list={list}
               value={value}
-              hasReceipt={hasReceipt}
-              setHasReceipt={setHasReceipt}
-              formSubmitted={formSubmitted}
               theme={theme}
             />
           }
         />
 
-        <Route
-          path="/History"
-          element={
-            <History
-              personName={personName}
-              personOwing={personOwing}
-              personReceiptAmount={personReceiptAmount}
-              addReceipt={addReceipt}
-              receipts={receipts}
-              merchantName={merchantName}
-              startDate={startDate}
-              invoiceNumber={invoiceNumber}
-              displayAdd={displayAdd}
-              setReceipts={setReceipts}
-              selectedPerson={selectedPerson}
-              setSelectedPerson={setSelectedPerson}
-              selectedValue={selectedValue}
-              history={history}
-              displayMerchant={displayMerchant}
-              setDisplayMerchant={setDisplayMerchant}
-              displayDate={displayDate}
-              setDisplayDate={setDisplayDate}
-              displayInvoice={displayInvoice}
-              setDisplayInvoice={setDisplayInvoice}
-              isReceiptSubmitted={isReceiptSubmitted}
-              setIsReceiptSubmitted={setIsReceiptSubmitted}
-              theme={theme}
-            />
-          }
-        />
+        <Route path="/History" element={<History receipts={receipts} />} />
 
         <Route
           path="/AddPerson"
@@ -394,64 +357,20 @@ function App() {
             />
           }
         />
-          <Route
+        <Route
           path="/ReceiptTable"
           element={
             <ReceiptTable
-              formSubmitted={formSubmitted}
-              setFormSubmitted={setFormSubmitted}
-              theme={theme}
-              addPerson={addPerson}
-              setAddPerson={setAddPerson}
-              selectPerson={selectPerson}
-              personName={personName}
-              personEmail={personEmail}
-              personPhone={personPhone}
-              personOwing={personOwing}
-              setPersonName={setPersonName}
-              setPersonEmail={setPersonEmail}
-              setPersonPhone={setPersonPhone}
-              setPersonOwing={setPersonOwing}
-              handleSubmit={handleSubmit}
-              setPersonState={setPersonState}
-              personState={personState}
-              setIsSelected={setIsSelected}
-              list={list}
-              value={value}
-              hasReceipt={hasReceipt}
-              setHasReceipt={setHasReceipt}
-              startDate={startDate}
-              setStartDate={setStartDate}
-              merchantName={merchantName}
-              setMerchantName={setMerchantName}
-              invoiceNumber={invoiceNumber}
-              setInvoiceNumber={setInvoiceNumber}
-              personReceiptAmount={personReceiptAmount}
-              setPersonReceiptAmount={setPersonReceiptAmount}
-              addNum={addNum}
-              subNum={subNum}
-              addReceipt={addReceipt}
-              receipts={receipts}
-              setReceipts={setReceipts}
-              displayAdd={displayAdd}
-              setDisplayAdd={setDisplayAdd}
-              selectedValue={selectedValue}
-              setSelectedValue={setSelectedValue}
-              handleAdd={handleAdd}
-              displayMerchant={displayMerchant}
-              setDisplayMerchant={setDisplayMerchant}
-              displayDate={displayDate}
-              setDisplayDate={setDisplayDate}
-              displayInvoice={displayInvoice}
-              setDisplayInvoice={setDisplayInvoice}
-              isReceiptSubmitted={isReceiptSubmitted}
-              setIsReceiptSubmitted={setIsReceiptSubmitted}
+              setThemPictureTotal={setThemPictureTotal}
+              setSplitPictureTotal={setSplitPictureTotal}
+              setYouPictureTotal={setYouPictureTotal}
               youPictureTotal={youPictureTotal}
               splitPictureTotal={splitPictureTotal}
               themPictureTotal={themPictureTotal}
-              setYouPictureTotal={setYouPictureTotal}
-              setSplitPictureTotal={setSplitPictureTotal}
-              setThemPictureTotal={setThemPictureTotal}
+              selectedValue={selectedValue}
+              personName={personName}
+              personReceiptAmount={personReceiptAmount}
+              setPersonReceiptAmount={setPersonReceiptAmount}
             />
           }
         />

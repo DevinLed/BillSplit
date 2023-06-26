@@ -1,6 +1,4 @@
 import { React, useState, useEffect } from "react";
-import History from "./History";
-import { IoMdCheckmark } from "react-icons/io";
 import "../index.css";
 
 export default function AddPerson({
@@ -14,11 +12,7 @@ export default function AddPerson({
   setPersonEmail,
   setPersonOwing,
   handleSubmit,
-  setIsSelected,
   value,
-  setValue,
-  addNum,
-  personReceiptAmount,
   formSubmitted,
   setFormSubmitted,
   theme,
@@ -32,10 +26,6 @@ export default function AddPerson({
   const [submissionError, setSubmissionError] = useState(true);
   const [showInput, setShowInput] = useState(false);
   const [inputWidth, setInputWidth] = useState(0);
-  const [isLoaded, setIsLoaded] = useState(true);
-  function handleKeyDown(event) {
-    // Handle key events
-  }
 
   function handleYesButtonClick() {
     setShowInput(true);

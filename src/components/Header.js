@@ -1,27 +1,18 @@
-import React, { useRef, useState, useEffect } from "react"; 
+import React from "react";
 import { IoIosArrowBack } from "react-icons/io";
 import { AiOutlineMenu } from "react-icons/ai";
-import { Route, Routes, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import "../darkMode.css";
 export default function Header({
   startBill,
-  setStartBill,
-  showPersonEdit,
-  setPersonEdit,
-  selectPersonEdit,
-  setSelectPersonEdit,
-  setHistory,
   showHistory,
   selectPersonReceipt,
-  setSelectPersonReceipt,
   selectPersonList,
   selectEditPersonList,
   selectMethodManual,
   selectMethodPicture,
-  resetReceiptForm,
-  resetValues,
-  handleResetTotals
+  handleResetTotals,
 }) {
   return (
     <>
@@ -85,7 +76,7 @@ export default function Header({
             id="headbar"
           >
             <Link to="/Home">
-              <button className="ml-2 text-black hover:text-black" >
+              <button className="ml-2 text-black hover:text-black">
                 <IoIosArrowBack />
               </button>
             </Link>
@@ -170,7 +161,10 @@ export default function Header({
           id="headbar"
         >
           <Link to="/SplitBill">
-            <button className="ml-2 text-black hover:text-black " onClick={() => handleResetTotals()}>
+            <button
+              className="ml-2 text-black hover:text-black "
+              onClick={() => handleResetTotals()}
+            >
               <IoIosArrowBack />
             </button>
           </Link>
@@ -213,7 +207,10 @@ export default function Header({
           id="headbar"
         >
           <Link to="/SplitBill">
-            <button className="ml-2 text-black hover:text-black" onClick={(e) => handleResetTotals(e)}>
+            <button
+              className="ml-2 text-black hover:text-black"
+              onClick={(e) => handleResetTotals(e)}
+            >
               <IoIosArrowBack />
             </button>
           </Link>

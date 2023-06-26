@@ -1,9 +1,6 @@
 import React from "react";
-import { useState, useEffect } from "react";
-import { v4 as uuidv4 } from "uuid";
-import { confirmAlert } from "react-confirm-alert"; // Import
-import { BrowserRouter, Switch, Route, Routes, Link } from "react-router-dom";
-import "./../index.css"
+import { useState } from "react";
+import "./../index.css";
 
 export default function EditPerson({
   personName,
@@ -16,11 +13,6 @@ export default function EditPerson({
   setPersonEmail,
   setPersonOwing,
   handleSubmit,
-  handleEditSubmit,
-  setIsSelected,
-  list,
-  setList,
-  setIsEditing,
   formSubmitted,
   theme,
 }) {
@@ -72,33 +64,28 @@ export default function EditPerson({
       setIsValidEmail(false);
     }
   };
-  function handleKeyDown(e) {
-    if (e.key === "Enter") {
-      e.target.blur();
-    }
-  }
 
   return (
     <>
-      <div className="p-8 justify-center items-center flex overflow-x-hidden overflow-y-hidden fixed inset-0 z-50 focus:outline-none">
-        <div className="relative w-auto my-6 mx-auto max-w-sm">
+      <div className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-hidden p-8 focus:outline-none">
+        <div className="relative my-6 mx-auto w-auto max-w-sm">
           {/*content*/}
           <div
             className={
               theme === "dark"
-                ? "bg-gray-500 border-8 border-black-500 rounded-lg shadow-lg relative flex flex-col w-full outline-none focus:outline-none"
-                : "bg-white border-8 border-black-500 rounded-lg shadow-lg relative flex flex-col w-full outline-none focus:outline-none"
+                ? "border-black-500 relative flex w-full flex-col rounded-lg border-8 bg-gray-500 shadow-lg outline-none focus:outline-none"
+                : "border-black-500 relative flex w-full flex-col rounded-lg border-8 bg-white shadow-lg outline-none focus:outline-none"
             }
           >
             {/*header*/}
-            <div className="flex items-center justify-evenly p-3 border-b border-solid border-slate-200 rounded-t">
+            <div className="flex items-center justify-evenly rounded-t border-b border-solid border-slate-200 p-3">
               <h3 className="text-2xl font-semibold text-black">Edit Person</h3>
             </div>
             {/*body*/}
 
-            <div className="relative p-6 flex-auto justify-center items-center">
+            <div className="relative flex-auto items-center justify-center p-6">
               <div className="text-center">
-                <div className="form-group row mb-3  flex justify-center items-center">
+                <div className="form-group row mb-3  flex items-center justify-center">
                   <label
                     htmlFor="colFormLabel"
                     className="col-sm-2 col-form-label mr-2"
@@ -107,7 +94,7 @@ export default function EditPerson({
                   </label>
                   <input
                     type="name"
-                    className="form-control w-2/4 ml-2 mb-2"
+                    className="form-control ml-2 mb-2 w-2/4"
                     id="colFormLabel"
                     placeholder="Name"
                     value={personName}
@@ -121,7 +108,7 @@ export default function EditPerson({
                   />
                 </div>
 
-                <div className="form-group row mb-3 flex justify-center items-center">
+                <div className="form-group row mb-3 flex items-center justify-center">
                   <label
                     htmlFor="colFormLabel"
                     className="col-sm-2 col-form-label mr-2"
@@ -142,10 +129,9 @@ export default function EditPerson({
                     value={formSubmitted ? "" : personPhone}
                     onChange={handlePhoneNumberChange}
                   />
-
                 </div>
 
-                <div className="form-group row mb-3 flex justify-center items-center">
+                <div className="form-group row mb-3 flex items-center justify-center">
                   <label
                     htmlFor="colFormLabel"
                     className="col-sm-2 col-form-label mr-2"
@@ -154,7 +140,6 @@ export default function EditPerson({
                   </label>
                   <input
                     type="email"
-                    
                     className={`form-control mb-2 ml-2 w-2/4 ${
                       isValidEmail ? "valid" : "invalid"
                     } `}
@@ -163,10 +148,9 @@ export default function EditPerson({
                     value={formSubmitted ? "" : personEmail}
                     onChange={handleEmailChange}
                   />
+                </div>
 
-                                 </div>
-
-                <div className="form-group row mb-0 text-center justify-center items-center">
+                <div className="form-group row mb-0 items-center justify-center text-center">
                   <label
                     htmlFor="colFormLabel"
                     className="col-form-label label-one-line"
@@ -175,9 +159,9 @@ export default function EditPerson({
                   </label>
                 </div>
 
-                <div className="form-group row mb-0 flex justify-center items-center">
-                  <div className="flex justify-center items-center">
-                    <div className="input-group mb-3 flex justify-center items-center">
+                <div className="form-group row mb-0 flex items-center justify-center">
+                  <div className="flex items-center justify-center">
+                    <div className="input-group mb-3 flex items-center justify-center">
                       <span className="input-group-text ml-9">$</span>
                       <input
                         type="text"
@@ -212,7 +196,7 @@ export default function EditPerson({
                   </div>
 
                   <div
-                    className="flex items-center justify-center error-msg h-5"
+                    className="error-msg flex h-5 items-center justify-center"
                     style={{ color: "red" }}
                   >
                     {errorMsg}
@@ -221,7 +205,7 @@ export default function EditPerson({
                     <div>
                       <button
                         type="submit"
-                        className="justify-center align-items-center mt-3 ml-2 bg-gray-500 font-bold py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
+                        className="align-items-center mt-3 ml-2 justify-center rounded border-2 border-blue-500 bg-gray-500 py-2 px-4 font-bold shadow transition-all duration-300 hover:bg-white"
                         onClick={(e) => {
                           setPersonOwing("0.00");
                           setErrorBalance(true);
@@ -235,10 +219,10 @@ export default function EditPerson({
               </div>
             </div>
             {/*footer*/}
-            <div className="flex items-center  justify-center align-items-center pb-6 px-6 border-t border-solid border-slate-200 rounded-b">
+            <div className="align-items-center flex  items-center justify-center rounded-b border-t border-solid border-slate-200 px-6 pb-6">
               <button
                 type="submit"
-                className="justify-center mt-3 ml-2 bg-blue-500 font-bold py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
+                className="mt-3 ml-2 justify-center rounded border-2 border-blue-500 bg-blue-500 py-2 px-4 font-bold shadow transition-all duration-300 hover:bg-white"
                 onClick={(e) => {
                   if (errorBalance && errorPhone & errorEmail) {
                     handleSubmit(e);
@@ -253,7 +237,7 @@ export default function EditPerson({
             </div>
             {!submissionError ? (
               <p
-                className="items-center justify-center mx-auto"
+                className="mx-auto items-center justify-center"
                 style={{ color: "red" }}
               >
                 Please complete all fields correctly.

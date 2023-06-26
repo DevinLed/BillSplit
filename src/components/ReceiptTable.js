@@ -32,39 +32,44 @@ export default function ReceiptTable({
   setCombinedArray,
   pictureTax,
   setPictureTax,
-  pictureConfidence, 
-  setName
+  pictureConfidence,
+  setName,
 }) {
+  // Handler for changing the name of the item added to array
   const handleNameChange = (event) => {
     setName(event.target.value);
   };
 
+  // Calculate the final total of the entire receipt, both picture and manually added
   const finalTotal = () => {
     let total =
       parseFloat(splitPictureTotal) +
       parseFloat(themPictureTotal) +
-      (parseFloat(pictureTax)||0) +
+      (parseFloat(pictureTax) || 0) +
       parseFloat(youPictureTotal);
-      
-      let splitValue = parseFloat(splitPictureTotal) / 2;
-      let themValue = parseFloat(themPictureTotal);
-      let youValue = parseFloat(youPictureTotal);
-  
-      if (selectedValue === "you") {
-        setPersonReceiptAmount(splitValue + themValue);
-      } else if (selectedValue === "them") {
-        setPersonReceiptAmount(splitValue + youValue);
-      }
+
+    let splitValue = parseFloat(splitPictureTotal) / 2;
+    let themValue = parseFloat(themPictureTotal);
+    let youValue = parseFloat(youPictureTotal);
+
+    if (selectedValue === "you") {
+      setPersonReceiptAmount(splitValue + themValue);
+    } else if (selectedValue === "them") {
+      setPersonReceiptAmount(splitValue + youValue);
+    }
     return parseFloat(total).toFixed(2);
   };
+
   const [hasBeenAccessed, setHasBeenAccessed] = useState(false);
+
+  // Handler for deleting an item from the combinedArray
   const handlePictureDelete = (index) => {
     const deletedItem = combinedArray[index];
 
     // Update the obtainedInfo array without the deleted item
     setObtainedInfo((prevInfo) => prevInfo.filter((_, i) => i !== index));
 
-    // Update the sliderValue of the remaining items, if necessary
+    // Update the sliderValue of the remaining items
     setCombinedArray((prevCombinedArray) => {
       const updatedArray = prevCombinedArray.map((item) => {
         if (item.sliderValue !== undefined) {
@@ -82,17 +87,19 @@ export default function ReceiptTable({
     });
   };
 
-  
   const [sliderValue, setSliderValue] = useState(55);
 
-  const taxOwing = (selectedValue === "you")
-  ? parseFloat(splitPictureTotal) / 2 + parseFloat(themPictureTotal)
-  : parseFloat(splitPictureTotal) / 2 + parseFloat(youPictureTotal);
+  // Calculate the tax owing based on the selected value, works into the values in the slider total information
+  const taxOwing =
+    selectedValue === "you"
+      ? parseFloat(splitPictureTotal) / 2 + parseFloat(themPictureTotal)
+      : parseFloat(splitPictureTotal) / 2 + parseFloat(youPictureTotal);
 
   const taxOwingPerc = taxOwing / parseFloat(getPictureTotal());
 
   const taxActual = parseFloat(pictureTax) * parseFloat(taxOwingPerc);
 
+  // Handler for when on mobile, enter key will collapse the keyboard popup
   const handleKeyDown = (e, index) => {
     if (e.key === "Enter") {
       e.preventDefault();
@@ -100,6 +107,7 @@ export default function ReceiptTable({
     }
   };
 
+  // Render the column based on the slider value
   const renderColumn = () => {
     if (sliderValue <= 33) {
       return renderYouColumn();
@@ -110,33 +118,21 @@ export default function ReceiptTable({
     }
   };
   const renderYouColumn = () => {
-    return (
-      <div className="flex h-full items-center justify-center">
-        {/* Add your content for the "You" column here */}
-      </div>
-    );
+    return <div className="flex h-full items-center justify-center"></div>;
   };
 
   const renderSplitColumn = () => {
-    return (
-      <div className="flex h-full items-center justify-center">
-        {/* Add your content for the "Split" column here */}
-      </div>
-    );
+    return <div className="flex h-full items-center justify-center"></div>;
   };
 
   const renderPersonNameColumn = () => {
-    return (
-      <div className="flex h-full items-center justify-center">
-        {/* Add your content for the "Person Name" column here */}
-      </div>
-    );
+    return <div className="flex h-full items-center justify-center"></div>;
   };
 
   const handleSliderChange = (value) => {
     setSliderValue(value);
   };
-
+  // Handler for changing the values in item.amount
   const handleAmountChange = (value, index) => {
     const newValue = value.replace(/^\$/, "");
 
@@ -156,10 +152,12 @@ export default function ReceiptTable({
     updatedCombinedArray[index].amount = parsedValue || "0";
     setCombinedArray(updatedCombinedArray);
   };
+
+  // Handler for manually editting Tax amount
   const handleTaxAmountChange = (value) => {
     const newValue = value.replace(/^\$/, "");
     let parsedValue = newValue.replace(/[^0-9.]/g, "");
-  
+
     const decimalIndex = parsedValue.indexOf(".");
     if (decimalIndex !== -1) {
       parsedValue =
@@ -170,11 +168,11 @@ export default function ReceiptTable({
     if (decimalSplit[1] && decimalSplit[1].length > 2) {
       parsedValue = decimalSplit[0] + "." + decimalSplit[1].slice(0, 2);
     }
-  
+
     // Update the state value of pictureTax
     setPictureTax(parsedValue || "");
   };
-
+  // Handler for moving the slider from entries added via picture
   const handlePictureSliderChange = (index, value, item) => {
     setObtainedInfo((prevInfo) => {
       const updatedInfo = [...prevInfo];
@@ -189,7 +187,7 @@ export default function ReceiptTable({
       if (i === index) {
         return {
           ...info,
-          previousAmount: parseFloat(info.amount), 
+          previousAmount: parseFloat(info.amount),
           sliderValue: value,
         };
       }
@@ -198,7 +196,7 @@ export default function ReceiptTable({
 
     const updatedYouPictureTotal = updatedObtainedInfo.reduce((total, info) => {
       if (info.sliderValue === 0) {
-        return total + parseFloat(info.amount); 
+        return total + parseFloat(info.amount);
       }
       return total;
     }, 0);
@@ -206,7 +204,7 @@ export default function ReceiptTable({
     const updatedSplitPictureTotal = updatedObtainedInfo.reduce(
       (total, info) => {
         if (info.sliderValue === 55) {
-          return total + parseFloat(info.amount); 
+          return total + parseFloat(info.amount);
         }
         return total;
       },
@@ -228,7 +226,7 @@ export default function ReceiptTable({
     setSplitPictureTotal(updatedSplitPictureTotal.toFixed(2));
     setThemPictureTotal(updatedThemPictureTotal.toFixed(2));
   };
-
+  // defaulting the slidervalues for picture array entries
   useEffect(() => {
     setObtainedInfo((prevInfo) =>
       prevInfo.map((item) => ({
@@ -237,7 +235,7 @@ export default function ReceiptTable({
       }))
     );
   }, []);
-
+  // combing the 2 arrays, picture and manually entered
   useEffect(() => {
     if (Array.isArray(items) && Array.isArray(obtainedInfo)) {
       setCombinedArray([...items, ...obtainedInfo]);
@@ -269,12 +267,12 @@ export default function ReceiptTable({
       },
       { youTotal: 0, splitTotal: 0, themTotal: 0 }
     );
-  
+
     const total =
       updatedTotals.youTotal +
       updatedTotals.splitTotal +
       updatedTotals.themTotal;
-  
+
     setYouPictureTotal(updatedTotals.youTotal.toFixed(2));
     setSplitPictureTotal(updatedTotals.splitTotal.toFixed(2));
     setThemPictureTotal(updatedTotals.themTotal.toFixed(2));
@@ -415,7 +413,7 @@ export default function ReceiptTable({
                         if (!hasBeenAccessed) {
                           setHasBeenAccessed(true);
                         }
-                        handleAmountChange(e.target.value, index)
+                        handleAmountChange(e.target.value, index);
                         handleKeyDown(e, combinedArray.length);
                       }}
                     />
@@ -446,7 +444,6 @@ export default function ReceiptTable({
                   <td></td>
                 </tr>
               ))}
-
             </tbody>
             <tfoot className="bg-blue-200">
               <tr className="border-t border-gray-500 bg-blue-200">
@@ -483,8 +480,8 @@ export default function ReceiptTable({
                 <td></td>
                 <td></td>
               </tr>
-              
-              {pictureTax ? (
+
+              {pictureTax && (
                 <tr className="bg-white">
                   <td className="text-black">Tax</td>
                   <td
@@ -495,6 +492,7 @@ export default function ReceiptTable({
                       height: "100%",
                     }}
                   >
+
                     <button
                       className="add-button m-2 items-center justify-center text-center text-2xl text-gray-500"
                       onClick={() => setPictureTax(0)}
@@ -506,7 +504,7 @@ export default function ReceiptTable({
                       className="my-0 ml-2 w-20 py-1 text-xs text-black"
                       style={{
                         border:
-                        pictureConfidence < 0.5 && !hasBeenAccessed
+                          pictureConfidence < 0.5 && !hasBeenAccessed
                             ? "1px solid red"
                             : "1px solid black",
                       }}
@@ -515,9 +513,7 @@ export default function ReceiptTable({
                         if (!hasBeenAccessed) {
                           setHasBeenAccessed(true);
                         }
-                        handleTaxAmountChange(
-                          e.target.value
-                        );
+                        handleTaxAmountChange(e.target.value);
                       }}
                     />
                   </td>
@@ -535,7 +531,7 @@ export default function ReceiptTable({
                   <td></td>
                   <td></td>
                 </tr>
-              ): ("")}
+              )}
             </tfoot>
           </table>
         </div>
@@ -554,19 +550,19 @@ export default function ReceiptTable({
           )}
         </label>
       </div>
-      {pictureTax ? <div className="mt-3 flex items-center justify-center rounded-lg bg-white px-3 py-2 shadow-md">
-        <label className="text-center text-lg font-medium">
-          {selectedValue === "you" ? (
-            <>
-              Taxes {personName} owes you: {parseFloat(taxActual).toFixed(2)}
-            </>
-          ) : (
-            <>
-              Taxes you owe {personName}: {parseFloat(taxActual).toFixed(2)}
-            </>
-          )}
-        </label>
-      </div>:("")}
+      {pictureTax && (
+        <div className="mt-3 flex items-center justify-center rounded-lg bg-white px-3 py-2 shadow-md">
+          <label className="text-center text-lg font-medium">
+            {selectedValue === "you"
+              ? `Taxes ${personName} owes you: ${parseFloat(taxActual).toFixed(
+                  2
+                )}`
+              : `Taxes you owe ${personName}: ${parseFloat(taxActual).toFixed(
+                  2
+                )}`}
+          </label>
+        </div>
+      )}
       <div className="mt-3 flex items-center justify-center rounded-lg bg-white px-3 py-2 shadow-md">
         <label className="text-center text-lg font-medium">
           Receipt Total: ${finalTotal()}

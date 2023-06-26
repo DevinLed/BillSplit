@@ -72,7 +72,6 @@ export default function ReceiptInput({
   const [showImage, setShowImage] = useState(false);
   const [showCameraImage, setShowCameraImage] = useState(false);
   const [showRedoButton, setShowRedoButton] = useState(false);
-  const [obtainedSliderInfo, setObtainedSliderInfo] = useState([]);
   const [displayPictureInfo, setDisplayPictureInfo] = useState(false);
   const [obtainedInfo, setObtainedInfo] = useState([]);
   const [isAddedManually, setIsAddedManually] = useState(false);
@@ -133,25 +132,15 @@ export default function ReceiptInput({
   };
 
   const { id } = useParams();
-  const [receiptList, setReceiptList] = useState([]);
   const [items, setItems] = useState([]);
   const [name, setName] = useState("");
   const [amount, setAmount] = useState("");
-  const [addToValue, setAddToValue] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [youValue, setYouValue] = useState(0);
-  const [splitValue, setSplitValue] = useState(0);
-  const [themValue, setThemValue] = useState(0);
   const [showTable, setShowTable] = useState("");
   const [youTotal, setYouTotal] = useState(0);
   const [splitTotal, setSplitTotal] = useState(0);
   const [themTotal, setThemTotal] = useState(0);
   const [combinedArray, setCombinedArray] = useState([]);
-
-  const [receiptSubmitted, setReceiptSubmitted] = useState(false);
-  const [totalToAdd, setTotalToAdd] = useState("");
-
-  const [defValue, setDefValue] = useState(55);
 
   const [selected, setSelected] = useState(null);
   const handleButton1Click = () => {
@@ -172,7 +161,6 @@ export default function ReceiptInput({
     setSelected(2);
   };
 
- 
   const handleReceiptSubmit = (sliderValue) => {
     if (!name || !amount) {
       return;
@@ -220,7 +208,7 @@ export default function ReceiptInput({
       return;
     }
     const parsedAmount = parseFloat(amount).toFixed(2);
-  
+
     setObtainedInfo((prevInfo) => [
       ...prevInfo,
       {
@@ -229,7 +217,7 @@ export default function ReceiptInput({
         sliderValue: sliderValue,
       },
     ]);
-  
+
     switch (sliderValue) {
       case 0:
         setYouPictureTotal((prevTotal) =>
@@ -249,7 +237,7 @@ export default function ReceiptInput({
       default:
         break;
     }
-  
+
     setName("");
     setAmount("");
     setCurrentIndex(currentIndex + 1);
@@ -304,7 +292,7 @@ export default function ReceiptInput({
     }
     return parseFloat(total).toFixed(2);
   };
-  const handleHistorySubmit = () =>{
+  const handleHistorySubmit = () => {
     const newReceipt = {
       personName,
       personOwing,
@@ -315,7 +303,7 @@ export default function ReceiptInput({
       invoiceNumber,
       displayMerchant,
       displayDate,
-      displayInvoice
+      displayInvoice,
     };
 
     addReceipt(newReceipt);

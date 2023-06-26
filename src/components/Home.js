@@ -1,19 +1,16 @@
-import React, { useRef, useState, useEffect } from "react";
-import { Route, Routes, Link } from "react-router-dom";
-import { v4 as uuidv4 } from "uuid";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import Header from "./Header";
 import Footer from "./Footer";
 
-export default function Home({theme, setTheme, toggleTheme, accessedApp, setAccessedApp, handleClearData}) {
+export default function Home({theme, toggleTheme, handleClearData}) {
 
 
     const [startBill, setStartBill] = useState(true);
     const [showPersonEdit, setPersonEdit] = useState(false);
-    const [showHistory, setHistory] = useState(false);
 
     
   const [selectPersonEdit, setSelectPersonEdit] = useState(false);
-  const [selectGroupEdit, setSelectGroupEdit] = useState(false);
 
   // For Dark/Bright mode. Keeps mode storage for page refresh.
   
@@ -24,7 +21,7 @@ export default function Home({theme, setTheme, toggleTheme, accessedApp, setAcce
     
     
   
-  // Main screen menu selection - 4 buttons: Start Bill, Edit Person, History, Darkmode
+  // Main screen menu selection - 6 buttons: Start Bill, Edit Person, History, Darkmode, Home Page, Clear Data
   return (
     <>
     

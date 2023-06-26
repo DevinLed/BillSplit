@@ -1,7 +1,6 @@
 import React, { useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import Header from "./Header";
-import Footer from "./Footer";
 
 export default function History({ receipts }) {
   const { id } = useParams();

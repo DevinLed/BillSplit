@@ -1,10 +1,7 @@
-import React, { useRef, useState, useEffect } from "react";
-import { v4 as uuidv4 } from "uuid";
-import { BrowserRouter, Switch, Route, Routes, Link } from "react-router-dom";
+import React, { useState} from "react";
 import AddPerson from "./AddPerson";
 import Header from "./Header";
 import EditPerson from "./EditPerson";
-import Footer from "./Footer";
 
 export default function EditList({
   addPerson,
@@ -99,7 +96,7 @@ export default function EditList({
             setPersonState={setPersonState}
             personState={personState}
             setIsSelected={setIsSelected}
-            theme={theme}
+            theme={theme} 
           ></AddPerson>
         ) : (
           ""
