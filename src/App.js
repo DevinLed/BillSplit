@@ -26,6 +26,23 @@ import "./index.css";
 import ReceiptTable from "./components/ReceiptTable";
 
 function App() {
+  // dark mode theme switching
+  const [theme, setTheme] = useState(localStorage.getItem("theme"));
+  const toggleTheme = () => {
+    if (theme === "light") {
+      setTheme("dark");
+      console.log("now in dark mode");
+    } else {
+      setTheme("light");
+      console.log("now in lite mode");
+    }
+  };
+  // useEffect to track dark mode
+  useEffect(() => {
+    localStorage.setItem("theme", theme);
+    document.body.className = theme;
+  }, [theme]);
+
   // Menus for edit person and edit group
   const [addPerson, setAddPerson] = useState(false);
   const [editPerson, setEditPerson] = useState(false);
@@ -42,6 +59,9 @@ function App() {
   });
   const [isEditing, setIsEditing] = useState(false);
   const [isSelected, setIsSelected] = useState(false);
+  const [youPictureTotal, setYouPictureTotal] = useState(0);
+  const [splitPictureTotal, setSplitPictureTotal] = useState(0);
+  const [themPictureTotal, setThemPictureTotal] = useState(0);
 
   const [formSubmitted, setFormSubmitted] = useState(false);
 
@@ -70,14 +90,7 @@ function App() {
     setReceipts([]);
     setTheme("light");
   };
-  const handleAccessApp = () => {
-    setAccessedApp(true);
-  };
-
-  const handleAdd = (newEntry) => {
-    setHistory([...history, newEntry]);
-  };
-
+  // used to update values of balance for contacts
   const addNum = (id, val, val2) => {
     setList((prevList) => {
       const newList = prevList.map((item) => {
@@ -96,6 +109,7 @@ function App() {
     console.log("this is to add");
   };
 
+  // used to update values of balance for contacts
   const subNum = (id, val, val2) => {
     setList((prevList) => {
       const newList = prevList.map((item) => {
@@ -113,7 +127,7 @@ function App() {
     setDisplayAdd(false);
     console.log("this is to sub");
   };
-
+  // Handler for full reset of tables.
   const handleSubmit = (e) => {
     const newItems = {
       personName,
@@ -142,32 +156,7 @@ function App() {
     setPersonReceiptAmount(selectingPerson.personReceiptAmount);
   };
 
-  const editRow = (id) => {
-    const editingRow = list.find((row) => row.id === id);
-    setList(list.filter((row) => row.id !== id));
-    setIsEditing(true);
-    setPersonName(editingRow.personName);
-    setPersonPhone(editingRow.personPhone);
-    setPersonEmail(editingRow.personEmail);
-    setPersonOwing(editingRow.personOwing);
-  };
-  // dark mode theme switching
-  const [theme, setTheme] = useState(localStorage.getItem("theme"));
-  const toggleTheme = () => {
-    if (theme === "light") {
-      setTheme("dark");
-      console.log("now in dark mode");
-    } else {
-      setTheme("light");
-      console.log("now in lite mode");
-    }
-  };
-  // useEffect to track dark mode
-  useEffect(() => {
-    localStorage.setItem("theme", theme);
-    document.body.className = theme;
-  }, [theme]);
-
+  // Used to send values to History component
   const [receipts, setReceipts] = useState(() => {
     const storedReceipts = localStorage.getItem("receipts");
     return storedReceipts ? JSON.parse(storedReceipts) : [];
@@ -205,9 +194,6 @@ function App() {
     });
   };
 
-  const [youPictureTotal, setYouPictureTotal] = useState(0);
-  const [splitPictureTotal, setSplitPictureTotal] = useState(0);
-  const [themPictureTotal, setThemPictureTotal] = useState(0);
   return (
     <>
       <Routes>
@@ -218,7 +204,6 @@ function App() {
               theme={theme}
               setTheme={setTheme}
               toggleTheme={toggleTheme}
-              handleAccessApp={handleAccessApp}
               handleClearData={handleClearData}
             />
           }
@@ -230,25 +215,8 @@ function App() {
           path="/ReceiptInput/:id"
           element={
             <ReceiptInput
-              addPerson={addPerson}
-              setAddPerson={setAddPerson}
-              selectPerson={selectPerson}
               personName={personName}
-              personEmail={personEmail}
-              personPhone={personPhone}
               personOwing={personOwing}
-              setPersonName={setPersonName}
-              setPersonEmail={setPersonEmail}
-              setPersonPhone={setPersonPhone}
-              setPersonOwing={setPersonOwing}
-              handleSubmit={handleSubmit}
-              setPersonState={setPersonState}
-              personState={personState}
-              setIsSelected={setIsSelected}
-              list={list}
-              value={value}
-              hasReceipt={hasReceipt}
-              setHasReceipt={setHasReceipt}
               startDate={startDate}
               setStartDate={setStartDate}
               merchantName={merchantName}
@@ -259,23 +227,17 @@ function App() {
               setPersonReceiptAmount={setPersonReceiptAmount}
               addNum={addNum}
               subNum={subNum}
+              value={value}
               addReceipt={addReceipt}
-              receipts={receipts}
-              setReceipts={setReceipts}
-              displayAdd={displayAdd}
-              setDisplayAdd={setDisplayAdd}
               selectedValue={selectedValue}
               setSelectedValue={setSelectedValue}
-              handleAdd={handleAdd}
               displayMerchant={displayMerchant}
-              setDisplayMerchant={setDisplayMerchant}
               displayDate={displayDate}
-              setDisplayDate={setDisplayDate}
               displayInvoice={displayInvoice}
+              setDisplayMerchant={setDisplayMerchant}
+              setDisplayDate={setDisplayDate}
               setDisplayInvoice={setDisplayInvoice}
-              isReceiptSubmitted={isReceiptSubmitted}
               setIsReceiptSubmitted={setIsReceiptSubmitted}
-              theme={theme}
               youPictureTotal={youPictureTotal}
               splitPictureTotal={splitPictureTotal}
               themPictureTotal={themPictureTotal}
@@ -307,10 +269,8 @@ function App() {
               list={list}
               value={value}
               addNum={addNum}
+              subNum={subNum}
               personReceiptAmount={personReceiptAmount}
-              hasReceipt={hasReceipt}
-              setHasReceipt={setHasReceipt}
-              formSubmitted={formSubmitted}
               setFormSubmitted={setFormSubmitted}
               theme={theme}
             />
@@ -337,7 +297,6 @@ function App() {
               setIsSelected={setIsSelected}
               editPerson={editPerson}
               setEditPerson={setEditPerson}
-              editRow={editRow}
               list={list}
               value={value}
               theme={theme}

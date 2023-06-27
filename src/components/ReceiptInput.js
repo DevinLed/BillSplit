@@ -48,23 +48,6 @@ export default function ReceiptInput({
 
   const [selectMethodManual, setSelectMethodManual] = useState(false);
   const [selectMethodPicture, setSelectMethodPicture] = useState(false);
-
-  const [receiptTotal, setReceiptTotal] = useState("");
-  const FormData = require("form-data");
-
-  const apiKey = "561e58edb1c93ab9fec230c1439fbf48";
-  const account = "mindee";
-  const endpoint = "expense_receipts";
-  const version = "5.0";
-
-  const handleReceiptTotal = (total) => {
-    setReceiptTotal(total);
-  };
-  const handleCapturePhoto = (dataUri) => {
-    setPhotoData(dataUri);
-    setShowCameraImage(true);
-    setShowRedoButton(true);
-  };
   const [photoData, setPhotoData] = useState(null);
   const [pictureTotal, setPictureTotal] = useState(0);
   const [pictureTax, setPictureTax] = useState(0);
@@ -75,6 +58,32 @@ export default function ReceiptInput({
   const [displayPictureInfo, setDisplayPictureInfo] = useState(false);
   const [obtainedInfo, setObtainedInfo] = useState([]);
   const [isAddedManually, setIsAddedManually] = useState(false);
+
+  const { id } = useParams();
+  const [items, setItems] = useState([]);
+  const [name, setName] = useState("");
+  const [amount, setAmount] = useState("");
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [showTable, setShowTable] = useState("");
+  const [youTotal, setYouTotal] = useState(0);
+  const [splitTotal, setSplitTotal] = useState(0);
+  const [themTotal, setThemTotal] = useState(0);
+  const [combinedArray, setCombinedArray] = useState([]);
+  const [selected, setSelected] = useState(null);
+
+  // Picture handling API section
+  const FormData = require("form-data");
+
+  const apiKey = "561e58edb1c93ab9fec230c1439fbf48";
+  const account = "mindee";
+  const endpoint = "expense_receipts";
+  const version = "5.0";
+
+  const handleCapturePhoto = (dataUri) => {
+    setPhotoData(dataUri);
+    setShowCameraImage(true);
+    setShowRedoButton(true);
+  };
   const handleCameraSubmit = async () => {
     setPhotoData(loading);
     setShowImage(true);
@@ -125,26 +134,9 @@ export default function ReceiptInput({
       setPhotoData(photoData);
       setSplitPictureTotal(totalAmount);
 
-      // Handle the response data as per your requirements
     } catch (error) {
       console.error("Error processing image:", error);
     }
-  };
-
-  const { id } = useParams();
-  const [items, setItems] = useState([]);
-  const [name, setName] = useState("");
-  const [amount, setAmount] = useState("");
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [showTable, setShowTable] = useState("");
-  const [youTotal, setYouTotal] = useState(0);
-  const [splitTotal, setSplitTotal] = useState(0);
-  const [themTotal, setThemTotal] = useState(0);
-  const [combinedArray, setCombinedArray] = useState([]);
-
-  const [selected, setSelected] = useState(null);
-  const handleButton1Click = () => {
-    setSelected(1);
   };
 
   function resetReceiptForm() {
@@ -152,57 +144,24 @@ export default function ReceiptInput({
     setInvoiceNumber("");
     setStartDate(new Date());
   }
+
+  // Handler for enter key on mobile collasping keyboard pop
   function handleKeyDown(e) {
     if (e.key === "Enter") {
       e.target.blur();
     }
   }
+
+  // Handlers for selected values, either me or them
+  const handleButton1Click = () => {
+    setSelected(1);
+  };
   const handleButton2Click = () => {
     setSelected(2);
   };
 
-  const handleReceiptSubmit = (sliderValue) => {
-    if (!name || !amount) {
-      return;
-    }
-    setItems([
-      ...items,
-      {
-        name: name,
-        amount: parseFloat(amount).toFixed(2),
-        sliderValue: sliderValue,
-      },
-    ]);
-    switch (sliderValue) {
-      case 0: {
-        let a = parseFloat(amount).toFixed(2);
-        let b = parseFloat(youTotal).toFixed(2);
-        let value = a + b;
-        setYouTotal(parseFloat(value).toFixed(2));
-        break;
-      }
-      case 55: {
-        let a = parseFloat(amount);
-        let b = parseFloat(splitTotal);
-        let value = a + b;
-        setSplitTotal(value.toFixed(2));
-        break;
-      }
-      case 100: {
-        let a = parseFloat(amount).toFixed(2);
-        let b = parseFloat(themTotal).toFixed(2);
-        let value = a + b;
-        setThemTotal(parseFloat(value).toFixed(2));
-        break;
-      }
-      default:
-        break;
-    }
-    setName("");
-    setAmount("");
-    setCurrentIndex(currentIndex + 1);
-  };
 
+  // Handler for adding items to the table array manually
   const handleReceiptPictureSubmit = (sliderValue) => {
     if (!name || !amount) {
       return;
@@ -242,39 +201,18 @@ export default function ReceiptInput({
     setAmount("");
     setCurrentIndex(currentIndex + 1);
   };
+
+  // Handler to reset table array on back/exit
   const handleResetTotals = () => {
-    setObtainedInfo([]); // Reset obtainedInfo to an empty array
+    setObtainedInfo([]); 
     setYouPictureTotal(0);
     setSplitPictureTotal(0);
     setThemPictureTotal(0);
     setPersonReceiptAmount(0);
     setPictureTax();
   };
-  const handleDelete = (index) => {
-    const newItems = [...items];
-    const deletedItem = newItems.splice(index, 1)[0]; // remove the deleted item from the list and get its details
 
-    // update the corresponding total based on the deleted item's sliderValue
-    switch (deletedItem.sliderValue) {
-      case 0: {
-        setYouTotal(youTotal - parseInt(deletedItem.amount));
-        break;
-      }
-      case 55: {
-        setSplitTotal(splitTotal - parseInt(deletedItem.amount));
-        break;
-      }
-      case 100: {
-        setThemTotal(themTotal - parseInt(deletedItem.amount));
-        break;
-      }
-      default:
-        break;
-    }
-
-    setItems(newItems);
-  };
-
+  // Used to calculate the amount by adding up all the item.amount of entries in the table array
   const getPictureTotal = () => {
     let total =
       parseFloat(splitPictureTotal) +
@@ -292,6 +230,8 @@ export default function ReceiptInput({
     }
     return parseFloat(total).toFixed(2);
   };
+
+  // Handler to push entries into the History tab array
   const handleHistorySubmit = () => {
     const newReceipt = {
       personName,
@@ -309,6 +249,7 @@ export default function ReceiptInput({
     addReceipt(newReceipt);
   };
 
+  // Used to update the balance of the person you are splitting receipt with
   const getFinalTotal = () => {
     if (selectedValue === "you") {
       console.log(personReceiptAmount);
@@ -319,15 +260,6 @@ export default function ReceiptInput({
     }
   };
 
-  const getFinalPictureTotal = () => {
-    if (selectedValue === "you") {
-      console.log(personReceiptAmount);
-      addNum(id, personOwing, personReceiptAmount);
-    } else {
-      console.log(personReceiptAmount);
-      subNum(id, personOwing, personReceiptAmount);
-    }
-  };
 
   useEffect(() => {
     setObtainedInfo((prevInfo) =>
@@ -337,6 +269,7 @@ export default function ReceiptInput({
       }))
     );
   }, []);
+  
   return (
     <>
       {selectPersonReceipt ? (
@@ -486,10 +419,8 @@ export default function ReceiptInput({
                         name={name}
                         amount={amount}
                         setAmount={setAmount}
-                        handleReceiptSubmit={handleReceiptSubmit}
                         items={items}
                         currentIndex={currentIndex}
-                        handleDelete={handleDelete}
                         getPictureTotal={getPictureTotal}
                         youTotal={youTotal}
                         themTotal={themTotal}
@@ -699,10 +630,8 @@ export default function ReceiptInput({
                               name={name}
                               amount={amount}
                               setAmount={setAmount}
-                              handleReceiptSubmit={handleReceiptSubmit}
                               items={items}
                               currentIndex={currentIndex}
-                              handleDelete={handleDelete}
                               getPictureTotal={getPictureTotal}
                               youTotal={youTotal}
                               themTotal={themTotal}
@@ -740,7 +669,7 @@ export default function ReceiptInput({
                               <button
                                 className="mt-4 mb-5 rounded border-2 border-blue-500 bg-blue-500 py-2 px-4 font-bold shadow transition-all duration-300 hover:bg-white"
                                 onClick={(e) => {
-                                  getFinalPictureTotal();
+                                  getFinalTotal();
                                   setSelectMethodPicture(false);
                                   setSelectPersonReceipt(true);
                                   handleHistorySubmit(e);

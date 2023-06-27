@@ -28,7 +28,7 @@ export default function Home({theme, toggleTheme, handleClearData}) {
     <main className="mt-5 p-0 pt-3 xs:max-w-xl sm:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl bg-white-500 rounded shadow">
         <div className={`App ${theme}`}>
               <div className="flex flex-col items-center justify-center">
-                {/*  Header narrative for the Main Screen + 4 button selection screens */}
+                {/*  Header narrative for the Main Screen + 6 button selection screens */}
                 <Header
                   startBill={startBill}
                   showPersonEdit={showPersonEdit}
