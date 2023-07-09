@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { Line } from 'react-chartjs-2';
 import { Link } from "react-router-dom";
 import Header from "./Header";
 import Footer from "./Footer";
+import { Chart, registerables } from "chart.js";
+import 'chart.js';
 
-export default function Home({theme, toggleTheme, handleClearData}) {
+export default function Home({theme, toggleTheme, handleClearData, personReceiptAmount }) {
 
 
     const [startBill, setStartBill] = useState(true);
@@ -17,11 +20,21 @@ export default function Home({theme, toggleTheme, handleClearData}) {
     // Text switch for dark mode button
     const [buttonText, setButtonText] = useState("Dark Mode");
     const changeText = (text) => setButtonText(text);
+    const [chartData, setChartData] = useState(null); // Initialize chartData as null
 
-    
-    
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const data = await personReceiptAmount();
+          setChartData(data); // Update chartData with the fetched data
+        } catch (error) {
+          console.error('Error fetching chart data:', error);
+        }
+      };
   
-  // Main screen menu selection - 6 buttons: Start Bill, Edit Person, History, Darkmode, Home Page, Clear Data
+      fetchData();
+    }, [personReceiptAmount]); // Include personReceiptAmount as a dependency to re-fetch data when it changes
+  
   return (
     <>
     
@@ -36,6 +49,49 @@ export default function Home({theme, toggleTheme, handleClearData}) {
                   setSelectPersonEdit={setSelectPersonEdit}
                   setPersonEdit={setPersonEdit}
                 ></Header>
+                <div className={`App ${theme}`}>
+                <div className="flex flex-col items-center justify-center">
+            {/* Header narrative for the Main Screen + 6 button selection screens */}
+            <Header
+              startBill={startBill}
+              showPersonEdit={showPersonEdit}
+              selectPersonEdit={selectPersonEdit}
+              setSelectPersonEdit={setSelectPersonEdit}
+              setPersonEdit={setPersonEdit}
+            ></Header>
+            <ul>
+              {/* Buttons */}
+            </ul>
+            <div>
+              <h2>Person Receipt Amount Over Time</h2>
+              {chartData ? ( // Render the chart only if chartData is available
+                <Line
+                  data={{
+                    labels: chartData.map((dataPoint) => dataPoint.date),
+                    datasets: [
+                      {
+                        label: 'Receipt Amount',
+                        data: chartData.map((dataPoint) => dataPoint.amount),
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1,
+                      },
+                    ],
+                  }}
+                  options={{
+                    scales: {
+                      y: {
+                        beginAtZero: true,
+                      },
+                    },
+                  }}
+                />
+              ) : (
+                <p>Loading chart data...</p> // Display a loading message while data is being fetched
+              )}
+            </div>
+          </div>
+        </div>
                 <ul>
                   <li className="flex items-center justify-center">
                     <Link to="/SplitBill">
