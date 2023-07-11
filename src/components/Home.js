@@ -1,161 +1,199 @@
 import React, { useState, useEffect } from "react";
-import { Line } from 'react-chartjs-2';
 import { Link } from "react-router-dom";
 import Header from "./Header";
 import Footer from "./Footer";
-import { Chart, registerables } from "chart.js";
-import 'chart.js';
+import { Bar } from "react-chartjs-2";
+import "chart.js/auto";
+import {
+  IoReceiptOutline,
+  IoPersonCircleOutline,
+  IoListOutline,
+  IoInvertModeSharp,
+  IoHomeOutline,
+  IoAlertCircle,
+} from "react-icons/io5";
 
-export default function Home({theme, toggleTheme, handleClearData, personReceiptAmount }) {
-
-
-    const [startBill, setStartBill] = useState(true);
-    const [showPersonEdit, setPersonEdit] = useState(false);
-
-    
+export default function Home({ theme, toggleTheme, handleClearData, list }) {
+  const [startBill, setStartBill] = useState(true);
+  const [showPersonEdit, setPersonEdit] = useState(false);
   const [selectPersonEdit, setSelectPersonEdit] = useState(false);
 
-  // For Dark/Bright mode. Keeps mode storage for page refresh.
-  
-    // Text switch for dark mode button
-    const [buttonText, setButtonText] = useState("Dark Mode");
-    const changeText = (text) => setButtonText(text);
-    const [chartData, setChartData] = useState(null); // Initialize chartData as null
+  useEffect(() => {
+    setStartBill(true);
+    setPersonEdit(false);
+    setSelectPersonEdit(false);
+  }, []);
 
-    useEffect(() => {
-      const fetchData = async () => {
-        try {
-          const data = await personReceiptAmount();
-          setChartData(data); // Update chartData with the fetched data
-        } catch (error) {
-          console.error('Error fetching chart data:', error);
-        }
-      };
-  
-      fetchData();
-    }, [personReceiptAmount]); // Include personReceiptAmount as a dependency to re-fetch data when it changes
-  
+  // For Dark/Bright mode. Keeps mode storage for page refresh.
+  const [buttonText, setButtonText] = useState("Dark Mode");
+  const changeText = (text) => setButtonText(text);
+
+  const yAxisCallback = (value) => `$${value.toFixed(2)}`;
+  const chartData = {
+    labels: list.map(({ personName }) => personName),
+    datasets: [
+      {
+        label: "Owing Amount",
+        data: list.map(({ personOwing }) => personOwing),
+        backgroundColor: [
+          "rgba(75, 192, 192, 0.6)",
+          "rgba(54, 162, 235, 0.6)",
+          "rgba(255, 206, 86, 0.6)",
+          "rgba(255, 99, 132, 0.6)",
+          "rgba(153, 102, 255, 0.6)",
+          "rgba(255, 159, 64, 0.6)",
+        ],
+        borderColor: [
+          "rgba(75, 192, 192, 1)",
+          "rgba(54, 162, 235, 1)",
+          "rgba(255, 206, 86, 1)",
+          "rgba(255, 99, 132, 1)",
+          "rgba(153, 102, 255, 1)",
+          "rgba(255, 159, 64, 1)",
+        ],
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const tooltipCallbacks = {
+    title: (tooltipItems) => {
+      if (tooltipItems.length > 0) {
+        const index = tooltipItems[0].dataIndex;
+        return list[index].personName;
+      }
+      return "";
+    },
+    label: (tooltipItem) => `$${tooltipItem.formattedValue}`,
+  };
+
+  const chartOptions = {
+    indexAxis: "x",
+    scales: {
+      x: {
+        beginAtZero: true,
+        grid: {
+          color: "rgba(0, 0, 0, 0.1)",
+        },
+      },
+      y: {
+        grid: {
+          color: "rgba(0, 0, 0, 0.1)",
+        },
+        ticks: {
+          callback: yAxisCallback,
+        },
+      },
+    },
+    plugins: {
+      title: {
+        display: true,
+        text: "Current balances",
+        font: {
+          size: 16,
+        },
+      },
+      legend: {
+        display: false,
+      },
+      tooltip: {
+        callbacks: tooltipCallbacks,
+        displayColors: false,
+        titleAlign: "center",
+        titleFont: {
+          weight: "bold",
+        },
+        bodyFont: {
+          weight: "normal",
+        },
+        custom: (tooltipModel) => {
+          // Check if tooltip is visible
+          if (tooltipModel.opacity === 0) {
+            return;
+          }
+
+          // Close tooltip after 5 seconds
+          setTimeout(() => {
+            tooltipModel.opacity = 0;
+            this._chart.tooltip.update();
+          }, 5000);
+        },
+      },
+    },
+  };
+
   return (
     <>
-    
-    <main className="mt-5 p-0 pt-3 xs:max-w-xl sm:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl bg-white-500 rounded shadow">
+      <main className="xs:max-w-xl bg-white-500 mt-5 rounded p-0 pt-3 shadow sm:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl">
         <div className={`App ${theme}`}>
-              <div className="flex flex-col items-center justify-center">
-                {/*  Header narrative for the Main Screen + 6 button selection screens */}
-                <Header
-                  startBill={startBill}
-                  showPersonEdit={showPersonEdit}
-                  selectPersonEdit={selectPersonEdit}
-                  setSelectPersonEdit={setSelectPersonEdit}
-                  setPersonEdit={setPersonEdit}
-                ></Header>
-                <div className={`App ${theme}`}>
-                <div className="flex flex-col items-center justify-center">
-            {/* Header narrative for the Main Screen + 6 button selection screens */}
+          <div className="flex flex-col items-center justify-center">
+            {/*  Header narrative for the Main Screen + 6 button selection screens */}
             <Header
               startBill={startBill}
               showPersonEdit={showPersonEdit}
               selectPersonEdit={selectPersonEdit}
               setSelectPersonEdit={setSelectPersonEdit}
               setPersonEdit={setPersonEdit}
-            ></Header>
-            <ul>
-              {/* Buttons */}
-            </ul>
+            />
             <div>
-              <h2>Person Receipt Amount Over Time</h2>
-              {chartData ? ( // Render the chart only if chartData is available
-                <Line
-                  data={{
-                    labels: chartData.map((dataPoint) => dataPoint.date),
-                    datasets: [
-                      {
-                        label: 'Receipt Amount',
-                        data: chartData.map((dataPoint) => dataPoint.amount),
-                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        borderWidth: 1,
-                      },
-                    ],
-                  }}
-                  options={{
-                    scales: {
-                      y: {
-                        beginAtZero: true,
-                      },
-                    },
-                  }}
-                />
+              {chartData.labels.length > 0 ? (
+                <Bar data={chartData} options={chartOptions} />
               ) : (
-                <p>Loading chart data...</p> // Display a loading message while data is being fetched
+                <p>No submitted receipts</p>
               )}
             </div>
+            <div className="grid grid-cols-3 py-4 gap-y-0">
+  <Link to="/SplitBill">
+    <label className="flex flex-col items-center justify-center mb-0 h-24 w-full rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline">
+      <IoReceiptOutline size={24} />
+      <span className="text-gray-800">Split a Bill</span>
+    </label>
+  </Link>
+  <Link to="/EditList">
+    <label className="flex flex-col items-center justify-center h-24 w-full rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline">
+      <IoPersonCircleOutline size={24} />
+      <span className="text-gray-800">Edit Person</span>
+    </label>
+  </Link>
+  <Link to="/History">
+    <label className="flex flex-col items-center justify-center h-24 w-full rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline">
+      <IoListOutline size={24} />
+      <span className="text-gray-800">History</span>
+    </label>
+  </Link>
+  <label
+    onClick={() => {
+      toggleTheme();
+      if (theme === "light") {
+        changeText("Bright Mode");
+      } else {
+        changeText("Dark Mode");
+      }
+    }}
+    className="flex flex-col items-center justify-center h-24 w-full cursor-pointer rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
+  >
+    <IoInvertModeSharp size={24} />
+    <span className="text-gray-800">{buttonText}</span>
+  </label>
+  <Link to="/LandingPage">
+    <label className="flex flex-col items-center justify-center h-24 w-full rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline">
+      <IoHomeOutline size={24} />
+      <span className="text-gray-800">Home Page</span>
+    </label>
+  </Link>
+  <label
+    onClick={() => handleClearData()}
+    className="flex flex-col items-center justify-center h-24 w-full cursor-pointer rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
+  >
+    <IoAlertCircle size={24} />
+    <span className="text-gray-800">Clear Data</span>
+  </label>
+</div>
+
           </div>
         </div>
-                <ul>
-                  <li className="flex items-center justify-center">
-                    <Link to="/SplitBill">
-                      <button
-                        className="justify-center mt-5 bg-blue-500 font-bold py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
-                      >
-                        Split a Bill
-                      </button>
-                    </Link>
-                  </li>
-                  <li className="flex items-center justify-center">
-                    <Link to="/EditList">
-                      <button
-                        className="mt-5 bg-blue-500 font-bold py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
-                      >
-                        Edit Person
-                      </button>
-                    </Link>
-                  </li>
-
-                  <li className="flex items-center justify-center">
-                    <Link to="/History">
-                      <button
-                        className="mt-5 bg-blue-500 font-bold py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
-                       >
-                        Show History
-                      </button>
-                    </Link>
-                  </li>
-                  <li className="flex items-center justify-center">
-                    <button
-                      onClick={() => {
-                        toggleTheme();
-                        if (theme === "light") {
-                          changeText("Bright Mode");
-                        } else {
-                          changeText("Dark Mode");
-                        }
-                      }}
-                      className="mt-5 mb-10 bg-black text-white font-bold py-2 px-4 rounded shadow border-2 border-black hover:text-white-500 transition-all duration-300"
-                    >
-                      {buttonText}
-                    </button>
-                  </li>
-                  <li className="flex items-center justify-center">
-                    
-                  <Link to="/LandingPage">
-                      <button
-                      
-                        className="mt-5 mb-5 bg-blue-500 font-bold py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
-                       >
-                        Home Page
-                      </button>
-                      </Link>
-                  </li>
-                  <li onClick={() => handleClearData()} className="flex items-center justify-center">
-                  <button className="mt-5 bg-blue-500 font-bold py-2 px-4 rounded shadow border-2 border-blue-500 hover:bg-white transition-all duration-300"
-                        onClick={() => handleClearData()}>Clear Data</button>
-                  </li>
-                </ul>
-              </div>
-        </div>
-      <Footer theme={theme}/>
+        <Footer theme={theme} />
       </main>
     </>
-  )
+  );
 }

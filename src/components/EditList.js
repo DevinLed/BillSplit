@@ -2,6 +2,9 @@ import React, { useState} from "react";
 import AddPerson from "./AddPerson";
 import Header from "./Header";
 import EditPerson from "./EditPerson";
+import {
+  IoPersonAddSharp
+} from "react-icons/io5";
 
 export default function EditList({
   addPerson,
@@ -34,7 +37,6 @@ export default function EditList({
       <main className="mt-5 p-0 pt-3 xs:max-w-xl sm:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl bg-white-500 rounded shadow">
         <Header selectEditPersonList={selectEditPersonList} />
         <div className="flex flex-col items-center justify-center">
-          {/*Table generator for people added*/}
           {list.map(({ id, personName, personPhone, personEmail, personOwing }) => (
             <React.Fragment key={id}>
               {personName.length ? (
@@ -42,6 +44,7 @@ export default function EditList({
                   <button
                     className="outline-none text-primary focus:outline-none"
                     onClick={() => {
+                      console.log(false);
                       selectPerson(id);
                       editRow(id);
 
@@ -72,12 +75,12 @@ export default function EditList({
               )}
             </React.Fragment>
           ))}
-          <button
-            className="bg-blue-500 font-bold py-2 px-4 mb-5 mt-5 rounded shadow border-2 border-blue-500 hover:bg-white  transition-all duration-300"
+          <label className="mt-4 mb-4 flex flex-col items-center justify-center mb-0 h-24 w-1/3 rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
             onClick={() => setAddPerson(true)}
           >
+            <IoPersonAddSharp size={24}/>
             Add Person
-          </button>
+          </label>
         </div>
         
         {addPerson ? (

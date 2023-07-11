@@ -3,6 +3,9 @@ import { v4 as uuidv4 } from "uuid";
 import { BrowserRouter, Switch, Route, Routes, Link } from "react-router-dom";
 import AddPerson from "./AddPerson";
 import Header from "./Header";
+import {
+  IoPersonAddSharp
+} from "react-icons/io5";
 
 export default function SplitBill({
   addPerson,
@@ -70,15 +73,15 @@ export default function SplitBill({
               )}
             </React.Fragment>
           ))}
-          <button
-            className="mt-4 mb-5 rounded border-2 border-blue-500 bg-blue-500 py-2 px-4 font-bold shadow transition-all duration-300 hover:bg-white"
+           <label className="mt-4 mb-4 flex flex-col items-center justify-center mb-0 h-24 w-1/3 rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
             onClick={() => {
               setAddPerson(true);
               setFormSubmitted(true);
             }}
           >
+            <IoPersonAddSharp size={24}/>
             Add Person
-          </button>
+          </label>
         </div>
         {addPerson ? (
           <AddPerson

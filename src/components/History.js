@@ -18,25 +18,26 @@ export default function History({ receipts }) {
     return filteredReceipts
       .slice(-10)
       .map((receipt, index) => {
+        const startDate =
+          receipt.startDate instanceof Date
+            ? receipt.startDate.toLocaleDateString("en-US")
+            : "";
+  
         return (
           <div key={index} className="border-b border-gray-300 py-2 my-2 px-8">
             <div>
               <div className="flex justify-center items-center">
                 <p className="font-bold">{receipt.personName}</p>
               </div>
-
+  
               <div className="flex justify-center items-center mt-2">
-                {receipt.merchantName && (
-                  <p>{`${receipt.merchantName}`}</p>
-                )}
+                {receipt.merchantName && <p>{`${receipt.merchantName}`}</p>}
               </div>
-
+  
               <div className="flex justify-center items-center mt-2">
-                <p className="text-sm">
-                  {receipt.startDate.toLocaleDateString("en-US")}
-                </p>
+                <p className="text-sm">{startDate}</p>
               </div>
-           
+             
             </div>
             <div className="flex justify-center items-center mt-2">
               <p className="text-sm">
@@ -44,16 +45,12 @@ export default function History({ receipts }) {
               </p>
             </div>
             <div className="flex justify-center items-center">
-              <p className="font-bold">
-                {`$${Math.abs(parseFloat(receipt.personReceiptAmount)).toFixed(2)}`}
-              </p>
+              <p className="font-bold">{`$${Math.abs(parseFloat(receipt.personReceiptAmount)).toFixed(2)}`}</p>
             </div>
             <div className="flex justify-center items-center mt-2">
               {receipt.invoiceNumber && (
                 <div>
-                  <p className="text-sm mb-2">
-                    {`Invoice Number: ${receipt.invoiceNumber}`}
-                  </p>
+                  <p className="text-sm mb-2">{`Invoice Number: ${receipt.invoiceNumber}`}</p>
                 </div>
               )}
             </div>
@@ -61,6 +58,7 @@ export default function History({ receipts }) {
         );
       });
   }, [filteredReceipts]);
+  
 
   const noReceiptsMessage = useMemo(() => {
     if (filteredReceipts.length === 0) {

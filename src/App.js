@@ -109,6 +109,16 @@ function App() {
     console.log("this is to add");
   };
 
+  const editRow = (id) => {
+    const editingRow = list.find((row) => row.id === id);
+    setList(list.filter((row) => row.id !== id));
+    setIsEditing(true);
+    setPersonName(editingRow.personName);
+    setPersonPhone(editingRow.personPhone);
+    setPersonEmail(editingRow.personEmail);
+    setPersonOwing(editingRow.personOwing);
+  };
+
   // used to update values of balance for contacts
   const subNum = (id, val, val2) => {
     setList((prevList) => {
@@ -205,6 +215,9 @@ function App() {
               setTheme={setTheme}
               toggleTheme={toggleTheme}
               handleClearData={handleClearData}
+              personOwing={personOwing}
+              personName={personName}
+              list={list}
             />
           }
         />
@@ -296,6 +309,7 @@ function App() {
               personState={personState}
               setIsSelected={setIsSelected}
               editPerson={editPerson}
+              editRow={editRow}
               setEditPerson={setEditPerson}
               list={list}
               value={value}
