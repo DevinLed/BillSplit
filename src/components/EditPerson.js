@@ -67,34 +67,28 @@ export default function EditPerson({
 
   return (
     <>
-      <div className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-hidden p-8 focus:outline-none">
-        <div className="relative my-6 mx-auto w-auto max-w-sm">
-          {/*content*/}
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-opacity-50 bg-gray-900">
+        <div className="relative w-full max-w-sm">
           <div
             className={
               theme === "dark"
-                ? "border-black-500 relative flex w-full flex-col rounded-lg border-8 bg-gray-500 shadow-lg outline-none focus:outline-none"
-                : "border-black-500 relative flex w-full flex-col rounded-lg border-8 bg-white shadow-lg outline-none focus:outline-none"
+                ? "bg-gray-800 border border-gray-300 rounded-lg shadow-lg overflow-hidden"
+                : "bg-white border border-gray-300 rounded-lg shadow-lg overflow-hidden"
             }
           >
-            {/*header*/}
-            <div className="flex items-center justify-evenly rounded-t border-b border-solid border-slate-200 p-3">
-              <h3 className="text-2xl font-semibold text-black">Edit Person</h3>
+            <div className="flex items-center justify-evenly p-3 border-b border-gray-300">
+              <h3 className="text-xl font-semibold">Edit Person</h3>
             </div>
-            {/*body*/}
 
-            <div className="relative flex-auto items-center justify-center p-6">
+            <div className="p-4">
               <div className="text-center">
-                <div className="form-group row mb-3  flex items-center justify-center">
-                  <label
-                    htmlFor="colFormLabel"
-                    className="col-sm-2 col-form-label mr-2"
-                  >
+                <div className="mb-2">
+                  <label htmlFor="colFormLabel" className="sr-only">
                     Name
                   </label>
                   <input
                     type="name"
-                    className="form-control ml-2 mb-2 w-2/4"
+                    className="form-control w-full py-2 px-3 rounded-lg focus:outline-none focus:ring focus:border-blue-300"
                     id="colFormLabel"
                     placeholder="Name"
                     value={personName}
@@ -108,20 +102,17 @@ export default function EditPerson({
                   />
                 </div>
 
-                <div className="form-group row mb-3 flex items-center justify-center">
-                  <label
-                    htmlFor="colFormLabel"
-                    className="col-sm-2 col-form-label mr-2"
-                  >
+                <div className="mb-2">
+                  <label htmlFor="colFormLabel" className="sr-only">
                     Phone
                   </label>
                   <input
                     type="phone"
-                    className={`form-control mb-2 ml-2 w-2/4 ${
-                      isValidPhoneNumber ? "valid" : "invalid"
+                    className={`form-control w-full py-2 px-3 rounded-lg focus:outline-none focus:ring ${
+                      isValidPhoneNumber ? "ring-green-300" : "ring-red-300"
                     } ${
                       personPhone.length >= 10 && !isValidPhoneNumber
-                        ? "red"
+                        ? "ring-red-300"
                         : ""
                     }`}
                     id="colFormLabel"
@@ -131,18 +122,15 @@ export default function EditPerson({
                   />
                 </div>
 
-                <div className="form-group row mb-3 flex items-center justify-center">
-                  <label
-                    htmlFor="colFormLabel"
-                    className="col-sm-2 col-form-label mr-2"
-                  >
+                <div className="mb-2">
+                  <label htmlFor="colFormLabel" className="sr-only">
                     Email
                   </label>
                   <input
                     type="email"
-                    className={`form-control mb-2 ml-2 w-2/4 ${
-                      isValidEmail ? "valid" : "invalid"
-                    } `}
+                    className={`form-control w-full py-2 px-3 rounded-lg focus:outline-none focus:ring ${
+                      isValidEmail ? "ring-green-300" : "ring-red-300"
+                    }`}
                     id="colFormLabel"
                     placeholder="Email"
                     value={formSubmitted ? "" : personEmail}
@@ -150,27 +138,24 @@ export default function EditPerson({
                   />
                 </div>
 
-                <div className="form-group row mb-0 items-center justify-center text-center">
-                  <label
-                    htmlFor="colFormLabel"
-                    className="col-form-label label-one-line"
-                  >
+                <div className="mb-2">
+                  <label htmlFor="colFormLabel" className="label-one-line">
                     Balance?
                   </label>
                 </div>
 
-                <div className="form-group row mb-0 flex items-center justify-center">
+                <div className="mb-2 items-center justify-center">
                   <div className="flex items-center justify-center">
-                    <div className="input-group mb-3 flex items-center justify-center">
-                      <span className="input-group-text ml-9">$</span>
+                    <div className="input-group">
+                      <span className="input-group-text">$</span>
                       <input
                         type="text"
-                        className="form-control max-six-digits rounded-left w-1/3"
+                        className="form-control max-six-digits rounded-start"
                         onKeyDown={handleKeyDown}
                         placeholder={
                           personOwing
                             ? parseFloat(personOwing).toFixed(2)
-                            : "0.00 "
+                            : "0.00"
                         }
                         onClick={(e) => {
                           e.target.select();
@@ -194,37 +179,27 @@ export default function EditPerson({
                       />
                     </div>
                   </div>
+                </div>
 
-                  <div
-                    className="error-msg flex h-5 items-center justify-center"
-                    style={{ color: "red" }}
-                  >
-                    {errorMsg}
-                  </div>
-                  <div className="flex items-center justify-center px-10">
-                    <div>
-                      <button
-                        type="submit"
-                        className="align-items-center mt-3 ml-2 justify-center rounded border-2 border-blue-500 bg-gray-500 py-2 px-4 font-bold shadow transition-all duration-300 hover:bg-white"
-                        onClick={(e) => {
-                          setPersonOwing("0.00");
-                          setErrorBalance(true);
-                        }}
-                      >
-                        Reset balance
-                      </button>
-                    </div>
-                  </div>
+                <div className="text-red-500 text-sm text-center mb-2">
+                  {errorMsg}
                 </div>
               </div>
             </div>
-            {/*footer*/}
-            <div className="align-items-center flex  items-center justify-center rounded-b border-t border-solid border-slate-200 px-6 pb-6">
+
+            <div className="flex justify-center p-2">
               <button
-                type="submit"
-                className="mt-3 ml-2 justify-center rounded border-2 border-blue-500 bg-blue-500 py-2 px-4 font-bold shadow transition-all duration-300 hover:bg-white"
+                className="btn btn-primary mr-2"
                 onClick={(e) => {
-                  if (errorBalance && errorPhone & errorEmail) {
+                  setEditPerson(false);
+                }}
+              >
+                Close
+              </button>
+              <button
+                className="btn btn-primary"
+                onClick={(e) => {
+                  if (errorBalance && errorPhone && errorEmail) {
                     handleSubmit(e);
                     setEditPerson(false);
                   } else {
@@ -235,15 +210,11 @@ export default function EditPerson({
                 Save
               </button>
             </div>
-            {!submissionError ? (
-              <p
-                className="mx-auto items-center justify-center"
-                style={{ color: "red" }}
-              >
+
+            {!submissionError && (
+              <p className="text-red-500 text-sm text-center mb-2">
                 Please complete all fields correctly.
               </p>
-            ) : (
-              <div />
             )}
           </div>
         </div>
