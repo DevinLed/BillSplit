@@ -7,6 +7,7 @@ import Header from "./Header";
 import ReceiptTable from "./ReceiptTable";
 import { Link } from "react-router-dom";
 import "../darkMode.css";
+import { IoCameraSharp, IoEnterOutline } from "react-icons/io5";
 
 import DatePicker from "react-datepicker";
 
@@ -45,7 +46,6 @@ export default function ReceiptInput({
   setThemPictureTotal,
 }) {
   const [selectPersonReceipt, setSelectPersonReceipt] = useState(true);
-
   const [selectMethodManual, setSelectMethodManual] = useState(false);
   const [selectMethodPicture, setSelectMethodPicture] = useState(false);
   const [photoData, setPhotoData] = useState(null);
@@ -58,7 +58,6 @@ export default function ReceiptInput({
   const [displayPictureInfo, setDisplayPictureInfo] = useState(false);
   const [obtainedInfo, setObtainedInfo] = useState([]);
   const [isAddedManually, setIsAddedManually] = useState(false);
-
   const { id } = useParams();
   const [items, setItems] = useState([]);
   const [name, setName] = useState("");
@@ -73,12 +72,10 @@ export default function ReceiptInput({
 
   // Picture handling API section
   const FormData = require("form-data");
-
   const apiKey = "561e58edb1c93ab9fec230c1439fbf48";
   const account = "mindee";
   const endpoint = "expense_receipts";
   const version = "5.0";
-
   const handleCapturePhoto = (dataUri) => {
     setPhotoData(dataUri);
     setShowCameraImage(true);
@@ -133,7 +130,6 @@ export default function ReceiptInput({
       setShowImage(false);
       setPhotoData(photoData);
       setSplitPictureTotal(totalAmount);
-
     } catch (error) {
       console.error("Error processing image:", error);
     }
@@ -159,7 +155,6 @@ export default function ReceiptInput({
   const handleButton2Click = () => {
     setSelected(2);
   };
-
 
   // Handler for adding items to the table array manually
   const handleReceiptPictureSubmit = (sliderValue) => {
@@ -204,7 +199,7 @@ export default function ReceiptInput({
 
   // Handler to reset table array on back/exit
   const handleResetTotals = () => {
-    setObtainedInfo([]); 
+    setObtainedInfo([]);
     setYouPictureTotal(0);
     setSplitPictureTotal(0);
     setThemPictureTotal(0);
@@ -260,7 +255,6 @@ export default function ReceiptInput({
     }
   };
 
-
   useEffect(() => {
     setObtainedInfo((prevInfo) =>
       prevInfo.map((item) => ({
@@ -269,7 +263,7 @@ export default function ReceiptInput({
       }))
     );
   }, []);
-  
+
   return (
     <>
       {selectPersonReceipt ? (
@@ -284,26 +278,29 @@ export default function ReceiptInput({
               <div className="flex flex-col items-center justify-center">
                 <h1>Split a bill with {personName}</h1>
                 <ul className="list-group items-center justify-center">
-                  <Link
-                    className="btn btn-primary btn-lg mt-5"
-                    onClick={(e) => {
-                      setSelectMethodManual(true);
-                      setSelectPersonReceipt(false);
-                    }}
-                  >
-                    <li>Manual</li>
+                  <Link className="flex flex-col items-center justify-center">
+                    <label
+                      className="mt-4 mb-4 mb-0 flex h-24 w-1/3 flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-14 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
+                      onClick={(e) => {
+                        setSelectMethodManual(true);
+                        setSelectPersonReceipt(false);
+                      }}
+                    >
+                      <IoEnterOutline size={24} />
+                      <li>Manual</li>
+                    </label>
                   </Link>
-                  <li>
-                    <button
-                      className="btn btn-primary btn-lg mt-5 mb-5"
-                      type="submit"
+                  <li className="flex flex-col items-center justify-center">
+                    <label
+                      className="mt-4 mb-4 mb-0 flex h-24 w-1/3 flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-14 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
                       onClick={(e) => {
                         setSelectMethodPicture(true);
                         setSelectPersonReceipt(false);
                       }}
                     >
+                      <IoCameraSharp size={24} />
                       Picture
-                    </button>
+                    </label>
                   </li>
                 </ul>
               </div>

@@ -41,38 +41,33 @@ export default function SplitBill({
         <div className="flex flex-col items-center justify-center">
           {/*Table generator for people added*/}
           {list.map(({ id, personName, personOwing }) => (
-            <React.Fragment key={id}>
-              {personName.length ? (
-                <ul className="list-group m-0">
-                  <Link
-                    to={`/ReceiptInput/${id}`}
-                    onClick={() => selectPerson(id)}
-                  >
-                    <li className="text-primary list-group-item d-flex l-500 justify-content-between align-items-center outline-none focus:outline-none">
-                      {personName}
+  <React.Fragment key={id}>
+    {personName.length ? (
+      <ul className="list-group m-0">
+        <Link
+          to={`/ReceiptInput/${id}`}
+          onClick={() => selectPerson(id)}
+        >
+          <li className="flex items-center justify-between p-4 border-b border-gray-300 bg-white hover:bg-gray-100">
+            <span className="text-primary font-medium">{personName}</span>
+            <span
+              className={`badge badge-primary badge-pill rounded px-1 py-1 ${
+                personOwing < 0 ? "bg-red-500 text-black" : "bg-blue-500 text-white"
+              }`}
+            >
+              ${value
+                ? parseFloat(value).toFixed(2)
+                : parseFloat(personOwing).toString() === "NaN"
+                ? "0.00"
+                : parseFloat(personOwing).toFixed(2)}
+            </span>
+          </li>
+        </Link>
+      </ul>
+    ) : null}
+  </React.Fragment>
+))}
 
-                      <span
-                        className="badge badge-primary badge-pill"
-                        style={{
-                          backgroundColor: personOwing < 0 ? "red" : "",
-                          color: personOwing < 0 ? "black" : "white",
-                        }}
-                      >
-                        $
-                        {value
-                          ? parseFloat(value).toFixed(2)
-                          : parseFloat(personOwing).toString() === "NaN"
-                          ? "0.00"
-                          : parseFloat(personOwing).toFixed(2)}
-                      </span>
-                    </li>
-                  </Link>
-                </ul>
-              ) : (
-                ""
-              )}
-            </React.Fragment>
-          ))}
            <label className="mt-4 mb-4 flex flex-col items-center justify-center mb-0 h-24 w-1/3 rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
             onClick={() => {
               setAddPerson(true);

@@ -144,42 +144,44 @@ export default function EditPerson({
                   </label>
                 </div>
 
-                <div className="mb-2 items-center justify-center">
-                  <div className="flex items-center justify-center">
-                    <div className="input-group">
-                      <span className="input-group-text">$</span>
-                      <input
-                        type="text"
-                        className="form-control max-six-digits rounded-start"
-                        onKeyDown={handleKeyDown}
-                        placeholder={
-                          personOwing
-                            ? parseFloat(personOwing).toFixed(2)
-                            : "0.00"
-                        }
-                        onClick={(e) => {
-                          e.target.select();
-                        }}
-                        onChange={(e) => {
-                          const value = e.target.value;
-                          setPersonOwing(value);
-                          const regex = /^[-\d{1,5}\.\d{0,2}]*$/;
-                          if (regex.test(value)) {
-                            setErrorBalance(true);
-                            setPersonOwing(value);
-                            setErrorMsg("");
-                            if (isNaN(value)) {
-                              setPersonOwing("0.00");
-                            }
-                          } else {
-                            setErrorBalance(false);
-                            setErrorMsg("Please enter a valid number");
-                          }
-                        }}
-                      />
-                    </div>
-                  </div>
-                </div>
+                <div className="mb-2 flex justify-center">
+  <div className="flex items-center">
+    <div className="input-group">
+      <span className="input-group-text">$</span>
+      <input
+        type="text"
+        className="form-control max-six-digits rounded-start"
+        onKeyDown={handleKeyDown}
+        placeholder={
+          personOwing
+            ? parseFloat(personOwing).toFixed(2)
+            : "0.00"
+        }
+        onClick={(e) => {
+          e.target.select();
+        }}
+        onChange={(e) => {
+          const value = e.target.value;
+          setPersonOwing(value);
+          const regex = /^[-\d{1,5}\.\d{0,2}]*$/;
+          if (regex.test(value)) {
+            setErrorBalance(true);
+            setPersonOwing(value);
+            setErrorMsg("");
+            if (isNaN(value)) {
+              setPersonOwing("0.00");
+            }
+          } else {
+            setErrorBalance(false);
+            setErrorMsg("Please enter a valid number");
+          }
+        }}
+      />
+    </div>
+  </div>
+</div>
+
+
 
                 <div className="text-red-500 text-sm text-center mb-2">
                   {errorMsg}
