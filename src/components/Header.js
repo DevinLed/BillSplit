@@ -157,7 +157,7 @@ export default function Header({
 
       {selectMethodManual ? (
         <div
-          className="align-items-center mb-5 flex h-10 w-full items-center items-stretch justify-between border-t-2 border-b-2 text-2xl font-bold "
+          className="align-items-center mb-2 flex h-10 w-full items-center items-stretch justify-between border-t-2 border-b-2 text-2xl font-bold "
           id="headbar"
         >
           <Link to="/SplitBill">

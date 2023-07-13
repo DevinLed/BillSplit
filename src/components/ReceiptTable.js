@@ -107,6 +107,9 @@ export default function ReceiptTable({
     }
   };
 
+
+
+  
   // Render the column based on the slider value
   const renderColumn = () => {
     if (sliderValue <= 33) {
@@ -281,19 +284,19 @@ export default function ReceiptTable({
     <>
       <div className="whitespace-no-wrap m-0 w-full max-w-min rounded-lg bg-white py-1 px-1 dark:bg-slate-900">
         <div className="mx-auto mb-0 max-w-min">
-          <table className="m-auto max-w-min table-fixed border border-black">
+          <table className="w-full border-collapse">
             <thead className="whitespace-no-wrap max-w-fit overflow-hidden truncate">
               <tr className="whitespace-no-wrap max-w-fit overflow-hidden px-2">
-                <th className="px-15 text-black">Item</th>
-                <th className="px-15 text-black">Price</th>
-                <th className="px-1" colSpan={3} style={{ width: "33.33%" }}>
-                  <span className="border-r border-black pr-2 pl-4 text-black">
+                <th  className="border-b-2 px-2 py-1 text-left sm:px-4 sm:py-2">Item</th>
+                <th className="border-b-2 px-2 py-1 text-left sm:px-4 sm:py-2">Price</th>
+                <th className="pl-1" colSpan={3} style={{ width: "33.33%" }}>
+                  <span className="border-b-2 px-3 py-1 text-left sm:px-4 sm:py-2 ">
                     Me
                   </span>
-                  <span className="border-r border-l border-black px-2 text-black">
+                  <span className="border-r border-l border-b-2 pr-3 pl-3 py-1 text-left sm:px-4 sm:py-2">
                     Split
                   </span>
-                  <span className="border-l border-black pl-2 text-black">
+                  <span className="border-b-2 px-2 py-1 text-left sm:px-4 sm:py-2 ">
                     Them
                   </span>
                 </th>
@@ -389,12 +392,6 @@ export default function ReceiptTable({
                       height: "100%",
                     }}
                   >
-                    <button
-                      className="add-button m-2 items-center justify-center text-center text-2xl text-gray-500"
-                      onClick={() => handlePictureDelete(index)}
-                    >
-                      <IoMdRemoveCircleOutline />
-                    </button>
                     <input
                       type="text"
                       className="my-0 ml-2 w-20 py-1 text-xs text-black"
@@ -567,7 +564,9 @@ export default function ReceiptTable({
         <label className="text-center text-lg font-medium">
           Receipt Total: ${finalTotal()}
         </label>
+        
       </div>
+      
     </>
   );
 }

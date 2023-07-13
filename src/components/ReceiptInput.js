@@ -7,7 +7,7 @@ import Header from "./Header";
 import ReceiptTable from "./ReceiptTable";
 import { Link } from "react-router-dom";
 import "../darkMode.css";
-import { IoCameraSharp, IoEnterOutline } from "react-icons/io5";
+import { IoCameraSharp, IoEnterOutline, IoCardOutline } from "react-icons/io5";
 
 import DatePicker from "react-datepicker";
 
@@ -69,6 +69,16 @@ export default function ReceiptInput({
   const [themTotal, setThemTotal] = useState(0);
   const [combinedArray, setCombinedArray] = useState([]);
   const [selected, setSelected] = useState(null);
+  const [isMerchantNameFocused, setMerchantNameFocused] = useState(false);
+  const [isInvoiceNumberFocused, setInvoiceNumberFocused] = useState(false);
+
+  const handleMerchantNameFocus = () => {
+    setMerchantNameFocused(true);
+  };
+
+  const handleInvoiceNumberFocus = () => {
+    setInvoiceNumberFocused(true);
+  };
 
   // Picture handling API section
   const FormData = require("form-data");
@@ -319,48 +329,152 @@ export default function ReceiptInput({
                 handleResetTotals={handleResetTotals}
               />
 
-              <div className="l-36 bg-grey flex flex-col  items-center justify-center rounded-lg px-6 py-6 ring-slate-900/5 dark:bg-slate-900">
-                <div className="max-w-fit">
-                  <label
-                    htmlFor="payment"
-                    className="form-control justify-left mt-0 flex items-center px-2"
-                  >
-                    <div className="whitespace-no-wrap w-22 pl-2 ">
-                      Who paid?
+              <div className="container mx-auto px-2 py-8 ">
+                <div className="overflow-hidden rounded-lg shadow">
+                  <div className="bg-gray-900 px-6 py-4">
+                    <div className="mb-8 flex items-center justify-between">
+                      <div>
+                        <input
+                          type="amount"
+                          className="form-control mt-3 h-10 bg-gray-900 text-left font-bold text-gray-300 outline-none"
+                          id="colFormLabel"
+                          placeholder="Merchant Name"
+                          onKeyDown={handleKeyDown}
+                          onChange={(e) =>
+                            setMerchantName(
+                              e.target.value.replace(/\b\w/g, (c) =>
+                                c.toUpperCase()
+                              )
+                            )
+                          }
+                          onClick={() => setDisplayMerchant(true)}
+                        />
+                        <div>
+                          <input
+                            type="invoice"
+                            className="form-control opacity-4 mb-0 w-40 bg-gray-900 text-left font-bold text-gray-300 outline-none"
+                            id="colFormLabel"
+                            placeholder="Invoice Number"
+                            onKeyDown={handleKeyDown}
+                            onChange={(e) => setInvoiceNumber(e.target.value)}
+                            onClick={() => setDisplayInvoice(true)}
+                          />
+                        </div>
+                      </div>
                     </div>
-                    <div className="inline-flex px-2">
-                      <button
-                        className={`m-0 rounded-l bg-blue-500 py-1 px-2 font-bold text-white ${
-                          selected === 1 ? "bg-blue-700" : ""
-                        } h-8 w-16`}
-                        onClick={() => {
-                          handleButton1Click();
-                          setSelectedValue("you");
-                          setShowTable(true);
-                          setDisplayMerchant(false);
-                          setDisplayDate(false);
-                          setDisplayInvoice(false);
-                        }}
+                  </div>
+                  <div className="bg-white px-4 py-4 sm:px-6">
+                    <div className="mb-4">
+                      <h2 className="text-xl font-bold">Split with:</h2>
+                      <p className="text-xl font-bold">{personName}</p>
+                    </div>
+                    <div className="max-w-fit">
+                     <label htmlFor="payment" className="form-control px-0 mt-0 flex   justify-center  items-center">
+                        <div className="whitespace-no-wrap w-12 pl-2">
+                          <IoCardOutline size={36} />
+                        </div>
+                        <div className="inline-flex px-2">
+                          <button
+                            className={`m-0 rounded-l bg-blue-500 py-1 px-2 font-bold text-white ${
+                              selected === 1 ? "bg-blue-700" : ""
+                            } h-8 w-16`}
+                            onClick={() => {
+                              handleButton1Click();
+                              setSelectedValue("you");
+                              setShowTable(true);
+                              setDisplayMerchant(false);
+                              setDisplayDate(false);
+                              setDisplayInvoice(false);
+                            }}
+                          >
+                            Me
+                          </button>
+                          <button
+                            className={`m-0 rounded-r border-l bg-blue-500 py-1 px-3 font-bold text-white ${
+                              selected === 2 ? "bg-blue-700" : ""
+                            } min-w-16 max-w-24 h-8 overflow-hidden`}
+                            onClick={() => {
+                              handleButton2Click();
+                              setSelectedValue("them");
+                              setShowTable(true);
+                            }}
+                          >
+                            {personName.length > 12
+                              ? personName.slice(0, 12) + "..."
+                              : personName}
+                          </button>
+                        </div>
+                      </label>
+                    </div>
+                    <div className="mt-3">
+                      <label
+                        htmlFor="colFormLabel"
+                        className="col-form-label"
                       >
-                        Me
-                      </button>
-                      <button
-                        className={`m-0 rounded-r border-l bg-blue-500 py-1 px-3 font-bold text-white ${
-                          selected === 2 ? "bg-blue-700" : ""
-                        } min-w-16 max-w-24 h-8 overflow-hidden`}
-                        onClick={() => {
-                          handleButton2Click();
-                          setSelectedValue("them");
-                          setShowTable(true);
-                        }}
-                      >
-                        {personName.length > 12
-                          ? personName.slice(0, 12) + "..."
-                          : personName}
+                        Date of Receipt
+                      </label>
+                      <div className="z-50 mt-3 mb-3 text-center justify-left">
+                        <DatePicker
+                          defaultValue="Date of Receipt"
+                          selected={startDate}
+                          onChange={(date) => setStartDate(date)}
+                          className="bg-blue-100 text-center justify-left"
+                          onFocus={(e) => e.target.blur()}
+                          dateFormat="dd/MM/yyyy"
+                          onClick={() => setDisplayDate(true)}
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <ReceiptTable
+                        name={name}
+                        amount={amount}
+                        setAmount={setAmount}
+                        items={items}
+                        currentIndex={currentIndex}
+                        getPictureTotal={getPictureTotal}
+                        youTotal={youTotal}
+                        themTotal={themTotal}
+                        splitTotal={splitTotal}
+                        handleReceiptPictureSubmit={handleReceiptPictureSubmit}
+                        setIsAddedManually={setIsAddedManually}
+                        combinedArray={combinedArray}
+                        setCombinedArray={setCombinedArray}
+                        pictureTotal={pictureTotal}
+                        youPictureTotal={youPictureTotal}
+                        splitPictureTotal={splitPictureTotal}
+                        themPictureTotal={themPictureTotal}
+                        obtainedInfo={obtainedInfo}
+                        setObtainedInfo={setObtainedInfo}
+                        selectMethodManual={selectMethodManual}
+                        setThemPictureTotal={setThemPictureTotal}
+                        setSplitPictureTotal={setSplitPictureTotal}
+                        setYouPictureTotal={setYouPictureTotal}
+                        selectedValue={selectedValue}
+                        personName={personName}
+                        personReceiptAmount={personReceiptAmount}
+                        setPersonReceiptAmount={setPersonReceiptAmount}
+                        setName={setName}
+                      />
+                    </div>
+                  </div>
+                  <div className="bg-gray-100 px-6 py-4">
+                    <div className="mb-4 flex flex-col justify-between sm:flex-row">
+                      <div>
+                        <h2 className="text-lg font-bold">Payment Details:</h2>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <button className="rounded bg-blue-500 py-2 px-4 text-white">
+                        Pay Now
                       </button>
                     </div>
-                  </label>
+                  </div>
                 </div>
+              </div>
+
+              <div className="l-36 bg-grey flex flex-col  items-center justify-center rounded-lg px-6 py-6 ring-slate-900/5 dark:bg-slate-900">
                 {showTable ? (
                   <>
                     <div className="col-sm-10 mb-0 mt-3">
