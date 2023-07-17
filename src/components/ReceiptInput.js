@@ -356,11 +356,11 @@ export default function ReceiptInput({
                   <div
                     className={
                       theme === "dark"
-                        ? "bg-gray-900 px-6 py-4"
-                        : "bg-gray-900 px-6 py-4"
+                        ? "bg-gray-900 px-6 "
+                        : "bg-gray-900 px-6 "
                     }
                   >
-                    <div className="mb-8 flex items-center justify-between">
+                    <div className="flex items-center justify-between">
                       <div>
                         <input
                           type="amount"
@@ -380,7 +380,7 @@ export default function ReceiptInput({
                         <div>
                           <input
                             type="invoice"
-                            className="form-control opacity-4 mb-0 w-40 bg-gray-900 text-left font-bold text-gray-300 outline-none"
+                            className="form-control opacity-4 mb-3 w-40 bg-gray-900 text-left font-bold text-gray-300 outline-none"
                             id="colFormLabel"
                             placeholder="Invoice Number"
                             onKeyDown={handleKeyDown}
@@ -394,8 +394,8 @@ export default function ReceiptInput({
                   <div
                     className={
                       theme === "dark"
-                        ? "bg-gray-900 px-2 py-4 sm:px-6"
-                        : "bg-white px-2 py-4 sm:px-6"
+                        ? "bg-gray-900 px-2 sm:px-6"
+                        : "bg-white px-2 sm:px-6"
                     }
                   >
                     <div className="mb-4">
@@ -405,9 +405,19 @@ export default function ReceiptInput({
                     <div className="max-w-fit">
                       <label
                         htmlFor="payment"
-                        className={theme === "dark" ? "bg-gray-600 form-control mt-0 flex items-center   justify-center  px-0":"form-control mt-0 flex items-center   justify-center  px-0"}
+                        className={
+                          theme === "dark"
+                            ? "form-control mt-0 flex items-center justify-center   bg-gray-600  px-0"
+                            : "form-control mt-0 flex items-center   justify-center  px-0"
+                        }
                       >
-                        <div className={theme === "dark" ? "text-white whitespace-no-wrap w-12 pl-2":"whitespace-no-wrap w-12 pl-2"}>
+                        <div
+                          className={
+                            theme === "dark"
+                              ? "whitespace-no-wrap w-12 pl-2 text-white"
+                              : "whitespace-no-wrap w-12 pl-2"
+                          }
+                        >
                           <IoCardOutline size={36} />
                         </div>
                         <div className="inline-flex px-2">
@@ -448,7 +458,11 @@ export default function ReceiptInput({
                         <div className="mt-3">
                           <label
                             htmlFor="colFormLabel"
-                            className={theme === "dark" ? "col-form-label text-center text-white":"col-form-label text-center text-black"}
+                            className={
+                              theme === "dark"
+                                ? "col-form-label text-center text-white"
+                                : "col-form-label text-center text-black"
+                            }
                           >
                             Date of Receipt
                           </label>
@@ -507,45 +521,55 @@ export default function ReceiptInput({
                       ""
                     )}
                   </div>
-                  <div className={theme === "dark" ? "grid grid-cols-2 gap-y-0 bg-gray-900 py-4": "grid grid-cols-2 gap-y-0 bg-white py-4"}>
+                  <div
+                    className={
+                      theme === "dark"
+                        ? "grid grid-cols-2 gap-y-0 bg-gray-900 py-4"
+                        : "grid grid-cols-2 gap-y-0 bg-white py-4"
+                    }
+                  >
                     <div className="max-w-20 m-2 mb-4 flex flex-col justify-center sm:flex-row">
                       <Link to={`/ReceiptInput/${id}`}>
-                      <label
-  className={
-    "flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-200 py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline " +
-    (theme === "dark" ? "text-white bg-gray-900" : "text-gray-800 bg-white")
-  }
-  onClick={(e) => {
-    getFinalTotal();
-    setSelectMethodPicture(false);
-    setSelectPersonReceipt(true);
-    handleHistorySubmit(e);
-    resetReceiptForm();
-    setIsReceiptSubmitted(true);
-  }}
->
-  <IoDuplicateOutline size={24} />
-  Add Another
-</label>
+                        <label
+                          className={
+                            "flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-200 py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline " +
+                            (theme === "dark"
+                              ? "bg-gray-900 text-white"
+                              : "bg-white text-gray-800")
+                          }
+                          onClick={(e) => {
+                            getFinalTotal();
+                            setSelectMethodPicture(false);
+                            setSelectPersonReceipt(true);
+                            handleHistorySubmit(e);
+                            resetReceiptForm();
+                            setIsReceiptSubmitted(true);
+                          }}
+                        >
+                          <IoDuplicateOutline size={24} />
+                          Add Another
+                        </label>
                       </Link>
                     </div>
                     <div className="max-w-20 m-2 mb-4 flex flex-col justify-center sm:flex-row">
                       <Link to="/SplitBill">
-                      <label
-  className={
-    "flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-200 py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline " +
-    (theme === "dark" ? "text-white bg-gray-900" : "bg-white text-gray-800")
-  }
-  onClick={(e) => {
-    getFinalTotal();
-    handleHistorySubmit(e);
-    resetReceiptForm();
-    setIsReceiptSubmitted(true);
-  }}
->
-  <IoExitOutline size={24} />
-  Submit
-</label>
+                        <label
+                          className={
+                            "flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-200 py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline " +
+                            (theme === "dark"
+                              ? "bg-gray-900 text-white"
+                              : "bg-white text-gray-800")
+                          }
+                          onClick={(e) => {
+                            getFinalTotal();
+                            handleHistorySubmit(e);
+                            resetReceiptForm();
+                            setIsReceiptSubmitted(true);
+                          }}
+                        >
+                          <IoExitOutline size={24} />
+                          Submit
+                        </label>
                       </Link>
                     </div>
                   </div>
@@ -660,7 +684,11 @@ export default function ReceiptInput({
                               <div className="z-50 mt-3 mb-3 text-center">
                                 <label
                                   htmlFor="colFormLabel"
-                                  className={theme === "dark" ? "col-form-label text-center text-white":"col-form-label text-center text-black"}
+                                  className={
+                                    theme === "dark"
+                                      ? "col-form-label text-center text-white"
+                                      : "col-form-label text-center text-black"
+                                  }
                                 >
                                   Date of Receipt
                                 </label>

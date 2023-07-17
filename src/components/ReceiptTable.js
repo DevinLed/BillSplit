@@ -282,12 +282,12 @@ export default function ReceiptTable({
   }, [combinedArray]);
   return (
     <>
-      <div className="whitespace-no-wrap m-0 max-w-full rounded-lg bg-white py-1 px-1 dark:bg-slate-900">
+      <div className={theme === "dark" ? "bg-gray-900 whitespace-no-wrap m-0 max-w-full rounded-lg py-1 px-1 dark:bg-slate-900":" whitespace-no-wrap m-0 max-w-full rounded-lg bg-white py-1 px-1 dark:bg-slate-900"}>
         <div className="mb-0 flex max-w-min justify-center">
-          <table className="mx-20 border-collapse">
+          <table className={theme === "dark" ? "text-white bg-gray-900 mx-20 border-collapse":"mx-20 border-collapse"}>
             <thead className="whitespace-no-wrap max-w-fit overflow-hidden truncate">
               <tr className="whitespace-no-wrap max-w-fit overflow-hidden px-2">
-                <th className="px-2 py-1 text-left sm:px-4 sm:py-2">
+                <th className="py-1 text-left sm:py-2">
                 <span className="border-b-2 ml-1">
                    
                   Item
@@ -375,7 +375,7 @@ export default function ReceiptTable({
 
             <tr className="add-button m-2 items-center justify-center text-center text-black">
               <button
-                className="add-button m-2 items-center justify-center text-center text-2xl text-gray-500"
+                className={theme === "dark" ? "add-button m-2 items-center justify-center text-center text-2xl text-white": "add-button m-2 items-center justify-center text-center text-2xl text-black"}
                 onClick={() => {
                   handleReceiptPictureSubmit(sliderValue);
                   setSliderValue(50);
@@ -387,8 +387,8 @@ export default function ReceiptTable({
             <tbody className="pt-5">
               {combinedArray.map((item, index) => (
                 <tr key={index}>
-                  <td className="text-black px-2">
-                    <span className="border-b-2 text-left">
+                  <td className={theme === "dark" ? "text-white pl-2":"text-black pl-2"}>
+                  <span className="border-b-2 text-left">
                       {item.name
                         ? item.name.replace(/\b\w/g, (c) => c.toUpperCase())
                             .length > 5
@@ -409,10 +409,11 @@ export default function ReceiptTable({
                     </span>
                     
                     <button
-                      className="add-button justify-right py-2 text-2xl text-gray-500"
+                      className={theme === "dark" ? "justify-right text-2xl text-white" : "justify-right text-2xl text-black"}
                       onClick={() => handlePictureDelete(index)}
+                      style={{ float: 'right' }}
                     >
-                      <IoMdRemoveCircleOutline />
+                      <IoMdRemoveCircleOutline/>
                     </button>
                   </td>
                   
