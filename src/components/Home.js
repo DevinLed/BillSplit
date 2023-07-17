@@ -25,7 +25,7 @@ export default function Home({ theme, toggleTheme, handleClearData, list }) {
   }, []);
 
   // For Dark/Bright mode. Keeps mode storage for page refresh.
-  const [buttonText, setButtonText] = useState("Dark Mode");
+  const [buttonText, setButtonText] = useState("Dark");
   const changeText = (text) => setButtonText(text);
 
   const yAxisCallback = (value) => `$${value.toFixed(2)}`;
@@ -142,54 +142,86 @@ export default function Home({ theme, toggleTheme, handleClearData, list }) {
                 <p>No submitted receipts</p>
               )}
             </div>
-            <div className="grid grid-cols-3 py-4 gap-y-0">
-  <Link to="/SplitBill">
-    <label className="flex flex-col items-center justify-center mb-0 h-24 w-full rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline">
-      <IoReceiptOutline size={24} />
-      <span className="text-gray-800">Split a Bill</span>
-    </label>
-  </Link>
-  <Link to="/EditList">
-    <label className="flex flex-col items-center justify-center h-24 w-full rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline">
-      <IoPersonCircleOutline size={24} />
-      <span className="text-gray-800">Edit Person</span>
-    </label>
-  </Link>
-  <Link to="/History">
-    <label className="flex flex-col items-center justify-center h-24 w-full rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline">
-      <IoListOutline size={24} />
-      <span className="text-gray-800">History</span>
-    </label>
-  </Link>
+            <div className="grid grid-cols-3 gap-y-0 gap-x-1 py-4">
+            <Link to="/SplitBill" className="mb-0 p-0">
   <label
-    onClick={() => {
-      toggleTheme();
-      if (theme === "light") {
-        changeText("Bright Mode");
-      } else {
-        changeText("Dark Mode");
-      }
-    }}
-    className="flex flex-col items-center justify-center h-24 w-full cursor-pointer rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
+    className={
+      theme === "dark"
+        ? "mb-0 flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
+        : "mb-0 flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
+    }
   >
-    <IoInvertModeSharp size={24} />
-    <span className="text-gray-800">{buttonText}</span>
+    <IoReceiptOutline size={24} />
+    <span className={theme === "dark" ? "text-white" : "text-gray-800"}>Split a Bill</span>
   </label>
-  <Link to="/LandingPage">
-    <label className="flex flex-col items-center justify-center h-24 w-full rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline">
-      <IoHomeOutline size={24} />
-      <span className="text-gray-800">Home Page</span>
-    </label>
-  </Link>
+</Link>
+<Link to="/EditList">
   <label
-    onClick={() => handleClearData()}
-    className="flex flex-col items-center justify-center h-24 w-full cursor-pointer rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
+    className={
+      theme === "dark"
+        ? "flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
+        : "flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
+    }
   >
-    <IoAlertCircle size={24} />
-    <span className="text-gray-800">Clear Data</span>
+    <IoPersonCircleOutline size={24} />
+    <span className={theme === "dark" ? "text-white" : "text-gray-800"}>Edit Person</span>
   </label>
-</div>
+</Link>
+<Link to="/History">
+  <label
+    className={
+      theme === "dark"
+        ? "flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
+        : "flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
+    }
+  >
+    <IoListOutline size={24} />
+    <span className={theme === "dark" ? "text-white" : "text-gray-800"}>History</span>
+  </label>
+</Link>
+<label
+  onClick={() => {
+    toggleTheme();
+    if (theme === "light") {
+      changeText("Light");
+    } else {
+      changeText("Dark");
+    }
+  }}
+  className={
+    theme === "dark"
+      ? "flex h-24 w-full cursor-pointer flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
+      : "flex h-24 w-full cursor-pointer flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
+  }
+>
+  <IoInvertModeSharp size={24} />
+  <span className={theme === "dark" ? "text-white" : "text-gray-800"}>{buttonText}</span>
+</label>
+<Link to="/LandingPage">
+  <label
+    className={
+      theme === "dark"
+        ? "flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
+        : "flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
+    }
+  >
+    <IoHomeOutline size={24} />
+    <span className={theme === "dark" ? "text-white" : "text-gray-800"}>Home Page</span>
+  </label>
+</Link>
+<label
+  onClick={() => handleClearData()}
+  className={
+    theme === "dark"
+      ? "flex h-24 w-full cursor-pointer flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
+      : "flex h-24 w-full cursor-pointer flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
+  }
+>
+  <IoAlertCircle size={24} />
+  <span className={theme === "dark" ? "text-white" : "text-gray-800"}>Clear Data</span>
+</label>
 
+            </div>
           </div>
         </div>
         <Footer theme={theme} />

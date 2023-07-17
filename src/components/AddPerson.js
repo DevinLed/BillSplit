@@ -159,9 +159,16 @@ export default function AddPerson({
                 </div>
 
                 <div className="mb-4">
-                  <label htmlFor="colFormLabel" className="label-one-line">
-                    Starting balance?
-                  </label>
+                <label
+  htmlFor="colFormLabel"
+  className={
+    "label-one-line " +
+    (theme === "dark" ? "text-white" : "text-gray-800")
+  }
+>
+  Starting balance?
+</label>
+
                 </div>
 
                 <div className="mb-4">

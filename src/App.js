@@ -257,6 +257,7 @@ function App() {
               setYouPictureTotal={setYouPictureTotal}
               setSplitPictureTotal={setSplitPictureTotal}
               setThemPictureTotal={setThemPictureTotal}
+              theme={theme}
             />
           }
         />
@@ -318,7 +319,7 @@ function App() {
           }
         />
 
-        <Route path="/History" element={<History receipts={receipts} />} />
+        <Route path="/History" element={<History receipts={receipts} theme={theme}/>} />
 
         <Route
           path="/AddPerson"
@@ -344,6 +345,7 @@ function App() {
               personName={personName}
               personReceiptAmount={personReceiptAmount}
               setPersonReceiptAmount={setPersonReceiptAmount}
+              theme={theme}
             />
           }
         />

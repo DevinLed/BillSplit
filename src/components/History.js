@@ -2,7 +2,7 @@ import React, { useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import Header from "./Header";
 
-export default function History({ receipts }) {
+export default function History({ receipts, theme }) {
   const { id } = useParams();
   const [selectedPerson, setSelectedPerson] = useState("");
 
@@ -84,12 +84,19 @@ export default function History({ receipts }) {
         <div className="flex flex-col items-center justify-center">
           <div className="rounded-lg px-3 py-2 shadow-md mb-4 mx-auto">
             <div className="flex items-center justify-end mb-2">
-              <label htmlFor="filterSelect" className="mr-2">
-                Filter By Person:
-              </label>
+            <label
+  htmlFor="filterSelect"
+  className={
+    "mr-2 " +
+    (theme === "dark" ? "text-white" : "text-gray-800")
+  }
+>
+  Filter By Person:
+</label>
+
               <select
                 id="filterSelect"
-                className="px-2 py-1 border border-gray-300 rounded"
+                className={(theme === "dark" ? "bg-gray-900 px-2 py-1 border border-gray-300 rounded": "bg-gray-200 px-2 py-1 border border-gray-300 rounded")}
                 value={selectedPerson}
                 onChange={handlePersonNameChange}
               >

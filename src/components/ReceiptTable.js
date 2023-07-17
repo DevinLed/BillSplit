@@ -34,6 +34,9 @@ export default function ReceiptTable({
   setPictureTax,
   pictureConfidence,
   setName,
+  filledIn,
+  setFilledIn,
+  theme
 }) {
   // Handler for changing the name of the item added to array
   const handleNameChange = (event) => {
@@ -87,7 +90,7 @@ export default function ReceiptTable({
     });
   };
 
-  const [sliderValue, setSliderValue] = useState(55);
+  const [sliderValue, setSliderValue] = useState(50);
 
   // Calculate the tax owing based on the selected value, works into the values in the slider total information
   const taxOwing =
@@ -107,9 +110,6 @@ export default function ReceiptTable({
     }
   };
 
-
-
-  
   // Render the column based on the slider value
   const renderColumn = () => {
     if (sliderValue <= 33) {
@@ -206,7 +206,7 @@ export default function ReceiptTable({
 
     const updatedSplitPictureTotal = updatedObtainedInfo.reduce(
       (total, info) => {
-        if (info.sliderValue === 55) {
+        if (info.sliderValue === 50) {
           return total + parseFloat(info.amount);
         }
         return total;
@@ -234,7 +234,7 @@ export default function ReceiptTable({
     setObtainedInfo((prevInfo) =>
       prevInfo.map((item) => ({
         ...item,
-        sliderValue: 55,
+        sliderValue: 50,
       }))
     );
   }, []);
@@ -257,7 +257,7 @@ export default function ReceiptTable({
           case 0:
             totals.youTotal += parseFloat(amount);
             break;
-          case 55:
+          case 50:
             totals.splitTotal += parseFloat(amount);
             break;
           case 100:
@@ -282,22 +282,38 @@ export default function ReceiptTable({
   }, [combinedArray]);
   return (
     <>
-      <div className="whitespace-no-wrap m-0 w-full max-w-min rounded-lg bg-white py-1 px-1 dark:bg-slate-900">
-        <div className="mx-auto mb-0 max-w-min">
-          <table className="w-full border-collapse">
+      <div className="whitespace-no-wrap m-0 max-w-full rounded-lg bg-white py-1 px-1 dark:bg-slate-900">
+        <div className="mb-0 flex max-w-min justify-center">
+          <table className="mx-20 border-collapse">
             <thead className="whitespace-no-wrap max-w-fit overflow-hidden truncate">
               <tr className="whitespace-no-wrap max-w-fit overflow-hidden px-2">
-                <th  className="border-b-2 px-2 py-1 text-left sm:px-4 sm:py-2">Item</th>
-                <th className="border-b-2 px-2 py-1 text-left sm:px-4 sm:py-2">Price</th>
+                <th className="px-2 py-1 text-left sm:px-4 sm:py-2">
+                <span className="border-b-2 ml-1">
+                   
+                  Item
+                  </span>
+                </th>
+                <th className="px-2 py-1 text-left sm:px-4 sm:py-2">
+                <span className="border-b-2">
+                   
+                   Price
+                   </span>
+                </th>
                 <th className="pl-1" colSpan={3} style={{ width: "33.33%" }}>
-                  <span className="border-b-2 px-3 py-1 text-left sm:px-4 sm:py-2 ">
-                    Me
+                  <span className="px-3 py-1 text-left sm:px-4 sm:py-2 ">
+                  <span className="border-b-2 text-left">
+                 Me
+                 </span>
                   </span>
-                  <span className="border-r border-l border-b-2 pr-3 pl-3 py-1 text-left sm:px-4 sm:py-2">
-                    Split
+                  <span className="py-1 pr-3 pl-3 text-left sm:px-4 sm:py-2">
+                  <span className="border-b-2 text-center">
+                  Split
                   </span>
-                  <span className="border-b-2 px-2 py-1 text-left sm:px-4 sm:py-2 ">
-                    Them
+                  </span>
+                  <span className="px-2 py-1 text-left sm:px-4 sm:py-2 ">
+                  <span className="border-b-2 text-right">
+                 Them
+                 </span>
                   </span>
                 </th>
               </tr>
@@ -337,7 +353,7 @@ export default function ReceiptTable({
                   }}
                 />
               </td>
-              <td colSpan="3" className="px-2">
+              <td colSpan="3" className="pl-3">
                 <div
                   style={{
                     width: "auto",
@@ -345,11 +361,11 @@ export default function ReceiptTable({
                   }}
                 >
                   <Slider
-                    defaultValue={55}
+                    defaultValue={50}
                     min={0}
                     max={100}
                     value={sliderValue}
-                    step={55}
+                    step={50}
                     onChange={(value) => handleSliderChange(value)}
                   />
                   {renderColumn()}
@@ -362,7 +378,7 @@ export default function ReceiptTable({
                 className="add-button m-2 items-center justify-center text-center text-2xl text-gray-500"
                 onClick={() => {
                   handleReceiptPictureSubmit(sliderValue);
-                  setSliderValue(55);
+                  setSliderValue(50);
                 }}
               >
                 <IoMdAddCircleOutline />
@@ -370,20 +386,36 @@ export default function ReceiptTable({
             </tr>
             <tbody className="pt-5">
               {combinedArray.map((item, index) => (
-                <tr
-                  key={index}
-                  className={
-                    index % 2 === currentIndex % 2 ? "bg-blue-100" : ""
-                  }
-                >
-                  <td className="text-black">
-                    {item.name
-                      ? item.name.replace(/\b\w/g, (c) => c.toUpperCase())
-                      : item.description &&
-                        item.description.replace(/\b\w/g, (c) =>
-                          c.toUpperCase()
-                        )}
+                <tr key={index}>
+                  <td className="text-black px-2">
+                    <span className="border-b-2 text-left">
+                      {item.name
+                        ? item.name.replace(/\b\w/g, (c) => c.toUpperCase())
+                            .length > 5
+                          ? item.name
+                              .replace(/\b\w/g, (c) => c.toUpperCase())
+                              .slice(0, 5) + "..."
+                          : item.name.replace(/\b\w/g, (c) => c.toUpperCase())
+                        : item.description &&
+                          (item.description.replace(/\b\w/g, (c) =>
+                            c.toUpperCase()
+                          ).length > 5
+                            ? item.description
+                                .replace(/\b\w/g, (c) => c.toUpperCase())
+                                .slice(0, 5) + "..."
+                            : item.description.replace(/\b\w/g, (c) =>
+                                c.toUpperCase()
+                              ))}
+                    </span>
+                    
+                    <button
+                      className="add-button justify-right py-2 text-2xl text-gray-500"
+                      onClick={() => handlePictureDelete(index)}
+                    >
+                      <IoMdRemoveCircleOutline />
+                    </button>
                   </td>
+                  
                   <td
                     className="mr-2"
                     style={{
@@ -394,7 +426,7 @@ export default function ReceiptTable({
                   >
                     <input
                       type="text"
-                      className="my-0 ml-2 w-20 py-1 text-xs text-black"
+                      className="my-2 ml-2  w-16 items-center justify-center py-1 text-xs text-black"
                       style={{
                         border:
                           item.confidence < 0.5 && !hasBeenAccessed
@@ -425,10 +457,10 @@ export default function ReceiptTable({
                       }}
                     >
                       <Slider
-                        defaultValue={item.sliderValue || 55}
+                        defaultValue={item.sliderValue || 50}
                         min={0}
                         max={100}
-                        step={55}
+                        step={50}
                         value={item.sliderValue}
                         onChange={(value) =>
                           handlePictureSliderChange(index, value, item)
@@ -442,37 +474,66 @@ export default function ReceiptTable({
                 </tr>
               ))}
             </tbody>
-            <tfoot className="bg-blue-200">
-              <tr className="border-t border-gray-500 bg-blue-200">
+            <tfoot className="bg-white">
+              <tr>
                 <td
                   className="px-2 py-1 text-black"
                   style={{ width: "33.33%" }}
                 >
-                  Total:
+                  <span className="border-b-2">Total</span>
                 </td>
                 <td
-                  className="mr-2 px-2 py-1 text-right  text-black"
+                  className="mr-2 px-2 py-1 text-right  text-black "
                   style={{ width: "33.33%" }}
                 >
-                  ${getPictureTotal()}
+                  <span className="border-b-2">
+                    $
+                    {getPictureTotal().toString().length > 7
+                      ? getPictureTotal().toString().slice(0, 4) + "..."
+                      : getPictureTotal()}
+                  </span>
                 </td>
                 <td
-                  className="border-l border-gray-500 px-2 py-1 text-center text-xs  text-black"
+                  className=" px-2 py-1 text-center text-xs text-black"
                   style={{ width: "33.33%" }}
                 >
-                  {parseFloat(youPictureTotal).toFixed(2)}
+                  <span className="border-b-2">
+                    {parseFloat(youPictureTotal).toFixed(2).toString().length >
+                    7
+                      ? parseFloat(youPictureTotal)
+                          .toFixed(2)
+                          .toString()
+                          .slice(0, 4) + "..."
+                      : parseFloat(youPictureTotal).toFixed(2)}
+                  </span>
                 </td>
                 <td
-                  className="border-l border-gray-500 px-2 py-1 text-center text-xs  text-black"
+                  className="px-2 py-1 text-center text-xs text-black"
                   style={{ width: "33.33%" }}
                 >
-                  {parseFloat(splitPictureTotal).toFixed(2)}
+                  <span className="border-b-2">
+                    {parseFloat(splitPictureTotal).toFixed(2).toString()
+                      .length > 7
+                      ? parseFloat(splitPictureTotal)
+                          .toFixed(2)
+                          .toString()
+                          .slice(0, 4) + "..."
+                      : parseFloat(splitPictureTotal).toFixed(2)}
+                  </span>
                 </td>
                 <td
-                  className="border-l border-gray-500 px-2 py-1 text-center text-xs  text-black"
+                  className="px-2 py-1 text-center text-xs text-black"
                   style={{ width: "33.33%" }}
                 >
-                  {parseFloat(themPictureTotal).toFixed(2)}
+                  <span className="border-b-2">
+                    {parseFloat(themPictureTotal).toFixed(2).toString().length >
+                    7
+                      ? parseFloat(themPictureTotal)
+                          .toFixed(2)
+                          .toString()
+                          .slice(0, 4) + "..."
+                      : parseFloat(themPictureTotal).toFixed(2)}
+                  </span>
                 </td>
                 <td></td>
                 <td></td>
@@ -489,7 +550,6 @@ export default function ReceiptTable({
                       height: "100%",
                     }}
                   >
-
                     <button
                       className="add-button m-2 items-center justify-center text-center text-2xl text-gray-500"
                       onClick={() => setPictureTax(0)}
@@ -533,23 +593,40 @@ export default function ReceiptTable({
           </table>
         </div>
       </div>
-      <div className="mt-3 flex items-center justify-center rounded-lg bg-white px-3 py-2 shadow-md">
-        <label className="text-center text-lg font-medium">
-          {selectedValue === "you" ? (
-            <>
-              {personName} owes you $
-              {parseFloat(personReceiptAmount).toFixed(2)}
-            </>
-          ) : (
-            <>
-              You owe {personName} ${parseFloat(personReceiptAmount).toFixed(2)}
-            </>
-          )}
-        </label>
-      </div>
-      {pictureTax && (
-        <div className="mt-3 flex items-center justify-center rounded-lg bg-white px-3 py-2 shadow-md">
-          <label className="text-center text-lg font-medium">
+      <div className="bg-gray-100 px-6 py-4">
+        <div className="mb-1 flex flex-col justify-between sm:flex-row">
+          <div>
+            <h2 className={theme=== "dark" ? "text-black mb-2 text-lg font-bold":"mb-2 text-lg font-bold"}>Payment Details:</h2>
+          </div>
+
+          <label className="text-lg font-medium">
+            {selectedValue === "you" ? (
+              <>
+                {personName} owes you $
+                {parseFloat(personReceiptAmount).toFixed(2).toString().length >
+                15
+                  ? parseFloat(personReceiptAmount)
+                      .toFixed(2)
+                      .toString()
+                      .slice(0, 15) + "..."
+                  : parseFloat(personReceiptAmount).toFixed(2)}
+              </>
+            ) : (
+              <>
+                You owe {personName} $
+                {parseFloat(personReceiptAmount).toFixed(2).toString().length >
+                15
+                  ? parseFloat(personReceiptAmount)
+                      .toFixed(2)
+                      .toString()
+                      .slice(0, 15) + "..."
+                  : parseFloat(personReceiptAmount).toFixed(2)}
+              </>
+            )}
+          </label>
+        </div>
+        {pictureTax && (
+          <label className=" flex items-center justify-center text-center text-lg font-medium">
             {selectedValue === "you"
               ? `Taxes ${personName} owes you: ${parseFloat(taxActual).toFixed(
                   2
@@ -558,15 +635,11 @@ export default function ReceiptTable({
                   2
                 )}`}
           </label>
-        </div>
-      )}
-      <div className="mt-3 flex items-center justify-center rounded-lg bg-white px-3 py-2 shadow-md">
-        <label className="text-center text-lg font-medium">
+        )}
+        <label className="mt-0 flex items-center text-lg font-medium">
           Receipt Total: ${finalTotal()}
         </label>
-        
       </div>
-      
     </>
   );
 }

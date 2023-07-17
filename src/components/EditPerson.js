@@ -67,16 +67,16 @@ export default function EditPerson({
 
   return (
     <>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-opacity-50 bg-gray-900">
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50 p-4">
         <div className="relative w-full max-w-sm">
           <div
             className={
               theme === "dark"
-                ? "bg-gray-800 border border-gray-300 rounded-lg shadow-lg overflow-hidden"
-                : "bg-white border border-gray-300 rounded-lg shadow-lg overflow-hidden"
+                ? "overflow-hidden rounded-lg border border-gray-300 bg-gray-800 shadow-lg"
+                : "overflow-hidden rounded-lg border border-gray-300 bg-white shadow-lg"
             }
           >
-            <div className="flex items-center justify-evenly p-3 border-b border-gray-300">
+            <div className="flex items-center justify-evenly border-b border-gray-300 p-3">
               <h3 className="text-xl font-semibold">Edit Person</h3>
             </div>
 
@@ -88,7 +88,7 @@ export default function EditPerson({
                   </label>
                   <input
                     type="name"
-                    className="form-control w-full py-2 px-3 rounded-lg focus:outline-none focus:ring focus:border-blue-300"
+                    className="form-control w-full rounded-lg py-2 px-3 focus:border-blue-300 focus:outline-none focus:ring"
                     id="colFormLabel"
                     placeholder="Name"
                     value={personName}
@@ -108,7 +108,7 @@ export default function EditPerson({
                   </label>
                   <input
                     type="phone"
-                    className={`form-control w-full py-2 px-3 rounded-lg focus:outline-none focus:ring ${
+                    className={`form-control w-full rounded-lg py-2 px-3 focus:outline-none focus:ring ${
                       isValidPhoneNumber ? "ring-green-300" : "ring-red-300"
                     } ${
                       personPhone.length >= 10 && !isValidPhoneNumber
@@ -128,7 +128,7 @@ export default function EditPerson({
                   </label>
                   <input
                     type="email"
-                    className={`form-control w-full py-2 px-3 rounded-lg focus:outline-none focus:ring ${
+                    className={`form-control w-full rounded-lg py-2 px-3 focus:outline-none focus:ring ${
                       isValidEmail ? "ring-green-300" : "ring-red-300"
                     }`}
                     id="colFormLabel"
@@ -145,59 +145,49 @@ export default function EditPerson({
                 </div>
 
                 <div className="mb-2 flex justify-center">
-  <div className="flex items-center">
-    <div className="input-group">
-      <span className="input-group-text">$</span>
-      <input
-        type="text"
-        className="form-control max-six-digits rounded-start"
-        onKeyDown={handleKeyDown}
-        placeholder={
-          personOwing
-            ? parseFloat(personOwing).toFixed(2)
-            : "0.00"
-        }
-        onClick={(e) => {
-          e.target.select();
-        }}
-        onChange={(e) => {
-          const value = e.target.value;
-          setPersonOwing(value);
-          const regex = /^[-\d{1,5}\.\d{0,2}]*$/;
-          if (regex.test(value)) {
-            setErrorBalance(true);
-            setPersonOwing(value);
-            setErrorMsg("");
-            if (isNaN(value)) {
-              setPersonOwing("0.00");
-            }
-          } else {
-            setErrorBalance(false);
-            setErrorMsg("Please enter a valid number");
-          }
-        }}
-      />
-    </div>
-  </div>
-</div>
+                  <div className="flex items-center">
+                    <div className="input-group">
+                      <span className="input-group-text">$</span>
+                      <input
+                        type="text"
+                        className="form-control max-six-digits rounded-start"
+                        onKeyDown={handleKeyDown}
+                        placeholder={
+                          personOwing
+                            ? parseFloat(personOwing).toFixed(2)
+                            : "0.00"
+                        }
+                        onClick={(e) => {
+                          e.target.select();
+                        }}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          setPersonOwing(value);
+                          const regex = /^[-\d{1,5}\.\d{0,2}]*$/;
+                          if (regex.test(value)) {
+                            setErrorBalance(true);
+                            setPersonOwing(value);
+                            setErrorMsg("");
+                            if (isNaN(value)) {
+                              setPersonOwing("0.00");
+                            }
+                          } else {
+                            setErrorBalance(false);
+                            setErrorMsg("Please enter a valid number");
+                          }
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
 
-
-
-                <div className="text-red-500 text-sm text-center mb-2">
+                <div className="mb-2 text-center text-sm text-red-500">
                   {errorMsg}
                 </div>
               </div>
             </div>
 
             <div className="flex justify-center p-2">
-              <button
-                className="btn btn-primary mr-2"
-                onClick={(e) => {
-                  setEditPerson(false);
-                }}
-              >
-                Close
-              </button>
               <button
                 className="btn btn-primary"
                 onClick={(e) => {
@@ -214,7 +204,7 @@ export default function EditPerson({
             </div>
 
             {!submissionError && (
-              <p className="text-red-500 text-sm text-center mb-2">
+              <p className="mb-2 text-center text-sm text-red-500">
                 Please complete all fields correctly.
               </p>
             )}

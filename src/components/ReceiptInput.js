@@ -7,7 +7,13 @@ import Header from "./Header";
 import ReceiptTable from "./ReceiptTable";
 import { Link } from "react-router-dom";
 import "../darkMode.css";
-import { IoCameraSharp, IoEnterOutline, IoCardOutline } from "react-icons/io5";
+import {
+  IoCameraSharp,
+  IoEnterOutline,
+  IoCardOutline,
+  IoExitOutline,
+  IoDuplicateOutline,
+} from "react-icons/io5";
 
 import DatePicker from "react-datepicker";
 
@@ -44,6 +50,7 @@ export default function ReceiptInput({
   setYouPictureTotal,
   setSplitPictureTotal,
   setThemPictureTotal,
+  theme,
 }) {
   const [selectPersonReceipt, setSelectPersonReceipt] = useState(true);
   const [selectMethodManual, setSelectMethodManual] = useState(false);
@@ -72,6 +79,7 @@ export default function ReceiptInput({
   const [isMerchantNameFocused, setMerchantNameFocused] = useState(false);
   const [isInvoiceNumberFocused, setInvoiceNumberFocused] = useState(false);
 
+  const [filledIn, setFilledIn] = useState(false);
   const handleMerchantNameFocus = () => {
     setMerchantNameFocused(true);
   };
@@ -149,6 +157,7 @@ export default function ReceiptInput({
     setMerchantName("");
     setInvoiceNumber("");
     setStartDate(new Date());
+    setSelectMethodManual(false);
   }
 
   // Handler for enter key on mobile collasping keyboard pop
@@ -290,19 +299,31 @@ export default function ReceiptInput({
                 <ul className="list-group items-center justify-center">
                   <Link className="flex flex-col items-center justify-center">
                     <label
-                      className="mt-4 mb-4 mb-0 flex h-24 w-1/3 flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-14 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
+                      className={
+                        "mt-4 mb-4 mb-0 flex h-24 w-1/3 flex-col items-center justify-center rounded-lg border " +
+                        (theme === "dark"
+                          ? "border-gray-900 bg-gray-900 text-white"
+                          : "border-gray-200 bg-white text-gray-800") +
+                        " py-4 px-14 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
+                      }
                       onClick={(e) => {
                         setSelectMethodManual(true);
                         setSelectPersonReceipt(false);
                       }}
                     >
                       <IoEnterOutline size={24} />
-                      <li>Manual</li>
+                      Manual
                     </label>
                   </Link>
                   <li className="flex flex-col items-center justify-center">
                     <label
-                      className="mt-4 mb-4 mb-0 flex h-24 w-1/3 flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-14 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
+                      className={
+                        "mt-4 mb-4 mb-0 flex h-24 w-1/3 flex-col items-center justify-center rounded-lg border " +
+                        (theme === "dark"
+                          ? "border-gray-900 bg-gray-900 text-white"
+                          : "border-gray-200 bg-white text-gray-800") +
+                        " py-4 px-14 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
+                      }
                       onClick={(e) => {
                         setSelectMethodPicture(true);
                         setSelectPersonReceipt(false);
@@ -320,6 +341,7 @@ export default function ReceiptInput({
       ) : (
         ""
       )}
+
       {selectMethodManual ? (
         <>
           <main className="xs:max-w-xl bg-white-500 mt-5 rounded p-0 pt-3 shadow sm:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl">
@@ -331,7 +353,13 @@ export default function ReceiptInput({
 
               <div className="container mx-auto px-2 py-8 ">
                 <div className="overflow-hidden rounded-lg shadow">
-                  <div className="bg-gray-900 px-6 py-4">
+                  <div
+                    className={
+                      theme === "dark"
+                        ? "bg-gray-900 px-6 py-4"
+                        : "bg-gray-900 px-6 py-4"
+                    }
+                  >
                     <div className="mb-8 flex items-center justify-between">
                       <div>
                         <input
@@ -363,20 +391,29 @@ export default function ReceiptInput({
                       </div>
                     </div>
                   </div>
-                  <div className="bg-white px-4 py-4 sm:px-6">
+                  <div
+                    className={
+                      theme === "dark"
+                        ? "bg-gray-900 px-2 py-4 sm:px-6"
+                        : "bg-white px-2 py-4 sm:px-6"
+                    }
+                  >
                     <div className="mb-4">
                       <h2 className="text-xl font-bold">Split with:</h2>
                       <p className="text-xl font-bold">{personName}</p>
                     </div>
                     <div className="max-w-fit">
-                     <label htmlFor="payment" className="form-control px-0 mt-0 flex   justify-center  items-center">
-                        <div className="whitespace-no-wrap w-12 pl-2">
+                      <label
+                        htmlFor="payment"
+                        className={theme === "dark" ? "bg-gray-600 form-control mt-0 flex items-center   justify-center  px-0":"form-control mt-0 flex items-center   justify-center  px-0"}
+                      >
+                        <div className={theme === "dark" ? "text-white whitespace-no-wrap w-12 pl-2":"whitespace-no-wrap w-12 pl-2"}>
                           <IoCardOutline size={36} />
                         </div>
                         <div className="inline-flex px-2">
                           <button
-                            className={`m-0 rounded-l bg-blue-500 py-1 px-2 font-bold text-white ${
-                              selected === 1 ? "bg-blue-700" : ""
+                            className={`m-0 rounded-l bg-gray-900 py-1 px-2 font-bold text-white ${
+                              selected === 1 ? "bg-gray-500" : ""
                             } h-8 w-16`}
                             onClick={() => {
                               handleButton1Click();
@@ -390,8 +427,8 @@ export default function ReceiptInput({
                             Me
                           </button>
                           <button
-                            className={`m-0 rounded-r border-l bg-blue-500 py-1 px-3 font-bold text-white ${
-                              selected === 2 ? "bg-blue-700" : ""
+                            className={`m-0 rounded-r border-l bg-gray-900 py-1 px-3 font-bold text-white ${
+                              selected === 2 ? "bg-gray-500 text-gray-200" : ""
                             } min-w-16 max-w-24 h-8 overflow-hidden`}
                             onClick={() => {
                               handleButton2Click();
@@ -406,198 +443,113 @@ export default function ReceiptInput({
                         </div>
                       </label>
                     </div>
-                    <div className="mt-3">
-                      <label
-                        htmlFor="colFormLabel"
-                        className="col-form-label"
-                      >
-                        Date of Receipt
-                      </label>
-                      <div className="z-50 mt-3 mb-3 text-center justify-left">
-                        <DatePicker
-                          defaultValue="Date of Receipt"
-                          selected={startDate}
-                          onChange={(date) => setStartDate(date)}
-                          className="bg-blue-100 text-center justify-left"
-                          onFocus={(e) => e.target.blur()}
-                          dateFormat="dd/MM/yyyy"
-                          onClick={() => setDisplayDate(true)}
-                        />
-                      </div>
-                    </div>
-
-                    <div>
-                      <ReceiptTable
-                        name={name}
-                        amount={amount}
-                        setAmount={setAmount}
-                        items={items}
-                        currentIndex={currentIndex}
-                        getPictureTotal={getPictureTotal}
-                        youTotal={youTotal}
-                        themTotal={themTotal}
-                        splitTotal={splitTotal}
-                        handleReceiptPictureSubmit={handleReceiptPictureSubmit}
-                        setIsAddedManually={setIsAddedManually}
-                        combinedArray={combinedArray}
-                        setCombinedArray={setCombinedArray}
-                        pictureTotal={pictureTotal}
-                        youPictureTotal={youPictureTotal}
-                        splitPictureTotal={splitPictureTotal}
-                        themPictureTotal={themPictureTotal}
-                        obtainedInfo={obtainedInfo}
-                        setObtainedInfo={setObtainedInfo}
-                        selectMethodManual={selectMethodManual}
-                        setThemPictureTotal={setThemPictureTotal}
-                        setSplitPictureTotal={setSplitPictureTotal}
-                        setYouPictureTotal={setYouPictureTotal}
-                        selectedValue={selectedValue}
-                        personName={personName}
-                        personReceiptAmount={personReceiptAmount}
-                        setPersonReceiptAmount={setPersonReceiptAmount}
-                        setName={setName}
-                      />
-                    </div>
-                  </div>
-                  <div className="bg-gray-100 px-6 py-4">
-                    <div className="mb-4 flex flex-col justify-between sm:flex-row">
-                      <div>
-                        <h2 className="text-lg font-bold">Payment Details:</h2>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <button className="rounded bg-blue-500 py-2 px-4 text-white">
-                        Pay Now
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="l-36 bg-grey flex flex-col  items-center justify-center rounded-lg px-6 py-6 ring-slate-900/5 dark:bg-slate-900">
-                {showTable ? (
-                  <>
-                    <div className="col-sm-10 mb-0 mt-3">
-                      <input
-                        type="amount"
-                        className="form-control mb-5 h-10 text-center font-bold"
-                        id="colFormLabel"
-                        placeholder="Merchant Name"
-                        onKeyDown={handleKeyDown}
-                        onChange={(e) =>
-                          setMerchantName(
-                            e.target.value.replace(/\b\w/g, (c) =>
-                              c.toUpperCase()
-                            )
-                          )
-                        }
-                        onClick={() => setDisplayMerchant(true)}
-                      />
-                      <div className="justify-left mt-3 flex h-11 items-center ">
-                        <div className="z-50 mt-3 mb-3 text-center">
+                    {showTable ? (
+                      <>
+                        <div className="mt-3">
                           <label
                             htmlFor="colFormLabel"
-                            className="col-form-label text-center text-black"
+                            className={theme === "dark" ? "col-form-label text-center text-white":"col-form-label text-center text-black"}
                           >
                             Date of Receipt
                           </label>
-                          <DatePicker
-                            defaultValue="Date of Receipt"
-                            selected={startDate}
-                            onChange={(date) => setStartDate(date)}
-                            className="bg-blue-100 text-center"
-                            onFocus={(e) => e.target.blur()}
-                            dateFormat="dd/MM/yyyy"
-                            onClick={() => setDisplayDate(true)}
+                          <div className="justify-left z-50 mt-3 mb-3 text-center">
+                            <DatePicker
+                              defaultValue="Date of Receipt"
+                              selected={startDate}
+                              onChange={(date) => setStartDate(date)}
+                              className="justify-left bg-blue-100 text-center"
+                              onFocus={(e) => e.target.blur()}
+                              dateFormat="dd/MM/yyyy"
+                              onClick={() => setDisplayDate(true)}
+                            />
+                          </div>
+                        </div>
+
+                        <div>
+                          <ReceiptTable
+                            name={name}
+                            amount={amount}
+                            setAmount={setAmount}
+                            items={items}
+                            currentIndex={currentIndex}
+                            getPictureTotal={getPictureTotal}
+                            youTotal={youTotal}
+                            themTotal={themTotal}
+                            splitTotal={splitTotal}
+                            handleReceiptPictureSubmit={
+                              handleReceiptPictureSubmit
+                            }
+                            setIsAddedManually={setIsAddedManually}
+                            combinedArray={combinedArray}
+                            setCombinedArray={setCombinedArray}
+                            pictureTotal={pictureTotal}
+                            youPictureTotal={youPictureTotal}
+                            splitPictureTotal={splitPictureTotal}
+                            themPictureTotal={themPictureTotal}
+                            obtainedInfo={obtainedInfo}
+                            setObtainedInfo={setObtainedInfo}
+                            selectMethodManual={selectMethodManual}
+                            setThemPictureTotal={setThemPictureTotal}
+                            setSplitPictureTotal={setSplitPictureTotal}
+                            setYouPictureTotal={setYouPictureTotal}
+                            selectedValue={selectedValue}
+                            personName={personName}
+                            personReceiptAmount={personReceiptAmount}
+                            setPersonReceiptAmount={setPersonReceiptAmount}
+                            setName={setName}
+                            filledIn={filledIn}
+                            setFilledIn={setFilledIn}
+                            theme={theme}
                           />
                         </div>
-                      </div>
+                      </>
+                    ) : (
+                      ""
+                    )}
+                  </div>
+                  <div className={theme === "dark" ? "grid grid-cols-2 gap-y-0 bg-gray-900 py-4": "grid grid-cols-2 gap-y-0 bg-white py-4"}>
+                    <div className="max-w-20 m-2 mb-4 flex flex-col justify-center sm:flex-row">
+                      <Link to={`/ReceiptInput/${id}`}>
+                      <label
+  className={
+    "flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-200 py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline " +
+    (theme === "dark" ? "text-white bg-gray-900" : "text-gray-800 bg-white")
+  }
+  onClick={(e) => {
+    getFinalTotal();
+    setSelectMethodPicture(false);
+    setSelectPersonReceipt(true);
+    handleHistorySubmit(e);
+    resetReceiptForm();
+    setIsReceiptSubmitted(true);
+  }}
+>
+  <IoDuplicateOutline size={24} />
+  Add Another
+</label>
+                      </Link>
                     </div>
-
-                    <div className="m-3">
-                      <input
-                        type="invoice"
-                        className="form-control w-55 opacity-4 mb-2 mt-2 text-center font-bold"
-                        id="colFormLabel"
-                        placeholder="Invoice Number"
-                        onKeyDown={handleKeyDown}
-                        onChange={(e) => setInvoiceNumber(e.target.value)}
-                        onClick={() => setDisplayInvoice(true)}
-                      />
+                    <div className="max-w-20 m-2 mb-4 flex flex-col justify-center sm:flex-row">
+                      <Link to="/SplitBill">
+                      <label
+  className={
+    "flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-200 py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline " +
+    (theme === "dark" ? "text-white bg-gray-900" : "bg-white text-gray-800")
+  }
+  onClick={(e) => {
+    getFinalTotal();
+    handleHistorySubmit(e);
+    resetReceiptForm();
+    setIsReceiptSubmitted(true);
+  }}
+>
+  <IoExitOutline size={24} />
+  Submit
+</label>
+                      </Link>
                     </div>
-                    <div>
-                      <ReceiptTable
-                        name={name}
-                        amount={amount}
-                        setAmount={setAmount}
-                        items={items}
-                        currentIndex={currentIndex}
-                        getPictureTotal={getPictureTotal}
-                        youTotal={youTotal}
-                        themTotal={themTotal}
-                        splitTotal={splitTotal}
-                        handleReceiptPictureSubmit={handleReceiptPictureSubmit}
-                        setIsAddedManually={setIsAddedManually}
-                        combinedArray={combinedArray}
-                        setCombinedArray={setCombinedArray}
-                        pictureTotal={pictureTotal}
-                        youPictureTotal={youPictureTotal}
-                        splitPictureTotal={splitPictureTotal}
-                        themPictureTotal={themPictureTotal}
-                        obtainedInfo={obtainedInfo}
-                        setObtainedInfo={setObtainedInfo}
-                        selectMethodManual={selectMethodManual}
-                        setThemPictureTotal={setThemPictureTotal}
-                        setSplitPictureTotal={setSplitPictureTotal}
-                        setYouPictureTotal={setYouPictureTotal}
-                        selectedValue={selectedValue}
-                        personName={personName}
-                        personReceiptAmount={personReceiptAmount}
-                        setPersonReceiptAmount={setPersonReceiptAmount}
-                        setName={setName}
-                      />
-                    </div>
-
-                    <div className="col-sm-10 ml-0 mr-0 mt-3 flex flex-col items-center justify-center">
-                      <div>
-                        <Link to={`/ReceiptInput/${id}`}>
-                          <button
-                            className="mt-4 mb-5 rounded border-2 border-blue-500 bg-blue-500 py-2 px-4 font-bold shadow transition-all duration-300 hover:bg-white"
-                            onClick={(e) => {
-                              getFinalTotal();
-                              setSelectMethodManual(false);
-                              setSelectPersonReceipt(true);
-                              handleHistorySubmit(e);
-                              resetReceiptForm();
-                              setIsReceiptSubmitted(true);
-                            }}
-                          >
-                            Add Another Receipt
-                          </button>
-                        </Link>
-                      </div>
-
-                      <div>
-                        <Link to="/SplitBill">
-                          <button
-                            type="submit"
-                            className="mb-5 rounded border-2 border-blue-500 bg-blue-500 py-2 px-4 font-bold shadow transition-all duration-300 hover:bg-white"
-                            onClick={(e) => {
-                              getFinalTotal();
-                              handleHistorySubmit(e);
-                              resetReceiptForm();
-                              setIsReceiptSubmitted(true);
-                            }}
-                          >
-                            Submit
-                          </button>
-                        </Link>
-                      </div>
-                    </div>
-                  </>
-                ) : (
-                  ""
-                )}
+                  </div>
+                </div>
               </div>
             </div>
           </main>
@@ -708,7 +660,7 @@ export default function ReceiptInput({
                               <div className="z-50 mt-3 mb-3 text-center">
                                 <label
                                   htmlFor="colFormLabel"
-                                  className="col-form-label text-center text-black"
+                                  className={theme === "dark" ? "col-form-label text-center text-white":"col-form-label text-center text-black"}
                                 >
                                   Date of Receipt
                                 </label>
