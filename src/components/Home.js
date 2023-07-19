@@ -147,7 +147,7 @@ export default function Home({ theme, toggleTheme, handleClearData, list }) {
   <label
     className={
       theme === "dark"
-        ? "mb-0 flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
+        ? "mb-0 flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-700 hover:no-underline"
         : "mb-0 flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
     }
   >
@@ -159,7 +159,7 @@ export default function Home({ theme, toggleTheme, handleClearData, list }) {
   <label
     className={
       theme === "dark"
-        ? "flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
+        ? "flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-700 hover:no-underline"
         : "flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
     }
   >
@@ -171,7 +171,7 @@ export default function Home({ theme, toggleTheme, handleClearData, list }) {
   <label
     className={
       theme === "dark"
-        ? "flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
+        ? "flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-700 hover:no-underline"
         : "flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
     }
   >
@@ -190,7 +190,7 @@ export default function Home({ theme, toggleTheme, handleClearData, list }) {
   }}
   className={
     theme === "dark"
-      ? "flex h-24 w-full cursor-pointer flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
+      ? "flex h-24 w-full cursor-pointer flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-700 hover:no-underline"
       : "flex h-24 w-full cursor-pointer flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
   }
 >
@@ -201,7 +201,7 @@ export default function Home({ theme, toggleTheme, handleClearData, list }) {
   <label
     className={
       theme === "dark"
-        ? "flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
+        ? "flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-700 hover:no-underline"
         : "flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
     }
   >
@@ -213,7 +213,7 @@ export default function Home({ theme, toggleTheme, handleClearData, list }) {
   onClick={() => handleClearData()}
   className={
     theme === "dark"
-      ? "flex h-24 w-full cursor-pointer flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
+      ? "flex h-24 w-full cursor-pointer flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-700 hover:no-underline"
       : "flex h-24 w-full cursor-pointer flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
   }
 >

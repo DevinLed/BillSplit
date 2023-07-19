@@ -36,7 +36,7 @@ export default function ReceiptTable({
   setName,
   filledIn,
   setFilledIn,
-  theme
+  theme,
 }) {
   // Handler for changing the name of the item added to array
   const handleNameChange = (event) => {
@@ -88,6 +88,12 @@ export default function ReceiptTable({
       });
       return updatedArray.filter((_, i) => i !== index);
     });
+  };
+
+  const [showTooltip, setShowTooltip] = useState(false);
+
+  const handleToggleTooltip = () => {
+    setShowTooltip((prevShowTooltip) => !prevShowTooltip);
   };
 
   const [sliderValue, setSliderValue] = useState(50);
@@ -282,38 +288,38 @@ export default function ReceiptTable({
   }, [combinedArray]);
   return (
     <>
-      <div className={theme === "dark" ? "bg-gray-900 whitespace-no-wrap m-0 max-w-full rounded-lg py-1 px-1 dark:bg-slate-900":" whitespace-no-wrap m-0 max-w-full rounded-lg bg-white py-1 px-1 dark:bg-slate-900"}>
-        <div className="mb-0 flex max-w-min justify-center">
-          <table className={theme === "dark" ? "text-white bg-gray-900 mx-20 border-collapse":"mx-20 border-collapse"}>
+      <div
+        className={
+          theme === "dark"
+            ? "whitespace-no-wrap m-0 flex max-w-full justify-center rounded-lg bg-gray-900 py-1 px-1 dark:bg-slate-900"
+            : "whitespace-no-wrap m-0  flex max-w-full justify-center bg-white py-1 px-1 dark:bg-slate-900"
+        }
+      >
+        <div className="mb-0 flex max-w-min justify-center rounded-lg border-2">
+          <table
+            className={
+              theme === "dark"
+                ? "mx-2 my-2 bg-gray-900 text-white"
+                : "mx-2 my-2 "
+            }
+          >
             <thead className="whitespace-no-wrap max-w-fit overflow-hidden truncate">
               <tr className="whitespace-no-wrap max-w-fit overflow-hidden px-2">
                 <th className="py-1 text-left sm:py-2">
-                <span className="border-b-2 ml-1">
-                   
-                  Item
-                  </span>
+                  <span className="ml-1 border-b-2">Item</span>
                 </th>
                 <th className="px-2 py-1 text-left sm:px-4 sm:py-2">
-                <span className="border-b-2">
-                   
-                   Price
-                   </span>
+                  <span className="border-b-2">Price</span>
                 </th>
                 <th className="pl-1" colSpan={3} style={{ width: "33.33%" }}>
                   <span className="px-3 py-1 text-left sm:px-4 sm:py-2 ">
-                  <span className="border-b-2 text-left">
-                 Me
-                 </span>
+                    <span className="border-b-2 text-left">Me</span>
                   </span>
                   <span className="py-1 pr-3 pl-3 text-left sm:px-4 sm:py-2">
-                  <span className="border-b-2 text-center">
-                  Split
-                  </span>
+                    <span className="border-b-2 text-center">Split</span>
                   </span>
                   <span className="px-2 py-1 text-left sm:px-4 sm:py-2 ">
-                  <span className="border-b-2 text-right">
-                 Them
-                 </span>
+                    <span className="border-b-2 text-right">Them</span>
                   </span>
                 </th>
               </tr>
@@ -375,7 +381,11 @@ export default function ReceiptTable({
 
             <tr className="add-button m-2 items-center justify-center text-center text-black">
               <button
-                className={theme === "dark" ? "add-button m-2 items-center justify-center text-center text-2xl text-white": "add-button m-2 items-center justify-center text-center text-2xl text-black"}
+                className={
+                  theme === "dark"
+                    ? "add-button m-2 items-center justify-center text-center text-2xl text-white"
+                    : "add-button m-2 items-center justify-center text-center text-2xl text-black"
+                }
                 onClick={() => {
                   handleReceiptPictureSubmit(sliderValue);
                   setSliderValue(50);
@@ -387,36 +397,47 @@ export default function ReceiptTable({
             <tbody className="pt-5">
               {combinedArray.map((item, index) => (
                 <tr key={index}>
-                  <td className={theme === "dark" ? "text-white pl-2":"text-black pl-2"}>
-                  <span className="border-b-2 text-left">
-                      {item.name
-                        ? item.name.replace(/\b\w/g, (c) => c.toUpperCase())
-                            .length > 5
-                          ? item.name
-                              .replace(/\b\w/g, (c) => c.toUpperCase())
-                              .slice(0, 5) + "..."
-                          : item.name.replace(/\b\w/g, (c) => c.toUpperCase())
-                        : item.description &&
-                          (item.description.replace(/\b\w/g, (c) =>
-                            c.toUpperCase()
-                          ).length > 5
-                            ? item.description
-                                .replace(/\b\w/g, (c) => c.toUpperCase())
-                                .slice(0, 5) + "..."
-                            : item.description.replace(/\b\w/g, (c) =>
-                                c.toUpperCase()
-                              ))}
-                    </span>
-                    
+                  <td
+                    className={theme === "dark" ? "text-white" : "text-black"}
+                    onClick={handleToggleTooltip}
+                  >
+                    <span
+      className="border-b-2 text-left"
+      title={
+        item.name
+          ? item.name.replace(/\b\w/g, (c) => c.toUpperCase())
+          : item.description
+          ? item.description.replace(/\b\w/g, (c) => c.toUpperCase())
+          : ""
+      }
+    >
+      {item.name
+        ? item.name.replace(/\b\w/g, (c) => c.toUpperCase()).length > 5
+          ? item.name.replace(/\b\w/g, (c) => c.toUpperCase()).slice(0, 5) +
+            "..."
+          : item.name.replace(/\b\w/g, (c) => c.toUpperCase())
+        : item.description &&
+          (item.description.replace(/\b\w/g, (c) => c.toUpperCase()).length >
+          5
+            ? item.description
+                .replace(/\b\w/g, (c) => c.toUpperCase())
+                .slice(0, 5) + "..."
+            : item.description.replace(/\b\w/g, (c) => c.toUpperCase()))}
+    </span>
+
                     <button
-                      className={theme === "dark" ? "justify-right text-2xl text-white" : "justify-right text-2xl text-black"}
+                      className={
+                        theme === "dark"
+                          ? "justify-right text-2xl text-white"
+                          : "justify-right text-2xl text-black"
+                      }
                       onClick={() => handlePictureDelete(index)}
-                      style={{ float: 'right' }}
+                      style={{ float: "right" }}
                     >
-                      <IoMdRemoveCircleOutline/>
+                      <IoMdRemoveCircleOutline />
                     </button>
                   </td>
-                  
+
                   <td
                     className="mr-2"
                     style={{
@@ -458,6 +479,7 @@ export default function ReceiptTable({
                       }}
                     >
                       <Slider
+                        className="ml-2"
                         defaultValue={item.sliderValue || 50}
                         min={0}
                         max={100}
@@ -475,10 +497,14 @@ export default function ReceiptTable({
                 </tr>
               ))}
             </tbody>
-            <tfoot className="bg-white">
+            <tfoot className={theme === "dark" ? "bg-gray-900" : "bg-white"}>
               <tr>
                 <td
-                  className="px-2 py-1 text-black"
+                  className={
+                    theme === "dark"
+                      ? "px-2 py-1 text-white"
+                      : "px-2 py-1 text-black"
+                  }
                   style={{ width: "33.33%" }}
                 >
                   <span className="border-b-2">Total</span>
@@ -487,7 +513,13 @@ export default function ReceiptTable({
                   className="mr-2 px-2 py-1 text-right  text-black "
                   style={{ width: "33.33%" }}
                 >
-                  <span className="border-b-2">
+                  <span
+                    className={
+                      theme === "dark"
+                        ? "border-b-2 text-white"
+                        : "border-b-2 text-black"
+                    }
+                  >
                     $
                     {getPictureTotal().toString().length > 7
                       ? getPictureTotal().toString().slice(0, 4) + "..."
@@ -495,10 +527,16 @@ export default function ReceiptTable({
                   </span>
                 </td>
                 <td
-                  className=" px-2 py-1 text-center text-xs text-black"
+                  className="px-2 py-1 text-center text-xs text-black"
                   style={{ width: "33.33%" }}
                 >
-                  <span className="border-b-2">
+                  <span
+                    className={
+                      theme === "dark"
+                        ? "ml-2 border-b-2 text-white"
+                        : "ml-2 border-b-2 text-black"
+                    }
+                  >
                     {parseFloat(youPictureTotal).toFixed(2).toString().length >
                     7
                       ? parseFloat(youPictureTotal)
@@ -512,7 +550,13 @@ export default function ReceiptTable({
                   className="px-2 py-1 text-center text-xs text-black"
                   style={{ width: "33.33%" }}
                 >
-                  <span className="border-b-2">
+                  <span
+                    className={
+                      theme === "dark"
+                        ? "ml-3 border-b-2 text-white"
+                        : "ml-2 border-b-2 text-black"
+                    }
+                  >
                     {parseFloat(splitPictureTotal).toFixed(2).toString()
                       .length > 7
                       ? parseFloat(splitPictureTotal)
@@ -526,7 +570,13 @@ export default function ReceiptTable({
                   className="px-2 py-1 text-center text-xs text-black"
                   style={{ width: "33.33%" }}
                 >
-                  <span className="border-b-2">
+                  <span
+                    className={
+                      theme === "dark"
+                        ? "ml-3 border-b-2 text-white"
+                        : "ml-2 border-b-2 text-black"
+                    }
+                  >
                     {parseFloat(themPictureTotal).toFixed(2).toString().length >
                     7
                       ? parseFloat(themPictureTotal)
@@ -594,13 +644,33 @@ export default function ReceiptTable({
           </table>
         </div>
       </div>
-      <div className="bg-gray-100 px-6 py-4">
-        <div className="mb-1 flex flex-col justify-between sm:flex-row">
+      <div
+        className={
+          theme === "dark"
+            ? "mr-2 ml-2 mt-2 rounded-lg bg-gray-800 px-24 py-4"
+            : "mt-2 rounded-lg bg-gray-100 px-24 py-4"
+        }
+      >
+        <div className="flex-column mb-1 flex justify-center">
           <div>
-            <h2 className={theme=== "dark" ? "text-black mb-2 text-lg font-bold":"mb-2 text-lg font-bold"}>Payment Details:</h2>
+            <h2
+              className={
+                theme === "dark"
+                  ? "text-white-200 mb-2 font-bold"
+                  : "justify-left mb-2 flex text-lg font-bold text-black"
+              }
+            >
+              Payment Details:
+            </h2>
           </div>
 
-          <label className="text-lg font-medium">
+          <label
+            className={
+              theme === "dark"
+                ? "flex justify-center text-lg font-medium text-white"
+                : "flex justify-center text-lg font-medium text-black"
+            }
+          >
             {selectedValue === "you" ? (
               <>
                 {personName} owes you $
@@ -627,7 +697,13 @@ export default function ReceiptTable({
           </label>
         </div>
         {pictureTax && (
-          <label className=" flex items-center justify-center text-center text-lg font-medium">
+          <label
+            className={
+              theme === "dark"
+                ? "flex items-center justify-center text-center text-lg font-medium text-white"
+                : "flex items-center justify-center text-center text-lg font-medium text-black"
+            }
+          >
             {selectedValue === "you"
               ? `Taxes ${personName} owes you: ${parseFloat(taxActual).toFixed(
                   2
@@ -637,7 +713,13 @@ export default function ReceiptTable({
                 )}`}
           </label>
         )}
-        <label className="mt-0 flex items-center text-lg font-medium">
+        <label
+          className={
+            theme === "dark"
+              ? "mt-0 flex items-center justify-center text-lg font-medium text-white"
+              : "mt-0 flex items-center justify-center text-lg font-medium text-black"
+          }
+        >
           Receipt Total: ${finalTotal()}
         </label>
       </div>

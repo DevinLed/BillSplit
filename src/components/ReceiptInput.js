@@ -421,36 +421,33 @@ export default function ReceiptInput({
                           <IoCardOutline size={36} />
                         </div>
                         <div className="inline-flex px-2">
-                          <button
-                            className={`m-0 rounded-l bg-gray-900 py-1 px-2 font-bold text-white ${
-                              selected === 1 ? "bg-gray-500" : ""
-                            } h-8 w-16`}
-                            onClick={() => {
-                              handleButton1Click();
-                              setSelectedValue("you");
-                              setShowTable(true);
-                              setDisplayMerchant(false);
-                              setDisplayDate(false);
-                              setDisplayInvoice(false);
-                            }}
-                          >
-                            Me
-                          </button>
-                          <button
-                            className={`m-0 rounded-r border-l bg-gray-900 py-1 px-3 font-bold text-white ${
-                              selected === 2 ? "bg-gray-500 text-gray-200" : ""
-                            } min-w-16 max-w-24 h-8 overflow-hidden`}
-                            onClick={() => {
-                              handleButton2Click();
-                              setSelectedValue("them");
-                              setShowTable(true);
-                            }}
-                          >
-                            {personName.length > 12
-                              ? personName.slice(0, 12) + "..."
-                              : personName}
-                          </button>
-                        </div>
+  <button
+    className={`m-0 rounded-l ${selected === 1 ? "bg-gray-500" : "bg-gray-900"} py-1 px-2 font-bold text-white h-8 w-16`}
+    onClick={() => {
+      handleButton1Click();
+      setSelected(1);
+      setSelectedValue("you");
+      setShowTable(true);
+      setDisplayMerchant(false);
+      setDisplayDate(false);
+      setDisplayInvoice(false);
+    }}
+  >
+    Me
+  </button>
+  <button
+    className={`m-0 rounded-r border-l ${selected === 2 ? "bg-gray-500" : "bg-gray-900"} py-1 px-3 font-bold text-white min-w-16 max-w-24 h-8 overflow-hidden`}
+    onClick={() => {
+      handleButton2Click();
+      setSelected(2);
+      setSelectedValue("them");
+      setShowTable(true);
+    }}
+  >
+    {personName.length > 12 ? personName.slice(0, 12) + "..." : personName}
+  </button>
+</div>
+
                       </label>
                     </div>
                     {showTable ? (
@@ -479,7 +476,7 @@ export default function ReceiptInput({
                           </div>
                         </div>
 
-                        <div>
+                        <div className="flex flex-column justify-center items-center">
                           <ReceiptTable
                             name={name}
                             amount={amount}
