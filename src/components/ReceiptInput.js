@@ -13,6 +13,8 @@ import {
   IoCardOutline,
   IoExitOutline,
   IoDuplicateOutline,
+  IoRepeatSharp,
+  IoCheckmarkCircle,
 } from "react-icons/io5";
 
 import DatePicker from "react-datepicker";
@@ -421,33 +423,38 @@ export default function ReceiptInput({
                           <IoCardOutline size={36} />
                         </div>
                         <div className="inline-flex px-2">
-  <button
-    className={`m-0 rounded-l ${selected === 1 ? "bg-gray-500" : "bg-gray-900"} py-1 px-2 font-bold text-white h-8 w-16`}
-    onClick={() => {
-      handleButton1Click();
-      setSelected(1);
-      setSelectedValue("you");
-      setShowTable(true);
-      setDisplayMerchant(false);
-      setDisplayDate(false);
-      setDisplayInvoice(false);
-    }}
-  >
-    Me
-  </button>
-  <button
-    className={`m-0 rounded-r border-l ${selected === 2 ? "bg-gray-500" : "bg-gray-900"} py-1 px-3 font-bold text-white min-w-16 max-w-24 h-8 overflow-hidden`}
-    onClick={() => {
-      handleButton2Click();
-      setSelected(2);
-      setSelectedValue("them");
-      setShowTable(true);
-    }}
-  >
-    {personName.length > 12 ? personName.slice(0, 12) + "..." : personName}
-  </button>
-</div>
-
+                          <button
+                            className={`m-0 rounded-l ${
+                              selected === 1 ? "bg-gray-500" : "bg-gray-900"
+                            } h-8 w-16 py-1 px-2 font-bold text-white`}
+                            onClick={() => {
+                              handleButton1Click();
+                              setSelected(1);
+                              setSelectedValue("you");
+                              setShowTable(true);
+                              setDisplayMerchant(false);
+                              setDisplayDate(false);
+                              setDisplayInvoice(false);
+                            }}
+                          >
+                            Me
+                          </button>
+                          <button
+                            className={`m-0 rounded-r border-l ${
+                              selected === 2 ? "bg-gray-500" : "bg-gray-900"
+                            } min-w-16 max-w-24 h-8 overflow-hidden py-1 px-3 font-bold text-white`}
+                            onClick={() => {
+                              handleButton2Click();
+                              setSelected(2);
+                              setSelectedValue("them");
+                              setShowTable(true);
+                            }}
+                          >
+                            {personName.length > 12
+                              ? personName.slice(0, 12) + "..."
+                              : personName}
+                          </button>
+                        </div>
                       </label>
                     </div>
                     {showTable ? (
@@ -476,7 +483,7 @@ export default function ReceiptInput({
                           </div>
                         </div>
 
-                        <div className="flex flex-column justify-center items-center">
+                        <div className="flex-column flex items-center justify-center">
                           <ReceiptTable
                             name={name}
                             amount={amount}
@@ -586,22 +593,23 @@ export default function ReceiptInput({
                 selectMethodPicture={selectMethodPicture}
                 handleResetTotals={handleResetTotals}
               />
-              <div className="l-36 bg-grey flex flex-col  items-center justify-center rounded-lg px-6 py-6 ring-slate-900/5 dark:bg-slate-900">
+              <div className="l-36 bg-grey flex flex-col  items-center justify-center rounded-lg px-6 ring-slate-900/5 dark:bg-slate-900">
                 <div className="max-w-fit">
                   <label
                     htmlFor="payment"
                     className="form-control justify-left mt-0 flex items-center px-2"
                   >
-                    <div className="whitespace-no-wrap w-22 pl-2 ">
+                    <div className="whitespace-no-wrap w-22 pl-2 text-black ">
                       Who paid?
                     </div>
                     <div className="inline-flex px-2">
                       <button
-                        className={`m-0 rounded-l bg-blue-500 py-1 px-2 font-bold text-white ${
-                          selected === 1 ? "bg-blue-700" : ""
-                        } h-8 w-16`}
+                        className={`m-0 rounded-l ${
+                          selected === 1 ? "bg-gray-500" : "bg-gray-900"
+                        } h-8 w-16 py-1 px-2 font-bold text-white`}
                         onClick={() => {
                           handleButton1Click();
+                          setSelected(1);
                           setSelectedValue("you");
                           setShowTable(true);
                           setDisplayMerchant(false);
@@ -612,11 +620,12 @@ export default function ReceiptInput({
                         Me
                       </button>
                       <button
-                        className={`m-0 rounded-r border-l bg-blue-500 py-1 px-3 font-bold text-white ${
-                          selected === 2 ? "bg-blue-700" : ""
-                        } min-w-16 max-w-24 h-8 overflow-hidden`}
+                        className={`m-0 rounded-r border-l ${
+                          selected === 2 ? "bg-gray-500" : "bg-gray-900"
+                        } min-w-16 max-w-24 h-8 overflow-hidden py-1 px-3 font-bold text-white`}
                         onClick={() => {
                           handleButton2Click();
+                          setSelected(2);
                           setSelectedValue("them");
                           setShowTable(true);
                         }}
@@ -633,30 +642,41 @@ export default function ReceiptInput({
                     <div>
                       {showCameraImage ? (
                         <div className="ml-0 mr-0 mt-3 flex flex-col items-center justify-center">
-                          <img src={photoData} alt="Captured Receipt" />
-                          <button
-                            className="ml-auto mr-auto mt-4 mb-2 items-center justify-center rounded border-2 border-blue-500 bg-blue-500 py-2 px-4 font-bold shadow transition-all duration-300 hover:bg-white"
+                          <img src={photoData} alt="Captured Receipt" className="w-72" />
+                          <label
+                            className={
+                              theme === "dark"
+                                ? "mt-2 flex h-24 w-fit cursor-pointer flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 py-4 px-6 text-sm font-semibold text-white shadow-md hover:bg-gray-700 hover:no-underline"
+                                : "mt-2 flex h-24 w-fit cursor-pointer flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
+                            }
                             onClick={(e) =>
                               setShowCameraImage(false)(handleResetTotals(e))
                             }
                           >
+                            <IoRepeatSharp size={24} />
                             Redo picture
-                          </button>
+                          </label>
                         </div>
-                      ) : (
+                      ) : (<div className="w-96 rounded-lg ">
                         <Camera
                           idealFacingMode="environment"
                           onTakePhoto={(dataUri) => handleCapturePhoto(dataUri)}
+                          className="rounded-lg"
                         />
+                        </div>
                       )}
 
                       <div className="ml-0 mr-0 mt-1 flex flex-col items-center justify-center">
-                        <button
-                          className="ml-auto mr-auto mt-4 mb-5 items-center justify-center rounded border-2 border-blue-500 bg-blue-500 py-2 px-4 font-bold shadow transition-all duration-300 hover:bg-white"
-                          onClick={handleCameraSubmit}
+                      <label
+                            className={
+                              theme === "dark"
+                                ? "flex h-24 w-fit cursor-pointer flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 py-4 px-6 text-sm font-semibold text-white shadow-md hover:bg-gray-700 hover:no-underline"
+                                : "flex h-24 w-fit cursor-pointer flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
+                            }onClick={handleCameraSubmit}
                         >
+                          <IoCheckmarkCircle size={24} />
                           Process Receipt Image
-                        </button>
+                        </label>
                       </div>
                     </div>
                     {displayPictureInfo ? (
