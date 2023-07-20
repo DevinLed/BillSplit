@@ -13,6 +13,8 @@ import {
   IoAlertCircle,
 } from "react-icons/io5";
 
+import { CSSTransition } from "react-transition-group";
+
 export default function Home({ theme, toggleTheme, handleClearData, list }) {
   const [startBill, setStartBill] = useState(true);
   const [showPersonEdit, setPersonEdit] = useState(false);
@@ -134,6 +136,7 @@ export default function Home({ theme, toggleTheme, handleClearData, list }) {
               selectPersonEdit={selectPersonEdit}
               setSelectPersonEdit={setSelectPersonEdit}
               setPersonEdit={setPersonEdit}
+              theme={theme}
             />
             <div>
               {chartData.labels.length > 0 ? (

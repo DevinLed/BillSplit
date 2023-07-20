@@ -13,6 +13,7 @@ export default function Header({
   selectMethodManual,
   selectMethodPicture,
   handleResetTotals,
+  theme
 }) {
   return (
     <>
@@ -54,7 +55,7 @@ export default function Header({
                 aria-labelledby="dropdownMenu2"
               >
                 <Link to="/EditList">
-                  <button className="dropdown-item">Edit Person</button>
+                  <button className={theme === "dark" ? "dropdown-item bg-gray-900 text-white hover:bg-gray-800":"dropdown-item"}>Edit Person</button>
                 </Link>
                 <Link to="/History">
                   <button className="dropdown-item" type="button">

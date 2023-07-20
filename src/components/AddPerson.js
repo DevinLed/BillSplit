@@ -1,5 +1,6 @@
 import { React, useState, useEffect } from "react";
 import "../index.css";
+import { CSSTransition } from "react-transition-group";
 
 export default function AddPerson({
   personName,
@@ -92,7 +93,10 @@ export default function AddPerson({
   }, []);
   return (
     <>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-opacity-50 bg-gray-900">
+      <div
+        className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-opacity-50 bg-gray-900"
+        style={{ marginTop: "-90px" }}
+      >
         <div className="relative w-full max-w-md">
           <div
             className={
@@ -102,9 +106,7 @@ export default function AddPerson({
             }
           >
             <div className="flex items-center justify-evenly p-4 border-b border-gray-300">
-              <h3 className="text-xl font-semibold">
-                Add A Person
-              </h3>
+              <h3 className="text-xl font-semibold">Add A Person</h3>
             </div>
 
             <div className="p-4">
@@ -135,7 +137,13 @@ export default function AddPerson({
                   </label>
                   <input
                     type="phone"
-                    className={`form-control w-full py-2 px-3 rounded-lg focus:outline-none focus:ring ${isValidPhoneNumber ? "ring-green-300" : "ring-red-300"} ${personPhone.length >= 10 && !isValidPhoneNumber ? "ring-red-300" : ""}`}
+                    className={`form-control w-full py-2 px-3 rounded-lg focus:outline-none focus:ring ${
+                      isValidPhoneNumber ? "ring-green-300" : "ring-red-300"
+                    } ${
+                      personPhone.length >= 10 && !isValidPhoneNumber
+                        ? "ring-red-300"
+                        : ""
+                    }`}
                     id="colFormLabel"
                     placeholder="Phone Number"
                     value={formSubmitted ? "" : personPhone}
@@ -149,7 +157,9 @@ export default function AddPerson({
                   </label>
                   <input
                     type="email"
-                    className={`form-control w-full py-2 px-3 rounded-lg focus:outline-none focus:ring ${isValidEmail ? "ring-green-300" : "ring-red-300"}`}
+                    className={`form-control w-full py-2 px-3 rounded-lg focus:outline-none focus:ring ${
+                      isValidEmail ? "ring-green-300" : "ring-red-300"
+                    }`}
                     id="colFormLabel"
                     placeholder="Email"
                     onKeyDown={handleKeyDown}
@@ -159,123 +169,151 @@ export default function AddPerson({
                 </div>
 
                 <div className="mb-4">
-                <label
-  htmlFor="colFormLabel"
-  className={
-    "label-one-line " +
-    (theme === "dark" ? "text-white" : "text-gray-800")
-  }
->
-  Starting balance?
-</label>
-
+                  <label
+                    htmlFor="colFormLabel"
+                    className={
+                      "label-one-line " +
+                      (theme === "dark" ? "text-white" : "text-gray-800")
+                    }
+                  >
+                    Starting balance?
+                  </label>
                 </div>
 
                 <div className="mb-4">
-  <div className="flex items-center justify-center">
-    <button
-      className="btn btn-primary mr-2"
-      onClick={(e) => {
-        handleNoButtonClick(e);
-        setErrorBalance(true);
-        setPersonOwing("0.00");
-      }}
-      disabled={!showInput}
-    >
-      No
-    </button>
-    <button
-      className="btn btn-primary"
-      onClick={handleYesButtonClick}
-      disabled={showInput}
-    >
-      Yes
-    </button>
-  </div>
-</div>
+                  <div className="flex items-center justify-center mb-2">
+                    <label className="inline-flex items-center cursor-pointer">
+                      <input
+                        type="radio"
+                        className="form-radio h-4 w-4 text-blue-500"
+                        onClick={(e) => {
+                          setShowInput(false);
+                          handleNoButtonClick(e);
+                          setErrorBalance(true);
+                          setPersonOwing("0.00");
+                        }}
+                        disabled={!showInput}
+                        checked={!showInput}
+                      />
+                      <span
+                        className={`ml-2 ${
+                          !showInput ? "text-white" : "text-gray-400"
+                        }`}
+                      >
+                        No
+                      </span>
+                    </label>
 
-{showInput && (
-  <div className="mb-2 flex items-center justify-center">
-    <div className="flex items-center align-items-center">
-      <span className="input-group-text">$</span>
-      <input
-        type="text"
-        placeholder={
-          value
-            ? parseFloat(value).toFixed(2)
-            : parseFloat(personOwing).toString() === "NaN"
-            ? "0.00"
-            : parseFloat(personOwing).toFixed(2)
-        }
-        className={`form-control max-six-digits mb-0 rounded-start ${
-          errorBalance ? "is-invalid" : ""
-        }`}
-        onClick={(e) => {
-          e.target.select();
-        }}
-        onKeyDown={handleKeyDown}
-        onChange={(e) => {
-          const value = e.target.value;
-          const regex = /^[-\d{1,5}.\d{0,2}]*$/;
-          if (regex.test(value)) {
-            setErrorBalance(true);
-            setPersonOwing(value);
-            setErrorMsg("");
-          } else {
-            setErrorBalance(false);
-            setErrorMsg("Please enter a valid number");
-          }
-        }}
-        style={{ borderColor: "lightblue" }}
-      />
-    </div>
-  </div>
-)}
+                    <label className="ml-8 inline-flex items-center cursor-pointer">
+                      <input
+                        type="radio"
+                        className="form-radio h-4 w-4 text-blue-500"
+                        onClick={() => setShowInput(true)}
+                        disabled={showInput}
+                        checked={showInput}
+                      />
+                      <span
+                        className={`ml-2 ${
+                          showInput ? "text-white" : "text-gray-400"
+                        }`}
+                      >
+                        Yes
+                      </span>
+                    </label>
+                  </div>
 
-{errorMsg && (
-  <div className="text-red-500 text-sm text-center mb-2">
-    {errorMsg}
-  </div>
-)}
-</div>
-</div>
+                  <CSSTransition
+                    in={showInput}
+                    timeout={300} // Adjust the duration of the transition as needed
+                    classNames="fade"
+                    unmountOnExit
+                  >
+                    <div
+                      className="mb-2 flex items-center justify-center"
+                      style={{ height: "40px" }}
+                    >
+                      {/* Set a fixed height for the div */}
+                      <div className="flex items-center align-items-center">
+                        <span className="input-group-text">$</span>
+                        <input
+                          type="text"
+                          placeholder={
+                            value
+                              ? parseFloat(value).toFixed(2)
+                              : parseFloat(personOwing).toString() === "NaN"
+                              ? "0.00"
+                              : parseFloat(personOwing).toFixed(2)
+                          }
+                          className={`form-control max-six-digits mb-0 rounded-start ${
+                            errorBalance ? "is-invalid" : ""
+                          }`}
+                          onClick={(e) => {
+                            e.target.select();
+                          }}
+                          onKeyDown={handleKeyDown}
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            const regex = /^[-\d{1,5}.\d{0,2}]*$/;
+                            if (regex.test(value)) {
+                              setErrorBalance(true);
+                              setPersonOwing(value);
+                              setErrorMsg("");
+                            } else {
+                              setErrorBalance(false);
+                              setErrorMsg("Please enter a valid number");
+                            }
+                          }}
+                          style={{ borderColor: "lightblue" }}
+                        />
+                      </div>
+                    </div>
+                  </CSSTransition>
+                </div>
 
-<div className="flex justify-center mb-1 p-2">
-<button
-  className="btn btn-primary mr-2"
-  onClick={(e) => {
-    setAddPerson(false);
-    setFormSubmitted(true);
-    resetForm();
-  }}
->
-  Close
-</button>
-<button
-  className="btn btn-primary"
-  onClick={(e) => {
-    if (errorBalance && errorPhone && errorEmail) {
-      handleSubmit(e);
-      setFormSubmitted(true);
-      resetForm();
-    } else {
-      console.log("nop");
-      setSubmissionError(false);
-    }
-  }}
->
-  Save
-</button>
-</div>
+                {errorMsg && (
+                  <div className="text-red-500 text-sm text-center mb-2">
+                    {errorMsg}
+                  </div>
+                )}
+              </div>
+            </div>
 
-{!submissionError && (
-<p className="text-red-500 text-sm text-center mb-2">
-  Please complete all fields correctly.
-</p>
-)}
-</div>
-</div>
-</div>
-</>
-);
+            <div className="flex justify-center mb-1 p-2">
+              <button
+                className="btn btn-primary mr-2"
+                onClick={(e) => {
+                  setAddPerson(false);
+                  setFormSubmitted(true);
+                  resetForm();
+                }}
+              >
+                Close
+              </button>
+              <button
+                className="btn btn-primary"
+                onClick={(e) => {
+                  if (errorBalance && errorPhone && errorEmail) {
+                    handleSubmit(e);
+                    setFormSubmitted(true);
+                    resetForm();
+                  } else {
+                    console.log("nop");
+                    setSubmissionError(false);
+                  }
+                }}
+              >
+                Save
+              </button>
+            </div>
+
+            {!submissionError && (
+              <p className="text-red-500 text-sm text-center mb-2">
+                Please complete all fields correctly.
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+    </>
+  );
 }

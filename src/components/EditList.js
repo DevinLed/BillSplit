@@ -4,6 +4,8 @@ import Header from "./Header";
 import EditPerson from "./EditPerson";
 import { IoPersonAddSharp } from "react-icons/io5";
 
+import { CSSTransition } from "react-transition-group";
+
 export default function EditList({
   addPerson,
   setAddPerson,
@@ -33,7 +35,7 @@ export default function EditList({
   return (
     <>
       <main className="xs:max-w-xl bg-white-500 mt-5 rounded p-0 pt-3 shadow sm:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl">
-        <Header selectEditPersonList={selectEditPersonList} />
+        <Header selectEditPersonList={selectEditPersonList} theme={theme}/>
         <div className="flex flex-col items-center justify-center">
           {list.map(
             ({ id, personName, personPhone, personEmail, personOwing }) => (
@@ -49,12 +51,10 @@ export default function EditList({
                         setEditPerson(true);
                       }}
                     >
-                      <li className="list-group-item d-flex items-center justify-between border-b border-gray-300 bg-white p-4 hover:bg-gray-100">
-                        <span className="text-primary font-medium">
-                          {personName}
-                        </span>
+                      <li className="list-group-item flex justify-between m-1 p-2 bg-white hover:bg-gray-100 rounded-lg shadow-sm">
+                      <span className="text-sm font-medium">{personName}</span>
                         <span
-                          className={`badge badge-primary badge-pill rounded px-1 py-1 ${
+                           className={`badge badge-primary badge-pill rounded px-1 py-1 ml-2 text-xs ${
                             personOwing < 0
                               ? "bg-red-500 text-black"
                               : "bg-blue-500 text-white"
@@ -77,7 +77,7 @@ export default function EditList({
 
 <label
   className={
-    "mt-4 mb-4 mb-0 flex h-24 w-1/3 flex-col items-center justify-center rounded-lg border " +
+    "mt-4 mb-4 mb-0 flex h-24 w-fit flex-col items-center justify-center rounded-lg border " +
     (theme === "dark" ? "border-gray-900 bg-gray-900 text-white" : "border-gray-200 bg-white text-gray-800") +
     " py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
   }
@@ -89,7 +89,13 @@ export default function EditList({
 
         </div>
 
-        {addPerson ? (
+         
+  <CSSTransition
+        in={addPerson}
+        timeout={300} // Adjust the duration of the transition as needed
+        classNames="fade"
+        unmountOnExit
+      >
           <AddPerson
             addPerson={addPerson}
             setAddPerson={setAddPerson}
@@ -107,10 +113,13 @@ export default function EditList({
             setIsSelected={setIsSelected}
             theme={theme}
           ></AddPerson>
-        ) : (
-          ""
-        )}
-        {editPerson ? (
+       </CSSTransition>
+       <CSSTransition
+        in={editPerson}
+        timeout={300} // Adjust the duration of the transition as needed
+        classNames="fade"
+        unmountOnExit
+      >
           <EditPerson
             addPerson={addPerson}
             setAddPerson={setAddPerson}
@@ -130,9 +139,7 @@ export default function EditList({
             setEditPerson={setEditPerson}
             theme={theme}
           ></EditPerson>
-        ) : (
-          ""
-        )}
+       </CSSTransition>
       </main>
     </>
   );

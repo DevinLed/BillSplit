@@ -13,7 +13,9 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: #f1f1f1;
 }
-
+a {
+  text-decoration: none;
+}
 label {
   margin-bottom: 0.3rem;
   font-size: 1.05rem;
@@ -36,7 +38,6 @@ button {
   text-decoration: none;
 }
 button:hover {
-  color: #007bff;
   text-decoration: none;
 }
 button:focus,
@@ -47,6 +48,31 @@ a:focus {
 }
 .footer li {
   margin: 0rem 0.2rem;
+  text-decoration: none;
+}
+
+.li{
+  text-decoration: none;
+}
+label{
+  text-decoration: none;
+}
+.fade-enter {
+  opacity: 0;
+}
+
+.fade-enter-active {
+  opacity: 1;
+  transition: opacity 500ms;
+}
+
+.fade-exit {
+  opacity: 1;
+}
+
+.fade-exit-active {
+  opacity: 0;
+  transition: opacity 500ms;
 }
 .list-group {
   display: -webkit-box;

@@ -402,28 +402,37 @@ export default function ReceiptTable({
                     onClick={handleToggleTooltip}
                   >
                     <span
-      className="border-b-2 text-left"
-      title={
-        item.name
-          ? item.name.replace(/\b\w/g, (c) => c.toUpperCase())
-          : item.description
-          ? item.description.replace(/\b\w/g, (c) => c.toUpperCase())
-          : ""
-      }
-    >
-      {item.name
-        ? item.name.replace(/\b\w/g, (c) => c.toUpperCase()).length > 5
-          ? item.name.replace(/\b\w/g, (c) => c.toUpperCase()).slice(0, 5) +
-            "..."
-          : item.name.replace(/\b\w/g, (c) => c.toUpperCase())
-        : item.description &&
-          (item.description.replace(/\b\w/g, (c) => c.toUpperCase()).length >
-          5
-            ? item.description
-                .replace(/\b\w/g, (c) => c.toUpperCase())
-                .slice(0, 5) + "..."
-            : item.description.replace(/\b\w/g, (c) => c.toUpperCase()))}
-    </span>
+                      className="border-b-2 text-left"
+                      title={
+                        (showTooltip &&
+                          (item.name
+                            ? item.name.replace(/\b\w/g, (c) => c.toUpperCase())
+                            : item.description
+                            ? item.description.replace(/\b\w/g, (c) =>
+                                c.toUpperCase()
+                              )
+                            : "")) ||
+                        null
+                      }
+                    >
+                      {item.name
+                        ? item.name.replace(/\b\w/g, (c) => c.toUpperCase())
+                            .length > 5
+                          ? item.name
+                              .replace(/\b\w/g, (c) => c.toUpperCase())
+                              .slice(0, 5) + "..."
+                          : item.name.replace(/\b\w/g, (c) => c.toUpperCase())
+                        : item.description &&
+                          (item.description.replace(/\b\w/g, (c) =>
+                            c.toUpperCase()
+                          ).length > 5
+                            ? item.description
+                                .replace(/\b\w/g, (c) => c.toUpperCase())
+                                .slice(0, 5) + "..."
+                            : item.description.replace(/\b\w/g, (c) =>
+                                c.toUpperCase()
+                              ))}
+                    </span>
 
                     <button
                       className={
@@ -590,7 +599,7 @@ export default function ReceiptTable({
                 <td></td>
               </tr>
 
-              {pictureTax && (
+              {pictureTax ? (
                 <tr className="bg-white">
                   <td className="text-black">Tax</td>
                   <td
@@ -639,7 +648,7 @@ export default function ReceiptTable({
                   <td></td>
                   <td></td>
                 </tr>
-              )}
+              ) : null}
             </tfoot>
           </table>
         </div>
@@ -696,7 +705,7 @@ export default function ReceiptTable({
             )}
           </label>
         </div>
-        {pictureTax && (
+        {pictureTax ? (
           <label
             className={
               theme === "dark"
@@ -712,7 +721,7 @@ export default function ReceiptTable({
                   2
                 )}`}
           </label>
-        )}
+        ): null}
         <label
           className={
             theme === "dark"

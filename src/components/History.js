@@ -2,6 +2,8 @@ import React, { useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import Header from "./Header";
 
+import { CSSTransition } from "react-transition-group";
+
 export default function History({ receipts, theme }) {
   const { id } = useParams();
   const [selectedPerson, setSelectedPerson] = useState("");
@@ -79,7 +81,7 @@ export default function History({ receipts, theme }) {
   return (
     <>
       <main className="mt-5 p-0 pt-3 xs:max-w-xl sm:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl bg-white-500 rounded shadow">
-        <Header showHistory={true} />
+        <Header showHistory={true} theme={theme}/>
 
         <div className="flex flex-col items-center justify-center">
           <div className="rounded-lg px-3 py-2 shadow-md mb-4 mx-auto">

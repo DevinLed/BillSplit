@@ -5,6 +5,8 @@ import AddPerson from "./AddPerson";
 import Header from "./Header";
 import { IoPersonAddSharp } from "react-icons/io5";
 
+import { CSSTransition } from "react-transition-group";
+
 export default function SplitBill({
   addPerson,
   setAddPerson,
@@ -72,11 +74,11 @@ export default function SplitBill({
 
     <label
       className={
-        "mt-4 mb-4 mb-0 flex h-24 w-1/3 flex-col items-center justify-center rounded-lg border " +
+        "mt-4 mb-4 mb-0 flex h-24 w-fit flex-col items-center justify-center rounded-lg border " +
         (theme === "dark"
           ? "border-gray-900 bg-gray-900 text-white"
           : "border-gray-200 bg-white text-gray-800") +
-        " py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
+        " py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-800 hover:no-underline"
       }
       onClick={() => {
         setAddPerson(true);
@@ -87,7 +89,13 @@ export default function SplitBill({
       Add Person
     </label>
   </div>
-        {addPerson ? (
+  
+  <CSSTransition
+        in={addPerson}
+        timeout={300} // Adjust the duration of the transition as needed
+        classNames="fade"
+        unmountOnExit
+      >
           <AddPerson
             addPerson={addPerson}
             setAddPerson={setAddPerson}
@@ -111,9 +119,7 @@ export default function SplitBill({
             setFormSubmitted={setFormSubmitted}
             theme={theme}
           ></AddPerson>
-        ) : (
-          ""
-        )}
+     </CSSTransition>
       </main>
     </>
   );

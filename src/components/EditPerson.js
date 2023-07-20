@@ -1,6 +1,10 @@
 import React from "react";
 import { useState } from "react";
 import "./../index.css";
+import {
+  IoSaveOutline
+} from "react-icons/io5";
+
 
 export default function EditPerson({
   personName,
@@ -67,7 +71,7 @@ export default function EditPerson({
 
   return (
     <>
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50 p-4">
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50 p-4" style={{ marginTop: "-90px" }}>
         <div className="relative w-full max-w-sm">
           <div
             className={
@@ -188,8 +192,12 @@ export default function EditPerson({
             </div>
 
             <div className="flex justify-center p-2">
-              <button
-                className="btn btn-primary"
+              <label
+                className={
+                  theme === "dark"
+                    ? "flex w-fit flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-700 hover:no-underline"
+                    : "flex w-fit flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-800 hover:no-underline"
+                }
                 onClick={(e) => {
                   if (errorBalance && errorPhone && errorEmail) {
                     handleSubmit(e);
@@ -199,8 +207,8 @@ export default function EditPerson({
                   }
                 }}
               >
-                Save
-              </button>
+              <IoSaveOutline size={24} />
+              </label>
             </div>
 
             {!submissionError && (
