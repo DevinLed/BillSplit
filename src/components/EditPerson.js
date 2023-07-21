@@ -1,10 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import "./../index.css";
-import {
-  IoSaveOutline
-} from "react-icons/io5";
-
+import { IoSaveOutline } from "react-icons/io5";
 
 export default function EditPerson({
   personName,
@@ -71,7 +68,10 @@ export default function EditPerson({
 
   return (
     <>
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50 p-4" style={{ marginTop: "-90px" }}>
+      <div
+        className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50 p-4"
+        style={{ marginTop: "-90px" }}
+      >
         <div className="relative w-full max-w-sm">
           <div
             className={
@@ -103,6 +103,7 @@ export default function EditPerson({
                       );
                       setErrorBalance(true);
                     }}
+                    autoComplete="off"
                   />
                 </div>
 
@@ -123,6 +124,7 @@ export default function EditPerson({
                     placeholder="Phone Number"
                     value={formSubmitted ? "" : personPhone}
                     onChange={handlePhoneNumberChange}
+                    autoComplete="off"
                   />
                 </div>
 
@@ -139,11 +141,12 @@ export default function EditPerson({
                     placeholder="Email"
                     value={formSubmitted ? "" : personEmail}
                     onChange={handleEmailChange}
+                    autoComplete="off"
                   />
                 </div>
 
                 <div className="mb-2">
-                  <label htmlFor="colFormLabel" className="label-one-line">
+                  <label htmlFor="colFormLabel" className={theme === "dark"? "text-white label-one-line":"text-black label-one-line"}>
                     Balance?
                   </label>
                 </div>
@@ -153,6 +156,7 @@ export default function EditPerson({
                     <div className="input-group">
                       <span className="input-group-text">$</span>
                       <input
+                        autoComplete="off"
                         type="text"
                         className="form-control max-six-digits rounded-start"
                         onKeyDown={handleKeyDown}
@@ -207,7 +211,7 @@ export default function EditPerson({
                   }
                 }}
               >
-              <IoSaveOutline size={24} />
+                <IoSaveOutline size={24} />
               </label>
             </div>
 

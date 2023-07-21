@@ -328,6 +328,7 @@ export default function ReceiptTable({
             <tr>
               <td>
                 <input
+                  autoComplete="off"
                   type="amount"
                   className="form-control mb-1 w-20 px-1 text-xs font-bold"
                   id="colFormLabel"
@@ -339,6 +340,7 @@ export default function ReceiptTable({
               </td>
               <td>
                 <input
+                  autoComplete="off"
                   type="amount"
                   className="form-control mb-1 w-20 px-1 text-xs font-bold"
                   id="colFormLabel"
@@ -676,8 +678,8 @@ export default function ReceiptTable({
           <label
             className={
               theme === "dark"
-                ? "flex justify-center text-lg font-medium text-white"
-                : "flex justify-center text-lg font-medium text-black"
+                ? "flex justify-left text-lg font-medium text-white"
+                : "flex justify-left text-lg font-medium text-black"
             }
           >
             {selectedValue === "you" ? (
@@ -704,6 +706,15 @@ export default function ReceiptTable({
               </>
             )}
           </label>
+          <label
+          className={
+            theme === "dark"
+              ? "mt-0 flex items-center justify-left text-lg font-medium text-white"
+              : "mt-0 flex items-center justify-left text-lg font-medium text-black"
+          }
+        >
+          Receipt Total: ${finalTotal()}
+        </label>
         </div>
         {pictureTax ? (
           <label
@@ -721,16 +732,8 @@ export default function ReceiptTable({
                   2
                 )}`}
           </label>
-        ): null}
-        <label
-          className={
-            theme === "dark"
-              ? "mt-0 flex items-center justify-center text-lg font-medium text-white"
-              : "mt-0 flex items-center justify-center text-lg font-medium text-black"
-          }
-        >
-          Receipt Total: ${finalTotal()}
-        </label>
+        ) : null}
+       
       </div>
     </>
   );

@@ -15,6 +15,7 @@ import {
   IoDuplicateOutline,
   IoRepeatSharp,
   IoCheckmarkCircle,
+  IoHandLeftOutline
 } from "react-icons/io5";
 
 import DatePicker from "react-datepicker";
@@ -93,6 +94,34 @@ export default function ReceiptInput({
     setInvoiceNumberFocused(true);
   };
 
+  const handleScroll = () => {
+    const scrollAmount = window.innerHeight * 1.5;
+    const duration = 500; // Adjust the duration (in milliseconds) as needed
+    const start = window.scrollY;
+    const startTime = performance.now();
+
+    // Smooth scrolling function
+    function smoothScroll(currentTime) {
+      const timeElapsed = currentTime - startTime;
+      const scroll = easeInOutQuad(timeElapsed, start, scrollAmount, duration);
+      window.scrollTo(0, scroll);
+      if (timeElapsed < duration) {
+        requestAnimationFrame(smoothScroll);
+      }
+    }
+
+    // Easing function for smoother scrolling
+    function easeInOutQuad(t, b, c, d) {
+      t /= d / 2;
+      if (t < 1) return (c / 2) * t * t + b;
+      t--;
+      return (-c / 2) * (t * (t - 2) - 1) + b;
+    }
+
+    // Initiate smooth scrolling
+    requestAnimationFrame(smoothScroll);
+  };
+
   // Picture handling API section
   const FormData = require("form-data");
   const apiKey = "561e58edb1c93ab9fec230c1439fbf48";
@@ -100,11 +129,13 @@ export default function ReceiptInput({
   const endpoint = "expense_receipts";
   const version = "5.0";
   const handleCapturePhoto = (dataUri) => {
+    
     setPhotoData(dataUri);
     setShowCameraImage(true);
     setShowRedoButton(true);
   };
   const handleCameraSubmit = async () => {
+    document.body.classList.add("scroll-transition");
     setPhotoData(loading);
     setShowImage(true);
     try {
@@ -153,6 +184,7 @@ export default function ReceiptInput({
       setShowImage(false);
       setPhotoData(photoData);
       setSplitPictureTotal(totalAmount);
+      handleScroll();
     } catch (error) {
       console.error("Error processing image:", error);
     }
@@ -306,29 +338,28 @@ export default function ReceiptInput({
                   <Link className="flex flex-col items-center justify-center">
                     <label
                       className={
-                        "mt-4 mb-4 mb-0 flex h-24 w-1/3 flex-col items-center justify-center rounded-lg border " +
+                        "mt-4 mb-4 mb-0 flex h-24 w-fit flex-col items-center justify-center rounded-lg border " +
                         (theme === "dark"
                           ? "border-gray-900 bg-gray-900 text-white hover:bg-gray-800"
                           : "border-gray-200 bg-white text-gray-800 hover:bg-gray-200") +
-                        " py-4 px-14 text-sm font-semibold shadow-md hover:no-underline"
+                        " py-4 px-10 text-sm font-semibold shadow-md hover:no-underline"
                       }
                       onClick={(e) => {
                         setSelectMethodManual(true);
                         setSelectPersonReceipt(false);
                       }}
                     >
-                      <IoEnterOutline size={24} />
-                      Manual
+                      <IoHandLeftOutline size={24} />
                     </label>
                   </Link>
                   <li className="flex flex-col items-center justify-center">
                     <label
                       className={
-                        "mt-4 mb-4 mb-0 flex h-24 w-1/3 flex-col items-center justify-center rounded-lg border " +
+                        "mt-1 mb-4 mb-0 flex h-24 w-fit flex-col items-center justify-center rounded-lg border " +
                         (theme === "dark"
                           ? "border-gray-900 bg-gray-900 text-white hover:bg-gray-800"
                           : "border-gray-200 bg-white text-gray-800 hover:bg-gray-200") +
-                        " py-4 px-14 text-sm font-semibold shadow-md hover:no-underline"
+                        " py-4 px-10 text-sm font-semibold shadow-md hover:no-underline"
                       }
                       onClick={(e) => {
                         setSelectMethodPicture(true);
@@ -336,7 +367,6 @@ export default function ReceiptInput({
                       }}
                     >
                       <IoCameraSharp size={24} />
-                      Picture
                     </label>
                   </li>
                 </ul>
@@ -550,58 +580,56 @@ export default function ReceiptInput({
                   </CSSTransition>
                 </div>
                 <div
-                  className={
-                    theme === "dark"
-                      ? "grid grid-cols-2 gap-y-0 bg-gray-900 py-4"
-                      : "grid grid-cols-2 gap-y-0 bg-white py-4"
-                  }
-                >
-                  <div className="max-w-20 m-2 mb-4 flex flex-col justify-center sm:flex-row">
-                    <Link to={`/ReceiptInput/${id}`}>
-                      <label
-                        className={
-                          "flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-200 py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline " +
-                          (theme === "dark"
-                            ? "bg-gray-900 text-white"
-                            : "bg-white text-gray-800")
-                        }
-                        onClick={(e) => {
-                          getFinalTotal();
-                          setSelectMethodPicture(false);
-                          setSelectPersonReceipt(true);
-                          handleHistorySubmit(e);
-                          resetReceiptForm();
-                          setIsReceiptSubmitted(true);
-                        }}
-                      >
-                        <IoDuplicateOutline size={24} />
-                        Add Another
-                      </label>
-                    </Link>
-                  </div>
-                  <div className="max-w-20 m-2 mb-4 flex flex-col justify-center sm:flex-row">
-                    <Link to="/SplitBill">
-                      <label
-                        className={
-                          "flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-200 py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline " +
-                          (theme === "dark"
-                            ? "bg-gray-900 text-white"
-                            : "bg-white text-gray-800")
-                        }
-                        onClick={(e) => {
-                          getFinalTotal();
-                          handleHistorySubmit(e);
-                          resetReceiptForm();
-                          setIsReceiptSubmitted(true);
-                        }}
-                      >
-                        <IoExitOutline size={24} />
-                        Submit
-                      </label>
-                    </Link>
-                  </div>
-                </div>
-              </div>
+  className={
+    theme === "dark"
+      ? "grid grid-cols-2 gap-y-0 bg-gray-900 py-4 justify-center"
+      : "grid grid-cols-2 gap-y-0 bg-white py-4 justify-center"
+  }
+>
+  <div className="m-2 mb-4 flex flex-col justify-center items-center sm:flex-row">
+    <Link to={`/ReceiptInput/${id}`}>
+      <label
+        className={
+          "flex h-24 w-28 flex-col items-center justify-center rounded-lg border border-gray-200 py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline " +
+          (theme === "dark"
+            ? "bg-gray-900 text-white"
+            : "bg-white text-gray-800")
+        }
+        onClick={(e) => {
+          getFinalTotal();
+          setSelectMethodPicture(false);
+          setSelectPersonReceipt(true);
+          handleHistorySubmit(e);
+          resetReceiptForm();
+          setIsReceiptSubmitted(true);
+        }}
+      >
+        <IoDuplicateOutline size={24} />
+      </label>
+    </Link>
+  </div>
+  <div className="m-2 mb-4 flex flex-col justify-center items-center sm:flex-row">
+    <Link to="/SplitBill">
+      <label
+        className={
+          "flex h-24 w-28 flex-col items-center justify-center rounded-lg border border-gray-200 py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline " +
+          (theme === "dark"
+            ? "bg-gray-900 text-white"
+            : "bg-white text-gray-800")
+        }
+        onClick={(e) => {
+          getFinalTotal();
+          handleHistorySubmit(e);
+          resetReceiptForm();
+          setIsReceiptSubmitted(true);
+        }}
+      >
+        <IoExitOutline size={24} />
+      </label>
+    </Link>
+  </div>
+</div>
+</div>
             </div>
           </div>
         </main>
@@ -725,6 +753,7 @@ export default function ReceiptInput({
                             <div className="flex items-center justify-between">
                               <div>
                                 <input
+                                autoComplete="off"
                                   type="amount"
                                   className="form-control mt-3 h-10 bg-gray-900 text-left font-bold text-gray-300 outline-none"
                                   id="colFormLabel"
@@ -741,6 +770,7 @@ export default function ReceiptInput({
                                 />
                                 <div>
                                   <input
+                                  autoComplete="off"
                                     type="invoice"
                                     className="form-control opacity-4 mb-3 w-40 bg-gray-900 text-left font-bold text-gray-300 outline-none"
                                     id="colFormLabel"
@@ -920,15 +950,15 @@ export default function ReceiptInput({
                           <div
                             className={
                               theme === "dark"
-                                ? "grid grid-cols-2 gap-y-0 bg-gray-900 py-4"
-                                : "grid grid-cols-2 gap-y-0 bg-white py-4"
+                                ? "flex item-center justify-center gap-y-0 bg-gray-900 py-4"
+                                : "flex item-center justify-center gap-y-0 bg-white py-4"
                             }
                           >
                             <div className="max-w-20 m-2 mb-4 flex flex-col justify-center sm:flex-row">
                               <Link to={`/ReceiptInput/${id}`}>
                                 <button
                                   className={
-                                    "flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-200 py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline " +
+                                    "flex h-24 w-fit flex-col items-center justify-center rounded-lg border border-gray-200 py-4 px-10 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline " +
                                     (theme === "dark"
                                       ? "bg-gray-900 text-white"
                                       : "bg-white text-gray-800")
@@ -943,15 +973,14 @@ export default function ReceiptInput({
                                   }}
                                 >
                                   <IoDuplicateOutline size={24} />
-                                  Add Another
-                                </button>
+                                                                </button>
                               </Link>
                             </div>
                             <div className="max-w-20 m-2 mb-4 flex flex-col justify-center sm:flex-row">
                               <Link to="/SplitBill">
                                 <button
                                   className={
-                                    "flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-200 py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline " +
+                                    "flex h-24 w-fit flex-col items-center justify-center rounded-lg border border-gray-200 py-4 px-10 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline " +
                                     (theme === "dark"
                                       ? "bg-gray-900 text-white"
                                       : "bg-white text-gray-800")
@@ -964,7 +993,6 @@ export default function ReceiptInput({
                                   }}
                                 >
                                   <IoExitOutline size={24} />
-                                  Submit
                                 </button>
                               </Link>
                             </div>

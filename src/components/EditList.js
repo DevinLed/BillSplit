@@ -79,12 +79,11 @@ export default function EditList({
   className={
     "mt-4 mb-4 mb-0 flex h-24 w-fit flex-col items-center justify-center rounded-lg border " +
     (theme === "dark" ? "border-gray-900 bg-gray-900 text-white" : "border-gray-200 bg-white text-gray-800") +
-    " py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
+    " py-4 px-10 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
   }
   onClick={() => setAddPerson(true)}
 >
   <IoPersonAddSharp size={24} />
-  Add Person
 </label>
 
         </div>

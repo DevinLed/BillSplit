@@ -1,6 +1,7 @@
 import { React, useState, useEffect } from "react";
 import "../index.css";
 import { CSSTransition } from "react-transition-group";
+import { IoSaveOutline, IoCloseCircleOutline } from "react-icons/io5";
 
 export default function AddPerson({
   personName,
@@ -128,6 +129,7 @@ export default function AddPerson({
                       );
                       setErrorBalance(true);
                     }}
+                    autoComplete="off"
                   />
                 </div>
 
@@ -136,6 +138,7 @@ export default function AddPerson({
                     Phone
                   </label>
                   <input
+                    autoComplete="off"
                     type="phone"
                     className={`form-control w-full py-2 px-3 rounded-lg focus:outline-none focus:ring ${
                       isValidPhoneNumber ? "ring-green-300" : "ring-red-300"
@@ -156,6 +159,7 @@ export default function AddPerson({
                     Email
                   </label>
                   <input
+                    autoComplete="off"
                     type="email"
                     className={`form-control w-full py-2 px-3 rounded-lg focus:outline-none focus:ring ${
                       isValidEmail ? "ring-green-300" : "ring-red-300"
@@ -182,44 +186,61 @@ export default function AddPerson({
 
                 <div className="mb-4">
                   <div className="flex items-center justify-center mb-2">
-                    <label className="inline-flex items-center cursor-pointer">
-                      <input
-                        type="radio"
-                        className="form-radio h-4 w-4 text-blue-500"
-                        onClick={(e) => {
-                          setShowInput(false);
-                          handleNoButtonClick(e);
-                          setErrorBalance(true);
-                          setPersonOwing("0.00");
-                        }}
-                        disabled={!showInput}
-                        checked={!showInput}
-                      />
-                      <span
-                        className={`ml-2 ${
-                          !showInput ? "text-white" : "text-gray-400"
-                        }`}
-                      >
-                        No
-                      </span>
-                    </label>
+                  <label className="inline-flex items-center cursor-pointer">
+  <input
+    type="radio"
+    className={`form-radio h-4 w-4 text-blue-500 ${
+      showInput ? "border-blue-500" : "border-gray-400"
+    }`}
+    onClick={(e) => {
+      setShowInput(false);
+      handleNoButtonClick(e);
+      setErrorBalance(true);
+      setPersonOwing("0.00");
+    }}
+    disabled={!showInput}
+    checked={!showInput}
+  />
+  <span
+    className={`ml-2 ${
+      theme === "dark"
+        ? showInput
+          ? "text-gray-400"
+          : "text-white"
+        : showInput
+        ? "text-gray-400"
+        : "text-black"
+    }`}
+  >
+    No
+  </span>
+</label>
 
-                    <label className="ml-8 inline-flex items-center cursor-pointer">
-                      <input
-                        type="radio"
-                        className="form-radio h-4 w-4 text-blue-500"
-                        onClick={() => setShowInput(true)}
-                        disabled={showInput}
-                        checked={showInput}
-                      />
-                      <span
-                        className={`ml-2 ${
-                          showInput ? "text-white" : "text-gray-400"
-                        }`}
-                      >
-                        Yes
-                      </span>
-                    </label>
+<label className="ml-8 inline-flex items-center cursor-pointer">
+  <input
+    type="radio"
+    className={`form-radio h-4 w-4 text-blue-500 ${
+      showInput ? "border-gray-400" : "border-blue-500"
+    }`}
+    onClick={() => setShowInput(true)}
+    disabled={showInput}
+    checked={showInput}
+  />
+  <span
+    className={`ml-2 ${
+      theme === "dark"
+        ? showInput
+          ? "text-white"
+          : "text-gray-400"
+        : showInput
+        ? "text-black"
+        : "text-gray-400"
+    }`}
+  >
+    Yes
+  </span>
+</label>
+
                   </div>
 
                   <CSSTransition
@@ -278,33 +299,43 @@ export default function AddPerson({
               </div>
             </div>
 
-            <div className="flex justify-center mb-1 p-2">
-              <button
-                className="btn btn-primary mr-2"
-                onClick={(e) => {
-                  setAddPerson(false);
-                  setFormSubmitted(true);
-                  resetForm();
-                }}
-              >
-                Close
-              </button>
-              <button
-                className="btn btn-primary"
-                onClick={(e) => {
-                  if (errorBalance && errorPhone && errorEmail) {
-                    handleSubmit(e);
-                    setFormSubmitted(true);
-                    resetForm();
-                  } else {
-                    console.log("nop");
-                    setSubmissionError(false);
-                  }
-                }}
-              >
-                Save
-              </button>
-            </div>
+            <div className="flex justify-center p-2 space-x-4">
+  <label
+    className={
+      theme === "dark"
+        ? "flex w-fit flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-700 hover:no-underline"
+        : "flex w-fit flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-800 hover:no-underline"
+    }
+    onClick={(e) => {
+      setAddPerson(false);
+      setFormSubmitted(true);
+      resetForm();
+    }}
+  >
+    <IoCloseCircleOutline size={24} />
+  </label>
+
+  <label
+    className={
+      theme === "dark"
+        ? "flex w-fit flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-700 hover:no-underline"
+        : "flex w-fit flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-800 hover:no-underline"
+    }
+    onClick={(e) => {
+      if (errorBalance && errorPhone && errorEmail) {
+        handleSubmit(e);
+        setFormSubmitted(true);
+        resetForm();
+      } else {
+        console.log("nop");
+        setSubmissionError(false);
+      }
+    }}
+  >
+    <IoSaveOutline size={24} />
+  </label>
+</div>
+
 
             {!submissionError && (
               <p className="text-red-500 text-sm text-center mb-2">

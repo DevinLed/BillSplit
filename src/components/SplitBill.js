@@ -41,35 +41,42 @@ export default function SplitBill({
   <div className="flex flex-col items-center justify-center">
     {/* Table generator for people added */}
     <ul className="list-group m-0 py-1">
-      {list.map(({ id, personName, personOwing }) => (
-        <React.Fragment key={id}>
-          {personName.length ? (
-            <Link
-              to={`/ReceiptInput/${id}`}
-              onClick={() => selectPerson(id)}
-              className="no-underline"
-            >
-              <li className="list-group-item flex justify-between m-1 p-2 bg-white hover:bg-gray-100 rounded-lg shadow-sm">
-                <span className="text-sm font-medium">{personName}</span>
-                <span
-                  className={`badge badge-primary badge-pill rounded px-1 py-1 ml-2 text-xs ${
-                    personOwing < 0
-                      ? "bg-red-500 text-black"
-                      : "bg-blue-500 text-white"
-                  }`}
-                >
-                  $
-                  {value
-                    ? parseFloat(value).toFixed(2)
-                    : parseFloat(personOwing).toString() === "NaN"
-                    ? "0.00"
-                    : parseFloat(personOwing).toFixed(2)}
-                </span>
-              </li>
-            </Link>
-          ) : null}
-        </React.Fragment>
-      ))}
+      
+    {list.map(({ id, personName, personOwing }) => (
+  <React.Fragment key={id}>
+    {personName.length ? (
+      <Link
+        to={`/ReceiptInput/${id}`}
+        onClick={() => selectPerson(id)}
+        className="no-underline"
+      >
+        <li
+          className={
+            "list-group-item flex justify-between m-1 p-2 rounded-lg shadow-sm " +
+            (theme === "dark"
+              ? "bg-gray-800 text-white"
+              : "bg-white text-gray-800")
+          }
+        >
+          <span className="text-sm font-medium">{personName}</span>
+          <span
+            className={`badge badge-pill rounded px-1 py-1 ml-2 text-xs ${
+              personOwing < 0 ? "bg-red-500 text-black" : "bg-blue-500 text-white"
+            }`}
+          >
+            $
+            {value
+              ? parseFloat(value).toFixed(2)
+              : parseFloat(personOwing).toString() === "NaN"
+              ? "0.00"
+              : parseFloat(personOwing).toFixed(2)}
+          </span>
+        </li>
+      </Link>
+    ) : null}
+  </React.Fragment>
+))}
+
     </ul>
 
     <label
@@ -78,7 +85,7 @@ export default function SplitBill({
         (theme === "dark"
           ? "border-gray-900 bg-gray-900 text-white"
           : "border-gray-200 bg-white text-gray-800") +
-        " py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-800 hover:no-underline"
+        " py-4 px-10 text-sm font-semibold shadow-md hover:bg-gray-800 hover:no-underline"
       }
       onClick={() => {
         setAddPerson(true);
@@ -86,7 +93,7 @@ export default function SplitBill({
       }}
     >
       <IoPersonAddSharp size={24} />
-      Add Person
+      
     </label>
   </div>
   
