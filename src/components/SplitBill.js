@@ -4,6 +4,7 @@ import { BrowserRouter, Switch, Route, Routes, Link } from "react-router-dom";
 import AddPerson from "./AddPerson";
 import Header from "./Header";
 import { IoPersonAddSharp } from "react-icons/io5";
+import Avatar from 'react-avatar';
 
 import { CSSTransition } from "react-transition-group";
 
@@ -45,22 +46,27 @@ export default function SplitBill({
     {list.map(({ id, personName, personOwing }) => (
   <React.Fragment key={id}>
     {personName.length ? (
-      <Link
-        to={`/ReceiptInput/${id}`}
-        onClick={() => selectPerson(id)}
-        className="no-underline"
-      >
+      <Link to={`/ReceiptInput/${id}`} onClick={() => selectPerson(id)} className="no-underline">
         <li
           className={
             "list-group-item flex justify-between m-1 p-2 rounded-lg shadow-sm " +
-            (theme === "dark"
-              ? "bg-gray-800 text-white"
-              : "bg-white text-gray-800")
+            (theme === "dark" ? "bg-gray-800 text-white" : "bg-white text-gray-800")
           }
         >
-          <span className="text-sm font-medium">{personName}</span>
+          <div className="flex items-center">
+            {/* Avatar component to display the person's avatar */}
+            <Avatar
+              name={personName} // Pass the person's name to the Avatar component
+              size={32} // Set the size of the avatar (adjust as needed)
+              round // Make the avatar circular
+            />
+            <span className="ml-1">
+            {/* Div to display the person's name */}
+            {personName.length > 8 ? `${personName.substring(0, 8)}...` : personName}
+            </span>
+          </div>
           <span
-            className={`badge badge-pill rounded px-1 py-1 ml-2 text-xs ${
+            className={`badge badge-pill rounded px-1 pt-2 ml-2 text-xs ${
               personOwing < 0 ? "bg-red-500 text-black" : "bg-blue-500 text-white"
             }`}
           >

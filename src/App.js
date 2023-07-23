@@ -84,11 +84,13 @@ function App() {
   // Landing page
   const [accessedApp, setAccessedApp] = useState(false);
 
+  const [showConfirmation, setShowConfirmation] = useState(false);
   const handleClearData = () => {
     localStorage.clear();
     setList([]);
     setReceipts([]);
     setTheme("light");
+    setShowConfirmation(false);
   };
   // used to update values of balance for contacts
   const addNum = (id, val, val2) => {
@@ -218,6 +220,8 @@ function App() {
               personOwing={personOwing}
               personName={personName}
               list={list}
+              showConfirmation={showConfirmation}
+              setShowConfirmation={setShowConfirmation}
             />
           }
         />

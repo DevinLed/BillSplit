@@ -15,10 +15,17 @@ import {
 
 import { CSSTransition } from "react-transition-group";
 
-export default function Home({ theme, toggleTheme, handleClearData, list }) {
+export default function Home({ theme, toggleTheme, handleClearData, list, setShowConfirmation, showConfirmation }) {
   const [startBill, setStartBill] = useState(true);
   const [showPersonEdit, setPersonEdit] = useState(false);
   const [selectPersonEdit, setSelectPersonEdit] = useState(false);
+
+  const handleConfirmClearData = () => {
+    setShowConfirmation(true); // Show the confirmation popup
+  };
+  const handleCancelClearData = () => {
+    setShowConfirmation(false); // Hide the confirmation popup
+  };
 
   useEffect(() => {
     setStartBill(true);
@@ -142,7 +149,7 @@ export default function Home({ theme, toggleTheme, handleClearData, list }) {
               {chartData.labels.length > 0 ? (
                 <Bar data={chartData} options={chartOptions} />
               ) : (
-                <p>No submitted receipts</p>
+                ""
               )}
             </div>
             <div className="grid grid-cols-3 gap-y-0 gap-x-1 py-4">
@@ -213,7 +220,7 @@ export default function Home({ theme, toggleTheme, handleClearData, list }) {
   </label>
 </Link>
 <label
-  onClick={() => handleClearData()}
+  onClick={() => handleConfirmClearData()}
   className={
     theme === "dark"
       ? "flex h-24 w-full cursor-pointer flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-700 hover:no-underline"
@@ -227,6 +234,27 @@ export default function Home({ theme, toggleTheme, handleClearData, list }) {
             </div>
           </div>
         </div>
+        {showConfirmation && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <div className="bg-white p-6 rounded shadow-md">
+              <p>Are you sure you want to clear all data?</p>
+              <div className="flex justify-end mt-4">
+                <button
+                  className="px-4 py-2 mr-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400"
+                  onClick={handleClearData}
+                >
+                  Yes
+                </button>
+                <button
+                  className="px-4 py-2 bg-gray-800 text-white rounded hover:bg-gray-900"
+                  onClick={handleCancelClearData}
+                >
+                  No
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
         <Footer theme={theme} />
       </main>
     </>

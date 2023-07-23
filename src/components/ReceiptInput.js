@@ -9,13 +9,13 @@ import { Link } from "react-router-dom";
 import "../darkMode.css";
 import {
   IoCameraSharp,
-  IoEnterOutline,
+  IoCameraOutline,
   IoCardOutline,
   IoExitOutline,
   IoDuplicateOutline,
   IoRepeatSharp,
   IoCheckmarkCircle,
-  IoHandLeftOutline
+  IoCreateOutline
 } from "react-icons/io5";
 
 import DatePicker from "react-datepicker";
@@ -58,6 +58,7 @@ export default function ReceiptInput({
   setThemPictureTotal,
   theme,
 }) {
+  
   const [selectPersonReceipt, setSelectPersonReceipt] = useState(true);
   const [selectMethodManual, setSelectMethodManual] = useState(false);
   const [selectMethodPicture, setSelectMethodPicture] = useState(false);
@@ -76,6 +77,7 @@ export default function ReceiptInput({
   const [name, setName] = useState("");
   const [amount, setAmount] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [receiptTotal, setReceiptTotal] = useState(0);
   const [showTable, setShowTable] = useState("");
   const [youTotal, setYouTotal] = useState(0);
   const [splitTotal, setSplitTotal] = useState(0);
@@ -214,11 +216,12 @@ export default function ReceiptInput({
 
   // Handler for adding items to the table array manually
   const handleReceiptPictureSubmit = (sliderValue) => {
+    
     if (!name || !amount) {
       return;
     }
     const parsedAmount = parseFloat(amount).toFixed(2);
-
+    
     setObtainedInfo((prevInfo) => [
       ...prevInfo,
       {
@@ -295,6 +298,7 @@ export default function ReceiptInput({
       displayMerchant,
       displayDate,
       displayInvoice,
+      receiptTotal
     };
 
     addReceipt(newReceipt);
@@ -349,7 +353,7 @@ export default function ReceiptInput({
                         setSelectPersonReceipt(false);
                       }}
                     >
-                      <IoHandLeftOutline size={24} />
+                      <IoCreateOutline size={24} />
                     </label>
                   </Link>
                   <li className="flex flex-col items-center justify-center">
@@ -366,7 +370,7 @@ export default function ReceiptInput({
                         setSelectPersonReceipt(false);
                       }}
                     >
-                      <IoCameraSharp size={24} />
+                      <IoCameraOutline size={24} />
                     </label>
                   </li>
                 </ul>
@@ -393,15 +397,13 @@ export default function ReceiptInput({
             <div className="container mx-auto px-2 py-8 ">
               <div className="overflow-hidden rounded-lg shadow">
                 <div
-                  className={
-                    theme === "dark" ? "bg-gray-900 px-6 " : "bg-gray-900 px-6 "
-                  }
+                  className={theme === "dark"? "bg-blue-900 px-6":"bg-blue-500 px-6"}
                 >
                   <div className="flex items-center justify-between">
                     <div>
                       <input
                         type="amount"
-                        className="form-control mt-3 h-10 bg-gray-900 text-left font-bold text-gray-300 outline-none"
+                        className={"form-control mt-3 h-10 text-left font-bold text-gray-300 outline-none " + (theme === "dark" ? "bg-gray-800" : "bg-gray-100")}
                         id="colFormLabel"
                         placeholder="Merchant Name"
                         onKeyDown={handleKeyDown}
@@ -417,7 +419,8 @@ export default function ReceiptInput({
                       <div>
                         <input
                           type="invoice"
-                          className="form-control opacity-4 mb-3 w-40 bg-gray-900 text-left font-bold text-gray-300 outline-none"
+                          className={"form-control opacity-4 mb-3 w-40 bg-gray-100 text-left font-bold text-gray-300 outline-none "  + (theme === "dark" ? "bg-gray-800" : "bg-gray-100")}
+                          
                           id="colFormLabel"
                           placeholder="Invoice Number"
                           onKeyDown={handleKeyDown}
@@ -541,6 +544,8 @@ export default function ReceiptInput({
 
                       <div className="flex-column flex items-center justify-center">
                         <ReceiptTable
+                          receiptTotal={receiptTotal}
+                          setReceiptTotal={setReceiptTotal}
                           name={name}
                           amount={amount}
                           setAmount={setAmount}
@@ -904,6 +909,8 @@ export default function ReceiptInput({
       
                                   <div>
                                     <ReceiptTable
+                                      receiptTotal={receiptTotal}
+                                      setReceiptTotal={setReceiptTotal}
                                       name={name}
                                       amount={amount}
                                       setAmount={setAmount}

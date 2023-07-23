@@ -19,6 +19,7 @@ export default function History({ receipts, theme }) {
   const receiptList = useMemo(() => {
     return filteredReceipts
       .slice(-10)
+      .reverse()
       .map((receipt, index) => {
         const startDate =
           receipt.startDate instanceof Date
@@ -49,6 +50,9 @@ export default function History({ receipts, theme }) {
             <div className="flex justify-center items-center">
               <p className="font-bold">{`$${Math.abs(parseFloat(receipt.personReceiptAmount)).toFixed(2)}`}</p>
             </div>
+            <div className="flex justify-center items-center mt-2">
+                <p className="text-sm">Receipt Total: ${receipt.receiptTotal}</p>
+              </div>
             <div className="flex justify-center items-center mt-2">
               {receipt.invoiceNumber && (
                 <div>

@@ -4,6 +4,7 @@ import Header from "./Header";
 import EditPerson from "./EditPerson";
 import { IoPersonAddSharp } from "react-icons/io5";
 
+import Avatar from 'react-avatar';
 import { CSSTransition } from "react-transition-group";
 
 export default function EditList({
@@ -37,43 +38,51 @@ export default function EditList({
       <main className="xs:max-w-xl bg-white-500 mt-5 rounded p-0 pt-3 shadow sm:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl">
         <Header selectEditPersonList={selectEditPersonList} theme={theme}/>
         <div className="flex flex-col items-center justify-center">
-          {list.map(
-            ({ id, personName, personPhone, personEmail, personOwing }) => (
-              <React.Fragment key={id}>
-                {personName.length ? (
-                  <ul className="list-group m-0">
-                    <button
-                      className="text-primary outline-none focus:outline-none"
-                      onClick={() => {
-                        console.log(false);
-                        selectPerson(id);
-                        editRow(id);
-                        setEditPerson(true);
-                      }}
-                    >
-                      <li className="list-group-item flex justify-between m-1 p-2 bg-white hover:bg-gray-100 rounded-lg shadow-sm">
-                      <span className="text-sm font-medium">{personName}</span>
-                        <span
-                           className={`badge badge-primary badge-pill rounded px-1 py-1 ml-2 text-xs ${
-                            personOwing < 0
-                              ? "bg-red-500 text-black"
-                              : "bg-blue-500 text-white"
-                          }`}
-                        >
-                          $
-                          {value
-                            ? parseFloat(value).toFixed(2)
-                            : parseFloat(personOwing).toString() === "NaN"
-                            ? "0.00"
-                            : parseFloat(personOwing).toFixed(2)}
-                        </span>
-                      </li>
-                    </button>
-                  </ul>
-                ) : null}
-              </React.Fragment>
-            )
-          )}
+        {list.map(({ id, personName, personPhone, personEmail, personOwing }) => (
+  <React.Fragment key={id}>
+    {personName.length ? (
+      <ul className="list-group m-0">
+        <button
+          className="text-primary outline-none focus:outline-none"
+          onClick={() => {
+            console.log(false);
+            selectPerson(id);
+            editRow(id);
+            setEditPerson(true);
+          }}
+        >
+          <li className="list-group-item flex justify-between m-1 p-2 bg-white hover:bg-gray-100 rounded-lg shadow-sm">
+            <div className="flex items-center">
+              {/* Avatar component to display the person's avatar */}
+              <Avatar
+                name={personName} // Pass the person's name to the Avatar component
+                size={32} // Set the size of the avatar (adjust as needed)
+                round // Make the avatar circular
+              />
+              {/* Div to display the person's name */}
+              <span className="ml-1">
+            {/* Div to display the person's name */}
+            {personName.length > 8 ? `${personName.substring(0, 8)}...` : personName}
+            </span>
+            </div>
+            <span
+              className={`badge badge-primary badge-pill rounded px-1 pt-2 ml-2 text-xs ${
+                personOwing < 0 ? "bg-red-500 text-black" : "bg-blue-500 text-white"
+              }`}
+            >
+              $
+              {value
+                ? parseFloat(value).toFixed(2)
+                : parseFloat(personOwing).toString() === "NaN"
+                ? "0.00"
+                : parseFloat(personOwing).toFixed(2)}
+            </span>
+          </li>
+        </button>
+      </ul>
+    ) : null}
+  </React.Fragment>
+))}
 
 <label
   className={

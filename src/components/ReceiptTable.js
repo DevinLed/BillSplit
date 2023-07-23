@@ -7,6 +7,7 @@ import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import "react-datepicker/dist/react-datepicker.css";
 import { IoMdAddCircleOutline, IoMdRemoveCircleOutline } from "react-icons/io";
+import { CSSTransition } from "react-transition-group";
 
 export default function ReceiptTable({
   name,
@@ -37,8 +38,12 @@ export default function ReceiptTable({
   filledIn,
   setFilledIn,
   theme,
+  receiptTotal,
+  setReceiptTotal
+
 }) {
   // Handler for changing the name of the item added to array
+  const [isAddingItem, setIsAddingItem] = useState(false);
   const handleNameChange = (event) => {
     setName(event.target.value);
   };
@@ -60,6 +65,8 @@ export default function ReceiptTable({
     } else if (selectedValue === "them") {
       setPersonReceiptAmount(splitValue + youValue);
     }
+    
+    setReceiptTotal(parseFloat(total).toFixed(2));
     return parseFloat(total).toFixed(2);
   };
 
