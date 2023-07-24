@@ -39,11 +39,16 @@ export default function ReceiptTable({
   setFilledIn,
   theme,
   receiptTotal,
-  setReceiptTotal
-
+  setReceiptTotal,
+  taxReal,
+  setTaxReal,
+  taxOwing,
+  taxOwingPerc,
+  taxActual
 }) {
   // Handler for changing the name of the item added to array
   const [isAddingItem, setIsAddingItem] = useState(false);
+  const [showTaxButton, setShowTableButton] = useState(true);
   const handleNameChange = (event) => {
     setName(event.target.value);
   };
@@ -106,14 +111,12 @@ export default function ReceiptTable({
   const [sliderValue, setSliderValue] = useState(50);
 
   // Calculate the tax owing based on the selected value, works into the values in the slider total information
-  const taxOwing =
-    selectedValue === "you"
-      ? parseFloat(splitPictureTotal) / 2 + parseFloat(themPictureTotal)
-      : parseFloat(splitPictureTotal) / 2 + parseFloat(youPictureTotal);
-
-  const taxOwingPerc = taxOwing / parseFloat(getPictureTotal());
-
-  const taxActual = parseFloat(pictureTax) * parseFloat(taxOwingPerc);
+    const handleAutoTaxesToggle = () => {
+      const calculatedTax = (parseFloat(getPictureTotal()) * 0.15).toFixed(2);
+      setPictureTax(calculatedTax);
+      setIsAddingItem(true);
+      setShowTableButton(false);
+  };
 
   // Handler for when on mobile, enter key will collapse the keyboard popup
   const handleKeyDown = (e, index) => {
@@ -306,8 +309,8 @@ export default function ReceiptTable({
           <table
             className={
               theme === "dark"
-                ? "mx-2 my-2 bg-gray-900 text-white"
-                : "mx-2 my-2 "
+                ? "mx-1 my-2 bg-gray-900 text-white"
+                : "mx-1 my-2 "
             }
           >
             <thead className="whitespace-no-wrap max-w-fit overflow-hidden truncate">
@@ -411,7 +414,7 @@ export default function ReceiptTable({
                     onClick={handleToggleTooltip}
                   >
                     <span
-                      className="border-b-2 text-left"
+                      className="border-b-2 text-left mr-1"
                       title={
                         (showTooltip &&
                           (item.name
@@ -426,18 +429,18 @@ export default function ReceiptTable({
                     >
                       {item.name
                         ? item.name.replace(/\b\w/g, (c) => c.toUpperCase())
-                            .length > 5
+                            .length > 4
                           ? item.name
                               .replace(/\b\w/g, (c) => c.toUpperCase())
-                              .slice(0, 5) + "..."
+                              .slice(0, 4) + ".."
                           : item.name.replace(/\b\w/g, (c) => c.toUpperCase())
                         : item.description &&
                           (item.description.replace(/\b\w/g, (c) =>
                             c.toUpperCase()
-                          ).length > 5
+                          ).length > 4
                             ? item.description
                                 .replace(/\b\w/g, (c) => c.toUpperCase())
-                                .slice(0, 5) + "..."
+                                .slice(0, 4) + ".."
                             : item.description.replace(/\b\w/g, (c) =>
                                 c.toUpperCase()
                               ))}
@@ -520,8 +523,8 @@ export default function ReceiptTable({
                 <td
                   className={
                     theme === "dark"
-                      ? "px-2 py-1 text-white"
-                      : "px-2 py-1 text-black"
+                      ? "py-1 text-white"
+                      : "py-1 text-black"
                   }
                   style={{ width: "33.33%" }}
                 >
@@ -607,27 +610,28 @@ export default function ReceiptTable({
                 <td></td>
                 <td></td>
               </tr>
-
+              <div className={theme === "dark" ? "bg-gray-900 h-2" : "bg-white h-2"}></div>
+              
+                
               {pictureTax ? (
-                <tr className="bg-white">
-                  <td className="text-black">Tax</td>
-                  <td
-                    className="mr-2"
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      height: "100%",
-                    }}
-                  >
+                <tr className={theme === "dark"? "bg-gray-900 text-white":"bg-white text-black"} >
+                  <td className="text-black">Tax
+                  
                     <button
-                      className="add-button m-2 items-center justify-center text-center text-2xl text-gray-500"
-                      onClick={() => setPictureTax(0)}
-                    >
-                      <IoMdRemoveCircleOutline />
+                      className={
+                        theme === "dark"
+                          ? "justify-right text-2xl text-white"
+                          : "justify-right text-2xl text-black"
+                      }
+                      
+                      style={{ float: "right" }}
+                      onClick={() => {setPictureTax(0);setShowTableButton(true);}}
+                    >                      <IoMdRemoveCircleOutline />
                     </button>
+                    </td>
                     <input
                       type="text"
-                      className="my-0 ml-2 w-20 py-1 text-xs text-black"
+                      className="my-0 ml-2 w-16 py-1 text-xs text-black"
                       style={{
                         border:
                           pictureConfidence < 0.5 && !hasBeenAccessed
@@ -642,7 +646,6 @@ export default function ReceiptTable({
                         handleTaxAmountChange(e.target.value);
                       }}
                     />
-                  </td>
                   <td colSpan={3}>
                     <div
                       style={{
@@ -658,6 +661,27 @@ export default function ReceiptTable({
                   <td></td>
                 </tr>
               ) : null}
+              <tr className={theme === "dark" ? "bg-gray-900" : "bg-white"}>
+                <td colSpan={6} className="text-center">
+                  
+              <div className={theme === "dark" ? "bg-gray-900 h-3" : "bg-white h-3"}></div>
+              {showTaxButton ? 
+                  <button
+                    className={
+                      theme === "dark"
+                        ? "bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                        : "bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                    }
+                    onClick={() => {handleAutoTaxesToggle();}}
+                  >
+                    Auto taxes?
+                  </button> : ""}
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
+       
+              
             </tfoot>
           </table>
         </div>
@@ -685,13 +709,13 @@ export default function ReceiptTable({
           <label
             className={
               theme === "dark"
-                ? "flex justify-left text-lg font-medium text-white"
-                : "flex justify-left text-lg font-medium text-black"
+                ? "flex justify-left text-lg w-full font-medium text-white"
+                : "flex justify-left text-lg w-full font-medium text-black"
             }
           >
             {selectedValue === "you" ? (
               <>
-                {personName} owes you $
+                {personName} owes you: $
                 {parseFloat(personReceiptAmount).toFixed(2).toString().length >
                 15
                   ? parseFloat(personReceiptAmount)
@@ -702,7 +726,7 @@ export default function ReceiptTable({
               </>
             ) : (
               <>
-                You owe {personName} $
+                You owe {personName}: $
                 {parseFloat(personReceiptAmount).toFixed(2).toString().length >
                 15
                   ? parseFloat(personReceiptAmount)
@@ -724,21 +748,22 @@ export default function ReceiptTable({
         </label>
         </div>
         {pictureTax ? (
-          <label
-            className={
-              theme === "dark"
-                ? "flex items-center justify-center text-center text-lg font-medium text-white"
-                : "flex items-center justify-center text-center text-lg font-medium text-black"
-            }
-          >
-            {selectedValue === "you"
-              ? `Taxes ${personName} owes you: ${parseFloat(taxActual).toFixed(
-                  2
-                )}`
-              : `Taxes you owe ${personName}: ${parseFloat(taxActual).toFixed(
-                  2
-                )}`}
-          </label>
+        <label
+        className={
+          theme === "dark"
+            ? "flex items-center justify-left text-lg font-medium text-white"
+            : "flex items-center justify-left text-lg font-medium text-black"
+        }
+      >
+        {selectedValue === "you"
+          ? `Taxes ${personName} owes you: $${isNaN(parseFloat(taxActual))
+              ? "0.00"
+              : parseFloat(taxActual).toFixed(2)}`
+          : `Taxes you owe ${personName}: $${isNaN(parseFloat(taxActual))
+              ? "0.00x"
+              : parseFloat(taxActual).toFixed(2)}`}
+      </label>
+      
         ) : null}
        
       </div>

@@ -17,6 +17,10 @@ export default function EditPerson({
   formSubmitted,
   theme,
 }) {
+
+  const handleResetBalance = () => {
+    setPersonOwing("0.00");
+  };
   function handleKeyDown(e) {
     if (e.key === "Enter") {
       e.target.blur();
@@ -187,7 +191,19 @@ export default function EditPerson({
                       />
                     </div>
                   </div>
-                </div>
+                  
+                </div> <div className="mt-2 flex justify-center">
+                          <button
+          className={
+            theme === "dark"
+              ? "flex w-fit flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-2 px-4 text-sm font-semibold shadow-md hover:bg-gray-700 hover:no-underline"
+              : "flex w-fit text-black flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-2 px-4 text-sm font-semibold shadow-md hover:bg-gray-800 hover:no-underline"
+          }
+          onClick={handleResetBalance} // Step 5: Call the function to reset the balance
+        >
+          Clear
+        </button>
+      </div>
 
                 <div className="mb-2 text-center text-sm text-red-500">
                   {errorMsg}

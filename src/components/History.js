@@ -50,8 +50,13 @@ export default function History({ receipts, theme }) {
             <div className="flex justify-center items-center">
               <p className="font-bold">{`$${Math.abs(parseFloat(receipt.personReceiptAmount)).toFixed(2)}`}</p>
             </div>
+            
+            <div className="flex justify-center items-center">
+  <p className="text-sm">{receipt.selectedValue === "you" ? "Taxes owed: " : "Taxes you owe: "}{`$${isNaN(receipt.taxActual) ? 0 : Math.abs(parseFloat(receipt.taxActual)).toFixed(2)}`}</p>
+</div>
+
             <div className="flex justify-center items-center mt-2">
-                <p className="text-sm">Receipt Total: ${receipt.receiptTotal}</p>
+                <p className="text-sm">Receipt Total: ${receipt.receiptTotal || 0}</p>
               </div>
             <div className="flex justify-center items-center mt-2">
               {receipt.invoiceNumber && (

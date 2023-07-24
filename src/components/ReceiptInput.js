@@ -65,6 +65,7 @@ export default function ReceiptInput({
   const [photoData, setPhotoData] = useState(null);
   const [pictureTotal, setPictureTotal] = useState(0);
   const [pictureTax, setPictureTax] = useState(0);
+  const [taxReal, setTaxReal] = useState(0);
   const [pictureConfidence, setPictureConfidence] = useState(0);
   const [showImage, setShowImage] = useState(false);
   const [showCameraImage, setShowCameraImage] = useState(false);
@@ -192,6 +193,7 @@ export default function ReceiptInput({
     }
   };
 
+  
   function resetReceiptForm() {
     setMerchantName("");
     setInvoiceNumber("");
@@ -291,6 +293,7 @@ export default function ReceiptInput({
       personName,
       personOwing,
       personReceiptAmount,
+      taxActual,
       selectedValue,
       merchantName,
       startDate,
@@ -304,14 +307,27 @@ export default function ReceiptInput({
     addReceipt(newReceipt);
   };
 
+  const taxOwing =
+    selectedValue === "you"
+      ? parseFloat(splitPictureTotal) / 2 + parseFloat(themPictureTotal)
+      : parseFloat(splitPictureTotal) / 2 + parseFloat(youPictureTotal);
+
+  const taxOwingPerc = taxOwing / parseFloat(getPictureTotal());
+
+  const taxActual = parseFloat(pictureTax) * parseFloat(taxOwingPerc);
+
+
   // Used to update the balance of the person you are splitting receipt with
   const getFinalTotal = () => {
+    let taxFinal = taxReal;
     if (selectedValue === "you") {
       console.log(personReceiptAmount);
-      addNum(id, personOwing, personReceiptAmount);
+      console.log("tax : " + taxActual);
+      addNum(id, personReceiptAmount, taxActual);
     } else {
       console.log(personReceiptAmount);
-      subNum(id, personOwing, personReceiptAmount);
+      console.log("tax : " + taxActual);
+      subNum(id, personReceiptAmount, taxActual);
     }
   };
 
@@ -544,6 +560,9 @@ export default function ReceiptInput({
 
                       <div className="flex-column flex items-center justify-center">
                         <ReceiptTable
+                          taxActual={taxActual}
+                          taxReal={taxReal}
+                          setTaxReal={setTaxReal}
                           receiptTotal={receiptTotal}
                           setReceiptTotal={setReceiptTotal}
                           name={name}
@@ -579,6 +598,8 @@ export default function ReceiptInput({
                           filledIn={filledIn}
                           setFilledIn={setFilledIn}
                           theme={theme}
+                          pictureTax={pictureTax}
+                          setPictureTax={setPictureTax}
                         />
                       </div>
                     </div>
@@ -909,6 +930,9 @@ export default function ReceiptInput({
       
                                   <div>
                                     <ReceiptTable
+                                      taxActual={taxActual}
+                                      taxReal={taxReal}
+                                      setTaxReal={setTaxReal}
                                       receiptTotal={receiptTotal}
                                       setReceiptTotal={setReceiptTotal}
                                       name={name}
@@ -948,6 +972,8 @@ export default function ReceiptInput({
                                       filledIn={filledIn}
                                       setFilledIn={setFilledIn}
                                       theme={theme}
+                                      pictureTax={pictureTax}
+                                      setPictureTax={setPictureTax}
                                     />
                                   </div>
                                 </div>

@@ -98,8 +98,10 @@ function App() {
       const newList = prevList.map((item) => {
         if (item.id === id) {
           const a = parseFloat(item.personOwing, 0);
-          const b = parseFloat(val2, 0);
-          const value = a + b;
+          const b = parseFloat(val);
+          const c = parseFloat(val2);
+          const prevalue = a + b;
+          const value = prevalue + c;
           return { ...item, personOwing: parseFloat(value).toFixed(2) };
         }
         return item;
@@ -127,8 +129,10 @@ function App() {
       const newList = prevList.map((item) => {
         if (item.id === id) {
           const a = parseFloat(item.personOwing, 0);
-          const b = parseFloat(val2, 0);
-          const value = a - b;
+          const b = parseFloat(val);
+          const c = parseFloat(val2);
+          const prevalue = a - b;
+          const value = prevalue - c;
           return { ...item, personOwing: parseFloat(value).toFixed(2) };
         }
         return item;
