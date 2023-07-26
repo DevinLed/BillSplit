@@ -13,23 +13,12 @@ export default function LandingPage({ theme }) {
       <div className="bg-gray-100 min-h-screen">
         <div className="bg-blue-600 text-white py-6 px-6 sticky top-0 flex items-center justify-between">
           <h1 className="text-4xl font-bold tracking-wider">
-            Welcome to Billifi
+            Welcome to Divvy
           </h1>
-          <div className="space-x-4">
-            <Link to="/info" className="text-gray-200 hover:text-gray-100">
-              Info
-            </Link>
-            <Link to="/contact" className="text-gray-200 hover:text-gray-100">
-              Contact
-            </Link>
-            <Link to="/about" className="text-gray-200 hover:text-gray-100">
-              About
-            </Link>
-          </div>
         </div>
         <div className="p-8 max-w-3xl mx-auto">
           <p className="text-gray-800 text-lg mb-6">
-            Billifi is a simple app that helps you split bills and expenses with your friends and family.
+            Divvy is a simple app that helps you split bills and expenses with your friends and family.
           </p>
           <Link to="/Home">
             <button className="text-black mb-0 flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-xl font-semibold shadow-md hover:bg-gray-200 hover:no-underline">

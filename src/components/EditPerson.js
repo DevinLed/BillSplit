@@ -17,15 +17,16 @@ export default function EditPerson({
   formSubmitted,
   theme,
 }) {
-
   const handleResetBalance = () => {
     setPersonOwing("0.00");
   };
+
   function handleKeyDown(e) {
     if (e.key === "Enter") {
       e.target.blur();
     }
   }
+
   const [isValidPhoneNumber, setIsValidPhoneNumber] = useState(true);
   const [isValidEmail, setIsValidEmail] = useState(true);
   const [errorBalance, setErrorBalance] = useState(true);
@@ -34,27 +35,33 @@ export default function EditPerson({
   const [errorMsg, setErrorMsg] = useState("");
   const [submissionError, setSubmissionError] = useState(true);
 
+  const formatPhoneNumber = (inputValue) => {
+    const numbersOnly = inputValue.replace(/[^\d]/g, ""); // Remove all non-numeric characters
+    if (numbersOnly.length <= 3) return numbersOnly;
+    if (numbersOnly.length <= 6) return `(${numbersOnly.slice(0, 3)}) ${numbersOnly.slice(3)}`;
+    return `(${numbersOnly.slice(0, 3)}) ${numbersOnly.slice(3, 6)}-${numbersOnly.slice(6, 10)}`;
+  };
+
   const handlePhoneNumberChange = (event) => {
     const inputValue = event.target.value;
-    let formattedValue = inputValue;
-    const phoneNumberRegex = /^[0-9]{10}$/; // matches a phone number in the format of XXX-XXX-XXXX
-    const isValid = phoneNumberRegex.test(inputValue);
-    const containsOnlyDigits = /^\d+$/.test(inputValue); // checks if the input contains only digits
-    setIsValidPhoneNumber(isValid && containsOnlyDigits);
-    setErrorPhone(false);
+    const formattedValue = formatPhoneNumber(inputValue);
+    setPersonPhone(formattedValue);
 
-    // Check if the input is a valid phone number after the 10th digit is typed
-    if (inputValue.length >= 10 && isValid && containsOnlyDigits) {
-      setErrorPhone(true); // sets error if the input is not a valid phone number or contains non-digits
+    const phoneNumberRegex = /^\(\d{3}\) \d{3}-\d{4}$/; // matches a phone number in the format of (XXX) XXX-XXXX
+    const isValid = phoneNumberRegex.test(formattedValue);
+    setIsValidPhoneNumber(isValid);
+
+    // Check if the input is a valid phone number
+    if (isValid) {
+      setErrorPhone(true);
       console.log("phone accepted");
     } else {
       setIsValidPhoneNumber(false);
       setErrorPhone(false);
       console.log("error in phone input");
     }
-
-    setPersonPhone(formattedValue);
   };
+
   const handleEmailChange = (event) => {
     const inputEmail = event.target.value;
     setPersonEmail(inputEmail);
@@ -72,18 +79,9 @@ export default function EditPerson({
 
   return (
     <>
-      <div
-        className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50 p-4"
-        style={{ marginTop: "-90px" }}
-      >
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50 p-4" style={{ marginTop: "-90px" }}>
         <div className="relative w-full max-w-sm">
-          <div
-            className={
-              theme === "dark"
-                ? "overflow-hidden rounded-lg border border-gray-300 bg-gray-800 shadow-lg"
-                : "overflow-hidden rounded-lg border border-gray-300 bg-white shadow-lg"
-            }
-          >
+          <div className={theme === "dark" ? "overflow-hidden rounded-lg border border-gray-300 bg-gray-800 shadow-lg" : "overflow-hidden rounded-lg border border-gray-300 bg-white shadow-lg"}>
             <div className="flex items-center justify-evenly border-b border-gray-300 p-3">
               <h3 className="text-xl font-semibold">Edit Person</h3>
             </div>
@@ -101,10 +99,7 @@ export default function EditPerson({
                     placeholder="Name"
                     value={personName}
                     onChange={(e) => {
-                      setPersonName(
-                        e.target.value.charAt(0).toUpperCase() +
-                          e.target.value.slice(1)
-                      );
+                      setPersonName(e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1));
                       setErrorBalance(true);
                     }}
                     autoComplete="off"
@@ -116,16 +111,12 @@ export default function EditPerson({
                     Phone
                   </label>
                   <input
-                    type="phone"
-                    className={`form-control w-full rounded-lg py-2 px-3 focus:outline-none focus:ring ${
-                      isValidPhoneNumber ? "ring-green-300" : "ring-red-300"
-                    } ${
-                      personPhone.length >= 10 && !isValidPhoneNumber
-                        ? "ring-red-300"
-                        : ""
-                    }`}
+                    type="tel"
+                    className={`form-control w-full rounded-lg py-2 px-3 focus:outline-none focus:ring ${isValidPhoneNumber ? "ring-green-300" : "ring-red-300"
+                      } ${personPhone.length >= 14 && !isValidPhoneNumber ? "ring-red-300" : ""
+                      }`}
                     id="colFormLabel"
-                    placeholder="Phone Number"
+                    placeholder="(123) 456-7890"
                     value={formSubmitted ? "" : personPhone}
                     onChange={handlePhoneNumberChange}
                     autoComplete="off"
@@ -138,9 +129,7 @@ export default function EditPerson({
                   </label>
                   <input
                     type="email"
-                    className={`form-control w-full rounded-lg py-2 px-3 focus:outline-none focus:ring ${
-                      isValidEmail ? "ring-green-300" : "ring-red-300"
-                    }`}
+                    className={`form-control w-full rounded-lg py-2 px-3 focus:outline-none focus:ring ${isValidEmail ? "ring-green-300" : "ring-red-300"}`}
                     id="colFormLabel"
                     placeholder="Email"
                     value={formSubmitted ? "" : personEmail}
@@ -150,7 +139,7 @@ export default function EditPerson({
                 </div>
 
                 <div className="mb-2">
-                  <label htmlFor="colFormLabel" className={theme === "dark"? "text-white label-one-line":"text-black label-one-line"}>
+                  <label htmlFor="colFormLabel" className={theme === "dark" ? "text-white label-one-line" : "text-black label-one-line"}>
                     Balance?
                   </label>
                 </div>
@@ -164,11 +153,7 @@ export default function EditPerson({
                         type="text"
                         className="form-control max-six-digits rounded-start"
                         onKeyDown={handleKeyDown}
-                        placeholder={
-                          personOwing
-                            ? parseFloat(personOwing).toFixed(2)
-                            : "0.00"
-                        }
+                        placeholder={personOwing ? parseFloat(personOwing).toFixed(2) : "0.00"}
                         onClick={(e) => {
                           e.target.select();
                         }}
@@ -191,19 +176,20 @@ export default function EditPerson({
                       />
                     </div>
                   </div>
-                  
-                </div> <div className="mt-2 flex justify-center">
-                          <button
-          className={
-            theme === "dark"
-              ? "flex w-fit flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-2 px-4 text-sm font-semibold shadow-md hover:bg-gray-700 hover:no-underline"
-              : "flex w-fit text-black flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-2 px-4 text-sm font-semibold shadow-md hover:bg-gray-800 hover:no-underline"
-          }
-          onClick={handleResetBalance} // Step 5: Call the function to reset the balance
-        >
-          Clear
-        </button>
-      </div>
+                </div>
+
+                <div className="pt-4 flex justify-center">
+                  <button
+                    className={
+                      theme === "dark"
+                        ? "flex w-fit flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-2 px-4 text-sm font-semibold shadow-md hover:bg-gray-700 hover:no-underline"
+                        : "flex w-fit text-black flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-2 px-4 text-sm font-semibold shadow-md hover:bg-gray-800 hover:no-underline"
+                    }
+                    onClick={handleResetBalance} // Step 5: Call the function to reset the balance
+                  >
+                    Clear
+                  </button>
+                </div>
 
                 <div className="mb-2 text-center text-sm text-red-500">
                   {errorMsg}

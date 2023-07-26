@@ -41,23 +41,38 @@ export default function AddPerson({
       e.target.blur();
     }
   }
+  const formatPhoneNumber = (inputValue) => {
+    const cleanedInput = inputValue.replace(/\D/g, ""); // Remove all non-digit characters
+    const match = cleanedInput.match(/^(\d{0,3})(\d{0,3})(\d{0,4})$/); // Match groups of digits (area code, first three digits, last four digits)
+
+    if (match) {
+      let formattedValue = "";
+      if (match[1]) {
+        formattedValue += `(${match[1]}`;
+      }
+      if (match[2]) {
+        formattedValue += `) ${match[2]}`;
+      }
+      if (match[3]) {
+        formattedValue += `-${match[3]}`;
+      }
+      return formattedValue; // Format the phone number as (XXX) XXX-XXXX
+    }
+    return inputValue; // If the input is not a valid phone number, return the original input value
+  };
   const handlePhoneNumberChange = (event) => {
     const inputValue = event.target.value;
-    let formattedValue = inputValue;
-    const phoneNumberRegex = /^[0-9]{10}$/; // matches a phone number in the format of XXX-XXX-XXXX
-    const isValid = phoneNumberRegex.test(inputValue);
-    const containsOnlyDigits = /^\d+$/.test(inputValue); // checks if the input contains only digits
-    setIsValidPhoneNumber(isValid && containsOnlyDigits);
+    const formattedValue = formatPhoneNumber(inputValue);
+
+    // Check if the input is a valid phone number after the formatting
+    const phoneNumberRegex = /^[(]\d{3}[)] \d{3}-\d{4}$/; // Allowing non-digit characters
+    const isValid = phoneNumberRegex.test(formattedValue);
+    setIsValidPhoneNumber(isValid);
     setErrorPhone(false);
 
     // Check if the input is a valid phone number after the 10th digit is typed
-    if (inputValue.length >= 10 && isValid && containsOnlyDigits) {
-      setErrorPhone(true); // sets error if the input is not a valid phone number or contains non-digits
-      console.log("phone accepted");
-    } else {
-      setIsValidPhoneNumber(false);
-      setErrorPhone(false);
-      console.log("error in phone input");
+    if (formattedValue.replace(/\D/g, "").length >= 10 && !isValid) {
+      setErrorPhone(true); // sets error if the input is not a valid phone number
     }
 
     setPersonPhone(formattedValue);
@@ -149,7 +164,7 @@ export default function AddPerson({
                     }`}
                     id="colFormLabel"
                     placeholder="Phone Number"
-                    value={formSubmitted ? "" : personPhone}
+                    value={formSubmitted ? "" : formatPhoneNumber(personPhone)}
                     onChange={handlePhoneNumberChange}
                   />
                 </div>

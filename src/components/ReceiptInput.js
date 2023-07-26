@@ -442,6 +442,7 @@ export default function ReceiptInput({
                           onKeyDown={handleKeyDown}
                           onChange={(e) => setInvoiceNumber(e.target.value)}
                           onClick={() => setDisplayInvoice(true)}
+                          autoComplete="off"
                         />
                       </div>
                     </div>
@@ -779,7 +780,6 @@ export default function ReceiptInput({
                             <div className="flex items-center justify-between">
                               <div>
                                 <input
-                                autoComplete="off"
                                   type="amount"
                                   className="form-control mt-3 h-10 bg-gray-900 text-left font-bold text-gray-300 outline-none"
                                   id="colFormLabel"

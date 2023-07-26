@@ -167,6 +167,9 @@ export default function ReceiptTable({
     if (decimalSplit[1] && decimalSplit[1].length > 2) {
       parsedValue = decimalSplit[0] + "." + decimalSplit[1].slice(0, 2);
     }
+    if (isNaN(parsedValue)) {
+      parsedValue = "0"; // Set to a default value (0 in this case)
+    }
     const updatedCombinedArray = [...combinedArray];
     updatedCombinedArray[index].amount = parsedValue || "0";
     setCombinedArray(updatedCombinedArray);
@@ -477,9 +480,9 @@ export default function ReceiptTable({
                             : "1px solid black",
                       }}
                       value={
-                        item.amount && !isNaN(item.amount)
-                          ? `$${item.amount}`
-                          : `$${parseFloat(item.total_amount).toFixed(2) || 0}`
+                        !isNaN(parseFloat(item.amount)) && parseFloat(item.amount) !== 0
+                          ? `$${parseFloat(item.amount).toFixed(2)}`
+                          : `$${parseFloat(item.total_amount).toFixed(2) || "0.00"}`
                       }
                       onChange={(e) => {
                         if (!hasBeenAccessed) {
@@ -615,7 +618,7 @@ export default function ReceiptTable({
                 
               {pictureTax ? (
                 <tr className={theme === "dark"? "bg-gray-900 text-white":"bg-white text-black"} >
-                  <td className="text-black">Tax
+                  <td className={theme === "dark" ? "text-white":"text-black"}>Tax
                   
                     <button
                       className={

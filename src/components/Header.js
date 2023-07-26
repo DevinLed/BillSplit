@@ -18,9 +18,15 @@ export default function Header({
   return (
     <>
       {startBill ? (
-        <header className="xs:flex-row xs:justify-center mr-3 mb-5 flex flex-col items-center text-2xl font-bold md:flex-row md:justify-center xl:flex-row xl:justify-center">
-          <h1>Bill Splitter</h1>
-        </header>
+      <div className="mt-5 flex flex-col items-center justify-center h-24 ">
+      <header className="xs:flex-row xs:justify-center mr-3 mb-5 flex flex-col items-center text-2xl md:flex-row md:justify-center xl:flex-row xl:justify-center">
+        <h1 className="text-4xl font-bold text-white mb-4 animate-pulse">
+          <span className="bg-gradient-to-r from-gray-900 via-blue-800 to-black text-transparent bg-clip-text">
+            Divvy
+          </span>
+        </h1>
+      </header>
+    </div>
       ) : (
         ""
       )}
