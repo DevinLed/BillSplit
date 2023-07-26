@@ -21,7 +21,7 @@ export default function Header({
       <div className="mt-5 flex flex-col items-center justify-center h-24 ">
       <header className="xs:flex-row xs:justify-center mr-3 mb-5 flex flex-col items-center text-2xl md:flex-row md:justify-center xl:flex-row xl:justify-center">
         <h1 className="text-4xl font-bold text-white mb-4 animate-pulse">
-          <span className="bg-gradient-to-r from-gray-900 via-blue-800 to-black text-transparent bg-clip-text">
+          <span className={theme === "dark" ? "bg-gradient-to-r  from-white via-gray-200 to-blue-300 text-transparent bg-clip-text": "bg-gradient-to-r from-gray-900 via-blue-800 to-black text-transparent bg-clip-text"}>
             Divvy
           </span>
         </h1>

@@ -74,7 +74,7 @@ export default function AddPerson({
     if (formattedValue.replace(/\D/g, "").length >= 10 && !isValid) {
       setErrorPhone(true); // sets error if the input is not a valid phone number
     }
-
+    setErrorPhone(true);
     setPersonPhone(formattedValue);
   };
   const handleEmailChange = (event) => {

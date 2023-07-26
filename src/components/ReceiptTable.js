@@ -271,7 +271,7 @@ export default function ReceiptTable({
         const amount =
           item.amount !== undefined ? item.amount : item.total_amount;
         const sliderValue =
-          item.sliderValue !== undefined ? item.sliderValue : 0;
+          item.sliderValue !== undefined ? item.sliderValue : 50;
         switch (sliderValue) {
           case 0:
             totals.youTotal += parseFloat(amount);
@@ -299,6 +299,12 @@ export default function ReceiptTable({
     setSplitPictureTotal(updatedTotals.splitTotal.toFixed(2));
     setThemPictureTotal(updatedTotals.themTotal.toFixed(2));
   }, [combinedArray]);
+  useEffect(() => {
+    if (!showTaxButton) {
+      const calculatedTax = (parseFloat(getPictureTotal()) * 0.15).toFixed(2);
+      setPictureTax(calculatedTax);
+    }
+  }, [showTaxButton, getPictureTotal]);
   return (
     <>
       <div

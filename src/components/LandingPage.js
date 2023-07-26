@@ -22,9 +22,7 @@ export default function LandingPage({ theme }) {
           </p>
           <Link to="/Home">
             <button className="text-black mb-0 flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-xl font-semibold shadow-md hover:bg-gray-200 hover:no-underline">
-
-              
-              Access App
+              Divvy it up
             </button>
           </Link>
           <div className="mt-5 flex flex-col justify-center">
