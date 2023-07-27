@@ -133,7 +133,7 @@ export default function Home({ theme, toggleTheme, handleClearData, list, setSho
 
   return (
     <>
-      <main className="xs:max-w-xl bg-white-500 mt-5 rounded p-0 pt-3 shadow sm:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl">
+      <main className={"xs:max-w-xl bg-white-500 mt-5 rounded p-0 pt-3 shadow sm:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl " + (theme === "dark" ? "border-2 border-gray-800 lg-rounded":"")}  style={{ maxWidth: '600px' }}>
         <div className={`App ${theme}`}>
           <div className="flex flex-col items-center justify-center">
             {/*  Header narrative for the Main Screen + 6 button selection screens */}
@@ -234,9 +234,14 @@ export default function Home({ theme, toggleTheme, handleClearData, list, setSho
             </div>
           </div>
         </div>
-        {showConfirmation && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-            <div className="bg-white p-6 rounded shadow-md">
+        <CSSTransition
+        in={showConfirmation}
+        timeout={500} // Adjust the duration of the transition as needed
+        classNames="fade"
+        unmountOnExit
+      >
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 ">
+            <div className={"p-6 rounded shadow-md " + (theme === "dark" ? "bg-gray-800" : "bg-gray-100")}>
               <p>Are you sure you want to clear all data?</p>
               <div className="flex justify-end mt-4">
                 <button
@@ -246,7 +251,7 @@ export default function Home({ theme, toggleTheme, handleClearData, list, setSho
                   Yes
                 </button>
                 <button
-                  className="px-4 py-2 bg-gray-800 text-white rounded hover:bg-gray-900"
+                  className={"px-4 py-2 rounded hover:bg-gray-900 " + (theme === "dark" ? "bg-gray-300 text-gray-800" : "bg-gray-800")}
                   onClick={handleCancelClearData}
                 >
                   No
@@ -254,7 +259,7 @@ export default function Home({ theme, toggleTheme, handleClearData, list, setSho
               </div>
             </div>
           </div>
-        )}
+          </CSSTransition>
         <Footer theme={theme} />
       </main>
     </>

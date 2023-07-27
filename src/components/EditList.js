@@ -31,8 +31,21 @@ export default function EditList({
   value,
   setValue,
   theme,
+  setList,
+  handleAddSubmit,
 }) {
   const [selectEditPersonList, setEditSelectPersonList] = useState(true);
+
+  const handleDeletePerson = (id) => {
+   
+      const updatedList = list.filter((row) => row.id !== editPerson);
+      setList(updatedList);
+  
+      // Close the edit person popup
+      setEditPerson(false);
+    
+  };
+
   return (
     <>
       <main className="xs:max-w-xl bg-white-500 mt-5 rounded p-0 pt-3 shadow sm:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl">
@@ -42,15 +55,13 @@ export default function EditList({
   <React.Fragment key={id}>
     {personName.length ? (
       <ul className="list-group m-0">
-        <button
-          className="text-primary outline-none focus:outline-none"
-          onClick={() => {
-            console.log(false);
-            selectPerson(id);
-            editRow(id);
-            setEditPerson(true);
-          }}
-        >
+<button
+  className="text-primary outline-none focus:outline-none"
+  onClick={() => {
+    console.log(false);
+    editRow(id); // Call editRow function with the selected item's ID
+  }}
+>
           <li className="list-group-item flex justify-between m-1 p-2 bg-white hover:bg-gray-100 rounded-lg shadow-sm">
             <div className="flex items-center">
               {/* Avatar component to display the person's avatar */}
@@ -120,6 +131,7 @@ export default function EditList({
             personState={personState}
             setIsSelected={setIsSelected}
             theme={theme}
+            handleAddSubmit={handleAddSubmit}
           ></AddPerson>
        </CSSTransition>
        <CSSTransition
@@ -146,6 +158,10 @@ export default function EditList({
             setIsSelected={setIsSelected}
             setEditPerson={setEditPerson}
             theme={theme}
+            setList={setList}
+            list={list}
+            editPerson={editPerson}
+            handleDeletePerson={handleDeletePerson}
           ></EditPerson>
        </CSSTransition>
       </main>

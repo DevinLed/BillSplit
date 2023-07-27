@@ -344,7 +344,7 @@ export default function ReceiptInput({
     <>
       {selectPersonReceipt ? (
         <>
-          <main className="xs:max-w-xl bg-white-500 mt-5 rounded p-0 pt-3 shadow sm:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl">
+          <main className="xs:max-w-xl bg-white-500 mt-5 rounded p-0 pt-3 shadow sm:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl"  style={{ maxWidth: '600px' }}>
             <div className="flex flex-col items-center justify-center">
               <Header
                 selectPersonReceipt={selectPersonReceipt}
@@ -403,7 +403,7 @@ export default function ReceiptInput({
         classNames="fade"
         unmountOnExit
       >
-        <main className="xs:max-w-xl bg-white-500 mt-5 rounded p-0 pt-3 shadow sm:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl">
+        <main className="xs:max-w-xl bg-white-500 mt-5 rounded p-0 pt-3 shadow sm:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl" style={{ maxWidth: '600px' }}>
           <div className="mt-0 flex flex-col items-center justify-center">
             <Header
               selectMethodManual={selectMethodManual}
@@ -667,7 +667,7 @@ export default function ReceiptInput({
         classNames="fade"
         unmountOnExit
       >
-        <main className="xs:max-w-xl bg-white-500 mt-5 rounded p-0 pt-3 shadow sm:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl">
+        <main className="xs:max-w-xl bg-white-500 mt-5 rounded p-0 pt-3 shadow sm:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl"  style={{ maxWidth: '600px' }}>
           <div className="mt-0 flex flex-col items-center justify-center">
             <Header
               selectMethodPicture={selectMethodPicture}

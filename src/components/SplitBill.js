@@ -32,12 +32,13 @@ export default function SplitBill({
   personReceiptAmount,
   setFormSubmitted,
   theme,
+  handleAddSubmit,
 }) {
   const [selectPersonList, setSelectPersonList] = useState(true);
 
   return (
     <>
- <main className="xs:max-w-xl bg-white-500 mt-5 rounded p-0 pt-3 shadow sm:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl">
+ <main className="xs:max-w-xl bg-white-500 mt-5 rounded p-0 pt-3 shadow sm:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl"  style={{ maxWidth: '600px' }}>
   <Header selectPersonList={selectPersonList} />
   <div className="flex flex-col items-center justify-center">
     {/* Table generator for people added */}
@@ -131,6 +132,7 @@ export default function SplitBill({
             personReceiptAmount={personReceiptAmount}
             setFormSubmitted={setFormSubmitted}
             theme={theme}
+            handleAddSubmit={handleAddSubmit}
           ></AddPerson>
      </CSSTransition>
       </main>

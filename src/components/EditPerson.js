@@ -2,6 +2,8 @@ import React from "react";
 import { useState } from "react";
 import "./../index.css";
 import { IoSaveOutline } from "react-icons/io5";
+import {AiOutlineDelete} from "react-icons/ai"
+import { CSSTransition } from "react-transition-group";
 
 export default function EditPerson({
   personName,
@@ -16,6 +18,8 @@ export default function EditPerson({
   handleSubmit,
   formSubmitted,
   theme,
+  setList,
+  handleDeletePerson
 }) {
   const handleResetBalance = () => {
     setPersonOwing("0.00");
@@ -26,7 +30,14 @@ export default function EditPerson({
       e.target.blur();
     }
   }
-
+  const handleDeletePrompt = () => {
+    setShowConfirmation(true);
+  };
+  const handleCancelDeletePrompt = () => {
+    // Close the confirmation popup without deleting
+    setShowConfirmation(false);
+  };
+  const [showConfirmation, setShowConfirmation] = useState(false);
   const [isValidPhoneNumber, setIsValidPhoneNumber] = useState(true);
   const [isValidEmail, setIsValidEmail] = useState(true);
   const [errorBalance, setErrorBalance] = useState(true);
@@ -196,14 +207,26 @@ export default function EditPerson({
                 </div>
               </div>
             </div>
-
+            <div className="flex justify-center p-2 space-x-4">
+            <div className="flex justify-center p-2 space-x-4">
+  <label
+    className={
+      theme === "dark"
+        ? "flex w-fit flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-700 hover:no-underline"
+        : "flex w-fit flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-800 hover:no-underline"
+    }
+                onClick={(e) => handleDeletePrompt()}
+              >
+                <AiOutlineDelete size={24} />
+              </label>
+            </div>
             <div className="flex justify-center p-2">
-              <label
-                className={
-                  theme === "dark"
-                    ? "flex w-fit flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-700 hover:no-underline"
-                    : "flex w-fit flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-800 hover:no-underline"
-                }
+            <label
+    className={
+      theme === "dark"
+        ? "flex w-fit flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-700 hover:no-underline"
+        : "flex w-fit flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-800 hover:no-underline"
+    }
                 onClick={(e) => {
                   if (errorBalance && errorPhone && errorEmail) {
                     handleSubmit(e);
@@ -216,7 +239,33 @@ export default function EditPerson({
                 <IoSaveOutline size={24} />
               </label>
             </div>
-
+            </div>
+            <CSSTransition
+        in={showConfirmation}
+        timeout={500} // Adjust the duration of the transition as needed
+        classNames="fade"
+        unmountOnExit
+      >
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 ">
+          <div className={"p-6 rounded shadow-md " + (theme === "dark" ? "bg-gray-800" : "bg-gray-100")}>
+            <p>Are you sure you want to delete this person?</p>
+            <div className="flex justify-end mt-4">
+              <button
+                className={"px-4 py-2 mr-2 rounded hover:bg-gray-900 " + (theme === "dark" ? "bg-gray-300 text-gray-800" : "bg-gray-800")}
+                onClick={(e) => handleDeletePerson()}
+              >
+                Yes
+              </button>
+              <button
+                className={"px-4 py-2 rounded hover:bg-gray-900 " + (theme === "dark" ? "bg-gray-300 text-gray-800" : "bg-gray-800")}
+                onClick={handleCancelDeletePrompt}
+              >
+                No
+              </button>
+            </div>
+          </div>
+        </div>
+      </CSSTransition>
             {!submissionError && (
               <p className="mb-2 text-center text-sm text-red-500">
                 Please complete all fields correctly.

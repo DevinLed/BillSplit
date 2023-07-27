@@ -1,15 +1,14 @@
-import { React } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import Footer from "./Footer";
 import phoneoutline from "../img/phoneoutline.png";
-
 import Receiptphoneoutline from "../img/Receiptphoneoutline.png";
 import Historyphoneoutline from "../img/Historyphoneoutline.png";
 import Historydarkoutline from "../img/Historydarkoutline.png";
 
 export default function LandingPage({ theme }) {
   return (
-    <main>
+    <main className="xs:max-w-xl bg-white-500 rounded p-0 shadow sm:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl" style={{ maxWidth: '650px' }}>
       <div className="bg-gray-100 min-h-screen">
         <div className="bg-blue-600 text-white py-6 px-6 sticky top-0 flex items-center justify-between">
           <h1 className="text-4xl font-bold tracking-wider">
@@ -37,15 +36,14 @@ export default function LandingPage({ theme }) {
                   className="w-full"
                 />
               </div>
-              <div className="w-48 bg-gray-100 ">
+              <div className="w-48 bg-gray-100 flex justify-center items-center">
                 <p className="text-gray-800 mt-2 ml-3">
                   You can add items manually, or try out the camera capture service.
                 </p>
               </div>
             </div>
-            <div className="flex flex-row items-top mb-2 mt-5">
-              
-            <div className="w-48 bg-gray-100 ">
+            <div className="flex flex-row items-top mb-2 mt-5 justify-end">
+              <div className="w-48 bg-gray-100 flex justify-center items-center">
                 <p className="text-gray-800 mt-2 ml-3">
                   The History tab shows the last 10 receipts submitted, however you can search by contact.
                 </p>
@@ -58,9 +56,7 @@ export default function LandingPage({ theme }) {
                 />
               </div>
             </div>
-
-
-            <div className="flex flex-row items-top mt-5">
+            <div className="flex flex-row items-top mt-5 justify-start">
               <div className="w-48 bg-gray-100">
                 <img
                   src={Historydarkoutline}
@@ -68,13 +64,13 @@ export default function LandingPage({ theme }) {
                   className="w-full"
                 />
               </div>
-              <div className="w-48 bg-gray-100">
+              <div className="w-48 bg-gray-100 flex justify-center items-center">
                 <p className="text-gray-800 mt-2 ml-3">
-                  With dark mode, everything is dimmed down so to not hurt the users eyes.
+                  With dark mode, everything is dimmed down so as not to hurt the user's eyes.
                 </p>
               </div>
             </div>
-            </div>
+          </div>
         </div>
       </div>
       <Footer theme={theme} />

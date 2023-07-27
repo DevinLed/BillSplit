@@ -114,9 +114,9 @@ function App() {
   };
 
   const editRow = (id) => {
-    const editingRow = list.find((row) => row.id === id);
-    setList(list.filter((row) => row.id !== id));
     setIsEditing(true);
+    setEditPerson(id); // Store the selected item's ID to be edited
+    const editingRow = list.find((row) => row.id === id);
     setPersonName(editingRow.personName);
     setPersonPhone(editingRow.personPhone);
     setPersonEmail(editingRow.personEmail);
@@ -144,7 +144,8 @@ function App() {
     console.log("this is to sub");
   };
   // Handler for full reset of tables.
-  const handleSubmit = (e) => {
+  const handleAddSubmit = (e) => {
+    e.preventDefault();
     const newItems = {
       personName,
       personPhone,
@@ -165,6 +166,65 @@ function App() {
     });
     setIsEditing(false);
   };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+  
+    // Validate input fields here (e.g., check if personName, personPhone, personEmail, and personOwing are valid)
+  
+    if (editPerson !== null) {
+      // Editing an existing entry
+  
+      // Find the index of the item in the list with the editPerson id
+      const itemIndex = list.findIndex((row) => row.id === editPerson);
+  
+      if (itemIndex !== -1) {
+        // Update the item in the list with the edited values
+        const updatedList = list.map((item) =>
+          item.id === editPerson
+            ? {
+                ...item,
+                personName,
+                personPhone,
+                personEmail,
+                personOwing,
+              }
+            : item
+        );
+  
+        // Set the updated list in the parent component
+        setList(updatedList);
+      }
+  
+      // Reset the editPerson state to null
+      setEditPerson(null);
+    } else {
+      // Adding a new entry
+  
+      const newItems = {
+        personName,
+        personPhone,
+        personEmail,
+        personOwing,
+        id: uuidv4(),
+      };
+  
+      setList((prevList) => {
+        const newList = [...prevList, newItems];
+        localStorage.setItem("list", JSON.stringify(newList));
+        return newList;
+      });
+    }
+  
+    // Reset input fields and close the edit person popup
+    setPersonName("");
+    setPersonPhone("");
+    setPersonEmail("");
+    setPersonOwing("");
+    setSelectedValue("");
+    setIsEditing(false);
+    setAddPerson(false);
+  };
+  
   const selectPerson = (id) => {
     const selectingPerson = list.find((row) => row.id === id);
     setPersonName(selectingPerson.personName);
@@ -295,6 +355,7 @@ function App() {
               personReceiptAmount={personReceiptAmount}
               setFormSubmitted={setFormSubmitted}
               theme={theme}
+              handleAddSubmit={handleAddSubmit}
             />
           }
         />
@@ -321,8 +382,10 @@ function App() {
               editRow={editRow}
               setEditPerson={setEditPerson}
               list={list}
+              setList={setList}
               value={value}
               theme={theme}
+              handleAddSubmit={handleAddSubmit}
             />
           }
         />
@@ -336,6 +399,7 @@ function App() {
               formSubmitted={formSubmitted}
               setFormSubmitted={setFormSubmitted}
               theme={theme}
+              handleAddSubmit={handleAddSubmit}
             />
           }
         />

@@ -18,6 +18,7 @@ export default function AddPerson({
   formSubmitted,
   setFormSubmitted,
   theme,
+  handleAddSubmit
 }) {
   const [isValidPhoneNumber, setIsValidPhoneNumber] = useState(false);
   const [isValidEmail, setIsValidEmail] = useState(false);
@@ -42,41 +43,32 @@ export default function AddPerson({
     }
   }
   const formatPhoneNumber = (inputValue) => {
-    const cleanedInput = inputValue.replace(/\D/g, ""); // Remove all non-digit characters
-    const match = cleanedInput.match(/^(\d{0,3})(\d{0,3})(\d{0,4})$/); // Match groups of digits (area code, first three digits, last four digits)
-
-    if (match) {
-      let formattedValue = "";
-      if (match[1]) {
-        formattedValue += `(${match[1]}`;
-      }
-      if (match[2]) {
-        formattedValue += `) ${match[2]}`;
-      }
-      if (match[3]) {
-        formattedValue += `-${match[3]}`;
-      }
-      return formattedValue; // Format the phone number as (XXX) XXX-XXXX
-    }
-    return inputValue; // If the input is not a valid phone number, return the original input value
+    const numbersOnly = inputValue.replace(/[^\d]/g, ""); // Remove all non-numeric characters
+    if (numbersOnly.length <= 3) return numbersOnly;
+    if (numbersOnly.length <= 6) return `(${numbersOnly.slice(0, 3)}) ${numbersOnly.slice(3)}`;
+    return `(${numbersOnly.slice(0, 3)}) ${numbersOnly.slice(3, 6)}-${numbersOnly.slice(6, 10)}`;
   };
+
   const handlePhoneNumberChange = (event) => {
     const inputValue = event.target.value;
     const formattedValue = formatPhoneNumber(inputValue);
+    setPersonPhone(formattedValue);
 
-    // Check if the input is a valid phone number after the formatting
-    const phoneNumberRegex = /^[(]\d{3}[)] \d{3}-\d{4}$/; // Allowing non-digit characters
+    const phoneNumberRegex = /^\(\d{3}\) \d{3}-\d{4}$/; // matches a phone number in the format of (XXX) XXX-XXXX
     const isValid = phoneNumberRegex.test(formattedValue);
     setIsValidPhoneNumber(isValid);
-    setErrorPhone(false);
 
-    // Check if the input is a valid phone number after the 10th digit is typed
-    if (formattedValue.replace(/\D/g, "").length >= 10 && !isValid) {
-      setErrorPhone(true); // sets error if the input is not a valid phone number
+    // Check if the input is a valid phone number
+    if (isValid) {
+      setErrorPhone(true);
+      console.log("phone accepted");
+    } else {
+      setIsValidPhoneNumber(false);
+      setErrorPhone(false);
+      console.log("error in phone input");
     }
-    setErrorPhone(true);
-    setPersonPhone(formattedValue);
   };
+
   const handleEmailChange = (event) => {
     const inputEmail = event.target.value;
     setPersonEmail(inputEmail);
@@ -338,7 +330,7 @@ export default function AddPerson({
     }
     onClick={(e) => {
       if (errorBalance && errorPhone && errorEmail) {
-        handleSubmit(e);
+        handleAddSubmit(e);
         setFormSubmitted(true);
         resetForm();
       } else {
