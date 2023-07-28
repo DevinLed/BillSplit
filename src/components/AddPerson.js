@@ -20,8 +20,10 @@ export default function AddPerson({
   theme,
   handleAddSubmit
 }) {
+  const [isValidName, setIsValidName] = useState(false);
   const [isValidPhoneNumber, setIsValidPhoneNumber] = useState(false);
   const [isValidEmail, setIsValidEmail] = useState(false);
+  const [errorName, setErrorName] = useState(false);
   const [errorBalance, setErrorBalance] = useState(false);
   const [errorPhone, setErrorPhone] = useState(false);
   const [errorEmail, setErrorEmail] = useState(false);
@@ -42,6 +44,20 @@ export default function AddPerson({
       e.target.blur();
     }
   }
+
+  const handleNameChange = (event) => {
+    const inputName = event.target.value;
+    setPersonName(inputName);
+    setErrorName(false);
+
+    // Check if name contains at least 1 character
+    if (inputName.trim().length >= 1) {
+      setIsValidName(true);
+      setErrorName(true);
+    } else {
+      setIsValidName(false);
+    }
+  };
   const formatPhoneNumber = (inputValue) => {
     const numbersOnly = inputValue.replace(/[^\d]/g, ""); // Remove all non-numeric characters
     if (numbersOnly.length <= 3) return numbersOnly;

@@ -38,13 +38,29 @@ export default function EditPerson({
     setShowConfirmation(false);
   };
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const [isValidName, setIsValidName] = useState(true);
   const [isValidPhoneNumber, setIsValidPhoneNumber] = useState(true);
   const [isValidEmail, setIsValidEmail] = useState(true);
   const [errorBalance, setErrorBalance] = useState(true);
+  const [errorName, setErrorName] = useState(true);
   const [errorPhone, setErrorPhone] = useState(true);
   const [errorEmail, setErrorEmail] = useState(true);
   const [errorMsg, setErrorMsg] = useState("");
   const [submissionError, setSubmissionError] = useState(true);
+
+  const handleNameChange = (event) => {
+    const inputName = event.target.value;
+    setPersonName(inputName);
+    setErrorName(false);
+
+    // Check if name contains at least 1 character
+    if (inputName.trim().length >= 1) {
+      setIsValidName(true);
+      setErrorName(true);
+    } else {
+      setIsValidName(false);
+    }
+  };
 
   const formatPhoneNumber = (inputValue) => {
     const numbersOnly = inputValue.replace(/[^\d]/g, ""); // Remove all non-numeric characters
@@ -99,23 +115,22 @@ export default function EditPerson({
 
             <div className="p-4">
               <div className="text-center">
-                <div className="mb-2">
-                  <label htmlFor="colFormLabel" className="sr-only">
-                    Name
-                  </label>
-                  <input
-                    type="name"
-                    className="form-control w-full rounded-lg py-2 px-3 focus:border-blue-300 focus:outline-none focus:ring"
-                    id="colFormLabel"
-                    placeholder="Name"
-                    value={personName}
-                    onChange={(e) => {
-                      setPersonName(e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1));
-                      setErrorBalance(true);
-                    }}
-                    autoComplete="off"
-                  />
-                </div>
+              <div className="mb-2">
+        <label htmlFor="colFormLabel" className="sr-only">
+          Name
+        </label>
+        <input
+          type="name"
+          className={`form-control w-full rounded-lg py-2 px-3 focus:border-blue-300 focus:outline-none focus:ring ${
+            isValidName ? "ring-green-300" : "ring-red-300"
+          }`}
+          id="colFormLabel"
+          placeholder="Name"
+          value={personName}
+          onChange={handleNameChange}
+          autoComplete="off"
+        />
+      </div>
 
                 <div className="mb-2">
                   <label htmlFor="colFormLabel" className="sr-only">
@@ -228,7 +243,7 @@ export default function EditPerson({
         : "flex w-fit flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-800 hover:no-underline"
     }
                 onClick={(e) => {
-                  if (errorBalance && errorPhone && errorEmail) {
+                  if (errorBalance && errorPhone && errorEmail && errorName) {
                     handleSubmit(e);
                     setEditPerson(false);
                   } else {
