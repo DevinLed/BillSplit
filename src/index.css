@@ -28,7 +28,9 @@ label {
   font-weight: bold;
   color: #112827;
 }
-
+.theme-transition {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
 input,
 textarea {
   background-color: #f1f1f1;

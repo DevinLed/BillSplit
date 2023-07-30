@@ -48,21 +48,27 @@ export default function EditList({
 
   return (
     <>
-      <main className="xs:max-w-xl bg-white-500 mt-5 rounded p-0 pt-3 shadow sm:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl">
+      <main className="xs:max-w-xl bg-white-500 mt-5 rounded p-0 pt-3 shadow sm:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl"  style={{ maxWidth: '600px' }}>
         <Header selectEditPersonList={selectEditPersonList} theme={theme}/>
         <div className="flex flex-col items-center justify-center">
         {list.map(({ id, personName, personPhone, personEmail, personOwing }) => (
   <React.Fragment key={id}>
     {personName.length ? (
-      <ul className="list-group m-0">
+      <ul className="m-0 py-1 w-3/4">
 <button
-  className="text-primary outline-none focus:outline-none"
+  className="text-primary outline-none focus:outline-none w-full"
   onClick={() => {
     console.log(false);
     editRow(id); // Call editRow function with the selected item's ID
   }}
 >
-          <li className="list-group-item flex justify-between m-1 p-2 bg-white hover:bg-gray-100 rounded-lg shadow-sm">
+          <li
+          className={
+            "list-group-item flex justify-between m-1 p-2 rounded-lg shadow-sm " +
+            (theme === "dark" ? "bg-gray-800 text-white" : "bg-white text-gray-800")
+          }
+        >
+
             <div className="flex items-center">
               {/* Avatar component to display the person's avatar */}
               <Avatar

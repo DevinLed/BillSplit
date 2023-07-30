@@ -5,12 +5,13 @@ import phoneoutline from "../img/phoneoutline.png";
 import Receiptphoneoutline from "../img/Receiptphoneoutline.png";
 import Historyphoneoutline from "../img/Historyphoneoutline.png";
 import Historydarkoutline from "../img/Historydarkoutline.png";
+import DivvySample from "../img/DivvySample.gif";
 
 export default function LandingPage({ theme }) {
   return (
     <main className="xs:max-w-xl bg-white-500 rounded p-0 shadow sm:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl" style={{ maxWidth: '650px' }}>
       <div className="bg-gray-100 min-h-screen">
-        <div className="bg-blue-600 text-white py-6 px-6 sticky top-0 flex items-center justify-between">
+        <div className="bg-blue-600 text-white py-6 px-6 sticky top-0 flex items-center justify-center">
           <h1 className="text-4xl font-bold tracking-wider">
             Welcome to Divvy
           </h1>
@@ -24,6 +25,20 @@ export default function LandingPage({ theme }) {
               Divvy it up
             </button>
           </Link>
+          <div className="mt-5 flex flex-col items-center justify-center">
+          <span className="flex justify-center mb-3 text-black">
+              Demo
+            </span>
+          <div className="flex flex-row justify-center items-center mb-2 mt-2 w-72">
+              <div className="w-72 bg-gray-100">
+                <img
+                  src={DivvySample}
+                  alt="Captured Receipt"
+                  className="w-full"
+                />
+              </div>
+              </div>
+              </div>
           <div className="mt-5 flex flex-col justify-center">
             <span className="flex justify-left mb-3 text-black">
               Features:

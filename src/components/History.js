@@ -27,6 +27,7 @@ export default function History({ receipts, theme }) {
             : "";
   
         return (
+          
           <div key={index} className="border-b border-gray-300 py-2 my-2 px-8">
             <div>
               <div className="flex justify-center items-center">
@@ -89,7 +90,7 @@ export default function History({ receipts, theme }) {
 
   return (
     <>
-      <main className="mt-5 p-0 pt-3 xs:max-w-xl sm:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl bg-white-500 rounded shadow">
+       <main className="xs:max-w-xl bg-white-500 mt-5 rounded p-0 pt-3 shadow sm:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl"  style={{ maxWidth: '600px' }}>
         <Header showHistory={true} theme={theme}/>
 
         <div className="flex flex-col items-center justify-center">

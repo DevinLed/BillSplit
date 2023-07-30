@@ -42,7 +42,7 @@ export default function SplitBill({
   <Header selectPersonList={selectPersonList} />
   <div className="flex flex-col items-center justify-center">
     {/* Table generator for people added */}
-    <ul className="list-group m-0 py-1">
+    <ul className="m-0 py-1 w-3/4">
       
     {list.map(({ id, personName, personOwing }) => (
   <React.Fragment key={id}>
