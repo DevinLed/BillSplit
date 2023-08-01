@@ -5,6 +5,8 @@ import { IoSaveOutline } from "react-icons/io5";
 import {AiOutlineDelete} from "react-icons/ai"
 import { CSSTransition } from "react-transition-group";
 
+import UseAnimations from "react-useanimations";
+
 export default function EditPerson({
   personName,
   personPhone,

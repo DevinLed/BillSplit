@@ -160,9 +160,10 @@ export default function Home({ theme, toggleTheme, handleClearData, list, setSho
         ? "mb-0 flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-700 hover:no-underline"
         : "mb-0 flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
     }
-  >
+  ><div style={{ width: "24px", height: "24px" }}>
     <IoReceiptOutline size={24} />
-    <span className={theme === "dark" ? "text-white" : "text-gray-800"}>Split a Bill</span>
+    </div>
+    <span className={theme === "dark" ? "text-white text-center" : "text-gray-800 text-center"}>Split a Bill</span>
   </label>
 </Link>
 <Link to="/EditList">
@@ -172,9 +173,11 @@ export default function Home({ theme, toggleTheme, handleClearData, list, setSho
         ? "flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-700 hover:no-underline"
         : "flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
     }
-  >
+  ><div style={{ width: "24px", height: "24px" }}>
     <IoPersonCircleOutline size={24} />
-    <span className={theme === "dark" ? "text-white" : "text-gray-800"}>Edit Person</span>
+    
+    </div>
+    <span className={theme === "dark" ? "text-white text-center" : "text-gray-800 text-center"}>Edit Person</span>
   </label>
 </Link>
 <Link to="/History">
@@ -184,9 +187,10 @@ export default function Home({ theme, toggleTheme, handleClearData, list, setSho
         ? "flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-700 hover:no-underline"
         : "flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
     }
-  >
+  ><div style={{ width: "24px", height: "24px" }}>
     <IoListOutline size={24} />
-    <span className={theme === "dark" ? "text-white" : "text-gray-800"}>History</span>
+    </div>
+    <span className={theme === "dark" ? "text-white text-center" : "text-gray-800 text-center"}>History</span>
   </label>
 </Link>
 <label
@@ -203,9 +207,10 @@ export default function Home({ theme, toggleTheme, handleClearData, list, setSho
       ? "flex h-24 w-full cursor-pointer flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-700 hover:no-underline"
       : "flex h-24 w-full cursor-pointer flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
   }
->
+><div style={{ width: "24px", height: "24px" }}>
   <IoInvertModeSharp size={24} />
-  <span className={theme === "dark" ? "text-white" : "text-gray-800"}>{buttonText}</span>
+  </div>
+  <span className={theme === "dark" ? "text-white text-center" : "text-gray-800 text-center"}>{buttonText}</span>
 </label>
 <Link to="/LandingPage">
   <label
@@ -215,8 +220,10 @@ export default function Home({ theme, toggleTheme, handleClearData, list, setSho
         : "flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
     }
   >
+    <div style={{ width: "24px", height: "24px" }}>
     <IoHomeOutline size={24} />
-    <span className={theme === "dark" ? "text-white" : "text-gray-800"}>Home Page</span>
+    </div>
+    <span className={theme === "dark" ? "text-white text-center" : "text-gray-800 text-center"}>Home Page</span>
   </label>
 </Link>
 <label
@@ -227,8 +234,10 @@ export default function Home({ theme, toggleTheme, handleClearData, list, setSho
       : "flex h-24 w-full cursor-pointer flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
   }
 >
+<div style={{ width: "24px", height: "24px" }}>
   <IoAlertCircle size={24} />
-  <span className={theme === "dark" ? "text-white" : "text-gray-800"}>Clear Data</span>
+  </div>
+  <span className={theme === "dark" ? "text-white text-center" : "text-gray-800 text-center"}>Clear Data</span>
 </label>
 
             </div>

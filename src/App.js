@@ -145,7 +145,6 @@ function App() {
   };
   // Handler for full reset of tables.
   const handleAddSubmit = (e) => {
-    e.preventDefault();
     const newItems = {
       personName,
       personPhone,
