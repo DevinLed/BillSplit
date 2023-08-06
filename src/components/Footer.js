@@ -1,8 +1,9 @@
 import React from "react";
 import "../darkMode.css";
 import "../index.css";
+import App from "../App";
 
-export default function Footer({theme}) {
+export default function Footer({theme, lang,setLang}) {
   return (
     <>
       <div className="flex justify-center mt-5">
@@ -12,8 +13,7 @@ export default function Footer({theme}) {
           <div className="outro">
             <div>
               <p>
-                App created by Devin Ledwell for Get Coding | Created using React and
-                JSX | Check out my{" "}
+              {lang === "english" ? "App created by Devin Ledwell for Get Coding | Created using React and JSX | Check out my " : "Cette application a été écrite par Devin Ledwell, pour Get Coding | Créé avec React et JSX | Consultez mon "}
                 <a
                   className="font-italic mt-5"
                   target="_blank"

@@ -18,7 +18,9 @@ export default function AddPerson({
   formSubmitted,
   setFormSubmitted,
   theme,
-  handleAddSubmit
+  handleAddSubmit,
+  lang,
+  setLang,
 }) {
   const [isValidName, setIsValidName] = useState(false);
   const [isValidPhoneNumber, setIsValidPhoneNumber] = useState(false);
@@ -61,8 +63,12 @@ export default function AddPerson({
   const formatPhoneNumber = (inputValue) => {
     const numbersOnly = inputValue.replace(/[^\d]/g, ""); // Remove all non-numeric characters
     if (numbersOnly.length <= 3) return numbersOnly;
-    if (numbersOnly.length <= 6) return `(${numbersOnly.slice(0, 3)}) ${numbersOnly.slice(3)}`;
-    return `(${numbersOnly.slice(0, 3)}) ${numbersOnly.slice(3, 6)}-${numbersOnly.slice(6, 10)}`;
+    if (numbersOnly.length <= 6)
+      return `(${numbersOnly.slice(0, 3)}) ${numbersOnly.slice(3)}`;
+    return `(${numbersOnly.slice(0, 3)}) ${numbersOnly.slice(
+      3,
+      6
+    )}-${numbersOnly.slice(6, 10)}`;
   };
 
   const handlePhoneNumberChange = (event) => {
@@ -130,20 +136,20 @@ export default function AddPerson({
             }
           >
             <div className="flex items-center justify-evenly p-4 border-b border-gray-300">
-              <h3 className="text-xl font-semibold">Add A Person</h3>
+              <h3 className="text-xl font-semibold">{lang === "english" ? "Add a Person" : "Ajouter une personne"}</h3>
             </div>
 
             <div className="p-4">
               <div className="text-center">
                 <div className="mb-4">
                   <label htmlFor="colFormLabel" className="sr-only">
-                    Name
+                  {lang === "english" ? "Name" : "Nom"}
                   </label>
                   <input
                     type="name"
                     className="form-control w-full py-2 px-3 rounded-lg focus:outline-none focus:ring focus:border-blue-300"
                     id="colFormLabel"
-                    placeholder="Name"
+                    placeholder={lang === "english" ? "Name" : "Nom"}
                     value={personName}
                     onChange={(e) => {
                       setPersonName(
@@ -158,7 +164,7 @@ export default function AddPerson({
 
                 <div className="mb-4">
                   <label htmlFor="colFormLabel" className="sr-only">
-                    Phone
+                  {lang === "english" ? "Phone Number" : "Numéro de téléphone"}
                   </label>
                   <input
                     autoComplete="off"
@@ -171,7 +177,7 @@ export default function AddPerson({
                         : ""
                     }`}
                     id="colFormLabel"
-                    placeholder="Phone Number"
+                    placeholder={lang === "english" ? "Phone Number" : "Numéro de téléphone"}
                     value={formSubmitted ? "" : formatPhoneNumber(personPhone)}
                     onChange={handlePhoneNumberChange}
                   />
@@ -179,7 +185,7 @@ export default function AddPerson({
 
                 <div className="mb-4">
                   <label htmlFor="colFormLabel" className="sr-only">
-                    Email
+                    E-mail
                   </label>
                   <input
                     autoComplete="off"
@@ -188,7 +194,7 @@ export default function AddPerson({
                       isValidEmail ? "ring-green-300" : "ring-red-300"
                     }`}
                     id="colFormLabel"
-                    placeholder="Email"
+                    placeholder="E-mail"
                     onKeyDown={handleKeyDown}
                     value={formSubmitted ? "" : personEmail}
                     onChange={handleEmailChange}
@@ -203,67 +209,66 @@ export default function AddPerson({
                       (theme === "dark" ? "text-white" : "text-gray-800")
                     }
                   >
-                    Starting balance?
+                  {lang === "english" ? "Starting balance?" : "Solde de départ?"}
                   </label>
                 </div>
 
                 <div className="mb-4">
                   <div className="flex items-center justify-center mb-2">
-                  <label className="inline-flex items-center cursor-pointer">
-  <input
-    type="radio"
-    className={`form-radio h-4 w-4 text-blue-500 ${
-      showInput ? "border-blue-500" : "border-gray-400"
-    }`}
-    onClick={(e) => {
-      setShowInput(false);
-      handleNoButtonClick(e);
-      setErrorBalance(true);
-      setPersonOwing("0.00");
-    }}
-    disabled={!showInput}
-    checked={!showInput}
-  />
-  <span
-    className={`ml-2 ${
-      theme === "dark"
-        ? showInput
-          ? "text-gray-400"
-          : "text-white"
-        : showInput
-        ? "text-gray-400"
-        : "text-black"
-    }`}
-  >
-    No
-  </span>
-</label>
+                    <label className="inline-flex items-center cursor-pointer">
+                      <input
+                        type="radio"
+                        className={`form-radio h-4 w-4 text-blue-500 ${
+                          showInput ? "border-blue-500" : "border-gray-400"
+                        }`}
+                        onClick={(e) => {
+                          setShowInput(false);
+                          handleNoButtonClick(e);
+                          setErrorBalance(true);
+                          setPersonOwing("0.00");
+                        }}
+                        disabled={!showInput}
+                        checked={!showInput}
+                      />
+                      <span
+                        className={`ml-2 ${
+                          theme === "dark"
+                            ? showInput
+                              ? "text-gray-400"
+                              : "text-white"
+                            : showInput
+                            ? "text-gray-400"
+                            : "text-black"
+                        }`}
+                      >
+                        {lang === "english" ? "No" : "Non"}
+                      </span>
+                    </label>
 
-<label className="ml-8 inline-flex items-center cursor-pointer">
-  <input
-    type="radio"
-    className={`form-radio h-4 w-4 text-blue-500 ${
-      showInput ? "border-gray-400" : "border-blue-500"
-    }`}
-    onClick={() => setShowInput(true)}
-    disabled={showInput}
-    checked={showInput}
-  />
-  <span
-    className={`ml-2 ${
-      theme === "dark"
-        ? showInput
-          ? "text-white"
-          : "text-gray-400"
-        : showInput
-        ? "text-black"
-        : "text-gray-400"
-    }`}
-  >
-    Yes
-  </span>
-</label>
-
+                    <label className="ml-8 inline-flex items-center cursor-pointer">
+                      <input
+                        type="radio"
+                        className={`form-radio h-4 w-4 text-blue-500 ${
+                          showInput ? "border-gray-400" : "border-blue-500"
+                        }`}
+                        onClick={() => setShowInput(true)}
+                        disabled={showInput}
+                        checked={showInput}
+                      />
+                      <span
+                        className={`ml-2 ${
+                          theme === "dark"
+                            ? showInput
+                              ? "text-white"
+                              : "text-gray-400"
+                            : showInput
+                            ? "text-black"
+                            : "text-gray-400"
+                        }`}
+                      >
+                        {lang === "english" ? "Yes" : "Oui"}
+                      </span>
+                    </label>
                   </div>
 
                   <CSSTransition
@@ -273,7 +278,7 @@ export default function AddPerson({
                     unmountOnExit
                   >
                     <div
-                      className="mb-2 flex items-center justify-center"
+                      className="flex w-5/6 items-center absolute justify-center"
                       style={{ height: "40px" }}
                     >
                       {/* Set a fixed height for the div */}
@@ -323,46 +328,45 @@ export default function AddPerson({
             </div>
 
             <div className="flex justify-center p-2 space-x-4">
-  <label
-    className={
-      theme === "dark"
-        ? "flex w-fit flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-700 hover:no-underline"
-        : "flex w-fit flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-800 hover:no-underline"
-    }
-    onClick={(e) => {
-      setAddPerson(false);
-      setFormSubmitted(true);
-      resetForm();
-    }}
-  >
-    <IoCloseCircleOutline size={24} />
-  </label>
+              <label
+                className={
+                  theme === "dark"
+                    ? "flex w-fit flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-700 hover:no-underline"
+                    : "flex w-fit flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-800 hover:no-underline"
+                }
+                onClick={(e) => {
+                  setAddPerson(false);
+                  setFormSubmitted(true);
+                  resetForm();
+                }}
+              >
+                <IoCloseCircleOutline size={24} />
+              </label>
 
-  <label
-    className={
-      theme === "dark"
-        ? "flex w-fit flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-700 hover:no-underline"
-        : "flex w-fit flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-800 hover:no-underline"
-    }
-    onClick={(e) => {
-      if (errorBalance && errorPhone && errorEmail) {
-        handleAddSubmit(e);
-        setFormSubmitted(true);
-        resetForm();
-      } else {
-        console.log("nop");
-        setSubmissionError(false);
-      }
-    }}
-  >
-    <IoSaveOutline size={24} />
-  </label>
-</div>
-
+              <label
+                className={
+                  theme === "dark"
+                    ? "flex w-fit flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-700 hover:no-underline"
+                    : "flex w-fit flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-800 hover:no-underline"
+                }
+                onClick={(e) => {
+                  if (errorBalance && errorPhone && errorEmail) {
+                    handleAddSubmit(e);
+                    setFormSubmitted(true);
+                    resetForm();
+                  } else {
+                    console.log("nop");
+                    setSubmissionError(false);
+                  }
+                }}
+              >
+                <IoSaveOutline size={24} />
+              </label>
+            </div>
 
             {!submissionError && (
               <p className="text-red-500 text-sm text-center mb-2">
-                Please complete all fields correctly.
+                {lang === "english" ? "Please complete all fields correctly." : "Veuillez remplir tous les champs correctement."}
               </p>
             )}
           </div>

@@ -1,4 +1,7 @@
 import React, { useRef, useState, useEffect, onBlur, useCamera } from "react";
+import { registerLocale } from "react-datepicker";
+import en from "date-fns/locale/en-US";
+import fr from "date-fns/locale/fr";
 import { useParams } from "react-router-dom";
 import { Camera } from "react-html5-camera-photo";
 import "react-html5-camera-photo/build/css/index.css";
@@ -15,9 +18,9 @@ import {
   IoDuplicateOutline,
   IoRepeatSharp,
   IoCheckmarkCircle,
-  IoCreateOutline
+  IoCreateOutline,
 } from "react-icons/io5";
-
+import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
 import { CSSTransition } from "react-transition-group";
 
@@ -57,8 +60,13 @@ export default function ReceiptInput({
   setSplitPictureTotal,
   setThemPictureTotal,
   theme,
+  taxRate,
+  lang,
+  setLang,
 }) {
   
+registerLocale("en", en);
+registerLocale("fr", fr);
   const [selectPersonReceipt, setSelectPersonReceipt] = useState(true);
   const [selectMethodManual, setSelectMethodManual] = useState(false);
   const [selectMethodPicture, setSelectMethodPicture] = useState(false);
@@ -132,11 +140,11 @@ export default function ReceiptInput({
   const endpoint = "expense_receipts";
   const version = "5.0";
   const handleCapturePhoto = (dataUri) => {
-    
     setPhotoData(dataUri);
     setShowCameraImage(true);
     setShowRedoButton(true);
   };
+  // Image processing for table input
   const handleCameraSubmit = async () => {
     document.body.classList.add("scroll-transition");
     setPhotoData(loading);
@@ -193,7 +201,6 @@ export default function ReceiptInput({
     }
   };
 
-  
   function resetReceiptForm() {
     setMerchantName("");
     setInvoiceNumber("");
@@ -218,12 +225,11 @@ export default function ReceiptInput({
 
   // Handler for adding items to the table array manually
   const handleReceiptPictureSubmit = (sliderValue) => {
-    
     if (!name || !amount) {
       return;
     }
     const parsedAmount = parseFloat(amount).toFixed(2);
-    
+
     setObtainedInfo((prevInfo) => [
       ...prevInfo,
       {
@@ -301,7 +307,7 @@ export default function ReceiptInput({
       displayMerchant,
       displayDate,
       displayInvoice,
-      receiptTotal
+      receiptTotal,
     };
 
     addReceipt(newReceipt);
@@ -315,7 +321,6 @@ export default function ReceiptInput({
   const taxOwingPerc = taxOwing / parseFloat(getPictureTotal());
 
   const taxActual = parseFloat(pictureTax) * parseFloat(taxOwingPerc);
-
 
   // Used to update the balance of the person you are splitting receipt with
   const getFinalTotal = () => {
@@ -344,16 +349,20 @@ export default function ReceiptInput({
     <>
       {selectPersonReceipt ? (
         <>
-          <main className="xs:max-w-xl bg-white-500 mt-5 rounded p-0 pt-3 shadow sm:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl"  style={{ maxWidth: '600px' }}>
+          <main
+            className="xs:max-w-xl bg-white-500 mt-5 rounded p-0 pt-3 shadow sm:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl"
+            style={{ maxWidth: "600px" }}
+          >
             <div className="flex flex-col items-center justify-center">
               <Header
                 selectPersonReceipt={selectPersonReceipt}
                 handleResetTotals={handleResetTotals}
                 theme={theme}
+                lang={lang}
               />
 
               <div className="flex flex-col items-center justify-center">
-                <h1>Split a bill with {personName}</h1>
+                <h1>{lang === "english" ? "Split a receipt with " : "Fractionner un reçu avec "}{personName}</h1>
                 <ul className="list-group items-center justify-center">
                   <Link className="flex flex-col items-center justify-center">
                     <label
@@ -403,25 +412,35 @@ export default function ReceiptInput({
         classNames="fade"
         unmountOnExit
       >
-        <main className="xs:max-w-xl bg-white-500 mt-5 rounded p-0 pt-3 shadow sm:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl" style={{ maxWidth: '600px' }}>
+        <main
+          className="xs:max-w-xl bg-white-500 mt-5 rounded p-0 pt-3 shadow sm:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl"
+          style={{ maxWidth: "600px" }}
+        >
           <div className="mt-0 flex flex-col items-center justify-center">
             <Header
               selectMethodManual={selectMethodManual}
               handleResetTotals={handleResetTotals}
+              lang={lang}
+              theme={theme}
             />
 
             <div className="container mx-auto px-2 py-8 ">
               <div className="overflow-hidden rounded-lg shadow">
                 <div
-                  className={theme === "dark"? "bg-blue-900 px-6":"bg-blue-500 px-6"}
+                  className={
+                    theme === "dark" ? "bg-blue-900 px-6" : "bg-blue-500 px-6"
+                  }
                 >
                   <div className="flex items-center justify-between">
                     <div>
                       <input
                         type="amount"
-                        className={"form-control mt-3 h-10 text-left font-bold text-gray-300 outline-none " + (theme === "dark" ? "bg-gray-800" : "bg-gray-100")}
+                        className={
+                          "form-control mt-3 h-10 text-left font-bold text-gray-300 outline-none " +
+                          (theme === "dark" ? "bg-gray-800" : "bg-gray-100")
+                        }
                         id="colFormLabel"
-                        placeholder="Merchant Name"
+                        placeholder={lang === "english" ? "Merchant Name" : "Nom du commerçant"}
                         onKeyDown={handleKeyDown}
                         onChange={(e) =>
                           setMerchantName(
@@ -435,10 +454,12 @@ export default function ReceiptInput({
                       <div>
                         <input
                           type="invoice"
-                          className={"form-control opacity-4 mb-3 w-40 bg-gray-100 text-left font-bold text-gray-300 outline-none "  + (theme === "dark" ? "bg-gray-800" : "bg-gray-100")}
-                          
+                          className={
+                            "form-control opacity-4 mb-3 w-40 bg-gray-100 text-left font-bold text-gray-300 outline-none " +
+                            (theme === "dark" ? "bg-gray-800" : "bg-gray-100")
+                          }
                           id="colFormLabel"
-                          placeholder="Invoice Number"
+                          placeholder={lang === "english" ? "Invoice #" : "Facture #"}
                           onKeyDown={handleKeyDown}
                           onChange={(e) => setInvoiceNumber(e.target.value)}
                           onClick={() => setDisplayInvoice(true)}
@@ -463,7 +484,7 @@ export default function ReceiptInput({
                           : "text-xl font-bold text-black"
                       }
                     >
-                      Split with:
+                      {lang === "english" ? "Split With:" : "Diviser avec:"}
                     </h2>
                     <p
                       className={
@@ -544,7 +565,7 @@ export default function ReceiptInput({
                               : "col-form-label text-center text-black"
                           }
                         >
-                          Date of Receipt
+                          {lang === "english" ? "Date of Receipt" : "Date de réception"}
                         </label>
                         <div className="justify-left z-50 mt-3 mb-3 text-center">
                           <DatePicker
@@ -555,12 +576,14 @@ export default function ReceiptInput({
                             onFocus={(e) => e.target.blur()}
                             dateFormat="dd/MM/yyyy"
                             onClick={() => setDisplayDate(true)}
+                            locale={lang === "english" ? "en" : "fr"} 
                           />
                         </div>
                       </div>
 
                       <div className="flex-column flex items-center justify-center">
                         <ReceiptTable
+                          taxRate={taxRate}
                           taxActual={taxActual}
                           taxReal={taxReal}
                           setTaxReal={setTaxReal}
@@ -601,62 +624,69 @@ export default function ReceiptInput({
                           theme={theme}
                           pictureTax={pictureTax}
                           setPictureTax={setPictureTax}
+                          lang={lang}
                         />
                       </div>
                     </div>
                   </CSSTransition>
                 </div>
                 <div
-  className={
-    theme === "dark"
-      ? "grid grid-cols-2 gap-y-0 bg-gray-900 py-4 justify-center"
-      : "grid grid-cols-2 gap-y-0 bg-white py-4 justify-center"
-  }
->
-  <div className="m-2 mb-4 flex flex-col justify-center items-center sm:flex-row">
-    <Link to={`/ReceiptInput/${id}`}>
-      <label
-        className={
-          "flex h-24 w-28 flex-col items-center justify-center rounded-lg border border-gray-200 py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline " +
-          (theme === "dark"
-            ? "bg-gray-900 text-white"
-            : "bg-white text-gray-800")
-        }
-        onClick={(e) => {
-          getFinalTotal();
-          setSelectMethodPicture(false);
-          setSelectPersonReceipt(true);
-          handleHistorySubmit(e);
-          resetReceiptForm();
-          setIsReceiptSubmitted(true);
-        }}
-      >
-        <IoDuplicateOutline size={24} />
-      </label>
-    </Link>
-  </div>
-  <div className="m-2 mb-4 flex flex-col justify-center items-center sm:flex-row">
-    <Link to="/SplitBill">
-      <label
-        className={
-          "flex h-24 w-28 flex-col items-center justify-center rounded-lg border border-gray-200 py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline " +
-          (theme === "dark"
-            ? "bg-gray-900 text-white"
-            : "bg-white text-gray-800")
-        }
-        onClick={(e) => {
-          getFinalTotal();
-          handleHistorySubmit(e);
-          resetReceiptForm();
-          setIsReceiptSubmitted(true);
-        }}
-      >
-        <IoExitOutline size={24} />
-      </label>
-    </Link>
-  </div>
-</div>
-</div>
+                  className={
+                    theme === "dark"
+                      ? "grid grid-cols-2 gap-y-0 bg-gray-900 py-4 justify-center"
+                      : "grid grid-cols-2 gap-y-0 bg-white py-4 justify-center"
+                  }
+                >
+                  <div className="m-2 mb-4 flex flex-col justify-center items-center sm:flex-row">
+                    <Link to={`/ReceiptInput/${id}`}>
+                      <label
+                        className={
+                          "flex h-24 w-28 flex-col items-center justify-center rounded-lg border border-gray-200 py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline " +
+                          (theme === "dark"
+                            ? "bg-gray-900 text-white"
+                            : "bg-white text-gray-800")
+                        }
+                        onClick={(e) => {
+                          getFinalTotal();
+                          setSelectMethodPicture(false);
+                          setSelectPersonReceipt(true);
+                          handleHistorySubmit(e);
+                          resetReceiptForm();
+                          setIsReceiptSubmitted(true);
+                        }}
+                      >
+                        <IoDuplicateOutline size={24} />
+                      </label>
+                    </Link>
+                  </div>
+                  <div className="m-2 mb-4 flex flex-col justify-center items-center sm:flex-row">
+                    <Link to="/SplitBill">
+                      <label
+                        className={
+                          "flex h-24 w-28 flex-col items-center justify-center rounded-lg border border-gray-200 py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline " +
+                          (theme === "dark"
+                            ? "bg-gray-900 text-white"
+                            : "bg-white text-gray-800")
+                        }
+                        onClick={(e) => {                          
+                          const finalTotal = getFinalTotal();
+                          if (finalTotal === 0 ) {
+                            // Handle the error case and prevent further actions
+                            console.error("Error: Invalid final total");
+                            return;
+                          }
+                          getFinalTotal();
+                          handleHistorySubmit(e);
+                          resetReceiptForm();
+                          setIsReceiptSubmitted(true);
+                        }}
+                      >
+                        <IoExitOutline size={24} />
+                      </label>
+                    </Link>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </main>
@@ -667,12 +697,16 @@ export default function ReceiptInput({
         classNames="fade"
         unmountOnExit
       >
-        <main className="xs:max-w-xl bg-white-500 mt-5 rounded p-0 pt-3 shadow sm:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl"  style={{ maxWidth: '600px' }}>
+        <main
+          className="xs:max-w-xl bg-white-500 mt-5 rounded p-0 pt-3 shadow sm:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl"
+          style={{ maxWidth: "600px" }}
+        >
           <div className="mt-0 flex flex-col items-center justify-center">
             <Header
               selectMethodPicture={selectMethodPicture}
               handleResetTotals={handleResetTotals}
               theme={theme}
+              lang={lang}
             />
             <div className="l-36 bg-grey flex flex-col  items-center justify-center rounded-lg px-6 ring-slate-900/5 dark:bg-slate-900">
               <div className="max-w-fit">
@@ -796,7 +830,7 @@ export default function ReceiptInput({
                                 />
                                 <div>
                                   <input
-                                  autoComplete="off"
+                                    autoComplete="off"
                                     type="invoice"
                                     className="form-control opacity-4 mb-3 w-40 bg-gray-900 text-left font-bold text-gray-300 outline-none"
                                     id="colFormLabel"
@@ -826,7 +860,7 @@ export default function ReceiptInput({
                                     : "text-xl font-bold text-black"
                                 }
                               >
-                                Split with:
+                                {lang === "english" ? "Split With:" : "Diviser avec"}
                               </h2>
                               <p
                                 className={
@@ -927,7 +961,6 @@ export default function ReceiptInput({
                                 </div>
 
                                 <div className="flex-column flex items-center justify-center">
-      
                                   <div>
                                     <ReceiptTable
                                       taxActual={taxActual}
@@ -974,6 +1007,7 @@ export default function ReceiptInput({
                                       theme={theme}
                                       pictureTax={pictureTax}
                                       setPictureTax={setPictureTax}
+                                      lang={lang}
                                     />
                                   </div>
                                 </div>
@@ -1006,7 +1040,7 @@ export default function ReceiptInput({
                                   }}
                                 >
                                   <IoDuplicateOutline size={24} />
-                                                                </button>
+                                </button>
                               </Link>
                             </div>
                             <div className="max-w-20 m-2 mb-4 flex flex-col justify-center sm:flex-row">
@@ -1019,6 +1053,14 @@ export default function ReceiptInput({
                                       : "bg-white text-gray-800")
                                   }
                                   onClick={(e) => {
+
+                                    const finalTotal = getFinalTotal();
+                                    if (finalTotal === 0 ) {
+                                      // Handle the error case and prevent further actions
+                                      console.error("Error: Invalid final total");
+                                      return;
+                                    }
+                                    
                                     getFinalTotal();
                                     handleHistorySubmit(e);
                                     resetReceiptForm();

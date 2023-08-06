@@ -7,7 +7,6 @@
 body {
   
   justify-content: center;
-  align-items: center;
   
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
@@ -258,4 +257,30 @@ label{
   border-color: red;
   outline: 0;
   box-shadow: 0 0 0 .2rem rgba(255, 0, 0, .25);
+}
+
+.fade1-enter {
+  opacity: 0;
+  transform: scaleY(0);
+  transform-origin: top;
+}
+
+.fade1-enter-active {
+  opacity: 1;
+  transform: scaleY(1);
+  transform-origin: top;
+  transition: opacity 500ms, transform 500ms;
+}
+
+.fade1-exit {
+  opacity: 1;
+  transform: scaleY(1);
+  transform-origin: top;
+}
+
+.fade1-exit-active {
+  opacity: 0;
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: opacity 200ms, transform 200ms;
 }

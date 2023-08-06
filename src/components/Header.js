@@ -2,18 +2,22 @@ import React from "react";
 import { IoIosArrowBack } from "react-icons/io";
 import { AiOutlineMenu } from "react-icons/ai";
 import { Link } from "react-router-dom";
+import App from "../App";
 
 import "../darkMode.css";
 export default function Header({
   startBill,
   showHistory,
+  showSettings,
   selectPersonReceipt,
   selectPersonList,
   selectEditPersonList,
   selectMethodManual,
   selectMethodPicture,
   handleResetTotals,
-  theme
+  theme,
+  lang,
+  setLang
 }) {
   return (
     <>
@@ -42,7 +46,7 @@ export default function Header({
               </button>
             </Link>
 
-            <h1 className="ml-2 mr-2">Select Person</h1>
+            <h1 className="whitespace-nowrap">{lang === "english" ? "Select Person" : "Choisissez la personne"}</h1>
 
             <div className="dropdown">
               <button
@@ -61,12 +65,17 @@ export default function Header({
                 aria-labelledby="dropdownMenu2"
               >
                 <Link to="/EditList">
-                  <button className={theme === "dark" ? "dropdown-item bg-gray-900 text-white hover:bg-gray-800":"dropdown-item"}>Edit Person</button>
+                  <button className={theme === "dark" ? "dropdown-item bg-gray-900 text-white hover:bg-gray-800":"dropdown-item"}>{lang === "english" ? "Edit Person" : "Modifier la personne"}</button>
                 </Link>
                 <Link to="/History">
                   <button className="dropdown-item" type="button">
-                    History
+                  {lang === "english" ? "History" : "Histoire"}
                   </button>
+                </Link>
+                
+                <Link to="/Settings">
+                  <button className="dropdown-item">
+                  {lang === "english" ? "Settings" : "Paramètres"}</button>
                 </Link>
               </div>
             </div>
@@ -88,7 +97,7 @@ export default function Header({
               </button>
             </Link>
 
-            <h1 class="m-5">Edit Person</h1>
+            <h1 className="whitespace-nowrap">{lang === "english" ? "Edit Person" : "Modifier la personne"}</h1>
 
             <div className="dropdown">
               <button
@@ -106,10 +115,14 @@ export default function Header({
                 aria-labelledby="dropdownMenu2"
               >
                 <Link to="/SplitBill">
-                  <button className="dropdown-item">New Receipt</button>
+                  <button className="dropdown-item">{lang === "english" ? "New Receipt" : "Nouveau reçu"}</button>
                 </Link>
                 <Link to="/History">
-                  <button className="dropdown-item">History</button>
+                  <button className="dropdown-item">{lang === "english" ? "History" : "Histoire"}</button>
+                </Link>
+                
+                <Link to="/Settings">
+                  <button className="dropdown-item"> {lang === "english" ? "Settings" : "Paramètres"}</button>
                 </Link>
               </div>
             </div>
@@ -128,7 +141,7 @@ export default function Header({
               <IoIosArrowBack />
             </button>
           </Link>
-          <h1 className="m-5">Select a method</h1>
+          <h1 className="whitespace-nowrap">{lang === "english" ? "Select a Method" : "Sélectionnez une méthode"}</h1>
 
           <div className="dropdown">
             <button
@@ -146,15 +159,19 @@ export default function Header({
               aria-labelledby="dropdownMenu2"
             >
               <Link to="/SplitBill">
-                <button className="dropdown-item">New Receipt</button>
+                <button className="dropdown-item">{lang === "english" ? "New Receipt" : "Nouveau reçu"}</button>
               </Link>
               <Link to="/EditList">
-                <button className="dropdown-item">Edit Person</button>
+                <button className="dropdown-item">{lang === "english" ? "Edit Person" : "Modifier la personne"}</button>
               </Link>
 
               <Link to="/History">
-                <button className="dropdown-item">History</button>
+                <button className="dropdown-item">{lang === "english" ? "History" : "Histoire"}</button>
               </Link>
+              
+              <Link to="/Settings">
+                  <button className="dropdown-item">{lang === "english" ? "Settings" : "Paramètres"}</button>
+                </Link>
             </div>
           </div>
         </div>
@@ -175,7 +192,7 @@ export default function Header({
               <IoIosArrowBack />
             </button>
           </Link>
-          <h1 className="m-5">Enter Details</h1>
+          <h1 className="whitespace-nowrap">{lang === "english" ? "Enter Details" : "Entrez les détails"}</h1>
 
           <div className="dropdown">
             <button
@@ -193,15 +210,19 @@ export default function Header({
               aria-labelledby="dropdownMenu2"
             >
               <Link to="/SplitBill">
-                <button className="dropdown-item">New Receipt</button>
+                <button className="dropdown-item">{lang === "english" ? "New Receipt" : "Nouveau reçu"}</button>
               </Link>
               <Link to="/EditList">
-                <button className="dropdown-item">Edit Person</button>
+                <button className="dropdown-item">{lang === "english" ? "Edit Person" : "Modifier la personne"}</button>
               </Link>
 
               <Link to="/History">
-                <button className="dropdown-item">History</button>
+                <button className="dropdown-item">{lang === "english" ? "History" : "Histoire"}</button>
               </Link>
+              
+              <Link to="/Settings">
+                  <button className="dropdown-item">{lang === "english" ? "Settings" : "Paramètres"}</button>
+                </Link>
             </div>
           </div>
         </div>
@@ -221,7 +242,7 @@ export default function Header({
               <IoIosArrowBack />
             </button>
           </Link>
-          <h1 className="m-5">Upload Picture</h1>
+          <h1 className="whitespace-nowrap">Upload Picture</h1>
 
           <div className="dropdown">
             <button
@@ -239,22 +260,26 @@ export default function Header({
               aria-labelledby="dropdownMenu2"
             >
               <Link to="/SplitBill">
-                <button className="dropdown-item">New Receipt</button>
+                <button className="dropdown-item">{lang === "english" ? "New Receipt" : "Nouveau reçu"}</button>
               </Link>
               <Link to="/EditList">
-                <button className="dropdown-item">Edit Person</button>
+                <button className="dropdown-item">{lang === "english" ? "Edit Person" : "Modifier la personne"}</button>
               </Link>
 
               <Link to="/History">
-                <button className="dropdown-item">History</button>
+                <button className="dropdown-item">{lang === "english" ? "History" : "Histoire"}</button>
               </Link>
+              
+              <Link to="/Settings">
+                  <button className="dropdown-item">{lang === "english" ? "Settings" : "Paramètres"}</button>
+                </Link>
             </div>
           </div>
         </div>
       ) : (
         ""
       )}
-      {showHistory ? (
+            {showSettings ? (
         <>
           <div
             className="align-items-center mb-5 flex h-10 w-full items-center items-stretch justify-between border-t-2 border-b-2 text-2xl font-bold "
@@ -265,7 +290,7 @@ export default function Header({
                 <IoIosArrowBack />
               </button>
             </Link>
-            <h1 className="m-5">History</h1>
+            <h1 className="whitespace-nowrap">{lang === "english" ? "Settings" : "Paramètres"}</h1>
             <div className="dropdown">
               <button
                 className="mr-2 text-black hover:text-black"
@@ -282,10 +307,56 @@ export default function Header({
                 aria-labelledby="dropdownMenu2"
               >
                 <Link to="/SplitBill">
-                  <button className="dropdown-item">New Receipt</button>
+                  <button className="dropdown-item">{lang === "english" ? "New Receipt" : "Nouveau reçu"}</button>
                 </Link>
                 <Link to="/EditList">
-                  <button className="dropdown-item">Edit Person</button>
+                  <button className="dropdown-item">{lang === "english" ? "Edit Person" : "Modifier la personne"}</button>
+                </Link>
+                <Link to="/History">
+                <button className="dropdown-item">{lang === "english" ? "History" : "Histoire"}</button>
+              </Link>
+              </div>
+            </div>
+          </div>
+        </>
+      ) : (
+        ""
+      )}
+      {showHistory ? (
+        <>
+          <div
+            className="align-items-center mb-5 flex h-10 w-full items-center items-stretch justify-between border-t-2 border-b-2 text-2xl font-bold "
+            id="headbar"
+          >
+            <Link to="/Home">
+              <button className="ml-2 text-black hover:text-black">
+                <IoIosArrowBack />
+              </button>
+            </Link>
+            <h1 className="whitespace-nowrap">{lang === "english" ? "History" : "Histoire"}</h1>
+            <div className="dropdown">
+              <button
+                className="mr-2 text-black hover:text-black"
+                type="button"
+                id="dropdownMenu2"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                <AiOutlineMenu />
+              </button>
+              <div
+                className="dropdown-menu dropdown-menu-right"
+                aria-labelledby="dropdownMenu2"
+              >
+                <Link to="/SplitBill">
+                  <button className="dropdown-item">{lang === "english" ? "New Receipt" : "Nouveau reçu"}</button>
+                </Link>
+                <Link to="/EditList">
+                  <button className="dropdown-item">{lang === "english" ? "Edit Person" : "Modifier la personne"}</button>
+                </Link>
+                <Link to="/Settings">
+                  <button className="dropdown-item">{lang === "english" ? "Settings" : "Paramètres"}</button>
                 </Link>
               </div>
             </div>

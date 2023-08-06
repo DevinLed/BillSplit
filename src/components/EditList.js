@@ -33,6 +33,8 @@ export default function EditList({
   theme,
   setList,
   handleAddSubmit,
+  lang,
+  setLang
 }) {
   const [selectEditPersonList, setEditSelectPersonList] = useState(true);
 
@@ -49,7 +51,7 @@ export default function EditList({
   return (
     <>
       <main className="xs:max-w-xl bg-white-500 mt-5 rounded p-0 pt-3 shadow sm:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl"  style={{ maxWidth: '600px' }}>
-        <Header selectEditPersonList={selectEditPersonList} theme={theme}/>
+        <Header selectEditPersonList={selectEditPersonList} theme={theme}  lang={lang}/>
         <div className="flex flex-col items-center justify-center">
         {list.map(({ id, personName, personPhone, personEmail, personOwing }) => (
   <React.Fragment key={id}>
@@ -138,6 +140,7 @@ export default function EditList({
             setIsSelected={setIsSelected}
             theme={theme}
             handleAddSubmit={handleAddSubmit}
+            lang={lang}
           ></AddPerson>
        </CSSTransition>
        <CSSTransition
@@ -168,6 +171,7 @@ export default function EditList({
             list={list}
             editPerson={editPerson}
             handleDeletePerson={handleDeletePerson}
+            lang={lang}
           ></EditPerson>
        </CSSTransition>
       </main>

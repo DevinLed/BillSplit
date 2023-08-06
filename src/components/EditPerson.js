@@ -21,7 +21,9 @@ export default function EditPerson({
   formSubmitted,
   theme,
   setList,
-  handleDeletePerson
+  handleDeletePerson,
+  lang,
+  setLang
 }) {
   const handleResetBalance = () => {
     setPersonOwing("0.00");

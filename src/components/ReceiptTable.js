@@ -44,7 +44,10 @@ export default function ReceiptTable({
   setTaxReal,
   taxOwing,
   taxOwingPerc,
-  taxActual
+  taxActual,
+  taxRate,
+  lang,
+  setLang,
 }) {
   // Handler for changing the name of the item added to array
   const [isAddingItem, setIsAddingItem] = useState(false);
@@ -70,7 +73,7 @@ export default function ReceiptTable({
     } else if (selectedValue === "them") {
       setPersonReceiptAmount(splitValue + youValue);
     }
-    
+
     setReceiptTotal(parseFloat(total).toFixed(2));
     return parseFloat(total).toFixed(2);
   };
@@ -111,11 +114,13 @@ export default function ReceiptTable({
   const [sliderValue, setSliderValue] = useState(50);
 
   // Calculate the tax owing based on the selected value, works into the values in the slider total information
-    const handleAutoTaxesToggle = () => {
-      const calculatedTax = (parseFloat(getPictureTotal()) * 0.15).toFixed(2);
-      setPictureTax(calculatedTax);
-      setIsAddingItem(true);
-      setShowTableButton(false);
+  const handleAutoTaxesToggle = () => {
+    const calculatedTax = (parseFloat(getPictureTotal()) * { taxRate }).toFixed(
+      2
+    );
+    setPictureTax(calculatedTax);
+    setIsAddingItem(true);
+    setShowTableButton(false);
   };
 
   // Handler for when on mobile, enter key will collapse the keyboard popup
@@ -153,28 +158,21 @@ export default function ReceiptTable({
   };
   // Handler for changing the values in item.amount
   const handleAmountChange = (value, index) => {
-    const newValue = value.replace(/^\$/, "");
+    if (!value) {
+      value = "0"; // Set value to 0 if it's empty
+    } else {
+      const isValid = /^\d+(\.\d{0,2})?$/.test(value);
+      if (!isValid) {
+        console.log("amount not verified");
+        return; // Exit the function early if the value is not valid
+      }
+    }
 
-    let parsedValue = newValue.replace(/[^0-9.]/g, "");
-
-    const decimalIndex = parsedValue.indexOf(".");
-    if (decimalIndex !== -1) {
-      parsedValue =
-        parsedValue.slice(0, decimalIndex + 1) +
-        parsedValue.slice(decimalIndex + 1).replace(".", "");
-    }
-    const decimalSplit = parsedValue.split(".");
-    if (decimalSplit[1] && decimalSplit[1].length > 2) {
-      parsedValue = decimalSplit[0] + "." + decimalSplit[1].slice(0, 2);
-    }
-    if (isNaN(parsedValue)) {
-      parsedValue = "0"; // Set to a default value (0 in this case)
-    }
     const updatedCombinedArray = [...combinedArray];
-    updatedCombinedArray[index].amount = parsedValue || "0";
+    updatedCombinedArray[index].amount = value;
     setCombinedArray(updatedCombinedArray);
+    console.log("amount verified");
   };
-
   // Handler for manually editting Tax amount
   const handleTaxAmountChange = (value) => {
     const newValue = value.replace(/^\$/, "");
@@ -301,7 +299,9 @@ export default function ReceiptTable({
   }, [combinedArray]);
   useEffect(() => {
     if (!showTaxButton) {
-      const calculatedTax = (parseFloat(getPictureTotal()) * 0.15).toFixed(2);
+      const calculatedTax = (parseFloat(getPictureTotal()) * taxRate).toFixed(
+        2
+      );
       setPictureTax(calculatedTax);
     }
   }, [showTaxButton, getPictureTotal]);
@@ -325,20 +325,20 @@ export default function ReceiptTable({
             <thead className="whitespace-no-wrap max-w-fit overflow-hidden truncate">
               <tr className="whitespace-no-wrap max-w-fit overflow-hidden px-2">
                 <th className="py-1 text-left sm:py-2">
-                  <span className="ml-1 border-b-2">Item</span>
+                  <span className="ml-1 border-b-2">{lang === "english" ? "Item" : "Article"}</span>
                 </th>
                 <th className="px-2 py-1 text-left sm:px-4 sm:py-2">
-                  <span className="border-b-2">Price</span>
+                  <span className="border-b-2">{lang === "english" ? "Price" : "Prix"}</span>
                 </th>
                 <th className="pl-1" colSpan={3} style={{ width: "33.33%" }}>
                   <span className="px-3 py-1 text-left sm:px-4 sm:py-2 ">
-                    <span className="border-b-2 text-left">Me</span>
+                    <span className="border-b-2 text-left">{lang === "english" ? "Me" : "Moi"}</span>
                   </span>
                   <span className="py-1 pr-3 pl-3 text-left sm:px-4 sm:py-2">
-                    <span className="border-b-2 text-center">Split</span>
+                    <span className="border-b-2 text-center">{lang === "english" ? "Split" : "Diviser"}</span>
                   </span>
                   <span className="px-2 py-1 text-left sm:px-4 sm:py-2 ">
-                    <span className="border-b-2 text-right">Them</span>
+                    <span className="border-b-2 text-right">{lang === "english" ? "Them" : "Eux"}</span>
                   </span>
                 </th>
               </tr>
@@ -351,7 +351,7 @@ export default function ReceiptTable({
                   type="amount"
                   className="form-control mb-1 w-20 px-1 text-xs font-bold"
                   id="colFormLabel"
-                  placeholder="Item Name"
+                  placeholder={lang === "english" ? "Item" : "Article"}
                   value={name}
                   onKeyDown={handleKeyDown}
                   onChange={handleNameChange}
@@ -361,9 +361,9 @@ export default function ReceiptTable({
                 <input
                   autoComplete="off"
                   type="amount"
-                  className="form-control mb-1 w-20 px-1 text-xs font-bold"
+                  className="form-control mb-1 w-16 px-1 text-xs font-bold"
                   id="colFormLabel"
-                  placeholder="Amount"
+                  placeholder={lang === "english" ? "Price" : "Prix"}
                   value={amount}
                   onKeyDown={handleKeyDown}
                   onChange={(e) => {
@@ -371,7 +371,6 @@ export default function ReceiptTable({
                     const isValid = /^\d+(\.\d{0,2})?$/.test(value);
 
                     if (isValid || value === "") {
-                      // Allow empty value
                       setAmount(value);
                       console.log("amount verified");
                     } else {
@@ -469,7 +468,6 @@ export default function ReceiptTable({
                   </td>
 
                   <td
-                    className="mr-2"
                     style={{
                       display: "flex",
                       alignItems: "center",
@@ -478,18 +476,14 @@ export default function ReceiptTable({
                   >
                     <input
                       type="text"
-                      className="my-2 ml-2  w-16 items-center justify-center py-1 text-xs text-black"
+                      className="my-2 ml-2 w-16 items-center justify-center py-1 text-xs text-black"
                       style={{
                         border:
                           item.confidence < 0.5 && !hasBeenAccessed
                             ? "1px solid red"
                             : "1px solid black",
                       }}
-                      value={
-                        !isNaN(parseFloat(item.amount)) && parseFloat(item.amount) !== 0
-                          ? `$${parseFloat(item.amount).toFixed(2)}`
-                          : `$${parseFloat(item.total_amount).toFixed(2) || "0.00"}`
-                      }
+                      value={item.amount}
                       onChange={(e) => {
                         if (!hasBeenAccessed) {
                           setHasBeenAccessed(true);
@@ -531,9 +525,7 @@ export default function ReceiptTable({
               <tr>
                 <td
                   className={
-                    theme === "dark"
-                      ? "py-1 text-white"
-                      : "py-1 text-black"
+                    theme === "dark" ? "py-1 text-white" : "py-1 text-black"
                   }
                   style={{ width: "33.33%" }}
                 >
@@ -546,13 +538,13 @@ export default function ReceiptTable({
                   <span
                     className={
                       theme === "dark"
-                        ? "border-b-2 text-white"
-                        : "border-b-2 text-black"
+                        ? "border-b-2 text-white text-xs"
+                        : "border-b-2 text-black text-xs"
                     }
                   >
                     $
                     {getPictureTotal().toString().length > 7
-                      ? getPictureTotal().toString().slice(0, 4) + "..."
+                      ? getPictureTotal().toString().slice(0, 4) + ".."
                       : getPictureTotal()}
                   </span>
                 </td>
@@ -619,42 +611,57 @@ export default function ReceiptTable({
                 <td></td>
                 <td></td>
               </tr>
-              <div className={theme === "dark" ? "bg-gray-900 h-2" : "bg-white h-2"}></div>
-              
-                
+              <div
+                className={
+                  theme === "dark" ? "bg-gray-900 h-2" : "bg-white h-2"
+                }
+              ></div>
+
               {pictureTax ? (
-                <tr className={theme === "dark"? "bg-gray-900 text-white":"bg-white text-black"} >
-                  <td className={theme === "dark" ? "text-white":"text-black"}>Tax
-                  
+                <tr
+                  className={
+                    theme === "dark"
+                      ? "bg-gray-900 text-white"
+                      : "bg-white text-black"
+                  }
+                >
+                  <td
+                    className={theme === "dark" ? "text-white" : "text-black"}
+                  >
+                    {lang === "english" ? "Tax" : "Impôt"}
                     <button
                       className={
                         theme === "dark"
                           ? "justify-right text-2xl text-white"
                           : "justify-right text-2xl text-black"
                       }
-                      
                       style={{ float: "right" }}
-                      onClick={() => {setPictureTax(0);setShowTableButton(true);}}
-                    >                      <IoMdRemoveCircleOutline />
+                      onClick={() => {
+                        setPictureTax(0);
+                        setShowTableButton(true);
+                      }}
+                    >
+                      {" "}
+                      <IoMdRemoveCircleOutline />
                     </button>
-                    </td>
-                    <input
-                      type="text"
-                      className="my-0 ml-2 w-16 py-1 text-xs text-black"
-                      style={{
-                        border:
-                          pictureConfidence < 0.5 && !hasBeenAccessed
-                            ? "1px solid red"
-                            : "1px solid black",
-                      }}
-                      value={`$${pictureTax}`}
-                      onChange={(e) => {
-                        if (!hasBeenAccessed) {
-                          setHasBeenAccessed(true);
-                        }
-                        handleTaxAmountChange(e.target.value);
-                      }}
-                    />
+                  </td>
+                  <input
+                    type="text"
+                    className="my-0 ml-2 w-14 px-0 py-1 text-xs text-black"
+                    style={{
+                      border:
+                        pictureConfidence < 0.5 && !hasBeenAccessed
+                          ? "1px solid red"
+                          : "1px solid black",
+                    }}
+                    value={`$${pictureTax}`}
+                    onChange={(e) => {
+                      if (!hasBeenAccessed) {
+                        setHasBeenAccessed(true);
+                      }
+                      handleTaxAmountChange(e.target.value);
+                    }}
+                  />
                   <td colSpan={3}>
                     <div
                       style={{
@@ -672,25 +679,33 @@ export default function ReceiptTable({
               ) : null}
               <tr className={theme === "dark" ? "bg-gray-900" : "bg-white"}>
                 <td colSpan={6} className="text-center">
-                  
-              <div className={theme === "dark" ? "bg-gray-900 h-3" : "bg-white h-3"}></div>
-              {showTaxButton ? 
-                  <button
+                  <div
                     className={
-                      theme === "dark"
-                        ? "bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                        : "bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                      theme === "dark" ? "bg-gray-900 h-3" : "bg-white h-3"
                     }
-                    onClick={() => {handleAutoTaxesToggle();}}
-                  >
-                    Auto taxes?
-                  </button> : ""}
+                  ></div>
+                  {showTaxButton ? (
+                    <button
+                      className={
+                        theme === "dark"
+                          ? "bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                          : "bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                      }
+                      onClick={() => {
+                        handleAutoTaxesToggle();
+                      }}
+                    >
+                      {lang === "english"
+                        ? "Auto Taxes?"
+                        : "Taxes Automatiques"}
+                    </button>
+                  ) : (
+                    ""
+                  )}
                 </td>
                 <td></td>
                 <td></td>
               </tr>
-       
-              
             </tfoot>
           </table>
         </div>
@@ -707,24 +722,25 @@ export default function ReceiptTable({
             <h2
               className={
                 theme === "dark"
-                  ? "text-white-200 mb-2 font-bold"
-                  : "justify-left mb-2 flex text-lg font-bold text-black"
+                  ? "text-white-200 mb-2 font-bold whitespace-nowrap"
+                  : "justify-left mb-2 flex text-lg font-bold text-black whitespace-nowrap"
               }
             >
-              Payment Details:
+              {lang === "english" ? "Payment Details" : "Détails de paiement"}
             </h2>
           </div>
 
           <label
             className={
               theme === "dark"
-                ? "flex justify-left text-lg w-full font-medium text-white"
-                : "flex justify-left text-lg w-full font-medium text-black"
+                ? "flex justify-left text-lg w-full font-medium text-white whitespace-nowrap"
+                : "flex justify-left text-lg w-full font-medium text-black whitespace-nowrap"
             }
           >
             {selectedValue === "you" ? (
               <>
-                {personName} owes you: $
+                {personName}{" "}
+                {lang === "english" ? "owes you: $" : "  vous doit: $"}
                 {parseFloat(personReceiptAmount).toFixed(2).toString().length >
                 15
                   ? parseFloat(personReceiptAmount)
@@ -735,7 +751,10 @@ export default function ReceiptTable({
               </>
             ) : (
               <>
-                You owe {personName}: $
+                {lang === "english"
+                  ? `You owe ${personName}`
+                  : `${personName} tu me dois `}{" "}
+                $
                 {parseFloat(personReceiptAmount).toFixed(2).toString().length >
                 15
                   ? parseFloat(personReceiptAmount)
@@ -747,34 +766,35 @@ export default function ReceiptTable({
             )}
           </label>
           <label
-          className={
-            theme === "dark"
-              ? "mt-0 flex items-center justify-left text-lg font-medium text-white"
-              : "mt-0 flex items-center justify-left text-lg font-medium text-black"
-          }
-        >
-          Receipt Total: ${finalTotal()}
-        </label>
+            className={
+              theme === "dark"
+                ? "mt-0 flex items-center justify-left text-lg font-medium text-white whitespace-nowrap"
+                : "mt-0 flex items-center justify-left text-lg font-medium text-black whitespace-nowrap"
+            }
+          >
+            {lang === "english" ? "Receipt Total: " : "Total des reçus: "}${finalTotal()}
+          </label>
         </div>
         {pictureTax ? (
-        <label
-        className={
-          theme === "dark"
-            ? "flex items-center justify-left text-lg font-medium text-white"
-            : "flex items-center justify-left text-lg font-medium text-black"
-        }
-      >
-        {selectedValue === "you"
-          ? `Taxes ${personName} owes you: $${isNaN(parseFloat(taxActual))
-              ? "0.00"
-              : parseFloat(taxActual).toFixed(2)}`
-          : `Taxes you owe ${personName}: $${isNaN(parseFloat(taxActual))
-              ? "0.00x"
-              : parseFloat(taxActual).toFixed(2)}`}
-      </label>
-      
+          <label
+            className={
+              theme === "dark"
+                ? "flex items-center justify-left text-lg font-medium text-white whitespace-no-wrap"
+                : "flex items-center justify-left text-lg font-medium text-black whitespace-no-wrap"
+            }
+          >
+          {
+  selectedValue === "you"
+    ? lang === "english"
+      ? `Taxes ${personName} owes you: $${isNaN(parseFloat(taxActual)) ? "0.00" : parseFloat(taxActual).toFixed(2)}`
+      : `Les impôts que ${personName} vous doit: $${isNaN(parseFloat(taxActual)) ? "0.00" : parseFloat(taxActual).toFixed(2)}`
+    : lang === "english"
+      ? `Taxes you owe ${personName}: $${isNaN(parseFloat(taxActual)) ? "0.00" : parseFloat(taxActual).toFixed(2)}`
+      : `Impôts que vous devez ${personName}: $${isNaN(parseFloat(taxActual)) ? "0.00" : parseFloat(taxActual).toFixed(2)}`
+}
+
+          </label>
         ) : null}
-       
       </div>
     </>
   );

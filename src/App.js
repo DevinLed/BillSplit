@@ -17,6 +17,7 @@ import Home from "./components/Home";
 import Header from "./components/Header";
 import EditList from "./components/EditList";
 import ReceiptInput from "./components/ReceiptInput";
+import Settings from "./components/Settings";
 import Footer from "./components/Footer";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -42,6 +43,22 @@ function App() {
     localStorage.setItem("theme", theme);
     document.body.className = theme;
   }, [theme]);
+  // language select
+  const [lang, setLang] = useState(localStorage.getItem("lang"));
+  // useEffect to track language
+  useEffect(() => {
+    localStorage.setItem("lang", lang);
+    document.body.className = lang;
+  }, [lang]);
+  // tax rate select
+  
+  const [taxRate, setTaxRate] = useState(localStorage.getItem("taxRate"));
+  // useEffect to track tax rate
+  useEffect(() => {
+    localStorage.setItem("taxRate", taxRate);
+    document.body.className = taxRate;
+  }, [taxRate]);
+  
 
   // Menus for edit person and edit group
   const [addPerson, setAddPerson] = useState(false);
@@ -84,13 +101,16 @@ function App() {
   // Landing page
   const [accessedApp, setAccessedApp] = useState(false);
 
+  // Settings page
   const [showConfirmation, setShowConfirmation] = useState(false);
   const handleClearData = () => {
     localStorage.clear();
     setList([]);
     setReceipts([]);
     setTheme("light");
+    setLang("english");
     setShowConfirmation(false);
+    setTaxRate(0);
   };
   // used to update values of balance for contacts
   const addNum = (id, val, val2) => {
@@ -167,15 +187,15 @@ function App() {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-  
+
     // Validate input fields here (e.g., check if personName, personPhone, personEmail, and personOwing are valid)
-  
+
     if (editPerson !== null) {
       // Editing an existing entry
-  
+
       // Find the index of the item in the list with the editPerson id
       const itemIndex = list.findIndex((row) => row.id === editPerson);
-  
+
       if (itemIndex !== -1) {
         // Update the item in the list with the edited values
         const updatedList = list.map((item) =>
@@ -189,16 +209,16 @@ function App() {
               }
             : item
         );
-  
+
         // Set the updated list in the parent component
         setList(updatedList);
       }
-  
+
       // Reset the editPerson state to null
       setEditPerson(null);
     } else {
       // Adding a new entry
-  
+
       const newItems = {
         personName,
         personPhone,
@@ -206,14 +226,14 @@ function App() {
         personOwing,
         id: uuidv4(),
       };
-  
+
       setList((prevList) => {
         const newList = [...prevList, newItems];
         localStorage.setItem("list", JSON.stringify(newList));
         return newList;
       });
     }
-  
+
     // Reset input fields and close the edit person popup
     setPersonName("");
     setPersonPhone("");
@@ -223,7 +243,7 @@ function App() {
     setIsEditing(false);
     setAddPerson(false);
   };
-  
+
   const selectPerson = (id) => {
     const selectingPerson = list.find((row) => row.id === id);
     setPersonName(selectingPerson.personName);
@@ -285,10 +305,15 @@ function App() {
               list={list}
               showConfirmation={showConfirmation}
               setShowConfirmation={setShowConfirmation}
+              lang={lang}
+              setLang={setLang}
             />
           }
         />
-        <Route path="/LandingPage" element={<LandingPage theme={theme} />} />
+        <Route
+          path="/LandingPage"
+          element={<LandingPage theme={theme} lang={lang} setLang={setLang} />}
+        />
         <Route path="/" element={<Navigate to="/LandingPage" />} />
 
         <Route
@@ -325,6 +350,9 @@ function App() {
               setSplitPictureTotal={setSplitPictureTotal}
               setThemPictureTotal={setThemPictureTotal}
               theme={theme}
+              taxRate={taxRate}
+              lang={lang}
+              setLang={setLang}
             />
           }
         />
@@ -355,6 +383,8 @@ function App() {
               setFormSubmitted={setFormSubmitted}
               theme={theme}
               handleAddSubmit={handleAddSubmit}
+              lang={lang}
+              setLang={setLang}
             />
           }
         />
@@ -385,11 +415,39 @@ function App() {
               value={value}
               theme={theme}
               handleAddSubmit={handleAddSubmit}
+              lang={lang}
+              setLang={setLang}
+            />
+          }
+        />
+        <Route
+          path="/Settings"
+          element={
+            <Settings
+              handleClearData={handleClearData}
+              showConfirmation={showConfirmation}
+              setShowConfirmation={setShowConfirmation}
+              taxRate={taxRate}
+              setTaxRate={setTaxRate}
+              theme={theme}
+              setTheme={setTheme}
+              lang={lang}
+              setLang={setLang}
             />
           }
         />
 
-        <Route path="/History" element={<History receipts={receipts} theme={theme}/>} />
+        <Route
+          path="/History"
+          element={
+            <History
+              receipts={receipts}
+              theme={theme}
+              lang={lang}
+              setLang={setLang}
+            />
+          }
+        />
 
         <Route
           path="/AddPerson"
@@ -399,6 +457,8 @@ function App() {
               setFormSubmitted={setFormSubmitted}
               theme={theme}
               handleAddSubmit={handleAddSubmit}
+              lang={lang}
+              setLang={setLang}
             />
           }
         />
@@ -417,10 +477,15 @@ function App() {
               personReceiptAmount={personReceiptAmount}
               setPersonReceiptAmount={setPersonReceiptAmount}
               theme={theme}
+              lang={lang}
+              setLang={setLang}
             />
           }
         />
-        <Route path="/EditPerson" element={<EditPerson theme={theme} />} />
+        <Route
+          path="/EditPerson"
+          element={<EditPerson theme={theme} lang={lang} setLang={setLang} />}
+        />
       </Routes>
     </>
   );
