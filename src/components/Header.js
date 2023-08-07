@@ -1,5 +1,8 @@
 import React from "react";
 import { IoIosArrowBack } from "react-icons/io";
+import {
+  IoArrowBackCircleOutline, IoArrowBackCircleSharp
+} from "react-icons/io5";
 import { AiOutlineMenu } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import App from "../App";
@@ -242,7 +245,7 @@ export default function Header({
               <IoIosArrowBack />
             </button>
           </Link>
-          <h1 className="whitespace-nowrap">Upload Picture</h1>
+          <h1 className="whitespace-nowrap">{lang === "english" ? "Upload Picture" : "Charger une photo"}</h1>
 
           <div className="dropdown">
             <button

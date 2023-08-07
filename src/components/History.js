@@ -45,7 +45,7 @@ export default function History({ receipts, theme, lang, setLang }) {
             </div>
             <div className="flex justify-center items-center mt-2">
               <p className="text-sm">
-                {receipt.selectedValue === "you" ? "You are owed" : "You owe"}
+                {receipt.selectedValue === "you" ? (lang === "english" ? "You are Owed" : "On vous doit") : (lang === "english" ? "You owe" : "Tu dois")}
               </p>
             </div>
             <div className="flex justify-center items-center">
@@ -57,8 +57,8 @@ export default function History({ receipts, theme, lang, setLang }) {
             <div className="flex justify-center items-center">
               <p className="text-sm">
                 {receipt.selectedValue === "you"
-                  ? "Taxes owed: "
-                  : "Taxes you owe: "}
+                  ? (lang === "english" ? "Taxes owed: " : "Impôts dus: ")
+                  : (lang === "english" ? "Taxes you owe: " : "Impôts que vous devez: ")}
                 {`$${
                   isNaN(receipt.taxActual)
                     ? 0
@@ -69,7 +69,7 @@ export default function History({ receipts, theme, lang, setLang }) {
 
             <div className="flex justify-center items-center mt-2">
               <p className="text-sm">
-                Receipt Total: ${receipt.receiptTotal || 0}
+              {lang === "english" ? "Receipt Total" : "Total des reçus"}: ${receipt.receiptTotal || 0}
               </p>
             </div>
             <div className="flex justify-center items-center mt-2">
@@ -119,7 +119,7 @@ export default function History({ receipts, theme, lang, setLang }) {
                   "mr-2 " + (theme === "dark" ? "text-white" : "text-gray-800")
                 }
               >
-                Filter By Person:
+                {lang === "english" ? "Filter by Person" : "Filtrer par personne"}
               </label>
 
               <select
@@ -132,7 +132,7 @@ export default function History({ receipts, theme, lang, setLang }) {
                 value={selectedPerson}
                 onChange={handlePersonNameChange}
               >
-                <option value="">All</option>
+                <option value="">{lang === "english" ? "All" : "Tout"}</option>
                 {personNames.map((name) => (
                   <option key={name} value={name}>
                     {name}

@@ -114,14 +114,14 @@ export default function EditPerson({
         <div className="relative w-full max-w-sm">
           <div className={theme === "dark" ? "overflow-hidden rounded-lg border border-gray-300 bg-gray-800 shadow-lg" : "overflow-hidden rounded-lg border border-gray-300 bg-white shadow-lg"}>
             <div className="flex items-center justify-evenly border-b border-gray-300 p-3">
-              <h3 className="text-xl font-semibold">Edit Person</h3>
+              <h3 className="text-xl font-semibold">{lang === "english" ? "Edit Person" : "Modifier le contact"}</h3>
             </div>
 
             <div className="p-4">
               <div className="text-center">
               <div className="mb-2">
         <label htmlFor="colFormLabel" className="sr-only">
-          Name
+        {lang === "english" ? "Name" : "Nom"}
         </label>
         <input
           type="name"
@@ -129,7 +129,7 @@ export default function EditPerson({
             isValidName ? "ring-green-300" : "ring-red-300"
           }`}
           id="colFormLabel"
-          placeholder="Name"
+          placeholder={lang === "english" ? "Name" : "Nom"}
           value={personName}
           onChange={handleNameChange}
           autoComplete="off"
@@ -155,13 +155,13 @@ export default function EditPerson({
 
                 <div className="mb-2">
                   <label htmlFor="colFormLabel" className="sr-only">
-                    Email
+                    E-mail
                   </label>
                   <input
                     type="email"
                     className={`form-control w-full rounded-lg py-2 px-3 focus:outline-none focus:ring ${isValidEmail ? "ring-green-300" : "ring-red-300"}`}
                     id="colFormLabel"
-                    placeholder="Email"
+                    placeholder="E-mail"
                     value={formSubmitted ? "" : personEmail}
                     onChange={handleEmailChange}
                     autoComplete="off"
@@ -170,7 +170,7 @@ export default function EditPerson({
 
                 <div className="mb-2">
                   <label htmlFor="colFormLabel" className={theme === "dark" ? "text-white label-one-line" : "text-black label-one-line"}>
-                    Balance?
+                  {lang === "english" ? "Balance?" : "Solde actuel?"}
                   </label>
                 </div>
 
@@ -217,7 +217,7 @@ export default function EditPerson({
                     }
                     onClick={handleResetBalance} // Step 5: Call the function to reset the balance
                   >
-                    Clear
+                    {lang === "english" ? "Clear" : "Solde actuel vide"}
                   </button>
                 </div>
 

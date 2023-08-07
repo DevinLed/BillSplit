@@ -44,7 +44,7 @@ export default function SplitBill({
         className="xs:max-w-xl bg-white-500 mt-5 rounded p-0 pt-3 shadow sm:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl"
         style={{ maxWidth: "600px" }}
       >
-        <Header selectPersonList={selectPersonList} lang={lang}/>
+        <Header selectPersonList={selectPersonList} lang={lang} theme={theme}/>
         <div className="flex flex-col items-center justify-center">
           {/* Table generator for people added */}
           <ul className="m-0 py-1 w-3/4">

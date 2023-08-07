@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import Header from "./Header";
 import { IoAlertCircle, IoLanguage } from "react-icons/io5";
+import { TbReceiptTax } from "react-icons/tb";
 import { CSSTransition } from "react-transition-group";
 
 export default function Settings({
@@ -39,8 +40,9 @@ export default function Settings({
   const handleRegionSelect = (selectedTaxRate) => {
     setSelectedTaxRate(selectedTaxRate); // Update the selected tax rate
     setTaxRate(selectedTaxRate); // Update the tax rate
+    setTheme(!theme);
   };
-  
+
   const [customTaxRate, setCustomTaxRate] = useState("");
 
   const handleConfirmClearData = () => {
@@ -81,12 +83,12 @@ export default function Settings({
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
               className={
                 theme === "dark"
-                  ? "flex h-24 w-fit cursor-pointer flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-700 hover:no-underline"
-                  : "flex h-24 w-fit cursor-pointer flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
+                  ? "flex h-24 w-fit cursor-pointer flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white p-0 text-sm font-semibold shadow-md hover:bg-gray-700 hover:no-underline"
+                  : "flex h-24 w-fit cursor-pointer flex-col items-center justify-center rounded-lg border border-gray-200 bg-white p-0 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
               }
             >
               <div style={{ width: "24px", height: "24px" }}>
-                <IoAlertCircle size={24} />
+                <TbReceiptTax size={24} />
               </div>
               <span
                 className={
@@ -96,8 +98,8 @@ export default function Settings({
                 }
               >
                 {lang === "english"
-                  ? "Select Tax Rate"
-                  : "Choisir le taux d'imposition"}
+                  ? "Tax %"
+                  : "Impôt %"}
               </span>
             </label>
             <CSSTransition
@@ -106,55 +108,52 @@ export default function Settings({
               classNames="fade1"
               unmountOnExit
             >
-             <div className="dropdown w-full mt-2 mx-auto text-center">
-  <div className="dropdown-content w-full absolute bg-white rounded-lg shadow-lg">
-    {regions.map((region) => (
-      <button
-        key={region.name}
-        className={
-          "dropdown-option cursor-pointer w-full flex items-center justify-center p-2 border-b-2 border-gray-300" +
-          (theme === "dark"
-            ? "bg-gray-900 text-white"
-            : "bg-white text-gray-800")
-        }
-        
-        onClick={() => {
-          handleRegionSelect(region.taxRate);
-          setIsDropdownOpen(false);
-        }}
-      >
-        <span className="ml-2 ">{region.name}</span>
-      </button>
-    ))}
-    <div className="dropdown-option flex items-center p-2">
-      <input
-        type="number"
-        placeholder={lang === "english" ? "Custom" : "Coutume"}
-        value={customTaxRate}
-        onChange={(e) => setCustomTaxRate(e.target.value)}
-        className="ml-2 my-auto border rounded px-1 pt-2 w-16 h-6"
-      />
-      <button
-        className={
-          "ml-2 cursor-pointer w-full " +
-          (theme === "dark"
-            ? "bg-gray-900 text-white"
-            : "bg-white text-gray-800")
-        }
-        onClick={() => {
-          handleRegionSelect(customTaxRate);
-          setCustomTaxRate("");
-          setIsDropdownOpen(false);
-        }}
-      >
-        {lang === "english" ? "Set" : "Appliquer"}
-      </button>
-    </div>
-  </div>
-</div>
-
+              <div className="dropdown w-full mt-2 mx-auto text-center">
+                <div className="dropdown-content w-full absolute bg-gray-600 rounded-lg shadow-lg">
+                  {regions.map((region) => (
+                    <button
+                      key={region.name}
+                      className={
+                        "dropdown-option cursor-pointer w-full flex items-center justify-center p-2 border-b-2 border-gray-300" +
+                        (theme === "dark"
+                          ? "bg-gray-900 text-black"
+                          : "bg-white text-gray-800")
+                      }
+                      onClick={() => {
+                        handleRegionSelect(region.taxRate);
+                        setIsDropdownOpen(false);
+                      }}
+                    >
+                      <span className="ml-2 ">{region.name}</span>
+                    </button>
+                  ))}
+                  <div className="dropdown-option flex items-center p-2">
+                    <input
+                      type="number"
+                      placeholder={lang === "english" ? "Custom" : "Coutume"}
+                      value={customTaxRate}
+                      onChange={(e) => setCustomTaxRate(e.target.value)}
+                      className="ml-2 my-auto border rounded px-1 pt-2 w-16 h-6"
+                    />
+                    <button
+                      className={
+                        "ml-2 cursor-pointer w-full " +
+                        (theme === "dark"
+                          ? "bg-gray-900 text-white"
+                          : "bg-white text-gray-800")
+                      }
+                      onClick={() => {
+                        handleRegionSelect(customTaxRate);
+                        setCustomTaxRate("");
+                        setIsDropdownOpen(false);
+                      }}
+                    >
+                      {lang === "english" ? "Set" : "Appliquer"}
+                    </button>
+                  </div>
+                </div>
+              </div>
             </CSSTransition>
-
 
             {/* Display current tax rate */}
             <p className="text-center mt-4">
@@ -184,7 +183,7 @@ export default function Settings({
                   : "text-gray-800 text-center"
               }
             >
-              {lang === "english" ? "Clear Data" : "Effacer toutes les données"}
+              {lang === "english" ? "Clear Data" : "Tout effacer"}
             </span>
           </label>
 
@@ -273,11 +272,13 @@ export default function Settings({
                   (theme === "dark" ? "bg-gray-800" : "bg-gray-100")
                 }
               >
-                <p className={
-              theme === "dark"
-                ? "text-white whitespace-nowrap"
-                : "text-black whitespace-nowrap"
-            }>
+                <p
+                  className={
+                    theme === "dark"
+                      ? "text-white whitespace-nowrap"
+                      : "text-black whitespace-nowrap"
+                  }
+                >
                   {lang === "english"
                     ? "Are you sure you want to clear all data?"
                     : "Voulez-vous vraiment effacer toutes les données ?"}

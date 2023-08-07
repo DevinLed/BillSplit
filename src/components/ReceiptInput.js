@@ -64,9 +64,8 @@ export default function ReceiptInput({
   lang,
   setLang,
 }) {
-  
-registerLocale("en", en);
-registerLocale("fr", fr);
+  registerLocale("en", en);
+  registerLocale("fr", fr);
   const [selectPersonReceipt, setSelectPersonReceipt] = useState(true);
   const [selectMethodManual, setSelectMethodManual] = useState(false);
   const [selectMethodPicture, setSelectMethodPicture] = useState(false);
@@ -103,6 +102,9 @@ registerLocale("fr", fr);
 
   const handleInvoiceNumberFocus = () => {
     setInvoiceNumberFocused(true);
+  };
+  const resetCombinedArray = () => {
+    setCombinedArray([]);
   };
 
   const handleScroll = () => {
@@ -362,7 +364,12 @@ registerLocale("fr", fr);
               />
 
               <div className="flex flex-col items-center justify-center">
-                <h1>{lang === "english" ? "Split a receipt with " : "Fractionner un reçu avec "}{personName}</h1>
+                <h1>
+                  {lang === "english"
+                    ? "Split a receipt with "
+                    : "Fractionner un reçu avec "}
+                  {personName}
+                </h1>
                 <ul className="list-group items-center justify-center">
                   <Link className="flex flex-col items-center justify-center">
                     <label
@@ -440,7 +447,11 @@ registerLocale("fr", fr);
                           (theme === "dark" ? "bg-gray-800" : "bg-gray-100")
                         }
                         id="colFormLabel"
-                        placeholder={lang === "english" ? "Merchant Name" : "Nom du commerçant"}
+                        placeholder={
+                          lang === "english"
+                            ? "Merchant Name"
+                            : "Nom du commerçant"
+                        }
                         onKeyDown={handleKeyDown}
                         onChange={(e) =>
                           setMerchantName(
@@ -459,7 +470,9 @@ registerLocale("fr", fr);
                             (theme === "dark" ? "bg-gray-800" : "bg-gray-100")
                           }
                           id="colFormLabel"
-                          placeholder={lang === "english" ? "Invoice #" : "Facture #"}
+                          placeholder={
+                            lang === "english" ? "Invoice #" : "Facture #"
+                          }
                           onKeyDown={handleKeyDown}
                           onChange={(e) => setInvoiceNumber(e.target.value)}
                           onClick={() => setDisplayInvoice(true)}
@@ -529,7 +542,7 @@ registerLocale("fr", fr);
                             setDisplayInvoice(false);
                           }}
                         >
-                          Me
+                          {lang === "english" ? "Me" : "Moi"}
                         </button>
                         <button
                           className={`m-0 rounded-r border-l ${
@@ -565,7 +578,9 @@ registerLocale("fr", fr);
                               : "col-form-label text-center text-black"
                           }
                         >
-                          {lang === "english" ? "Date of Receipt" : "Date de réception"}
+                          {lang === "english"
+                            ? "Date of Receipt"
+                            : "Date de réception"}
                         </label>
                         <div className="justify-left z-50 mt-3 mb-3 text-center">
                           <DatePicker
@@ -576,13 +591,14 @@ registerLocale("fr", fr);
                             onFocus={(e) => e.target.blur()}
                             dateFormat="dd/MM/yyyy"
                             onClick={() => setDisplayDate(true)}
-                            locale={lang === "english" ? "en" : "fr"} 
+                            locale={lang === "english" ? "en" : "fr"}
                           />
                         </div>
                       </div>
 
                       <div className="flex-column flex items-center justify-center">
                         <ReceiptTable
+                          resetCombinedArray={resetCombinedArray}
                           taxRate={taxRate}
                           taxActual={taxActual}
                           taxReal={taxReal}
@@ -648,10 +664,10 @@ registerLocale("fr", fr);
                         }
                         onClick={(e) => {
                           getFinalTotal();
-                          setSelectMethodPicture(false);
+                          resetCombinedArray();
+                          setSelectMethodManual(false);
                           setSelectPersonReceipt(true);
                           handleHistorySubmit(e);
-                          resetReceiptForm();
                           setIsReceiptSubmitted(true);
                         }}
                       >
@@ -668,9 +684,9 @@ registerLocale("fr", fr);
                             ? "bg-gray-900 text-white"
                             : "bg-white text-gray-800")
                         }
-                        onClick={(e) => {                          
+                        onClick={(e) => {
                           const finalTotal = getFinalTotal();
-                          if (finalTotal === 0 ) {
+                          if (finalTotal === 0) {
                             // Handle the error case and prevent further actions
                             console.error("Error: Invalid final total");
                             return;
@@ -732,7 +748,7 @@ registerLocale("fr", fr);
                         setDisplayInvoice(false);
                       }}
                     >
-                      Me
+                      {lang === "english" ? "Me" : "Moi"}
                     </button>
                     <button
                       className={`m-0 rounded-r border-l ${
@@ -773,7 +789,9 @@ registerLocale("fr", fr);
                           }
                         >
                           <IoRepeatSharp size={24} />
-                          Redo picture
+                          {lang === "english"
+                            ? "Redo Picture"
+                            : "Reprendre la photo"}
                         </label>
                       </div>
                     ) : (
@@ -796,7 +814,9 @@ registerLocale("fr", fr);
                         onClick={handleCameraSubmit}
                       >
                         <IoCheckmarkCircle size={24} />
-                        Process Receipt Image
+                        {lang === "english"
+                          ? "Process Receipt Image"
+                          : "Traiter l'image du reçu"}
                       </label>
                     </div>
                   </div>
@@ -817,7 +837,12 @@ registerLocale("fr", fr);
                                   type="amount"
                                   className="form-control mt-3 h-10 bg-gray-900 text-left font-bold text-gray-300 outline-none"
                                   id="colFormLabel"
-                                  placeholder={merchantName || "Merchant Name"}
+                                  placeholder={
+                                    merchantName ||
+                                    (lang === "english"
+                                      ? "Merchant Name"
+                                      : "Nom du commerçant")
+                                  }
                                   onKeyDown={handleKeyDown}
                                   onChange={(e) =>
                                     setMerchantName(
@@ -834,7 +859,11 @@ registerLocale("fr", fr);
                                     type="invoice"
                                     className="form-control opacity-4 mb-3 w-40 bg-gray-900 text-left font-bold text-gray-300 outline-none"
                                     id="colFormLabel"
-                                    placeholder="Invoice Number"
+                                    placeholder={
+                                      lang === "english"
+                                        ? "Invoice #"
+                                        : "Facture #"
+                                    }
                                     onKeyDown={handleKeyDown}
                                     onChange={(e) =>
                                       setInvoiceNumber(e.target.value)
@@ -860,7 +889,9 @@ registerLocale("fr", fr);
                                     : "text-xl font-bold text-black"
                                 }
                               >
-                                {lang === "english" ? "Split With:" : "Diviser avec"}
+                                {lang === "english"
+                                  ? "Split With:"
+                                  : "Diviser avec"}
                               </h2>
                               <p
                                 className={
@@ -907,7 +938,7 @@ registerLocale("fr", fr);
                                       setDisplayInvoice(false);
                                     }}
                                   >
-                                    Me
+                                    {lang === "english" ? "Me" : "Moi"}
                                   </button>
                                   <button
                                     className={`m-0 rounded-r border-l ${
@@ -945,7 +976,9 @@ registerLocale("fr", fr);
                                         : "col-form-label text-center text-black"
                                     }
                                   >
-                                    Date of Receipt
+                                    {lang === "english"
+                                      ? "Date of Receipt"
+                                      : "Date de réception"}
                                   </label>
                                   <div className="justify-left z-50 mt-3 mb-3 text-center">
                                     <DatePicker
@@ -956,6 +989,7 @@ registerLocale("fr", fr);
                                       onFocus={(e) => e.target.blur()}
                                       dateFormat="dd/MM/yyyy"
                                       onClick={() => setDisplayDate(true)}
+                                      locale={lang === "english" ? "en" : "fr"}
                                     />
                                   </div>
                                 </div>
@@ -963,6 +997,8 @@ registerLocale("fr", fr);
                                 <div className="flex-column flex items-center justify-center">
                                   <div>
                                     <ReceiptTable
+                                    taxRate={taxRate}
+                                      resetCombinedArray={resetCombinedArray}
                                       taxActual={taxActual}
                                       taxReal={taxReal}
                                       setTaxReal={setTaxReal}
@@ -1032,10 +1068,10 @@ registerLocale("fr", fr);
                                   }
                                   onClick={(e) => {
                                     getFinalTotal();
+                                    resetCombinedArray();
                                     setSelectMethodPicture(false);
                                     setSelectPersonReceipt(true);
                                     handleHistorySubmit(e);
-                                    resetReceiptForm();
                                     setIsReceiptSubmitted(true);
                                   }}
                                 >
@@ -1053,14 +1089,15 @@ registerLocale("fr", fr);
                                       : "bg-white text-gray-800")
                                   }
                                   onClick={(e) => {
-
                                     const finalTotal = getFinalTotal();
-                                    if (finalTotal === 0 ) {
+                                    if (finalTotal === 0) {
                                       // Handle the error case and prevent further actions
-                                      console.error("Error: Invalid final total");
+                                      console.error(
+                                        "Error: Invalid final total"
+                                      );
                                       return;
                                     }
-                                    
+
                                     getFinalTotal();
                                     handleHistorySubmit(e);
                                     resetReceiptForm();

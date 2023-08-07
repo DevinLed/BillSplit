@@ -55,7 +55,6 @@ export default function ReceiptTable({
   const handleNameChange = (event) => {
     setName(event.target.value);
   };
-
   // Calculate the final total of the entire receipt, both picture and manually added
   const finalTotal = () => {
     let total =
@@ -121,6 +120,7 @@ export default function ReceiptTable({
     setPictureTax(calculatedTax);
     setIsAddingItem(true);
     setShowTableButton(false);
+    console.log(taxRate)
   };
 
   // Handler for when on mobile, enter key will collapse the keyboard popup
@@ -158,20 +158,26 @@ export default function ReceiptTable({
   };
   // Handler for changing the values in item.amount
   const handleAmountChange = (value, index) => {
-    if (!value) {
-      value = "0"; // Set value to 0 if it's empty
-    } else {
-      const isValid = /^\d+(\.\d{0,2})?$/.test(value);
-      if (!isValid) {
-        console.log("amount not verified");
-        return; // Exit the function early if the value is not valid
-      }
-    }
+    const newValue = value.replace(/^\$/, "");
 
+    let parsedValue = newValue.replace(/[^0-9.]/g, "");
+
+    const decimalIndex = parsedValue.indexOf(".");
+    if (decimalIndex !== -1) {
+      parsedValue =
+        parsedValue.slice(0, decimalIndex + 1) +
+        parsedValue.slice(decimalIndex + 1).replace(".", "");
+    }
+    const decimalSplit = parsedValue.split(".");
+    if (decimalSplit[1] && decimalSplit[1].length > 2) {
+      parsedValue = decimalSplit[0] + "." + decimalSplit[1].slice(0, 2);
+    }
+    if (isNaN(parsedValue)) {
+      parsedValue = "0"; // Set to a default value (0 in this case)
+    }
     const updatedCombinedArray = [...combinedArray];
-    updatedCombinedArray[index].amount = value;
+    updatedCombinedArray[index].amount = parsedValue || "0";
     setCombinedArray(updatedCombinedArray);
-    console.log("amount verified");
   };
   // Handler for manually editting Tax amount
   const handleTaxAmountChange = (value) => {
@@ -255,6 +261,7 @@ export default function ReceiptTable({
       }))
     );
   }, []);
+  
   // combing the 2 arrays, picture and manually entered
   useEffect(() => {
     if (Array.isArray(items) && Array.isArray(obtainedInfo)) {
@@ -361,7 +368,7 @@ export default function ReceiptTable({
                 <input
                   autoComplete="off"
                   type="amount"
-                  className="form-control mb-1 w-16 px-1 text-xs font-bold"
+                  className="form-control mb-1 w-14 px-1 text-xs font-bold"
                   id="colFormLabel"
                   placeholder={lang === "english" ? "Price" : "Prix"}
                   value={amount}
@@ -476,7 +483,7 @@ export default function ReceiptTable({
                   >
                     <input
                       type="text"
-                      className="my-2 ml-2 w-16 items-center justify-center py-1 text-xs text-black"
+                      className="my-2 ml-2 w-14 items-center justify-center py-1 text-xs text-black"
                       style={{
                         border:
                           item.confidence < 0.5 && !hasBeenAccessed
@@ -647,7 +654,7 @@ export default function ReceiptTable({
                   </td>
                   <input
                     type="text"
-                    className="my-0 ml-2 w-14 px-0 py-1 text-xs text-black"
+                    className="my-0 ml-2 w-14 px-0 py-1 text-xs text-black text-center"
                     style={{
                       border:
                         pictureConfidence < 0.5 && !hasBeenAccessed
