@@ -54,7 +54,7 @@ export default function SplitBill({
                   <Link
                     to={`/ReceiptInput/${id}`}
                     onClick={() => selectPerson(id)}
-                    className="no-underline"
+                    className="no-underline py-1"
                   >
                     <li
                       className={

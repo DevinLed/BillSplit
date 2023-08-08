@@ -164,6 +164,14 @@ function App() {
     console.log("this is to sub");
   };
   // Handler for full reset of tables.
+  const handleResetCombinedArray = () => {
+    setCombinedArray([]);
+    setObtainedInfo([]);
+    console.log("being accessed");
+  };
+  const [combinedArray, setCombinedArray] = useState([]);
+  
+  const [obtainedInfo, setObtainedInfo] = useState([]);
   const handleAddSubmit = (e) => {
     const newItems = {
       personName,
@@ -353,6 +361,11 @@ function App() {
               taxRate={taxRate}
               lang={lang}
               setLang={setLang}
+              combinedArray={combinedArray}
+              setCombinedArray={setCombinedArray}
+              handleResetCombinedArray={handleResetCombinedArray}
+              obtainedInfo={obtainedInfo}
+              setObtainedInfo={setObtainedInfo}
             />
           }
         />
@@ -479,6 +492,11 @@ function App() {
               theme={theme}
               lang={lang}
               setLang={setLang}
+              combinedArray={combinedArray}
+              setCombinedArray={setCombinedArray}
+              handleResetCombinedArray={handleResetCombinedArray}
+              obtainedInfo={obtainedInfo}
+              setObtainedInfo={setObtainedInfo}
             />
           }
         />

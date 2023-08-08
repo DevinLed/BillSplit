@@ -48,6 +48,7 @@ export default function ReceiptTable({
   taxRate,
   lang,
   setLang,
+  handleResetCombinedArray
 }) {
   // Handler for changing the name of the item added to array
   const [isAddingItem, setIsAddingItem] = useState(false);
@@ -802,6 +803,7 @@ export default function ReceiptTable({
 
           </label>
         ) : null}
+        
       </div>
     </>
   );

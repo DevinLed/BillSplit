@@ -309,7 +309,11 @@ export default function AddPerson({
                               setErrorMsg("");
                             } else {
                               setErrorBalance(false);
-                              setErrorMsg("Please enter a valid number");
+                              setErrorMsg(
+                                lang === "english"
+                                  ? "Please enter a valid number"
+                                  : "S'il vous plait, entrez un nombre valide"
+                              );;
                             }
                           }}
                           style={{ borderColor: "lightblue" }}

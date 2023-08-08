@@ -72,7 +72,7 @@ export default function Header({
                 </Link>
                 <Link to="/History">
                   <button className="dropdown-item" type="button">
-                  {lang === "english" ? "History" : "Histoire"}
+                  {lang === "english" ? "History" : "Historique"}
                   </button>
                 </Link>
                 
@@ -121,7 +121,7 @@ export default function Header({
                   <button className="dropdown-item">{lang === "english" ? "New Receipt" : "Nouveau reçu"}</button>
                 </Link>
                 <Link to="/History">
-                  <button className="dropdown-item">{lang === "english" ? "History" : "Histoire"}</button>
+                  <button className="dropdown-item">{lang === "english" ? "History" : "Historique"}</button>
                 </Link>
                 
                 <Link to="/Settings">
@@ -169,7 +169,7 @@ export default function Header({
               </Link>
 
               <Link to="/History">
-                <button className="dropdown-item">{lang === "english" ? "History" : "Histoire"}</button>
+                <button className="dropdown-item">{lang === "english" ? "History" : "Historique"}</button>
               </Link>
               
               <Link to="/Settings">
@@ -220,7 +220,7 @@ export default function Header({
               </Link>
 
               <Link to="/History">
-                <button className="dropdown-item">{lang === "english" ? "History" : "Histoire"}</button>
+                <button className="dropdown-item">{lang === "english" ? "History" : "Historique"}</button>
               </Link>
               
               <Link to="/Settings">
@@ -270,7 +270,7 @@ export default function Header({
               </Link>
 
               <Link to="/History">
-                <button className="dropdown-item">{lang === "english" ? "History" : "Histoire"}</button>
+                <button className="dropdown-item">{lang === "english" ? "History" : "Historique"}</button>
               </Link>
               
               <Link to="/Settings">
@@ -316,7 +316,7 @@ export default function Header({
                   <button className="dropdown-item">{lang === "english" ? "Edit Person" : "Modifier la personne"}</button>
                 </Link>
                 <Link to="/History">
-                <button className="dropdown-item">{lang === "english" ? "History" : "Histoire"}</button>
+                <button className="dropdown-item">{lang === "english" ? "History" : "Historique"}</button>
               </Link>
               </div>
             </div>
@@ -336,7 +336,7 @@ export default function Header({
                 <IoIosArrowBack />
               </button>
             </Link>
-            <h1 className="whitespace-nowrap">{lang === "english" ? "History" : "Histoire"}</h1>
+            <h1 className="whitespace-nowrap">{lang === "english" ? "History" : "Historique"}</h1>
             <div className="dropdown">
               <button
                 className="mr-2 text-black hover:text-black"

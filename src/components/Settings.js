@@ -97,9 +97,7 @@ export default function Settings({
                     : "text-gray-800 text-center"
                 }
               >
-                {lang === "english"
-                  ? "Tax %"
-                  : "Impôt %"}
+                {lang === "english" ? "Tax %" : "Impôt %"}
               </span>
             </label>
             <CSSTransition
@@ -109,14 +107,19 @@ export default function Settings({
               unmountOnExit
             >
               <div className="dropdown w-full mt-2 mx-auto text-center">
-                <div className="dropdown-content w-full absolute bg-gray-600 rounded-lg shadow-lg">
+                <div
+                  className={
+                    "dropdown-content w-full absolute rounded-lg shadow-lg " +
+                    (theme === "dark" ? "bg-gray-900" : "bg-white")
+                  }
+                >
                   {regions.map((region) => (
                     <button
                       key={region.name}
                       className={
                         "dropdown-option cursor-pointer w-full flex items-center justify-center p-2 border-b-2 border-gray-300" +
                         (theme === "dark"
-                          ? "bg-gray-900 text-black"
+                          ? "bg-gray-900 text-white"
                           : "bg-white text-gray-800")
                       }
                       onClick={() => {
@@ -163,37 +166,14 @@ export default function Settings({
               : {taxRate === "" ? "Custom" : `${(taxRate * 100).toFixed(2)}%`}
             </p>
           </div>
-
-          {/* Clear Data Label */}
-          <label
-            onClick={handleConfirmClearData}
-            className={
-              theme === "dark"
-                ? "flex h-24 w-fit cursor-pointer flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-700 hover:no-underline"
-                : "flex h-24 w-fit cursor-pointer flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
-            }
-          >
-            <div style={{ width: "24px", height: "24px" }}>
-              <IoAlertCircle size={24} />
-            </div>
-            <span
-              className={
-                theme === "dark"
-                  ? "text-white text-center"
-                  : "text-gray-800 text-center"
-              }
-            >
-              {lang === "english" ? "Clear Data" : "Tout effacer"}
-            </span>
-          </label>
-
           {/* Language Label */}
           <label
             onClick={(e) => setShowLang(true)}
             className={
-              theme === "dark"
-                ? "flex h-24 w-fit cursor-pointer flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-700 hover:no-underline"
-                : "flex h-24 w-fit cursor-pointer flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
+              `mb-3 flex h-24 w-fit cursor-pointer flex-col items-center justify-center 
+               rounded-lg border ${theme === "dark" ? "border-gray-900 bg-gray-900 text-white" : "border-gray-200 bg-white"} 
+               py-4 px-6 text-sm font-semibold shadow-md 
+               hover:bg-${theme === "dark" ? "gray-700" : "gray-200"} hover:no-underline`
             }
           >
             <div style={{ width: "24px", height: "24px" }}>
@@ -243,10 +223,10 @@ export default function Settings({
                     </button>
                     <button
                       className={
-                        "px-4 py-2 rounded hover:bg-gray-900 " +
+                        "px-4 py-2 rounded hover:bg-gray-900 text-gray-800 " +
                         (theme === "dark"
                           ? "bg-gray-300 text-gray-800"
-                          : "bg-gray-800")
+                          : "bg-gray-300")
                       }
                       onClick={handleCancelLang}
                     >
@@ -257,6 +237,29 @@ export default function Settings({
               </div>
             </div>
           </CSSTransition>
+
+          {/* Clear Data Label */}
+          <label
+            onClick={handleConfirmClearData}
+            className={
+              theme === "dark"
+                ? "flex h-24 w-fit cursor-pointer flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-700 hover:no-underline"
+                : "flex h-24 w-fit cursor-pointer flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
+            }
+          >
+            <div style={{ width: "24px", height: "24px" }}>
+              <IoAlertCircle size={24} />
+            </div>
+            <span
+              className={
+                theme === "dark"
+                  ? "text-white text-center"
+                  : "text-gray-800 text-center"
+              }
+            >
+              {lang === "english" ? "Clear Data" : "Tout effacer"}
+            </span>
+          </label>
 
           {/* Confirmation Popup */}
           <CSSTransition

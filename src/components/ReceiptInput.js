@@ -63,9 +63,16 @@ export default function ReceiptInput({
   taxRate,
   lang,
   setLang,
+  combinedArray,
+  setCombinedArray,
+  handleResetCombinedArray,
+  obtainedInfo,
+  setObtainedInfo,
 }) {
   registerLocale("en", en);
   registerLocale("fr", fr);
+
+  const [submissionError, setSubmissionError] = useState(true);
   const [selectPersonReceipt, setSelectPersonReceipt] = useState(true);
   const [selectMethodManual, setSelectMethodManual] = useState(false);
   const [selectMethodPicture, setSelectMethodPicture] = useState(false);
@@ -78,7 +85,6 @@ export default function ReceiptInput({
   const [showCameraImage, setShowCameraImage] = useState(false);
   const [showRedoButton, setShowRedoButton] = useState(false);
   const [displayPictureInfo, setDisplayPictureInfo] = useState(false);
-  const [obtainedInfo, setObtainedInfo] = useState([]);
   const [isAddedManually, setIsAddedManually] = useState(false);
   const { id } = useParams();
   const [items, setItems] = useState([]);
@@ -90,7 +96,6 @@ export default function ReceiptInput({
   const [youTotal, setYouTotal] = useState(0);
   const [splitTotal, setSplitTotal] = useState(0);
   const [themTotal, setThemTotal] = useState(0);
-  const [combinedArray, setCombinedArray] = useState([]);
   const [selected, setSelected] = useState(null);
   const [isMerchantNameFocused, setMerchantNameFocused] = useState(false);
   const [isInvoiceNumberFocused, setInvoiceNumberFocused] = useState(false);
@@ -326,14 +331,9 @@ export default function ReceiptInput({
 
   // Used to update the balance of the person you are splitting receipt with
   const getFinalTotal = () => {
-    let taxFinal = taxReal;
     if (selectedValue === "you") {
-      console.log(personReceiptAmount);
-      console.log("tax : " + taxActual);
       addNum(id, personReceiptAmount, taxActual);
     } else {
-      console.log(personReceiptAmount);
-      console.log("tax : " + taxActual);
       subNum(id, personReceiptAmount, taxActual);
     }
   };
@@ -383,6 +383,7 @@ export default function ReceiptInput({
                       onClick={(e) => {
                         setSelectMethodManual(true);
                         setSelectPersonReceipt(false);
+                        setPersonReceiptAmount(0);
                       }}
                     >
                       <IoCreateOutline size={24} />
@@ -598,6 +599,7 @@ export default function ReceiptInput({
 
                       <div className="flex-column flex items-center justify-center">
                         <ReceiptTable
+                          handleResetCombinedArray={handleResetCombinedArray}
                           resetCombinedArray={resetCombinedArray}
                           taxRate={taxRate}
                           taxActual={taxActual}
@@ -649,8 +651,8 @@ export default function ReceiptInput({
                 <div
                   className={
                     theme === "dark"
-                      ? "grid grid-cols-2 gap-y-0 bg-gray-900 py-4 justify-center"
-                      : "grid grid-cols-2 gap-y-0 bg-white py-4 justify-center"
+                      ? "grid grid-cols-2 gap-y-0 bg-gray-900 py-4 justify-center text-center"
+                      : "grid grid-cols-2 gap-y-0 bg-white py-4 justify-center text-center"
                   }
                 >
                   <div className="m-2 mb-4 flex flex-col justify-center items-center sm:flex-row">
@@ -663,12 +665,20 @@ export default function ReceiptInput({
                             : "bg-white text-gray-800")
                         }
                         onClick={(e) => {
+                          const finalTotal = personReceiptAmount;
+                          if (finalTotal === 0) {
+                            // Handle the error case and prevent further actions
+                            console.error("Error: Invalid final total");
+                            setSubmissionError(false);
+                          } else {
                           getFinalTotal();
-                          resetCombinedArray();
+                          handleResetCombinedArray();
                           setSelectMethodManual(false);
                           setSelectPersonReceipt(true);
                           handleHistorySubmit(e);
                           setIsReceiptSubmitted(true);
+                          setInvoiceNumber(0);
+                          }
                         }}
                       >
                         <IoDuplicateOutline size={24} />
@@ -676,7 +686,6 @@ export default function ReceiptInput({
                     </Link>
                   </div>
                   <div className="m-2 mb-4 flex flex-col justify-center items-center sm:flex-row">
-                    <Link to="/SplitBill">
                       <label
                         className={
                           "flex h-24 w-28 flex-col items-center justify-center rounded-lg border border-gray-200 py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline " +
@@ -685,22 +694,34 @@ export default function ReceiptInput({
                             : "bg-white text-gray-800")
                         }
                         onClick={(e) => {
-                          const finalTotal = getFinalTotal();
+                          const finalTotal = personReceiptAmount;
                           if (finalTotal === 0) {
                             // Handle the error case and prevent further actions
                             console.error("Error: Invalid final total");
-                            return;
+                            setSubmissionError(false);
+                          } else {
+                            setSubmissionError(true);
+                            getFinalTotal();
+                            handleResetCombinedArray();
+                            handleHistorySubmit(e);
+                            resetReceiptForm();
+                            setIsReceiptSubmitted(true);
+                            window.location.href = "/SplitBill#/SplitBill";
                           }
-                          getFinalTotal();
-                          handleHistorySubmit(e);
-                          resetReceiptForm();
-                          setIsReceiptSubmitted(true);
                         }}
                       >
                         <IoExitOutline size={24} />
                       </label>
-                    </Link>
                   </div>
+                  {!submissionError && (
+                    <div className="flex justify-center items-center col-span-2">
+                    <p className="mb-2 text-center text-sm text-red-500 w-max mr-1/2">
+                      {lang === "english"
+                        ? "Please add an item before submitting."
+                        : "Veuillez ajouter un élément avant de soumettre."}
+                    </p>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -997,7 +1018,10 @@ export default function ReceiptInput({
                                 <div className="flex-column flex items-center justify-center">
                                   <div>
                                     <ReceiptTable
-                                    taxRate={taxRate}
+                                      handleResetCombinedArray={
+                                        handleResetCombinedArray
+                                      }
+                                      taxRate={taxRate}
                                       resetCombinedArray={resetCombinedArray}
                                       taxActual={taxActual}
                                       taxReal={taxReal}
@@ -1067,12 +1091,20 @@ export default function ReceiptInput({
                                       : "bg-white text-gray-800")
                                   }
                                   onClick={(e) => {
+                                    const finalTotal = personReceiptAmount;
+                                    if (finalTotal === 0) {
+                                      // Handle the error case and prevent further actions
+                                      console.error("Error: Invalid final total");
+                                      setSubmissionError(false);
+                                    } else {
                                     getFinalTotal();
-                                    resetCombinedArray();
+                                    handleResetCombinedArray();
                                     setSelectMethodPicture(false);
                                     setSelectPersonReceipt(true);
                                     handleHistorySubmit(e);
                                     setIsReceiptSubmitted(true);
+                                    setInvoiceNumber(0);
+                                    }
                                   }}
                                 >
                                   <IoDuplicateOutline size={24} />
@@ -1089,24 +1121,34 @@ export default function ReceiptInput({
                                       : "bg-white text-gray-800")
                                   }
                                   onClick={(e) => {
-                                    const finalTotal = getFinalTotal();
+                                    const finalTotal = personReceiptAmount;
                                     if (finalTotal === 0) {
                                       // Handle the error case and prevent further actions
-                                      console.error(
-                                        "Error: Invalid final total"
-                                      );
-                                      return;
-                                    }
-
-                                    getFinalTotal();
-                                    handleHistorySubmit(e);
-                                    resetReceiptForm();
-                                    setIsReceiptSubmitted(true);
-                                  }}
+                                      console.error("Error: Invalid final total");
+                                      setSubmissionError(false);
+                                    } else {
+                                      setSubmissionError(true);
+                                      getFinalTotal();
+                                      handleResetCombinedArray();
+                                      handleHistorySubmit(e);
+                                      resetReceiptForm();
+                                      setIsReceiptSubmitted(true);
+                                      setPersonReceiptAmount(0);
+                                      window.location.href = "/SplitBill#/SplitBill";
+                                    }}}
                                 >
                                   <IoExitOutline size={24} />
                                 </button>
                               </Link>
+                              {!submissionError && (
+                    <div className="flex justify-center items-center col-span-2">
+                    <p className="mb-2 text-center text-sm text-red-500 w-max mr-1/2">
+                      {lang === "english"
+                        ? "Please add an item before submitting."
+                        : "Veuillez ajouter un élément avant de soumettre."}
+                    </p>
+                    </div>
+                  )}
                             </div>
                           </div>
                         </div>

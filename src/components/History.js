@@ -45,33 +45,45 @@ export default function History({ receipts, theme, lang, setLang }) {
             </div>
             <div className="flex justify-center items-center mt-2">
               <p className="text-sm">
-                {receipt.selectedValue === "you" ? (lang === "english" ? "You are Owed" : "On vous doit") : (lang === "english" ? "You owe" : "Tu dois")}
+                {receipt.selectedValue === "you"
+                  ? lang === "english"
+                    ? "You are Owed"
+                    : "On vous doit"
+                  : lang === "english"
+                  ? "You owe"
+                  : "Tu dois"}
               </p>
             </div>
             <div className="flex justify-center items-center">
-              <p className="font-bold">{`$${Math.abs(
-                parseFloat(receipt.personReceiptAmount)
-              ).toFixed(2)}`}</p>
+              <p className="font-bold">
+                $
+                {(
+                  parseFloat(receipt.personReceiptAmount) +
+                  parseFloat(receipt.taxActual)
+                ).toFixed(2)}
+              </p>
             </div>
 
             <div className="flex justify-center items-center">
-              <p className="text-sm">
-                {receipt.selectedValue === "you"
-                  ? (lang === "english" ? "Taxes owed: " : "Impôts dus: ")
-                  : (lang === "english" ? "Taxes you owe: " : "Impôts que vous devez: ")}
-                {`$${
-                  isNaN(receipt.taxActual)
-                    ? 0
-                    : Math.abs(parseFloat(receipt.taxActual)).toFixed(2)
-                }`}
-              </p>
+              {receipt.taxActual !== 0 && (
+                <p className="text-sm mt-2">
+                  {lang === "english" ? "Taxes: " : "Impôts: "}
+                  {`$${
+                    isNaN(receipt.taxActual)
+                      ? 0
+                      : Math.abs(parseFloat(receipt.taxActual)).toFixed(2)
+                  }`}
+                </p>
+              )}
             </div>
 
             <div className="flex justify-center items-center mt-2">
               <p className="text-sm">
-              {lang === "english" ? "Receipt Total" : "Total des reçus"}: ${receipt.receiptTotal || 0}
+                {lang === "english" ? "Receipt Total" : "Total des reçus"}: $
+                {receipt.receiptTotal || 0}
               </p>
             </div>
+
             <div className="flex justify-center items-center mt-2">
               {receipt.invoiceNumber && (
                 <div>
@@ -108,7 +120,7 @@ export default function History({ receipts, theme, lang, setLang }) {
         className="xs:max-w-xl bg-white-500 mt-5 rounded p-0 pt-3 shadow sm:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl"
         style={{ maxWidth: "600px" }}
       >
-        <Header showHistory={true} theme={theme}  lang={lang} />
+        <Header showHistory={true} theme={theme} lang={lang} />
 
         <div className="flex flex-col items-center justify-center">
           <div className="rounded-lg px-3 py-2 shadow-md mb-4 mx-auto">
@@ -119,7 +131,9 @@ export default function History({ receipts, theme, lang, setLang }) {
                   "mr-2 " + (theme === "dark" ? "text-white" : "text-gray-800")
                 }
               >
-                {lang === "english" ? "Filter by Person" : "Filtrer par personne"}
+                {lang === "english"
+                  ? "Filter by Person"
+                  : "Filtrer par personne"}
               </label>
 
               <select

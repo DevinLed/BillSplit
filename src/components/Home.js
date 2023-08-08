@@ -36,7 +36,7 @@ export default function Home({
   }, []);
 
   // For Dark/Bright mode. Keeps mode storage for page refresh.
-  const [buttonText, setButtonText] = useState(lang === "english" ? "Dark" : "Sombre");
+  const [buttonText, setButtonText] = useState(lang === "english" ? "Dark Mode" : "Mode Sombre");
   const changeText = (text) => setButtonText(text);
 
   const yAxisCallback = (value) => `$${value.toFixed(2)}`;
@@ -137,8 +137,8 @@ export default function Home({
     <>
       <main
         className={
-          "xs:max-w-xl bg-white-500 mt-5 rounded p-0 pt-3 shadow sm:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl " +
-          (theme === "dark" ? "border-2 border-gray-800 lg-rounded" : "")
+          "xs:max-w-xl mt-5 rounded p-0 pt-3 shadow sm:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl " +
+          (theme === "dark" ? "border-2 border-gray-800 lg-rounded bg-gray-650" : "bg-white-500 ")
         }
         style={{ maxWidth: "600px" }}
       >
@@ -180,7 +180,7 @@ export default function Home({
                         : "text-gray-800 text-center"
                     }
                   >
-                    {lang === "english" ? "Split a Bill" : "Reçu fractionné"}
+                    {lang === "english" ? "Split a Bill" : "Partager la facture"}
                   </span>
                 </label>
               </Link>
@@ -224,7 +224,7 @@ export default function Home({
                         : "text-gray-800 text-center"
                     }
                   >
-                     {lang === "english" ? "History" : "Histoire"}
+                     {lang === "english" ? "History" : "Historique"}
                   </span>
                 </label>
               </Link>
@@ -232,9 +232,9 @@ export default function Home({
                 onClick={() => {
                   toggleTheme();
                   if (theme === "light") {
-                    changeText(lang === "english" ? "Light" : "Lumière");
+                    changeText(lang === "english" ? "Light Mode" : "Mode Lumière");
                   } else {
-                    changeText(lang === "english" ? "Dark" : "Sombre");
+                    changeText(lang === "english" ? "Dark Mode" : "Mode Sombre");
                   }
                 }}
                 className={

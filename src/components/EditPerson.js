@@ -2,7 +2,7 @@ import React from "react";
 import { useState } from "react";
 import "./../index.css";
 import { IoSaveOutline } from "react-icons/io5";
-import {AiOutlineDelete} from "react-icons/ai"
+import { AiOutlineDelete } from "react-icons/ai";
 import { CSSTransition } from "react-transition-group";
 
 import UseAnimations from "react-useanimations";
@@ -23,7 +23,7 @@ export default function EditPerson({
   setList,
   handleDeletePerson,
   lang,
-  setLang
+  setLang,
 }) {
   const handleResetBalance = () => {
     setPersonOwing("0.00");
@@ -69,8 +69,12 @@ export default function EditPerson({
   const formatPhoneNumber = (inputValue) => {
     const numbersOnly = inputValue.replace(/[^\d]/g, ""); // Remove all non-numeric characters
     if (numbersOnly.length <= 3) return numbersOnly;
-    if (numbersOnly.length <= 6) return `(${numbersOnly.slice(0, 3)}) ${numbersOnly.slice(3)}`;
-    return `(${numbersOnly.slice(0, 3)}) ${numbersOnly.slice(3, 6)}-${numbersOnly.slice(6, 10)}`;
+    if (numbersOnly.length <= 6)
+      return `(${numbersOnly.slice(0, 3)}) ${numbersOnly.slice(3)}`;
+    return `(${numbersOnly.slice(0, 3)}) ${numbersOnly.slice(
+      3,
+      6
+    )}-${numbersOnly.slice(6, 10)}`;
   };
 
   const handlePhoneNumberChange = (event) => {
@@ -110,31 +114,42 @@ export default function EditPerson({
 
   return (
     <>
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50 p-4" style={{ marginTop: "-90px" }}>
+      <div
+        className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50 p-4"
+        style={{ marginTop: "-90px" }}
+      >
         <div className="relative w-full max-w-sm">
-          <div className={theme === "dark" ? "overflow-hidden rounded-lg border border-gray-300 bg-gray-800 shadow-lg" : "overflow-hidden rounded-lg border border-gray-300 bg-white shadow-lg"}>
+          <div
+            className={
+              theme === "dark"
+                ? "overflow-hidden rounded-lg border border-gray-300 bg-gray-800 shadow-lg"
+                : "overflow-hidden rounded-lg border border-gray-300 bg-white shadow-lg"
+            }
+          >
             <div className="flex items-center justify-evenly border-b border-gray-300 p-3">
-              <h3 className="text-xl font-semibold">{lang === "english" ? "Edit Person" : "Modifier le contact"}</h3>
+              <h3 className="text-xl font-semibold">
+                {lang === "english" ? "Edit Person" : "Modifier le contact"}
+              </h3>
             </div>
 
             <div className="p-4">
               <div className="text-center">
-              <div className="mb-2">
-        <label htmlFor="colFormLabel" className="sr-only">
-        {lang === "english" ? "Name" : "Nom"}
-        </label>
-        <input
-          type="name"
-          className={`form-control w-full rounded-lg py-2 px-3 focus:border-blue-300 focus:outline-none focus:ring ${
-            isValidName ? "ring-green-300" : "ring-red-300"
-          }`}
-          id="colFormLabel"
-          placeholder={lang === "english" ? "Name" : "Nom"}
-          value={personName}
-          onChange={handleNameChange}
-          autoComplete="off"
-        />
-      </div>
+                <div className="mb-2">
+                  <label htmlFor="colFormLabel" className="sr-only">
+                    {lang === "english" ? "Name" : "Nom"}
+                  </label>
+                  <input
+                    type="name"
+                    className={`form-control w-full rounded-lg py-2 px-3 focus:border-blue-300 focus:outline-none focus:ring ${
+                      isValidName ? "ring-green-300" : "ring-red-300"
+                    }`}
+                    id="colFormLabel"
+                    placeholder={lang === "english" ? "Name" : "Nom"}
+                    value={personName}
+                    onChange={handleNameChange}
+                    autoComplete="off"
+                  />
+                </div>
 
                 <div className="mb-2">
                   <label htmlFor="colFormLabel" className="sr-only">
@@ -142,9 +157,13 @@ export default function EditPerson({
                   </label>
                   <input
                     type="tel"
-                    className={`form-control w-full rounded-lg py-2 px-3 focus:outline-none focus:ring ${isValidPhoneNumber ? "ring-green-300" : "ring-red-300"
-                      } ${personPhone.length >= 14 && !isValidPhoneNumber ? "ring-red-300" : ""
-                      }`}
+                    className={`form-control w-full rounded-lg py-2 px-3 focus:outline-none focus:ring ${
+                      isValidPhoneNumber ? "ring-green-300" : "ring-red-300"
+                    } ${
+                      personPhone.length >= 14 && !isValidPhoneNumber
+                        ? "ring-red-300"
+                        : ""
+                    }`}
                     id="colFormLabel"
                     placeholder="(123) 456-7890"
                     value={formSubmitted ? "" : personPhone}
@@ -159,7 +178,9 @@ export default function EditPerson({
                   </label>
                   <input
                     type="email"
-                    className={`form-control w-full rounded-lg py-2 px-3 focus:outline-none focus:ring ${isValidEmail ? "ring-green-300" : "ring-red-300"}`}
+                    className={`form-control w-full rounded-lg py-2 px-3 focus:outline-none focus:ring ${
+                      isValidEmail ? "ring-green-300" : "ring-red-300"
+                    }`}
                     id="colFormLabel"
                     placeholder="E-mail"
                     value={formSubmitted ? "" : personEmail}
@@ -169,8 +190,15 @@ export default function EditPerson({
                 </div>
 
                 <div className="mb-2">
-                  <label htmlFor="colFormLabel" className={theme === "dark" ? "text-white label-one-line" : "text-black label-one-line"}>
-                  {lang === "english" ? "Balance?" : "Solde actuel?"}
+                  <label
+                    htmlFor="colFormLabel"
+                    className={
+                      theme === "dark"
+                        ? "text-white label-one-line"
+                        : "text-black label-one-line"
+                    }
+                  >
+                    {lang === "english" ? "Balance?" : "Solde actuel?"}
                   </label>
                 </div>
 
@@ -183,7 +211,11 @@ export default function EditPerson({
                         type="text"
                         className="form-control max-six-digits rounded-start"
                         onKeyDown={handleKeyDown}
-                        placeholder={personOwing ? parseFloat(personOwing).toFixed(2) : "0.00"}
+                        placeholder={
+                          personOwing
+                            ? parseFloat(personOwing).toFixed(2)
+                            : "0.00"
+                        }
                         onClick={(e) => {
                           e.target.select();
                         }}
@@ -200,7 +232,11 @@ export default function EditPerson({
                             }
                           } else {
                             setErrorBalance(false);
-                            setErrorMsg("Please enter a valid number");
+                            setErrorMsg(
+                              lang === "english"
+                                ? "Please enter a valid number"
+                                : "S'il vous plait, entrez un nombre valide"
+                            );
                           }
                         }}
                       />
@@ -227,67 +263,84 @@ export default function EditPerson({
               </div>
             </div>
             <div className="flex justify-center p-2 space-x-4">
-            <div className="flex justify-center p-2 space-x-4">
-  <label
-    className={
-      theme === "dark"
-        ? "flex w-fit flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-700 hover:no-underline"
-        : "flex w-fit flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-800 hover:no-underline"
-    }
-                onClick={(e) => handleDeletePrompt()}
-              >
-                <AiOutlineDelete size={24} />
-              </label>
-            </div>
-            <div className="flex justify-center p-2">
-            <label
-    className={
-      theme === "dark"
-        ? "flex w-fit flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-700 hover:no-underline"
-        : "flex w-fit flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-800 hover:no-underline"
-    }
-                onClick={(e) => {
-                  if (errorBalance && errorPhone && errorEmail && errorName) {
-                    handleSubmit(e);
-                    setEditPerson(false);
-                  } else {
-                    setSubmissionError(false);
+              <div className="flex justify-center p-2 space-x-4">
+                <label
+                  className={
+                    theme === "dark"
+                      ? "flex w-fit flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-700 hover:no-underline"
+                      : "flex w-fit flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-800 hover:no-underline"
                   }
-                }}
-              >
-                <IoSaveOutline size={24} />
-              </label>
-            </div>
+                  onClick={(e) => handleDeletePrompt()}
+                >
+                  <AiOutlineDelete size={24} />
+                </label>
+              </div>
+              <div className="flex justify-center p-2">
+                <label
+                  className={
+                    theme === "dark"
+                      ? "flex w-fit flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-700 hover:no-underline"
+                      : "flex w-fit flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-800 hover:no-underline"
+                  }
+                  onClick={(e) => {
+                    if (errorBalance && errorPhone && errorEmail && errorName) {
+                      handleSubmit(e);
+                      setEditPerson(false);
+                    } else {
+                      setSubmissionError(false);
+                    }
+                  }}
+                >
+                  <IoSaveOutline size={24} />
+                </label>
+              </div>
             </div>
             <CSSTransition
-        in={showConfirmation}
-        timeout={500} // Adjust the duration of the transition as needed
-        classNames="fade"
-        unmountOnExit
-      >
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 ">
-          <div className={"p-6 rounded shadow-md " + (theme === "dark" ? "bg-gray-800" : "bg-gray-100")}>
-            <p>Are you sure you want to delete this person?</p>
-            <div className="flex justify-end mt-4">
-              <button
-                className={"px-4 py-2 mr-2 rounded hover:bg-gray-900 " + (theme === "dark" ? "bg-gray-300 text-gray-800" : "bg-gray-800")}
-                onClick={(e) => handleDeletePerson()}
-              >
-                Yes
-              </button>
-              <button
-                className={"px-4 py-2 rounded hover:bg-gray-900 " + (theme === "dark" ? "bg-gray-300 text-gray-800" : "bg-gray-800")}
-                onClick={handleCancelDeletePrompt}
-              >
-                No
-              </button>
-            </div>
-          </div>
-        </div>
-      </CSSTransition>
+              in={showConfirmation}
+              timeout={500} // Adjust the duration of the transition as needed
+              classNames="fade"
+              unmountOnExit
+            >
+              <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 ">
+                <div
+                  className={
+                    "p-6 rounded shadow-md " +
+                    (theme === "dark" ? "bg-gray-800" : "bg-gray-100")
+                  }
+                >
+                  <p>Are you sure you want to delete this person?</p>
+                  <div className="flex justify-end mt-4">
+                    <button
+                      className={
+                        "px-4 py-2 mr-2 rounded hover:bg-gray-900 " +
+                        (theme === "dark"
+                          ? "bg-gray-300 text-gray-800"
+                          : "bg-gray-800")
+                      }
+                      onClick={(e) => handleDeletePerson()}
+                    >
+                      Yes
+                    </button>
+                    <button
+                      className={
+                        "px-4 py-2 rounded hover:bg-gray-900 " +
+                        (theme === "dark"
+                          ? "bg-gray-300 text-gray-800"
+                          : "bg-gray-800")
+                      }
+                      onClick={handleCancelDeletePrompt}
+                    >
+                      No
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </CSSTransition>
             {!submissionError && (
               <p className="mb-2 text-center text-sm text-red-500">
-                Please complete all fields correctly.
+                {lang === "english"
+                  ? "Please complete all fields correctly."
+                  : "Veuillez remplir tous les champs correctement."}
               </p>
             )}
           </div>
