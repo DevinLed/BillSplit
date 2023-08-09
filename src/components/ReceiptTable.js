@@ -17,6 +17,7 @@ export default function ReceiptTable({
   currentIndex,
   handleReceiptPictureSubmit,
   combinedArray,
+  setCombinedArray,
   obtainedInfo,
   setObtainedInfo,
   getPictureTotal,
@@ -30,7 +31,6 @@ export default function ReceiptTable({
   personName,
   personReceiptAmount,
   setPersonReceiptAmount,
-  setCombinedArray,
   pictureTax,
   setPictureTax,
   pictureConfidence,
@@ -46,9 +46,7 @@ export default function ReceiptTable({
   taxOwingPerc,
   taxActual,
   taxRate,
-  lang,
-  setLang,
-  handleResetCombinedArray
+  lang
 }) {
   // Handler for changing the name of the item added to array
   const [isAddingItem, setIsAddingItem] = useState(false);
@@ -121,7 +119,7 @@ export default function ReceiptTable({
     setPictureTax(calculatedTax);
     setIsAddingItem(true);
     setShowTableButton(false);
-    console.log(taxRate)
+    console.log(taxRate);
   };
 
   // Handler for when on mobile, enter key will collapse the keyboard popup
@@ -159,27 +157,23 @@ export default function ReceiptTable({
   };
   // Handler for changing the values in item.amount
   const handleAmountChange = (value, index) => {
-    const newValue = value.replace(/^\$/, "");
-
-    let parsedValue = newValue.replace(/[^0-9.]/g, "");
-
-    const decimalIndex = parsedValue.indexOf(".");
-    if (decimalIndex !== -1) {
-      parsedValue =
-        parsedValue.slice(0, decimalIndex + 1) +
-        parsedValue.slice(decimalIndex + 1).replace(".", "");
-    }
-    const decimalSplit = parsedValue.split(".");
-    if (decimalSplit[1] && decimalSplit[1].length > 2) {
-      parsedValue = decimalSplit[0] + "." + decimalSplit[1].slice(0, 2);
-    }
-    if (isNaN(parsedValue)) {
-      parsedValue = "0"; // Set to a default value (0 in this case)
-    }
+    // Remove any non-digit and non-decimal characters
+    const sanitizedValue = value.replace(/[^\d.]/g, "");
+  
+    // Ensure the value is in the format of XXXXX.XX
+    const decimalSplit = sanitizedValue.split(".");
+    const integerPart = decimalSplit[0].slice(0, 5); // Limit to 5 digits before the decimal point
+    const decimalPart = decimalSplit[1] ? `.${decimalSplit[1].slice(0, 2)}` : "";
+  
+    const updatedValue = `${integerPart}${decimalPart}`;
+  
     const updatedCombinedArray = [...combinedArray];
-    updatedCombinedArray[index].amount = parsedValue || "0";
+    updatedCombinedArray[index].amount = updatedValue || "0";
     setCombinedArray(updatedCombinedArray);
   };
+  
+  
+  
   // Handler for manually editting Tax amount
   const handleTaxAmountChange = (value) => {
     const newValue = value.replace(/^\$/, "");
@@ -262,7 +256,7 @@ export default function ReceiptTable({
       }))
     );
   }, []);
-  
+
   // combing the 2 arrays, picture and manually entered
   useEffect(() => {
     if (Array.isArray(items) && Array.isArray(obtainedInfo)) {
@@ -333,20 +327,30 @@ export default function ReceiptTable({
             <thead className="whitespace-no-wrap max-w-fit overflow-hidden truncate">
               <tr className="whitespace-no-wrap max-w-fit overflow-hidden px-2">
                 <th className="py-1 text-left sm:py-2">
-                  <span className="ml-1 border-b-2">{lang === "english" ? "Item" : "Article"}</span>
+                  <span className="ml-1 border-b-2">
+                    {lang === "english" ? "Item" : "Article"}
+                  </span>
                 </th>
                 <th className="px-2 py-1 text-left sm:px-4 sm:py-2">
-                  <span className="border-b-2">{lang === "english" ? "Price" : "Prix"}</span>
+                  <span className="border-b-2">
+                    {lang === "english" ? "Price" : "Prix"}
+                  </span>
                 </th>
                 <th className="pl-1" colSpan={3} style={{ width: "33.33%" }}>
                   <span className="px-3 py-1 text-left sm:px-4 sm:py-2 ">
-                    <span className="border-b-2 text-left">{lang === "english" ? "Me" : "Moi"}</span>
+                    <span className="border-b-2 text-left">
+                      {lang === "english" ? "Me" : "Moi"}
+                    </span>
                   </span>
                   <span className="py-1 pr-3 pl-3 text-left sm:px-4 sm:py-2">
-                    <span className="border-b-2 text-center">{lang === "english" ? "Split" : "Diviser"}</span>
+                    <span className="border-b-2 text-center">
+                      {lang === "english" ? "Split" : "Diviser"}
+                    </span>
                   </span>
                   <span className="px-2 py-1 text-left sm:px-4 sm:py-2 ">
-                    <span className="border-b-2 text-right">{lang === "english" ? "Them" : "Eux"}</span>
+                    <span className="border-b-2 text-right">
+                      {lang === "english" ? "Them" : "Eux"}
+                    </span>
                   </span>
                 </th>
               </tr>
@@ -484,14 +488,14 @@ export default function ReceiptTable({
                   >
                     <input
                       type="text"
-                      className="my-2 ml-2 w-14 items-center justify-center py-1 text-xs text-black"
+                      className="my-2 ml-2 w-16 items-center justify-center py-1 text-xs text-black"
                       style={{
                         border:
                           item.confidence < 0.5 && !hasBeenAccessed
                             ? "1px solid red"
                             : "1px solid black",
                       }}
-                      value={item.amount}
+                      value={item.amount || item.total_amount}
                       onChange={(e) => {
                         if (!hasBeenAccessed) {
                           setHasBeenAccessed(true);
@@ -780,7 +784,8 @@ export default function ReceiptTable({
                 : "mt-0 flex items-center justify-left text-lg font-medium text-black whitespace-nowrap"
             }
           >
-            {lang === "english" ? "Receipt Total: " : "Total des reçus: "}${finalTotal()}
+            {lang === "english" ? "Receipt Total: " : "Total des reçus: "}$
+            {finalTotal()}
           </label>
         </div>
         {pictureTax ? (
@@ -791,19 +796,31 @@ export default function ReceiptTable({
                 : "flex items-center justify-left text-lg font-medium text-black whitespace-no-wrap"
             }
           >
-          {
-  selectedValue === "you"
-    ? lang === "english"
-      ? `Taxes ${personName} owes you: $${isNaN(parseFloat(taxActual)) ? "0.00" : parseFloat(taxActual).toFixed(2)}`
-      : `Les impôts que ${personName} vous doit: $${isNaN(parseFloat(taxActual)) ? "0.00" : parseFloat(taxActual).toFixed(2)}`
-    : lang === "english"
-      ? `Taxes you owe ${personName}: $${isNaN(parseFloat(taxActual)) ? "0.00" : parseFloat(taxActual).toFixed(2)}`
-      : `Impôts que vous devez ${personName}: $${isNaN(parseFloat(taxActual)) ? "0.00" : parseFloat(taxActual).toFixed(2)}`
-}
-
+            {selectedValue === "you"
+              ? lang === "english"
+                ? `Taxes ${personName} owes you: $${
+                    isNaN(parseFloat(taxActual))
+                      ? "0.00"
+                      : parseFloat(taxActual).toFixed(2)
+                  }`
+                : `Les impôts que ${personName} vous doit: $${
+                    isNaN(parseFloat(taxActual))
+                      ? "0.00"
+                      : parseFloat(taxActual).toFixed(2)
+                  }`
+              : lang === "english"
+              ? `Taxes you owe ${personName}: $${
+                  isNaN(parseFloat(taxActual))
+                    ? "0.00"
+                    : parseFloat(taxActual).toFixed(2)
+                }`
+              : `Impôts que vous devez ${personName}: $${
+                  isNaN(parseFloat(taxActual))
+                    ? "0.00"
+                    : parseFloat(taxActual).toFixed(2)
+                }`}
           </label>
         ) : null}
-        
       </div>
     </>
   );

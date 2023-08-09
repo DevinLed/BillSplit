@@ -111,6 +111,7 @@ export default function ReceiptInput({
   const resetCombinedArray = () => {
     setCombinedArray([]);
   };
+  
 
   const handleScroll = () => {
     const scrollAmount = window.innerHeight * 1.5;
@@ -1104,6 +1105,7 @@ export default function ReceiptInput({
                                     handleHistorySubmit(e);
                                     setIsReceiptSubmitted(true);
                                     setInvoiceNumber(0);
+                                    setPhotoData(null);
                                     }
                                   }}
                                 >

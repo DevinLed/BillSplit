@@ -82,6 +82,9 @@ function App() {
 
   const [formSubmitted, setFormSubmitted] = useState(false);
 
+  const [combinedArray, setCombinedArray] = useState([]);
+  
+  const [obtainedInfo, setObtainedInfo] = useState([]);
   // Calendar for manual receipt entry
   const [merchantName, setMerchantName] = useState("");
   const [invoiceNumber, setInvoiceNumber] = useState("");
@@ -166,12 +169,9 @@ function App() {
   // Handler for full reset of tables.
   const handleResetCombinedArray = () => {
     setCombinedArray([]);
-    setObtainedInfo([]);
+    setObtainedInfo([])
     console.log("being accessed");
   };
-  const [combinedArray, setCombinedArray] = useState([]);
-  
-  const [obtainedInfo, setObtainedInfo] = useState([]);
   const handleAddSubmit = (e) => {
     const newItems = {
       personName,

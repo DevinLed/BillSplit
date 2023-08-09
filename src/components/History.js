@@ -85,11 +85,11 @@ export default function History({ receipts, theme, lang, setLang }) {
             </div>
 
             <div className="flex justify-center items-center mt-2">
-              {receipt.invoiceNumber && (
+              {receipt.invoiceNumber ? (
                 <div>
                   <p className="text-sm mb-2">{`Invoice Number: ${receipt.invoiceNumber}`}</p>
                 </div>
-              )}
+              ):""}
             </div>
           </div>
         );

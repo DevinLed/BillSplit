@@ -324,7 +324,7 @@ export default function AddPerson({
                 </div>
 
                 {errorMsg && (
-                  <div className="text-red-500 text-sm text-center mb-2">
+                  <div className="text-red-500 text-sm text-center mt-12">
                     {errorMsg}
                   </div>
                 )}
