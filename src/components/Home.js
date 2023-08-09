@@ -304,7 +304,7 @@ export default function Home({
           </div>
         </div>
 
-        <Footer theme={theme} />
+        <Footer theme={theme} lang={lang}/>
       </main>
     </>
   );

@@ -687,6 +687,8 @@ export default function ReceiptInput({
                     </Link>
                   </div>
                   <div className="m-2 mb-4 flex flex-col justify-center items-center sm:flex-row">
+                    
+                  <Link to="/SplitBill">
                       <label
                         className={
                           "flex h-24 w-28 flex-col items-center justify-center rounded-lg border border-gray-200 py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline " +
@@ -707,12 +709,12 @@ export default function ReceiptInput({
                             handleHistorySubmit(e);
                             resetReceiptForm();
                             setIsReceiptSubmitted(true);
-                            window.location.href = "/SplitBill#/SplitBill";
                           }
                         }}
                       >
                         <IoExitOutline size={24} />
                       </label>
+                      </Link>
                   </div>
                   {!submissionError && (
                     <div className="flex justify-center items-center col-span-2">
@@ -1136,7 +1138,6 @@ export default function ReceiptInput({
                                       resetReceiptForm();
                                       setIsReceiptSubmitted(true);
                                       setPersonReceiptAmount(0);
-                                      window.location.href = "/SplitBill#/SplitBill";
                                     }}}
                                 >
                                   <IoExitOutline size={24} />
