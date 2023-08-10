@@ -71,7 +71,7 @@ export default function ReceiptInput({
 }) {
   registerLocale("en", en);
   registerLocale("fr", fr);
-
+  const [pictureError,setPictureError]= useState(false);
   const [submissionError, setSubmissionError] = useState(true);
   const [selectPersonReceipt, setSelectPersonReceipt] = useState(true);
   const [selectMethodManual, setSelectMethodManual] = useState(false);
@@ -182,7 +182,9 @@ export default function ReceiptInput({
         }));
       setObtainedInfo(lineItems);
       setDisplayPictureInfo(true);
-
+      if (lineItems.length === 0) {
+        setPictureError(true);
+      }
       const totalAmount =
         responseData.document.inference.prediction.total_amount.value || 0;
       const taxAmount =
@@ -375,7 +377,7 @@ export default function ReceiptInput({
                   <Link className="flex flex-col items-center justify-center">
                     <label
                       className={
-                        "mt-4 mb-4 mb-0 flex h-24 w-fit flex-col items-center justify-center rounded-lg border " +
+                        "mt-4 mb-4 mb-0 flex h-24 w-fit flex-col items-center justify-center rounded-lg border  " +
                         (theme === "dark"
                           ? "border-gray-900 bg-gray-900 text-white hover:bg-gray-800"
                           : "border-gray-200 bg-white text-gray-800 hover:bg-gray-200") +
@@ -386,8 +388,10 @@ export default function ReceiptInput({
                         setSelectPersonReceipt(false);
                         setPersonReceiptAmount(0);
                       }}
-                    >
+                    ><div style={{ width: "24px", height: "24px" }}>
                       <IoCreateOutline size={24} />
+                      </div>
+                      {lang === "english"? "Add Items": "Ajouter manuellement"}
                     </label>
                   </Link>
                   <li className="flex flex-col items-center justify-center">
@@ -405,6 +409,7 @@ export default function ReceiptInput({
                       }}
                     >
                       <IoCameraOutline size={24} />
+                      {lang === "english"? "Picture": "Image"}
                     </label>
                   </li>
                 </ul>
@@ -1106,6 +1111,10 @@ export default function ReceiptInput({
                                     setIsReceiptSubmitted(true);
                                     setInvoiceNumber(0);
                                     setPhotoData(null);
+                                    setShowTable(true);
+                                    setShowCameraImage(false);
+                                    
+                                    window.location.href = `/BillSplit#/ReceiptInput/${id}`;
                                     }
                                   }}
                                 >
@@ -1164,9 +1173,47 @@ export default function ReceiptInput({
                 ""
               )}
             </div>
+        
           </div>
         </main>
       </CSSTransition>
+      <div>
+      <CSSTransition
+            in={pictureError}
+            timeout={500} // Adjust the duration of the transition as needed
+            classNames="fade"
+            unmountOnExit
+          >
+            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 ">
+              <div
+                className={
+                  "p-6 rounded shadow-md " +
+                  (theme === "dark" ? "bg-gray-800" : "bg-gray-100")
+                }
+              >
+                <p
+                  className={
+                    theme === "dark"
+                      ? "text-white whitespace-nowrap"
+                      : "text-black whitespace-nowrap"
+                  }
+                >
+                  {lang === "english"
+                    ? "Picture too unclear.."
+                    : "La photo est trop floue"}
+                </p>
+                <div className="flex justify-center item-center mt-4">
+                  <button
+                    className="ml-1 px-4 py-2 mr-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400"
+                    onClick={() => setPictureError(false)} 
+                  >
+                    OK
+                  </button>
+                </div>
+              </div>
+            </div>
+          </CSSTransition>
+          </div>
     </>
   );
 }

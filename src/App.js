@@ -28,7 +28,7 @@ import ReceiptTable from "./components/ReceiptTable";
 
 function App() {
   // dark mode theme switching
-  const [theme, setTheme] = useState(localStorage.getItem("theme"));
+  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
   const toggleTheme = () => {
     if (theme === "light") {
       setTheme("dark");
@@ -44,7 +44,7 @@ function App() {
     document.body.className = theme;
   }, [theme]);
   // language select
-  const [lang, setLang] = useState(localStorage.getItem("lang"));
+  const [lang, setLang] = useState(localStorage.getItem("lang") || "english");
   // useEffect to track language
   useEffect(() => {
     localStorage.setItem("lang", lang);

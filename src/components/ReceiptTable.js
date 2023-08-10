@@ -51,6 +51,8 @@ export default function ReceiptTable({
   // Handler for changing the name of the item added to array
   const [isAddingItem, setIsAddingItem] = useState(false);
   const [showTaxButton, setShowTableButton] = useState(true);
+  
+  const [currentValue, setCurrentValue] = useState(undefined);
   const handleNameChange = (event) => {
     setName(event.target.value);
   };
@@ -157,15 +159,9 @@ export default function ReceiptTable({
   };
   // Handler for changing the values in item.amount
   const handleAmountChange = (value, index) => {
-    // Remove any non-digit and non-decimal characters
-    const sanitizedValue = value.replace(/[^\d.]/g, "");
-  
-    // Ensure the value is in the format of XXXXX.XX
-    const decimalSplit = sanitizedValue.split(".");
-    const integerPart = decimalSplit[0].slice(0, 5); // Limit to 5 digits before the decimal point
-    const decimalPart = decimalSplit[1] ? `.${decimalSplit[1].slice(0, 2)}` : "";
-  
-    const updatedValue = `${integerPart}${decimalPart}`;
+    const regex = /([0-9]*[.,]{0,1}[0-9]{0,2})/s;
+    const matchedValue = value.match(regex);
+    const updatedValue = matchedValue ? matchedValue[0] : "";
   
     const updatedCombinedArray = [...combinedArray];
     updatedCombinedArray[index].amount = updatedValue || "0";
