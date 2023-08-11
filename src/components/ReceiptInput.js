@@ -375,24 +375,27 @@ export default function ReceiptInput({
                 </h1>
                 <ul className="list-group items-center justify-center">
                   <Link className="flex flex-col items-center justify-center">
-                    <label
-                      className={
-                        "mt-4 mb-4 mb-0 flex h-24 w-fit flex-col items-center justify-center rounded-lg border  " +
-                        (theme === "dark"
-                          ? "border-gray-900 bg-gray-900 text-white hover:bg-gray-800"
-                          : "border-gray-200 bg-white text-gray-800 hover:bg-gray-200") +
-                        " py-4 px-10 text-sm font-semibold shadow-md hover:no-underline"
-                      }
-                      onClick={(e) => {
-                        setSelectMethodManual(true);
-                        setSelectPersonReceipt(false);
-                        setPersonReceiptAmount(0);
-                      }}
-                    ><div style={{ width: "24px", height: "24px" }}>
-                      <IoCreateOutline size={24} />
-                      </div>
-                      {lang === "english"? "Add Items": "Ajouter manuellement"}
-                    </label>
+                  <label
+  className={
+    "mt-4 mb-4 mb-0 flex h-24 w-fit flex-col items-center justify-center rounded-lg border  " +
+    (theme === "dark"
+      ? "border-gray-900 bg-gray-900 text-white hover:bg-gray-800"
+      : "border-gray-200 bg-white text-gray-800 hover:bg-gray-200") +
+    " py-4 px-10 whitespace-no-wrap text-sm font-semibold shadow-md hover:no-underline"
+  }
+  onClick={(e) => {
+    setSelectMethodManual(true);
+    setSelectPersonReceipt(false);
+    setPersonReceiptAmount(0);
+  }}
+>
+  <div className="whitespace-no-wrap" style={{ width: "24px", height: "24px" }}>
+    <IoCreateOutline size={24} />
+  </div>
+  <span className="whitespace-no-wrap">
+    {lang === "english" ? "Add Items" : "Ajouter manuellement"}
+  </span>
+</label>
                   </Link>
                   <li className="flex flex-col items-center justify-center">
                     <label
