@@ -308,7 +308,7 @@ export default function EditPerson({
                     (theme === "dark" ? "bg-gray-800" : "bg-gray-100")
                   }
                 >
-                  <p>Are you sure you want to delete this person?</p>
+                  <p>{lang === "english"? "Are you sure you want to delete this person?": "Voulez-vous vraiment supprimer cette personne ?"}</p>
                   <div className="flex justify-end mt-4">
                     <button
                       className={
@@ -319,7 +319,7 @@ export default function EditPerson({
                       }
                       onClick={(e) => handleDeletePerson()}
                     >
-                      Yes
+                       {lang === "english"? "Yes": "Oui"}
                     </button>
                     <button
                       className={
@@ -330,7 +330,7 @@ export default function EditPerson({
                       }
                       onClick={handleCancelDeletePrompt}
                     >
-                      No
+                       {lang === "english"? "No": "Non"}
                     </button>
                   </div>
                 </div>
