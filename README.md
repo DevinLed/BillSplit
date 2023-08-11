@@ -3,7 +3,7 @@
 Live App: [https://devinled.github.io/BillSplit/#/LandingPage](https://devinled.github.io/BillSplit/#/LandingPage)
 
 <div align="center">
-  <img src="/src/img/GitHubLogo.png" alt="Divvy Logo">
+  <img src="/src/img/GitHubLogo.png" alt="Divvy Logo" width="300">>
 </div>
 
 **Divvy** is a simple expense-splitting application that helps you manage shared expenses with your friends and family. With Divvy, you can easily add expenses, track balances, and view your expense history, making it convenient to settle up bills among your group.
