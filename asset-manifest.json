@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/BillSplit/static/css/main.d281a3b6.css",
-    "main.js": "/BillSplit/static/js/main.bf166ae8.js",
+    "main.js": "/BillSplit/static/js/main.dc149c0e.js",
     "static/media/DivvySample.gif": "/BillSplit/static/media/DivvySample.caf0bdbd0ccb7aa0349e.gif",
     "static/media/Historyphoneoutline.png": "/BillSplit/static/media/Historyphoneoutline.f6eb387df3f764753806.png",
     "static/media/Receiptphoneoutline.png": "/BillSplit/static/media/Receiptphoneoutline.121c12b21fd4b2908ef8.png",
@@ -10,10 +10,10 @@
     "static/media/loading.gif": "/BillSplit/static/media/loading.ba4ecef0459ee75c99b2.gif",
     "index.html": "/BillSplit/index.html",
     "main.d281a3b6.css.map": "/BillSplit/static/css/main.d281a3b6.css.map",
-    "main.bf166ae8.js.map": "/BillSplit/static/js/main.bf166ae8.js.map"
+    "main.dc149c0e.js.map": "/BillSplit/static/js/main.dc149c0e.js.map"
   },
   "entrypoints": [
     "static/css/main.d281a3b6.css",
-    "static/js/main.bf166ae8.js"
+    "static/js/main.dc149c0e.js"
   ]
 }
