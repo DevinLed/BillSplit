@@ -7,7 +7,7 @@ import Historyphoneoutline from "../img/Historyphoneoutline.png";
 import Historydarkoutline from "../img/Historydarkoutline.png";
 import DivvySample from "../img/DivvySample.gif";
 
-export default function LandingPage({ theme }) {
+export default function LandingPage({ theme, lang }) {
   return (
     <main className="xs:max-w-xl bg-white-500 rounded p-0 shadow sm:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl" style={{ maxWidth: '650px' }}>
       <div className="bg-gray-100 min-h-screen">
@@ -88,7 +88,7 @@ export default function LandingPage({ theme }) {
           </div>
         </div>
       </div>
-      <Footer theme={theme} />
+      <Footer theme={theme} lang={lang} />
     </main>
   );
 }
