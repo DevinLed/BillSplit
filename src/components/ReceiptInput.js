@@ -71,7 +71,7 @@ export default function ReceiptInput({
 }) {
   registerLocale("en", en);
   registerLocale("fr", fr);
-  const [pictureError,setPictureError]= useState(false);
+  const [pictureError, setPictureError] = useState(false);
   const [submissionError, setSubmissionError] = useState(true);
   const [selectPersonReceipt, setSelectPersonReceipt] = useState(true);
   const [selectMethodManual, setSelectMethodManual] = useState(false);
@@ -111,7 +111,6 @@ export default function ReceiptInput({
   const resetCombinedArray = () => {
     setCombinedArray([]);
   };
-  
 
   const handleScroll = () => {
     const scrollAmount = window.innerHeight * 1.5;
@@ -375,27 +374,32 @@ export default function ReceiptInput({
                 </h1>
                 <ul className="list-group items-center justify-center">
                   <Link className="flex flex-col items-center justify-center">
-                  <label
-  className={
-    "mt-4 mb-4 mb-0 flex h-24 w-fit flex-col items-center justify-center rounded-lg border  " +
-    (theme === "dark"
-      ? "border-gray-900 bg-gray-900 text-white hover:bg-gray-800"
-      : "border-gray-200 bg-white text-gray-800 hover:bg-gray-200") +
-    " py-4 px-10 whitespace-no-wrap text-sm font-semibold shadow-md hover:no-underline"
-  }
-  onClick={(e) => {
-    setSelectMethodManual(true);
-    setSelectPersonReceipt(false);
-    setPersonReceiptAmount(0);
-  }}
->
-  <div className="whitespace-no-wrap" style={{ width: "24px", height: "24px" }}>
-    <IoCreateOutline size={24} />
-  </div>
-  <span className="whitespace-no-wrap">
-    {lang === "english" ? "Add Items" : "Ajouter manuellement"}
-  </span>
-</label>
+                    <label
+                      className={
+                        "mt-4 mb-4 mb-0 flex h-24 w-fit flex-col items-center justify-center rounded-lg border  " +
+                        (theme === "dark"
+                          ? "border-gray-900 bg-gray-900 text-white hover:bg-gray-800"
+                          : "border-gray-200 bg-white text-gray-800 hover:bg-gray-200") +
+                        " py-4 px-10 whitespace-no-wrap text-sm font-semibold shadow-md hover:no-underline"
+                      }
+                      onClick={(e) => {
+                        setSelectMethodManual(true);
+                        setSelectPersonReceipt(false);
+                        setPersonReceiptAmount(0);
+                      }}
+                    >
+                      <div
+                        className="whitespace-no-wrap"
+                        style={{ width: "24px", height: "24px" }}
+                      >
+                        <IoCreateOutline size={24} />
+                      </div>
+                      <span className="whitespace-no-wrap">
+                        {lang === "english"
+                          ? "Manual"
+                          : "À la main"}
+                      </span>
+                    </label>
                   </Link>
                   <li className="flex flex-col items-center justify-center">
                     <label
@@ -412,7 +416,7 @@ export default function ReceiptInput({
                       }}
                     >
                       <IoCameraOutline size={24} />
-                      {lang === "english"? "Picture": "Image"}
+                      {lang === "english" ? "Picture" : "Image"}
                     </label>
                   </li>
                 </ul>
@@ -680,13 +684,13 @@ export default function ReceiptInput({
                             console.error("Error: Invalid final total");
                             setSubmissionError(false);
                           } else {
-                          getFinalTotal();
-                          handleResetCombinedArray();
-                          setSelectMethodManual(false);
-                          setSelectPersonReceipt(true);
-                          handleHistorySubmit(e);
-                          setIsReceiptSubmitted(true);
-                          setInvoiceNumber(0);
+                            getFinalTotal();
+                            handleResetCombinedArray();
+                            setSelectMethodManual(false);
+                            setSelectPersonReceipt(true);
+                            handleHistorySubmit(e);
+                            setIsReceiptSubmitted(true);
+                            setInvoiceNumber(0);
                           }
                         }}
                       >
@@ -695,40 +699,40 @@ export default function ReceiptInput({
                     </Link>
                   </div>
                   <div className="m-2 mb-4 flex flex-col justify-center items-center sm:flex-row">
-                      <label
-                        className={
-                          "flex h-24 w-28 flex-col items-center justify-center rounded-lg border border-gray-200 py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline " +
-                          (theme === "dark"
-                            ? "bg-gray-900 text-white"
-                            : "bg-white text-gray-800")
+                    <label
+                      className={
+                        "flex h-24 w-28 flex-col items-center justify-center rounded-lg border border-gray-200 py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline " +
+                        (theme === "dark"
+                          ? "bg-gray-900 text-white"
+                          : "bg-white text-gray-800")
+                      }
+                      onClick={(e) => {
+                        const finalTotal = personReceiptAmount;
+                        if (finalTotal === 0) {
+                          // Handle the error case and prevent further actions
+                          console.error("Error: Invalid final total");
+                          setSubmissionError(false);
+                        } else {
+                          setSubmissionError(true);
+                          getFinalTotal();
+                          handleResetCombinedArray();
+                          handleHistorySubmit(e);
+                          resetReceiptForm();
+                          setIsReceiptSubmitted(true);
+                          window.location.href = "/BillSplit/#/SplitBill";
                         }
-                        onClick={(e) => {
-                          const finalTotal = personReceiptAmount;
-                          if (finalTotal === 0) {
-                            // Handle the error case and prevent further actions
-                            console.error("Error: Invalid final total");
-                            setSubmissionError(false);
-                          } else {
-                            setSubmissionError(true);
-                            getFinalTotal();
-                            handleResetCombinedArray();
-                            handleHistorySubmit(e);
-                            resetReceiptForm();
-                            setIsReceiptSubmitted(true);
-                            window.location.href = "/BillSplit/#/SplitBill";
-                          }
-                        }}
-                      >
-                        <IoExitOutline size={24} />
-                      </label>
+                      }}
+                    >
+                      <IoExitOutline size={24} />
+                    </label>
                   </div>
                   {!submissionError && (
                     <div className="flex justify-center items-center col-span-2">
-                    <p className="mb-2 text-center text-sm text-red-500 w-max mr-1/2">
-                      {lang === "english"
-                        ? "Please add an item before submitting."
-                        : "Veuillez ajouter un élément avant de soumettre."}
-                    </p>
+                      <p className="mb-2 text-center text-sm text-red-500 w-max mr-1/2">
+                        {lang === "english"
+                          ? "Please add an item before submitting."
+                          : "Veuillez ajouter un élément avant de soumettre."}
+                      </p>
                     </div>
                   )}
                 </div>
@@ -1103,21 +1107,23 @@ export default function ReceiptInput({
                                     const finalTotal = personReceiptAmount;
                                     if (finalTotal === 0) {
                                       // Handle the error case and prevent further actions
-                                      console.error("Error: Invalid final total");
+                                      console.error(
+                                        "Error: Invalid final total"
+                                      );
                                       setSubmissionError(false);
                                     } else {
-                                    getFinalTotal();
-                                    handleResetCombinedArray();
-                                    setSelectMethodPicture(false);
-                                    setSelectPersonReceipt(true);
-                                    handleHistorySubmit(e);
-                                    setIsReceiptSubmitted(true);
-                                    setInvoiceNumber(0);
-                                    setPhotoData(null);
-                                    setShowTable(true);
-                                    setShowCameraImage(false);
-                                    
-                                    window.location.href = `/BillSplit#/ReceiptInput/${id}`;
+                                      getFinalTotal();
+                                      handleResetCombinedArray();
+                                      setSelectMethodPicture(false);
+                                      setSelectPersonReceipt(true);
+                                      handleHistorySubmit(e);
+                                      setIsReceiptSubmitted(true);
+                                      setInvoiceNumber(0);
+                                      setPhotoData(null);
+                                      setShowTable(true);
+                                      setShowCameraImage(false);
+
+                                      window.location.href = `/BillSplit#/ReceiptInput/${id}`;
                                     }
                                   }}
                                 >
@@ -1126,45 +1132,50 @@ export default function ReceiptInput({
                               </Link>
                             </div>
                             <div className="max-w-20 m-2 mb-4 flex flex-col justify-center sm:flex-row">
-                                <button
-                                  className={
-                                    "flex h-24 w-fit flex-col items-center justify-center rounded-lg border border-gray-200 py-4 px-10 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline " +
-                                    (theme === "dark"
-                                      ? "bg-gray-900 text-white"
-                                      : "bg-white text-gray-800")
+                              <button
+                                className={
+                                  "flex h-24 w-fit flex-col items-center justify-center rounded-lg border border-gray-200 py-4 px-10 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline " +
+                                  (theme === "dark"
+                                    ? "bg-gray-900 text-white"
+                                    : "bg-white text-gray-800")
+                                }
+                                onClick={(e) => {
+                                  const finalTotal = personReceiptAmount;
+                                  if (finalTotal === 0) {
+                                    // Handle the error case and prevent further actions
+                                    console.error("Error: Invalid final total");
+                                    setSubmissionError(false);
+                                  } else {
+                                    setSubmissionError(true);
+                                    getFinalTotal();
+                                    handleResetCombinedArray();
+                                    handleHistorySubmit(e);
+                                    resetReceiptForm();
+                                    setIsReceiptSubmitted(true);
+                                    setPersonReceiptAmount(0);
+                                    window.location.href =
+                                      "/BillSplit/#/SplitBill";
                                   }
-                                  onClick={(e) => {
-                                    const finalTotal = personReceiptAmount;
-                                    if (finalTotal === 0) {
-                                      // Handle the error case and prevent further actions
-                                      console.error("Error: Invalid final total");
-                                      setSubmissionError(false);
-                                    } else {
-                                      setSubmissionError(true);
-                                      getFinalTotal();
-                                      handleResetCombinedArray();
-                                      handleHistorySubmit(e);
-                                      resetReceiptForm();
-                                      setIsReceiptSubmitted(true);
-                                      setPersonReceiptAmount(0);
-                                      window.location.href = "/BillSplit/#/SplitBill";
-                                    }}}
-                                >
-                                  <IoExitOutline size={24} />
-                                </button>
-                           
+                                }}
+                              >
+                                <IoExitOutline size={24} />
+                              </button>
                             </div>
-                            
                           </div>
                           {!submissionError && (
-                    <div className={"flex justify-center items-center col-span-2 "+ (theme === "dark" ? "bg-gray-900":"bg-white")}>
-                    <p className="mb-2 text-center text-sm text-red-500 w-max mr-1/2">
-                      {lang === "english"
-                        ? "Please add an item before submitting."
-                        : "Veuillez ajouter un élément avant de soumettre."}
-                    </p>
-                    </div>
-                  )}
+                            <div
+                              className={
+                                "flex justify-center items-center col-span-2 " +
+                                (theme === "dark" ? "bg-gray-900" : "bg-white")
+                              }
+                            >
+                              <p className="mb-2 text-center text-sm text-red-500 w-max mr-1/2">
+                                {lang === "english"
+                                  ? "Please add an item before submitting."
+                                  : "Veuillez ajouter un élément avant de soumettre."}
+                              </p>
+                            </div>
+                          )}
                         </div>
                       </div>
                     </>
@@ -1176,47 +1187,46 @@ export default function ReceiptInput({
                 ""
               )}
             </div>
-        
           </div>
         </main>
       </CSSTransition>
       <div>
-      <CSSTransition
-            in={pictureError}
-            timeout={500} // Adjust the duration of the transition as needed
-            classNames="fade"
-            unmountOnExit
-          >
-            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 ">
-              <div
+        <CSSTransition
+          in={pictureError}
+          timeout={500} // Adjust the duration of the transition as needed
+          classNames="fade"
+          unmountOnExit
+        >
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 ">
+            <div
+              className={
+                "p-6 rounded shadow-md " +
+                (theme === "dark" ? "bg-gray-800" : "bg-gray-100")
+              }
+            >
+              <p
                 className={
-                  "p-6 rounded shadow-md " +
-                  (theme === "dark" ? "bg-gray-800" : "bg-gray-100")
+                  theme === "dark"
+                    ? "text-white whitespace-nowrap"
+                    : "text-black whitespace-nowrap"
                 }
               >
-                <p
-                  className={
-                    theme === "dark"
-                      ? "text-white whitespace-nowrap"
-                      : "text-black whitespace-nowrap"
-                  }
+                {lang === "english"
+                  ? "Picture too unclear.."
+                  : "La photo est trop floue"}
+              </p>
+              <div className="flex justify-center item-center mt-4">
+                <button
+                  className="ml-1 px-4 py-2 mr-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400"
+                  onClick={() => setPictureError(false)}
                 >
-                  {lang === "english"
-                    ? "Picture too unclear.."
-                    : "La photo est trop floue"}
-                </p>
-                <div className="flex justify-center item-center mt-4">
-                  <button
-                    className="ml-1 px-4 py-2 mr-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400"
-                    onClick={() => setPictureError(false)} 
-                  >
-                    OK
-                  </button>
-                </div>
+                  OK
+                </button>
               </div>
             </div>
-          </CSSTransition>
           </div>
+        </CSSTransition>
+      </div>
     </>
   );
 }
