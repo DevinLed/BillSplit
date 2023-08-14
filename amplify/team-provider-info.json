@@ -1,0 +1,15 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-divvy-dev-210958-authRole",
+      "UnauthRoleArn": "arn:aws:iam::365430784720:role/amplify-divvy-dev-210958-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::365430784720:role/amplify-divvy-dev-210958-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-divvy-dev-210958-deployment",
+      "UnauthRoleName": "amplify-divvy-dev-210958-unauthRole",
+      "StackName": "amplify-divvy-dev-210958",
+      "StackId": "arn:aws:cloudformation:us-east-1:365430784720:stack/amplify-divvy-dev-210958/b9891a50-3a32-11ee-9675-1259ddad5be3",
+      "AmplifyAppId": "dg6vgpg03g8ii"
+    }
+  }
+}
