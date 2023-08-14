@@ -10,6 +10,11 @@
       "StackName": "amplify-divvy-dev-210958",
       "StackId": "arn:aws:cloudformation:us-east-1:365430784720:stack/amplify-divvy-dev-210958/b9891a50-3a32-11ee-9675-1259ddad5be3",
       "AmplifyAppId": "dg6vgpg03g8ii"
+    },
+    "categories": {
+      "api": {
+        "divvy": {}
+      }
     }
   }
 }
