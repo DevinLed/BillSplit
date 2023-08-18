@@ -21,12 +21,14 @@ import Settings from "./components/Settings";
 import Footer from "./components/Footer";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { withAuthenticator, Button, Heading } from '@aws-amplify/ui-react';
+import '@aws-amplify/ui-react/styles.css';
 
 import "./darkMode.css";
 import "./index.css";
 import ReceiptTable from "./components/ReceiptTable";
 
-function App() {
+function App({ signOut, user }) {
   // dark mode theme switching
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
   const toggleTheme = () => {
@@ -59,7 +61,15 @@ function App() {
     document.body.className = taxRate;
   }, [taxRate]);
   
-
+//styling for login prompt
+  const styles = {
+    container: { width: 400, margin: '0 auto', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: 20 },
+    todo: {  marginBottom: 15 },
+    input: { border: 'none', backgroundColor: '#ddd', marginBottom: 10, padding: 8, fontSize: 18 },
+    todoName: { fontSize: 20, fontWeight: 'bold' },
+    todoDescription: { marginBottom: 0 },
+    button: { backgroundColor: 'black', color: 'white', outline: 'none', fontSize: 18, padding: '12px 0px' }
+  }
   // Menus for edit person and edit group
   const [addPerson, setAddPerson] = useState(false);
   const [editPerson, setEditPerson] = useState(false);
@@ -299,6 +309,9 @@ function App() {
 
   return (
     <>
+    <div style={styles.container}>
+    <Heading level={1}>Hello {user.username}</Heading>
+    <Button onClick={signOut}>Sign out</Button>
       <Routes>
         <Route
           path="/Home"
@@ -505,8 +518,11 @@ function App() {
           element={<EditPerson theme={theme} lang={lang} setLang={setLang} />}
         />
       </Routes>
+      </div>
+      
     </>
+    
   );
 }
 
-export default App;
+export default withAuthenticator(App);
