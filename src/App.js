@@ -23,7 +23,6 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { withAuthenticator, Button, Heading } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
-
 import "./darkMode.css";
 import "./index.css";
 import ReceiptTable from "./components/ReceiptTable";
@@ -309,9 +308,7 @@ function App({ signOut, user }) {
 
   return (
     <>
-    <div style={styles.container}>
-    <Heading level={1}>Hello {user.username}</Heading>
-    <Button onClick={signOut}>Sign out</Button>
+    
       <Routes>
         <Route
           path="/Home"
@@ -328,6 +325,8 @@ function App({ signOut, user }) {
               setShowConfirmation={setShowConfirmation}
               lang={lang}
               setLang={setLang}
+              signOut={signOut}
+              user={user}
             />
           }
         />
@@ -518,7 +517,6 @@ function App({ signOut, user }) {
           element={<EditPerson theme={theme} lang={lang} setLang={setLang} />}
         />
       </Routes>
-      </div>
       
     </>
     

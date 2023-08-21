@@ -15,6 +15,8 @@ import {
 } from "react-icons/io5";
 
 import { CSSTransition } from "react-transition-group";
+import { withAuthenticator, Button, Heading } from '@aws-amplify/ui-react';
+import '@aws-amplify/ui-react/styles.css';
 
 export default function Home({
   theme,
@@ -23,6 +25,8 @@ export default function Home({
   list,
   lang,
   setLang,
+  signOut, 
+  user
 }) {
   const [startBill, setStartBill] = useState(true);
   const [showPersonEdit, setPersonEdit] = useState(false);
@@ -135,6 +139,21 @@ export default function Home({
 
   return (
     <>
+    <div>
+      <div className="flex items-center justify-center mt-4">
+    <Heading className={
+                      theme === "dark"
+                        ? "text-white text-center"
+                        : "text-gray-800 text-center"
+                    } level={1}>{lang === "english" ? "Hello" : "Bonjour"} {user.username}</Heading>
+    </div>
+    <div className="flex items-center justify-center mt-4">
+    <Button onClick={signOut} className={
+                      theme === "dark"
+                        ? "text-white text-center"
+                        : "text-gray-800 text-center"
+                    }>{lang === "english" ? "Sign out" : "Se déconnecter"}</Button>
+    </div>
       <main
         className={
           "xs:max-w-xl mt-5 rounded p-0 pt-3 shadow sm:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl " +
@@ -306,6 +325,7 @@ export default function Home({
 
         <Footer theme={theme} lang={lang}/>
       </main>
+      </div>
     </>
   );
 }
