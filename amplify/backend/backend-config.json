@@ -77,6 +77,11 @@
       ],
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
+    },
+    "graphQlLambdaAuthorizer53cb7da9": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
     }
   },
   "parameters": {
@@ -93,6 +98,22 @@
         {
           "category": "function",
           "resourceName": "divvy25172621"
+        }
+      ]
+    },
+    "AMPLIFY_function_graphQlLambdaAuthorizer53cb7da9_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "graphQlLambdaAuthorizer53cb7da9"
+        }
+      ]
+    },
+    "AMPLIFY_function_graphQlLambdaAuthorizer53cb7da9_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "graphQlLambdaAuthorizer53cb7da9"
         }
       ]
     }

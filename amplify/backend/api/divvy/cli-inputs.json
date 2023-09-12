@@ -5,10 +5,14 @@
     "serviceName": "AppSync",
     "defaultAuthType": {
       "mode": "AWS_LAMBDA",
-      "lambdaFunction": "divvy25172621",
+      "lambdaFunction": "graphQlLambdaAuthorizer53cb7da9",
       "ttlSeconds": "300"
     },
-    "conflictResolution": {},
+    "conflictResolution": {
+      "defaultResolutionStrategy": {
+        "type": "AUTOMERGE"
+      }
+    },
     "additionalAuthTypes": []
   }
 }

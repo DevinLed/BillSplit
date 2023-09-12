@@ -26,7 +26,66 @@
         "divvy25172621": {
           "deploymentBucketName": "amplify-divvy-dev-210958-deployment",
           "s3Key": "amplify-builds/divvy25172621-427a5130755057503439-build.zip"
+        },
+        "divvystorage": {}
+      }
+    }
+  },
+  "divvy": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-divvy-divvy-190057-authRole",
+      "UnauthRoleArn": "arn:aws:iam::365430784720:role/amplify-divvy-divvy-190057-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::365430784720:role/amplify-divvy-divvy-190057-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-divvy-divvy-190057-deployment",
+      "UnauthRoleName": "amplify-divvy-divvy-190057-unauthRole",
+      "StackName": "amplify-divvy-divvy-190057",
+      "StackId": "arn:aws:cloudformation:us-east-1:365430784720:stack/amplify-divvy-divvy-190057/ac907c10-51b3-11ee-9d5c-1279e81109c3",
+      "AmplifyAppId": "d2xuv8xhtmcgm8"
+    },
+    "categories": {
+      "auth": {
+        "divvy412182fd": {}
+      },
+      "function": {
+        "divvy25172621": {},
+        "divvystorage": {}
+      }
+    }
+  },
+  "divvyapp": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-divvy-divvyapp-190907-authRole",
+      "UnauthRoleArn": "arn:aws:iam::365430784720:role/amplify-divvy-divvyapp-190907-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::365430784720:role/amplify-divvy-divvyapp-190907-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-divvy-divvyapp-190907-deployment",
+      "UnauthRoleName": "amplify-divvy-divvyapp-190907-unauthRole",
+      "StackName": "amplify-divvy-divvyapp-190907",
+      "StackId": "arn:aws:cloudformation:us-east-1:365430784720:stack/amplify-divvy-divvyapp-190907/d0622480-51b4-11ee-8688-0e0527f064a5",
+      "AmplifyAppId": "d2xuv8xhtmcgm8"
+    },
+    "categories": {
+      "auth": {
+        "divvy412182fd": {}
+      },
+      "function": {
+        "divvy25172621": {
+          "deploymentBucketName": "amplify-divvy-divvyapp-190907-deployment",
+          "s3Key": "amplify-builds/divvy25172621-427a5130755057503439-build.zip"
+        },
+        "divvystorage": {},
+        "graphQlLambdaAuthorizer53cb7da9": {
+          "deploymentBucketName": "amplify-divvy-divvyapp-190907-deployment",
+          "s3Key": "amplify-builds/graphQlLambdaAuthorizer53cb7da9-70455253453849717533-build.zip"
         }
+      },
+      "api": {
+        "api2fbcef50": {},
+        "divvy": {}
+      },
+      "storage": {
+        "divvystorage": {}
       }
     }
   }

@@ -14,12 +14,3 @@ type Contact @model {
   personEmail: String
   personOwing: Float
 }
-mutation createContact($input: CreateContactInput!) {
-  createContact(input: $input) {
-    id
-    personName
-    personPhone
-    personEmail
-    personOwing
-  }
-}
