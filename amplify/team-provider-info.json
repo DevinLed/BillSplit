@@ -13,10 +13,20 @@
     },
     "categories": {
       "api": {
-        "divvy": {}
+        "divvy": {},
+        "api2fbcef50": {}
       },
       "auth": {
         "divvy412182fd": {}
+      },
+      "storage": {
+        "divvystorage": {}
+      },
+      "function": {
+        "divvy25172621": {
+          "deploymentBucketName": "amplify-divvy-dev-210958-deployment",
+          "s3Key": "amplify-builds/divvy25172621-427a5130755057503439-build.zip"
+        }
       }
     }
   }

@@ -1,0 +1,14 @@
+{
+  "resourceName": "divvystorage",
+  "tableName": "contacts",
+  "partitionKey": {
+    "fieldName": "personName",
+    "fieldType": "string"
+  },
+  "sortKey": {
+    "fieldName": "personOwing",
+    "fieldType": "number"
+  },
+  "gsi": [],
+  "triggerFunctions": []
+}
