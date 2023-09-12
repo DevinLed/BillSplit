@@ -4,8 +4,11 @@
     "apiName": "divvy",
     "serviceName": "AppSync",
     "defaultAuthType": {
-      "mode": "API_KEY",
-      "expirationTime": 7
-    }
+      "mode": "AWS_LAMBDA",
+      "lambdaFunction": "divvy25172621",
+      "ttlSeconds": "300"
+    },
+    "conflictResolution": {},
+    "additionalAuthTypes": []
   }
 }

@@ -26,6 +26,8 @@ import '@aws-amplify/ui-react/styles.css';
 import "./darkMode.css";
 import "./index.css";
 import ReceiptTable from "./components/ReceiptTable";
+import { createContact, updateContact, deleteContact } from './graphql/mutations';
+import { API, graphqlOperation } from 'aws-amplify';
 
 function App({ signOut, user }) {
   // dark mode theme switching
@@ -181,26 +183,35 @@ function App({ signOut, user }) {
     setObtainedInfo([])
     console.log("being accessed");
   };
-  const handleAddSubmit = (e) => {
-    const newItems = {
-      personName,
-      personPhone,
-      personEmail,
-      personOwing,
-      id: uuidv4(),
+  const handleAddSubmit = async (e) => {
+    e.preventDefault();
+  
+    // Create a new contact object
+    const newContact = {
+      personName: personName,
+      personPhone: personPhone,
+      personEmail: personEmail,
+      personOwing: parseFloat(personOwing),
     };
-    setPersonName("");
-    setPersonPhone("");
-    setPersonEmail("");
-    setPersonOwing("");
-    setSelectedValue("");
-    setAddPerson(false);
-    setList((prevList) => {
-      const newList = [...prevList, newItems];
-      localStorage.setItem("list", JSON.stringify(newList));
-      return newList;
-    });
-    setIsEditing(false);
+  
+    try {
+      // Use the createContact mutation to add the new contact
+      const result = await API.graphql(graphqlOperation(createContact, { input: newContact }));
+      
+      // Log the result or handle success as needed
+      console.log('Contact created:', result.data.createContact);
+  
+      // Reset the form or perform other actions
+      setPersonName("");
+      setPersonPhone("");
+      setPersonEmail("");
+      setPersonOwing("");
+      setAddPerson(false);
+      setIsEditing(false);
+    } catch (error) {
+      console.error('Error creating contact:', error);
+      // Handle errors as needed
+    }
   };
   const handleSubmit = (e) => {
     e.preventDefault();

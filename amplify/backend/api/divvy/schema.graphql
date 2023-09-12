@@ -7,3 +7,19 @@ type Todo @model {
   name: String!
   description: String
 }
+type Contact @model {
+  id: ID!
+  personName: String!
+  personPhone: String
+  personEmail: String
+  personOwing: Float
+}
+mutation createContact($input: CreateContactInput!) {
+  createContact(input: $input) {
+    id
+    personName
+    personPhone
+    personEmail
+    personOwing
+  }
+}
