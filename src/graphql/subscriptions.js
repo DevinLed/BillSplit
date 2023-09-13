@@ -1,38 +1,50 @@
-/* eslint-disable */
-// this is an auto generated file. This will be overwritten
-
-export const onCreateTodo = /* GraphQL */ `
-  subscription OnCreateTodo($filter: ModelSubscriptionTodoFilterInput) {
-    onCreateTodo(filter: $filter) {
+export const onCreateContact = /* GraphQL */ `
+  subscription OnCreateContact($filter: ModelSubscriptionContactFilterInput) {
+    onCreateContact(filter: $filter) {
       id
-      name
-      description
+      personName
+      personPhone
+      personEmail
+      personOwing
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
       __typename
     }
   }
 `;
-export const onUpdateTodo = /* GraphQL */ `
-  subscription OnUpdateTodo($filter: ModelSubscriptionTodoFilterInput) {
-    onUpdateTodo(filter: $filter) {
+export const onUpdateContact = /* GraphQL */ `
+  subscription OnUpdateContact($filter: ModelSubscriptionContactFilterInput) {
+    onUpdateContact(filter: $filter) {
       id
-      name
-      description
+      personName
+      personPhone
+      personEmail
+      personOwing
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
       __typename
     }
   }
 `;
-export const onDeleteTodo = /* GraphQL */ `
-  subscription OnDeleteTodo($filter: ModelSubscriptionTodoFilterInput) {
-    onDeleteTodo(filter: $filter) {
+export const onDeleteContact = /* GraphQL */ `
+  subscription OnDeleteContact($filter: ModelSubscriptionContactFilterInput) {
+    onDeleteContact(filter: $filter) {
       id
-      name
-      description
+      personName
+      personPhone
+      personEmail
+      personOwing
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
       __typename
     }
   }

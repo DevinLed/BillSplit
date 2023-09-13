@@ -1,35 +1,39 @@
 /* eslint-disable */
-// this is an auto generated file. This will be overwritten
+// This is an auto-generated file. It will be overwritten
 
-export const getTodo = /* GraphQL */ `
-  query GetTodo($id: ID!) {
-    getTodo(id: $id) {
+export const getContact = /* GraphQL */ `
+  query GetContact($id: ID!) {
+    getContact(id: $id) {
       id
-      name
-      description
+      personName
+      personPhone
+      personEmail
+      personOwing
       createdAt
       updatedAt
       __typename
     }
   }
 `;
-export const listTodos = /* GraphQL */ `
-  query ListTodos(
-    $filter: ModelTodoFilterInput
+
+export const listContacts = /* GraphQL */ `
+  query ListContacts(
+    $filter: ModelContactFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    listTodos(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    listContacts(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
-        name
-        description
+        personName
+        personPhone
+        personEmail
+        personOwing
         createdAt
         updatedAt
         __typename
       }
       nextToken
-      __typename
     }
   }
 `;

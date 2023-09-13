@@ -21,13 +21,19 @@ import Settings from "./components/Settings";
 import Footer from "./components/Footer";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { withAuthenticator, Button, Heading } from '@aws-amplify/ui-react';
-import '@aws-amplify/ui-react/styles.css';
+import { withAuthenticator, Button, Heading } from "@aws-amplify/ui-react";
+import "@aws-amplify/ui-react/styles.css";
 import "./darkMode.css";
 import "./index.css";
 import ReceiptTable from "./components/ReceiptTable";
-import { createContact, updateContact, deleteContact } from './graphql/mutations';
-import { API, graphqlOperation } from 'aws-amplify';
+import {
+  createContact,
+  updateContact,
+  deleteContact,
+} from "./graphql/mutations";
+import { Amplify, API, graphqlOperation, Auth } from "aws-amplify";
+import awsconfig from "./aws-exports";
+Amplify.configure(awsconfig);
 
 function App({ signOut, user }) {
   // dark mode theme switching
@@ -54,23 +60,42 @@ function App({ signOut, user }) {
     document.body.className = lang;
   }, [lang]);
   // tax rate select
-  
+
   const [taxRate, setTaxRate] = useState(localStorage.getItem("taxRate"));
   // useEffect to track tax rate
   useEffect(() => {
     localStorage.setItem("taxRate", taxRate);
     document.body.className = taxRate;
   }, [taxRate]);
-  
-//styling for login prompt
+
+  //styling for login prompt
   const styles = {
-    container: { width: 400, margin: '0 auto', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: 20 },
-    todo: {  marginBottom: 15 },
-    input: { border: 'none', backgroundColor: '#ddd', marginBottom: 10, padding: 8, fontSize: 18 },
-    todoName: { fontSize: 20, fontWeight: 'bold' },
+    container: {
+      width: 400,
+      margin: "0 auto",
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "center",
+      padding: 20,
+    },
+    todo: { marginBottom: 15 },
+    input: {
+      border: "none",
+      backgroundColor: "#ddd",
+      marginBottom: 10,
+      padding: 8,
+      fontSize: 18,
+    },
+    todoName: { fontSize: 20, fontWeight: "bold" },
     todoDescription: { marginBottom: 0 },
-    button: { backgroundColor: 'black', color: 'white', outline: 'none', fontSize: 18, padding: '12px 0px' }
-  }
+    button: {
+      backgroundColor: "black",
+      color: "white",
+      outline: "none",
+      fontSize: 18,
+      padding: "12px 0px",
+    },
+  };
   // Menus for edit person and edit group
   const [addPerson, setAddPerson] = useState(false);
   const [editPerson, setEditPerson] = useState(false);
@@ -94,7 +119,7 @@ function App({ signOut, user }) {
   const [formSubmitted, setFormSubmitted] = useState(false);
 
   const [combinedArray, setCombinedArray] = useState([]);
-  
+
   const [obtainedInfo, setObtainedInfo] = useState([]);
   // Calendar for manual receipt entry
   const [merchantName, setMerchantName] = useState("");
@@ -180,28 +205,37 @@ function App({ signOut, user }) {
   // Handler for full reset of tables.
   const handleResetCombinedArray = () => {
     setCombinedArray([]);
-    setObtainedInfo([])
+    setObtainedInfo([]);
     console.log("being accessed");
   };
   const handleAddSubmit = async (e) => {
     e.preventDefault();
-  
-    // Create a new contact object
-    const newContact = {
-      personName: personName,
-      personPhone: personPhone,
-      personEmail: personEmail,
-      personOwing: parseFloat(personOwing),
-    };
-  
+
     try {
-      // Use the createContact mutation to add the new contact
-      const result = await API.graphql(graphqlOperation(createContact, { input: newContact }));
-      
-      // Log the result or handle success as needed
-      console.log('Contact created:', result.data.createContact);
-  
-      // Reset the form or perform other actions
+      // Check if the user is authenticated
+      const user = await Auth.currentAuthenticatedUser();
+
+      const newContact = {
+        personName: personName,
+        personPhone: personPhone,
+        personEmail: personEmail,
+        personOwing: parseFloat(personOwing),
+      };
+
+      // Add the contact to DynamoDB
+      const result = await API.graphql(
+        graphqlOperation(createContact, { input: newContact })
+      );
+      console.log("Contact created:", result.data.createContact);
+
+      // Add the contact to the local list
+      setList((prevList) => {
+        const newList = [...prevList, newContact];
+        localStorage.setItem("list", JSON.stringify(newList));
+        return newList;
+      });
+
+      // Clear form fields and set editing state
       setPersonName("");
       setPersonPhone("");
       setPersonEmail("");
@@ -209,10 +243,27 @@ function App({ signOut, user }) {
       setAddPerson(false);
       setIsEditing(false);
     } catch (error) {
-      console.error('Error creating contact:', error);
-      // Handle errors as needed
+      console.error("Error creating contact:", error);
+
+      // If there's an error, still add the contact to the local list
+      setList((prevList) => {
+        const newContact = {
+          personName,
+          personPhone,
+          personEmail,
+          personOwing: parseFloat(personOwing),
+          id: uuidv4(),
+        };
+        const newList = [...prevList, newContact];
+        localStorage.setItem("list", JSON.stringify(newList));
+
+        setAddPerson(false);
+        setIsEditing(false);
+        return newList;
+      });
     }
   };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -319,7 +370,6 @@ function App({ signOut, user }) {
 
   return (
     <>
-    
       <Routes>
         <Route
           path="/Home"
@@ -528,9 +578,7 @@ function App({ signOut, user }) {
           element={<EditPerson theme={theme} lang={lang} setLang={setLang} />}
         />
       </Routes>
-      
     </>
-    
   );
 }
 

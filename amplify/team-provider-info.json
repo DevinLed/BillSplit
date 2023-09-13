@@ -78,7 +78,8 @@
         "graphQlLambdaAuthorizer53cb7da9": {
           "deploymentBucketName": "amplify-divvy-divvyapp-190907-deployment",
           "s3Key": "amplify-builds/graphQlLambdaAuthorizer53cb7da9-70455253453849717533-build.zip"
-        }
+        },
+        "graphQlLambdaAuthorizer3f860781": {}
       },
       "api": {
         "api2fbcef50": {},
