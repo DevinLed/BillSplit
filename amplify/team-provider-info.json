@@ -45,11 +45,15 @@
     },
     "categories": {
       "auth": {
-        "divvy412182fd": {}
+        "divvy412182fd": {},
+        "divvyad54b6de": {}
       },
       "function": {
         "divvy25172621": {},
         "divvystorage": {}
+      },
+      "storage": {
+        "Users": {}
       }
     }
   },

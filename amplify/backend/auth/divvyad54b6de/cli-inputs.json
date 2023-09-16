@@ -1,14 +1,14 @@
 {
   "version": "1",
   "cognitoConfig": {
-    "identityPoolName": "divvy412182fd_identitypool_412182fd",
+    "identityPoolName": "divvyad54b6de_identitypool_ad54b6de",
     "allowUnauthenticatedIdentities": false,
-    "resourceNameTruncated": "divvy412182fd",
-    "userPoolName": "divvy412182fd_userpool_412182fd",
+    "resourceNameTruncated": "divvyad54b6de",
+    "userPoolName": "divvyad54b6de_userpool_ad54b6de",
     "autoVerifiedAttributes": [
       "email"
     ],
-    "mfaConfiguration": "OPTIONAL",
+    "mfaConfiguration": "OFF",
     "mfaTypes": [
       "SMS Text Message"
     ],
@@ -31,39 +31,15 @@
     "userpoolClientReadAttributes": [
       "email"
     ],
-    "userpoolClientLambdaRole": "divvy4412182fd_userpoolclient_lambda_role",
+    "userpoolClientLambdaRole": "divvyaad54b6de_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
-    "sharedId": "412182fd",
-    "resourceName": "divvy412182fd",
+    "sharedId": "ad54b6de",
+    "resourceName": "divvyad54b6de",
     "authSelections": "identityPoolAndUserPool",
-    "useDefault": "manual",
+    "useDefault": "default",
     "userPoolGroupList": [],
     "serviceName": "Cognito",
     "usernameCaseSensitive": false,
-    "useEnabledMfas": true,
-    "authRoleArn": {
-      "Fn::GetAtt": [
-        "AuthRole",
-        "Arn"
-      ]
-    },
-    "unauthRoleArn": {
-      "Fn::GetAtt": [
-        "UnauthRole",
-        "Arn"
-      ]
-    },
-    "breakCircularDependency": true,
-    "dependsOn": [],
-    "thirdPartyAuth": false,
-    "userPoolGroups": false,
-    "adminQueries": false,
-    "triggers": {},
-    "hostedUI": false,
-    "authProviders": [],
-    "parentStack": {
-      "Ref": "AWS::StackId"
-    },
-    "permissions": []
+    "useEnabledMfas": true
   }
 }

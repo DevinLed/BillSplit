@@ -1,47 +1,10 @@
 {
-  "api": {
-    "api2fbcef50": {
-      "dependsOn": [
-        {
-          "attributes": [
-            "Name",
-            "Arn"
-          ],
-          "category": "function",
-          "resourceName": "divvy25172621"
-        }
-      ],
-      "providerPlugin": "awscloudformation",
-      "service": "API Gateway"
-    },
-    "divvy": {
-      "dependsOn": [],
-      "output": {
-        "authConfig": {
-          "additionalAuthenticationProviders": [
-            {
-              "authenticationType": "AWS_IAM"
-            }
-          ],
-          "defaultAuthentication": {
-            "authenticationType": "AWS_LAMBDA",
-            "lambdaAuthorizerConfig": {
-              "lambdaFunction": "divvy25172621",
-              "ttlSeconds": "300"
-            }
-          }
-        }
-      },
-      "providerPlugin": "awscloudformation",
-      "service": "AppSync"
-    }
-  },
   "auth": {
-    "divvy412182fd": {
+    "divvyad54b6de": {
       "customAuth": false,
       "dependsOn": [],
       "frontendAuthConfig": {
-        "mfaConfiguration": "OPTIONAL",
+        "mfaConfiguration": "OFF",
         "mfaTypes": [
           "SMS"
         ],
@@ -62,73 +25,8 @@
       "service": "Cognito"
     }
   },
-  "function": {
-    "divvy25172621": {
-      "build": true,
-      "dependsOn": [
-        {
-          "attributeEnvMap": {
-            "Arn": "TABLE_ARN",
-            "Name": "TABLE_NAME"
-          },
-          "attributes": [
-            "Name",
-            "Arn"
-          ],
-          "category": "storage",
-          "resourceName": "divvystorage"
-        }
-      ],
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda"
-    },
-    "graphQlLambdaAuthorizer3f860781": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda"
-    },
-    "graphQlLambdaAuthorizer53cb7da9": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda"
-    }
-  },
-  "parameters": {
-    "AMPLIFY_function_divvy25172621_deploymentBucketName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "divvy25172621"
-        }
-      ]
-    },
-    "AMPLIFY_function_divvy25172621_s3Key": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "divvy25172621"
-        }
-      ]
-    },
-    "AMPLIFY_function_graphQlLambdaAuthorizer53cb7da9_deploymentBucketName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "graphQlLambdaAuthorizer53cb7da9"
-        }
-      ]
-    },
-    "AMPLIFY_function_graphQlLambdaAuthorizer53cb7da9_s3Key": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "graphQlLambdaAuthorizer53cb7da9"
-        }
-      ]
-    }
-  },
   "storage": {
-    "divvystorage": {
+    "Users": {
       "providerPlugin": "awscloudformation",
       "service": "DynamoDB"
     }
