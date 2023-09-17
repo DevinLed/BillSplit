@@ -13,10 +13,13 @@ type UserData @model {
 query GetUserData($id: ID!) {
   getUserData(id: $id) {
     id
+    username
     personName
     personPhone
     personEmail
     personOwing
-    
+    createdAt
+    updatedAt
+    __typename
   }
 }

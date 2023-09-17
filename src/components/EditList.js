@@ -3,12 +3,11 @@ import AddPerson from "./AddPerson";
 import Header from "./Header";
 import EditPerson from "./EditPerson";
 import { IoPersonAddSharp } from "react-icons/io5";
-import { API, graphqlOperation } from 'aws-amplify';
-import { listUserData } from '../graphql/queries'; // Import your GraphQL query
-
+import { API, graphqlOperation, Auth } from 'aws-amplify';
+import { listUserData } from '../graphql/queries';
+import { deleteUserData } from "../graphql/mutations";
 import Avatar from "react-avatar";
 import { CSSTransition } from "react-transition-group";
-import { deleteUserData } from "../graphql/mutations";
 
 export default function EditList({
   addPerson,
@@ -39,19 +38,35 @@ export default function EditList({
 }) {
   const [list, setList] = useState([]);
   const [selectEditPersonList, setEditSelectPersonList] = useState(true);
-  const [userData, setUserData] = useState([]); // Store user data from DynamoDB
+  const [userId, setUserId] = useState(null); // Initialize userId as null
+
+  const getUserId = async () => {
+    try {
+      const user = await Auth.currentAuthenticatedUser();
+      return user.attributes.sub; // 'sub' is the unique user ID
+    } catch (error) {
+      // Handle authentication error
+      console.error('Error getting user ID:', error);
+      return null;
+    }
+  };
   useEffect(() => {
-    async function fetchUserData() {
+    async function fetchData() {
       try {
         const userData = await API.graphql(graphqlOperation(listUserData));
         const userDataList = userData.data.listUserData.items;
         setList(userDataList);
+
+        // Get the user ID and set it in the state
+        const id = await getUserId();
+        setUserId(id);
       } catch (error) {
         console.error("Error fetching UserData", error);
       }
     }
 
-    fetchUserData();
+    fetchData(); // Call fetchData to fetch data and set userId
+
   }, []);
 
   const handleDeletePerson = async (id) => {
@@ -60,10 +75,10 @@ export default function EditList({
       const response = await API.graphql(
         graphqlOperation(deleteUserData, { input: { id } })
       );
-  
+
       // Handle the response as needed (e.g., update local state)
       console.log('User deleted:', response);
-  
+
       // Close the edit person popup
       setEditPerson(false);
     } catch (error) {
@@ -83,18 +98,17 @@ export default function EditList({
           lang={lang}
         />
         <div className={`flex flex-col items-center justify-center transition-opacity duration-300 ${
-    list.length > 0 ? "opacity-100" : "opacity-0"
-  }`}>
+          list.length > 0 ? "opacity-100" : "opacity-0"
+        }`}>
 
           <ul className="m-0 py-1 w-3/4">
-          {list.map(
-            ({ id, personName, personPhone, personEmail, personOwing }) => (
-              <React.Fragment key={id}>
-                {personName.length ? (
+            {list.map(
+              ({ id, personName, personPhone, personEmail, personOwing }) => (
+                <React.Fragment key={id}>
+                  {personName.length ? (
                     <button
                       className="text-primary outline-none focus:outline-none w-full"
                       onClick={() => {
-                        console.log(false);
                         editRow(id); // Call editRow function with the selected item's ID
                       }}
                     >
@@ -137,10 +151,10 @@ export default function EditList({
                         </span>
                       </li>
                     </button>
-                ) : null}
-              </React.Fragment>
-            )
-          )}
+                  ) : null}
+                </React.Fragment>
+              )
+            )}
           </ul>
 
           <label
@@ -212,6 +226,7 @@ export default function EditList({
             editPerson={editPerson}
             handleDeletePerson={handleDeletePerson}
             lang={lang}
+            userId={userId}
           ></EditPerson>
         </CSSTransition>
       </main>

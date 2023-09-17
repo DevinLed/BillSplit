@@ -27,6 +27,8 @@ export default function EditPerson({
   handleDeletePerson,
   lang,
   setLang,
+  userData,
+  userId
 }) {
   const handleResetBalance = () => {
     setPersonOwing("0.00");
