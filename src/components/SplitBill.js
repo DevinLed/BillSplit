@@ -1,12 +1,13 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { BrowserRouter, Switch, Route, Routes, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import AddPerson from "./AddPerson";
 import Header from "./Header";
 import { IoPersonAddSharp } from "react-icons/io5";
 import Avatar from "react-avatar";
-
 import { CSSTransition } from "react-transition-group";
+import { API, graphqlOperation } from "aws-amplify";
+import { listUserData } from "../graphql/queries";
 
 export default function SplitBill({
   addPerson,
@@ -24,7 +25,6 @@ export default function SplitBill({
   setPersonState,
   personState,
   setIsSelected,
-  list,
   value,
   setValue,
   addNum,
@@ -34,9 +34,23 @@ export default function SplitBill({
   theme,
   handleAddSubmit,
   lang,
-  setLang,
+  setLang
 }) {
+  const [list, setList] = useState([]);
   const [selectPersonList, setSelectPersonList] = useState(true);
+  useEffect(() => {
+    async function fetchUserData() {
+      try {
+        const userData = await API.graphql(graphqlOperation(listUserData));
+        const userDataList = userData.data.listUserData.items;
+        setList(userDataList);
+      } catch (error) {
+        console.error("Error fetching UserData", error);
+      }
+    }
+
+    fetchUserData();
+  }, []);
 
   return (
     <>
@@ -46,7 +60,6 @@ export default function SplitBill({
       >
         <Header selectPersonList={selectPersonList} lang={lang} theme={theme}/>
         <div className="flex flex-col items-center justify-center">
-          {/* Table generator for people added */}
           <ul className="m-0 py-1 w-3/4">
             {list.map(({ id, personName, personOwing }) => (
               <React.Fragment key={id}>
@@ -65,14 +78,12 @@ export default function SplitBill({
                       }
                     >
                       <div className="flex items-center">
-                        {/* Avatar component to display the person's avatar */}
                         <Avatar
-                          name={personName} // Pass the person's name to the Avatar component
-                          size={32} // Set the size of the avatar (adjust as needed)
-                          round // Make the avatar circular
+                          name={personName}
+                          size={32}
+                          round
                         />
                         <span className="ml-1">
-                          {/* Div to display the person's name */}
                           {personName.length > 8
                             ? `${personName.substring(0, 8)}...`
                             : personName}
@@ -118,7 +129,7 @@ export default function SplitBill({
 
         <CSSTransition
           in={addPerson}
-          timeout={300} // Adjust the duration of the transition as needed
+          timeout={300}
           classNames="fade"
           unmountOnExit
         >

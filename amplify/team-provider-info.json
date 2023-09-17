@@ -54,6 +54,9 @@
       },
       "storage": {
         "Users": {}
+      },
+      "api": {
+        "divvy": {}
       }
     }
   },

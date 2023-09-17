@@ -1,59 +1,56 @@
-export const createContact = /* GraphQL */ `
-  mutation CreateContact(
-    $input: CreateContactInput!
-    $condition: ModelContactConditionInput
+/* eslint-disable */
+// this is an auto generated file. This will be overwritten
+
+export const createUserData = /* GraphQL */ `
+  mutation CreateUserData(
+    $input: CreateUserDataInput!
+    $condition: ModelUserDataConditionInput
   ) {
-    createContact(input: $input, condition: $condition) {
+    createUserData(input: $input, condition: $condition) {
       id
+      username
       personName
       personPhone
       personEmail
       personOwing
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
 `;
-export const updateContact = /* GraphQL */ `
-  mutation UpdateContact(
-    $input: UpdateContactInput!
-    $condition: ModelContactConditionInput
+export const updateUserData = /* GraphQL */ `
+  mutation UpdateUserData(
+    $input: UpdateUserDataInput!
+    $condition: ModelUserDataConditionInput
   ) {
-    updateContact(input: $input, condition: $condition) {
+    updateUserData(input: $input, condition: $condition) {
       id
+      username
       personName
       personPhone
       personEmail
       personOwing
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
 `;
-export const deleteContact = /* GraphQL */ `
-  mutation DeleteContact(
-    $input: DeleteContactInput!
-    $condition: ModelContactConditionInput
+export const deleteUserData = /* GraphQL */ `
+  mutation DeleteUserData(
+    $input: DeleteUserDataInput!
+    $condition: ModelUserDataConditionInput
   ) {
-    deleteContact(input: $input, condition: $condition) {
+    deleteUserData(input: $input, condition: $condition) {
       id
+      username
       personName
       personPhone
       personEmail
       personOwing
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }

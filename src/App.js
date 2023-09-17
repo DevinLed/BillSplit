@@ -26,12 +26,9 @@ import "@aws-amplify/ui-react/styles.css";
 import "./darkMode.css";
 import "./index.css";
 import ReceiptTable from "./components/ReceiptTable";
-import {
-  createContact,
-  updateContact,
-  deleteContact,
-} from "./graphql/mutations";
-import { Amplify, API, graphqlOperation, Auth } from "aws-amplify";
+import { createUserData, updateUserData, deleteUserData } from './graphql/mutations'; // Import the mutations
+
+import { Amplify, API, graphqlOperation, Auth, Storage } from "aws-amplify";
 import awsconfig from "./aws-exports";
 Amplify.configure(awsconfig);
 
@@ -210,31 +207,28 @@ function App({ signOut, user }) {
   };
   const handleAddSubmit = async (e) => {
     e.preventDefault();
-
+  
     try {
       // Check if the user is authenticated
       const user = await Auth.currentAuthenticatedUser();
-
-      const newContact = {
+  
+      const newUserData = {
+        username: user.username, // Use the authenticated user's username as a reference
         personName: personName,
         personPhone: personPhone,
         personEmail: personEmail,
         personOwing: parseFloat(personOwing),
       };
-
-      // Add the contact to DynamoDB
+  
+      // Add the user data to DynamoDB
       const result = await API.graphql(
-        graphqlOperation(createContact, { input: newContact })
+        graphqlOperation(createUserData, { input: newUserData })
       );
-      console.log("Contact created:", result.data.createContact);
-
-      // Add the contact to the local list
-      setList((prevList) => {
-        const newList = [...prevList, newContact];
-        localStorage.setItem("list", JSON.stringify(newList));
-        return newList;
-      });
-
+  
+      console.log("User data created:", result.data.createUserData);
+  
+      // Handle the response as needed
+  
       // Clear form fields and set editing state
       setPersonName("");
       setPersonPhone("");
@@ -243,24 +237,17 @@ function App({ signOut, user }) {
       setAddPerson(false);
       setIsEditing(false);
     } catch (error) {
-      console.error("Error creating contact:", error);
-
-      // If there's an error, still add the contact to the local list
-      setList((prevList) => {
-        const newContact = {
-          personName,
-          personPhone,
-          personEmail,
-          personOwing: parseFloat(personOwing),
-          id: uuidv4(),
-        };
-        const newList = [...prevList, newContact];
-        localStorage.setItem("list", JSON.stringify(newList));
-
-        setAddPerson(false);
-        setIsEditing(false);
-        return newList;
-      });
+      console.error("Error creating user data:", error);
+  
+      // Handle the error appropriately
+  
+      // Clear form fields and set editing state
+      setPersonName("");
+      setPersonPhone("");
+      setPersonEmail("");
+      setPersonOwing("");
+      setAddPerson(false);
+      setIsEditing(false);
     }
   };
 

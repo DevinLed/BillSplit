@@ -15,6 +15,7 @@
     "chart.js": "^4.3.3",
     "form-data": "^4.0.0",
     "fs": "^0.0.1-security",
+    "graphql-tag": "^2.12.6",
     "html2canvas": "^1.4.1",
     "rc-slider": "^10.1.1",
     "react": "^18.2.0",

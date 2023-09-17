@@ -1,10 +1,11 @@
 /* eslint-disable */
-// This is an auto-generated file. It will be overwritten
+// this is an auto generated file. This will be overwritten
 
-export const getContact = /* GraphQL */ `
-  query GetContact($id: ID!) {
-    getContact(id: $id) {
+export const getUserData = /* GraphQL */ `
+  query GetUserData($id: ID!) {
+    getUserData(id: $id) {
       id
+      username
       personName
       personPhone
       personEmail
@@ -15,16 +16,16 @@ export const getContact = /* GraphQL */ `
     }
   }
 `;
-
-export const listContacts = /* GraphQL */ `
-  query ListContacts(
-    $filter: ModelContactFilterInput
+export const listUserData = /* GraphQL */ `
+  query ListUserData(
+    $filter: ModelUserDataFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    listContacts(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    listUserData(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
+        username
         personName
         personPhone
         personEmail
@@ -34,6 +35,7 @@ export const listContacts = /* GraphQL */ `
         __typename
       }
       nextToken
+      __typename
     }
   }
 `;
