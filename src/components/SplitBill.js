@@ -34,7 +34,7 @@ export default function SplitBill({
   theme,
   handleAddSubmit,
   lang,
-  setLang
+  setLang,
 }) {
   const [list, setList] = useState([]);
   const [selectPersonList, setSelectPersonList] = useState(true);
@@ -58,8 +58,12 @@ export default function SplitBill({
         className="xs:max-w-xl bg-white-500 mt-5 rounded p-0 pt-3 shadow sm:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl"
         style={{ maxWidth: "600px" }}
       >
-        <Header selectPersonList={selectPersonList} lang={lang} theme={theme}/>
-        <div className="flex flex-col items-center justify-center">
+        <Header selectPersonList={selectPersonList} lang={lang} theme={theme} />
+        <div
+          className={`flex flex-col items-center justify-center transition-opacity duration-300 ${
+            list.length > 0 ? "opacity-100" : "opacity-0"
+          }`}
+        >
           <ul className="m-0 py-1 w-3/4">
             {list.map(({ id, personName, personOwing }) => (
               <React.Fragment key={id}>
@@ -78,11 +82,7 @@ export default function SplitBill({
                       }
                     >
                       <div className="flex items-center">
-                        <Avatar
-                          name={personName}
-                          size={32}
-                          round
-                        />
+                        <Avatar name={personName} size={32} round />
                         <span className="ml-1">
                           {personName.length > 8
                             ? `${personName.substring(0, 8)}...`

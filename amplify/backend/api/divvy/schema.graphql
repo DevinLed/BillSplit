@@ -10,3 +10,13 @@ type UserData @model {
   personEmail: String
   personOwing: Float
 }
+query GetUserData($id: ID!) {
+  getUserData(id: $id) {
+    id
+    personName
+    personPhone
+    personEmail
+    personOwing
+    
+  }
+}

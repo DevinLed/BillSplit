@@ -30,6 +30,7 @@ import { createUserData, updateUserData, deleteUserData } from './graphql/mutati
 
 import { Amplify, API, graphqlOperation, Auth, Storage } from "aws-amplify";
 import awsconfig from "./aws-exports";
+import { listUserData, getUserData } from "./graphql/queries";
 Amplify.configure(awsconfig);
 
 function App({ signOut, user }) {
@@ -168,17 +169,34 @@ function App({ signOut, user }) {
     setDisplayAdd(true);
     console.log("this is to add");
   };
-
-  const editRow = (id) => {
+  const editRow = async (id) => {
     setIsEditing(true);
     setEditPerson(id); // Store the selected item's ID to be edited
-    const editingRow = list.find((row) => row.id === id);
-    setPersonName(editingRow.personName);
-    setPersonPhone(editingRow.personPhone);
-    setPersonEmail(editingRow.personEmail);
-    setPersonOwing(editingRow.personOwing);
+  
+    try {
+      // Fetch the user data for the selected item from DynamoDB using the new query
+      const userDataResponse = await API.graphql(
+        graphqlOperation(getUserData, { id }) // Replace GetUserData with the actual query name
+      );
+  
+      const editingRow = userDataResponse.data.getUserData; // Assuming getUserData returns a single item
+  
+      if (editingRow) {
+        // Update state variables with the values from the selected item
+        setPersonName(editingRow.personName);
+        setPersonPhone(editingRow.personPhone);
+        setPersonEmail(editingRow.personEmail);
+        setPersonOwing(editingRow.personOwing);
+      } else {
+        // Handle the case where the item with the specified ID was not found
+        // You can display an error message or take other appropriate actions
+      }
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+      // Handle the error case as needed
+    }
   };
-
+  
   // used to update values of balance for contacts
   const subNum = (id, val, val2) => {
     setList((prevList) => {

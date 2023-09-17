@@ -1,11 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import AddPerson from "./AddPerson";
 import Header from "./Header";
 import EditPerson from "./EditPerson";
 import { IoPersonAddSharp } from "react-icons/io5";
+import { API, graphqlOperation } from 'aws-amplify';
+import { listUserData } from '../graphql/queries'; // Import your GraphQL query
 
 import Avatar from "react-avatar";
 import { CSSTransition } from "react-transition-group";
+import { deleteUserData } from "../graphql/mutations";
 
 export default function EditList({
   addPerson,
@@ -27,23 +30,45 @@ export default function EditList({
   editPerson,
   setEditPerson,
   editRow,
-  list,
   value,
   setValue,
   theme,
-  setList,
   handleAddSubmit,
   lang,
   setLang,
 }) {
+  const [list, setList] = useState([]);
   const [selectEditPersonList, setEditSelectPersonList] = useState(true);
+  const [userData, setUserData] = useState([]); // Store user data from DynamoDB
+  useEffect(() => {
+    async function fetchUserData() {
+      try {
+        const userData = await API.graphql(graphqlOperation(listUserData));
+        const userDataList = userData.data.listUserData.items;
+        setList(userDataList);
+      } catch (error) {
+        console.error("Error fetching UserData", error);
+      }
+    }
 
-  const handleDeletePerson = (id) => {
-    const updatedList = list.filter((row) => row.id !== editPerson);
-    setList(updatedList);
+    fetchUserData();
+  }, []);
 
-    // Close the edit person popup
-    setEditPerson(false);
+  const handleDeletePerson = async (id) => {
+    try {
+      // Call the deleteUser mutation with the user's ID to delete them
+      const response = await API.graphql(
+        graphqlOperation(deleteUserData, { input: { id } })
+      );
+  
+      // Handle the response as needed (e.g., update local state)
+      console.log('User deleted:', response);
+  
+      // Close the edit person popup
+      setEditPerson(false);
+    } catch (error) {
+      console.error('Error deleting user:', error);
+    }
   };
 
   return (
@@ -57,12 +82,15 @@ export default function EditList({
           theme={theme}
           lang={lang}
         />
-        <div className="flex flex-col items-center justify-center">
+        <div className={`flex flex-col items-center justify-center transition-opacity duration-300 ${
+    list.length > 0 ? "opacity-100" : "opacity-0"
+  }`}>
+
+          <ul className="m-0 py-1 w-3/4">
           {list.map(
             ({ id, personName, personPhone, personEmail, personOwing }) => (
               <React.Fragment key={id}>
                 {personName.length ? (
-                  <ul className="m-0 py-1 w-3/4">
                     <button
                       className="text-primary outline-none focus:outline-none w-full"
                       onClick={() => {
@@ -109,11 +137,11 @@ export default function EditList({
                         </span>
                       </li>
                     </button>
-                  </ul>
                 ) : null}
               </React.Fragment>
             )
           )}
+          </ul>
 
           <label
             className={

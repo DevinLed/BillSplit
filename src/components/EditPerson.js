@@ -4,6 +4,9 @@ import "./../index.css";
 import { IoSaveOutline } from "react-icons/io5";
 import { AiOutlineDelete } from "react-icons/ai";
 import { CSSTransition } from "react-transition-group";
+import { API, graphqlOperation } from 'aws-amplify';
+import { updateUserData } from '../graphql/mutations';
+
 
 import UseAnimations from "react-useanimations";
 
@@ -77,26 +80,38 @@ export default function EditPerson({
     )}-${numbersOnly.slice(6, 10)}`;
   };
 
-  const handlePhoneNumberChange = (event) => {
-    const inputValue = event.target.value;
-    const formattedValue = formatPhoneNumber(inputValue);
-    setPersonPhone(formattedValue);
+ 
+const handlePhoneNumberChange = async (event, userId, personName, personEmail, personOwing) => {
+  const inputValue = event.target.value;
+  const formattedValue = formatPhoneNumber(inputValue);
+  setPersonPhone(formattedValue);
 
-    const phoneNumberRegex = /^\(\d{3}\) \d{3}-\d{4}$/; // matches a phone number in the format of (XXX) XXX-XXXX
-    const isValid = phoneNumberRegex.test(formattedValue);
-    setIsValidPhoneNumber(isValid);
+  const phoneNumberRegex = /^\(\d{3}\) \d{3}-\d{4}$/; // matches a phone number in the format of (XXX) XXX-XXXX
+  const isValid = phoneNumberRegex.test(formattedValue);
+  setIsValidPhoneNumber(isValid);
 
-    // Check if the input is a valid phone number
-    if (isValid) {
-      setErrorPhone(true);
-      console.log("phone accepted");
+  // Check if the input is a valid phone number
+  if (isValid) {
+    setErrorPhone(true);
+    console.log("Phone accepted");
+
+    // Update the user's phone number in the UserData table
+    const success = await updateUserData(userId, personName, formattedValue, personEmail, personOwing);
+    
+    if (success) {
+      console.log('User phone number updated');
+      // Optionally, update the local state or perform other actions
     } else {
-      setIsValidPhoneNumber(false);
-      setErrorPhone(false);
-      console.log("error in phone input");
+      console.error('Error updating user phone number');
+      // Handle the error case as needed
     }
-  };
-
+  } else {
+    setIsValidPhoneNumber(false);
+    setErrorPhone(false);
+    console.log("Error in phone input");
+    // Handle invalid phone number input if needed
+  }
+};
   const handleEmailChange = (event) => {
     const inputEmail = event.target.value;
     setPersonEmail(inputEmail);
