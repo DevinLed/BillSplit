@@ -28,6 +28,12 @@ import UseAnimations from "react-useanimations";
 import github from "react-useanimations/lib/github";
 import "rc-slider/assets/index.css";
 import "react-datepicker/dist/react-datepicker.css";
+import { Amplify, API, graphqlOperation, Auth } from 'aws-amplify';
+import { listUserData } from '../graphql/queries';
+import { updateUserData, deleteUserData } from "../graphql/mutations";
+import awsconfig from "../aws-exports";
+Amplify.configure(awsconfig);
+
 
 export default function ReceiptInput({
   personName,
@@ -68,6 +74,7 @@ export default function ReceiptInput({
   handleResetCombinedArray,
   obtainedInfo,
   setObtainedInfo,
+  
 }) {
   registerLocale("en", en);
   registerLocale("fr", fr);
@@ -92,13 +99,14 @@ export default function ReceiptInput({
   const [amount, setAmount] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [receiptTotal, setReceiptTotal] = useState(0);
-  const [showTable, setShowTable] = useState("");
+  const [showTable, setShowTable] = useState(false);
   const [youTotal, setYouTotal] = useState(0);
   const [splitTotal, setSplitTotal] = useState(0);
   const [themTotal, setThemTotal] = useState(0);
   const [selected, setSelected] = useState(null);
   const [isMerchantNameFocused, setMerchantNameFocused] = useState(false);
   const [isInvoiceNumberFocused, setInvoiceNumberFocused] = useState(false);
+  const csstransitionRef = useRef(null);
 
   const [filledIn, setFilledIn] = useState(false);
   const handleMerchantNameFocus = () => {
@@ -285,6 +293,7 @@ export default function ReceiptInput({
 
   // Used to calculate the amount by adding up all the item.amount of entries in the table array
   const getPictureTotal = () => {
+    // Calculate the total without setting state
     let total =
       parseFloat(splitPictureTotal) +
       parseFloat(themPictureTotal) +
@@ -294,14 +303,18 @@ export default function ReceiptInput({
     let themValue = parseFloat(themPictureTotal);
     let youValue = parseFloat(youPictureTotal);
 
+    let personReceiptAmount;
+
     if (selectedValue === "you") {
-      setPersonReceiptAmount(splitValue + themValue);
+      // Calculate the personReceiptAmount without setting state
+      personReceiptAmount = splitValue + themValue;
     } else if (selectedValue === "them") {
-      setPersonReceiptAmount(splitValue + youValue);
+      // Calculate the personReceiptAmount without setting state
+      personReceiptAmount = splitValue + youValue;
     }
+
     return parseFloat(total).toFixed(2);
   };
-
   // Handler to push entries into the History tab array
   const handleHistorySubmit = () => {
     const newReceipt = {
@@ -321,7 +334,16 @@ export default function ReceiptInput({
 
     addReceipt(newReceipt);
   };
-
+  const getUserId = async () => {
+    try {
+      const user = await Auth.currentAuthenticatedUser();
+      return user.attributes.sub; // 'sub' is the unique user ID
+    } catch (error) {
+      // Handle authentication error
+      console.error('Error getting user ID:', error);
+      return null;
+    }
+  };
   const taxOwing =
     selectedValue === "you"
       ? parseFloat(splitPictureTotal) / 2 + parseFloat(themPictureTotal)
@@ -432,10 +454,13 @@ export default function ReceiptInput({
         timeout={500} // Adjust the duration of the transition as needed
         classNames="fade"
         unmountOnExit
+        
+        nodeRef={csstransitionRef}
       >
         <main
           className="xs:max-w-xl bg-white-500 mt-5 rounded p-0 pt-3 shadow sm:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl"
           style={{ maxWidth: "600px" }}
+          ref={csstransitionRef}
         >
           <div className="mt-0 flex flex-col items-center justify-center">
             <Header

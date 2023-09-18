@@ -3,11 +3,14 @@ import AddPerson from "./AddPerson";
 import Header from "./Header";
 import EditPerson from "./EditPerson";
 import { IoPersonAddSharp } from "react-icons/io5";
-import { API, graphqlOperation, Auth } from 'aws-amplify';
+import { Amplify, API, graphqlOperation, Auth } from 'aws-amplify';
 import { listUserData } from '../graphql/queries';
-import { deleteUserData } from "../graphql/mutations";
+import { updateUserData, deleteUserData } from "../graphql/mutations";
 import Avatar from "react-avatar";
 import { CSSTransition } from "react-transition-group";
+
+import awsconfig from "../aws-exports";
+Amplify.configure(awsconfig);
 
 export default function EditList({
   addPerson,
@@ -50,13 +53,36 @@ export default function EditList({
       return null;
     }
   };
+  const handleDeletePerson = async () => {
+    try {
+      // Call the deleteUser mutation with the user's ID to delete them
+      const response = await API.graphql(
+        graphqlOperation(deleteUserData, { input: { id: editPerson } })
+      );
+  
+      // Handle the response as needed 
+      console.log('User deleted:', response);
+  
+      // Close the edit person popup
+      setEditPerson(null); // Clear the editPerson state to exit editing mode
+    } catch (error) {
+      console.error('Error deleting user:', error);
+    }
+  };
   useEffect(() => {
     async function fetchData() {
       try {
-        const userData = await API.graphql(graphqlOperation(listUserData));
+        // Fetch the updated list of users after a user is deleted
+        const userData = await API.graphql(
+          graphqlOperation(listUserData, {
+            limit: 100,
+            sortField: "createdAt",
+            sortDirection: "DESC",
+          })
+        );
         const userDataList = userData.data.listUserData.items;
         setList(userDataList);
-
+  
         // Get the user ID and set it in the state
         const id = await getUserId();
         setUserId(id);
@@ -64,28 +90,10 @@ export default function EditList({
         console.error("Error fetching UserData", error);
       }
     }
-
+  
     fetchData(); // Call fetchData to fetch data and set userId
-
-  }, []);
-
-  const handleDeletePerson = async (id) => {
-    try {
-      // Call the deleteUser mutation with the user's ID to delete them
-      const response = await API.graphql(
-        graphqlOperation(deleteUserData, { input: { id } })
-      );
-
-      // Handle the response as needed (e.g., update local state)
-      console.log('User deleted:', response);
-
-      // Close the edit person popup
-      setEditPerson(false);
-    } catch (error) {
-      console.error('Error deleting user:', error);
-    }
-  };
-
+  }, [personName, personPhone, personEmail, personOwing, editPerson]);
+  
   return (
     <>
       <main
@@ -198,37 +206,37 @@ export default function EditList({
           ></AddPerson>
         </CSSTransition>
         <CSSTransition
-          in={editPerson}
-          timeout={300} // Adjust the duration of the transition as needed
-          classNames="fade"
-          unmountOnExit
-        >
-          <EditPerson
-            addPerson={addPerson}
-            setAddPerson={setAddPerson}
-            personName={personName}
-            setPersonName={setPersonName}
-            setPersonPhone={setPersonPhone}
-            setPersonEmail={setPersonEmail}
-            setPersonOwing={setPersonOwing}
-            personEmail={personEmail}
-            personPhone={personPhone}
-            personOwing={personOwing}
-            handleSubmit={handleSubmit}
-            handleEditSubmit={handleEditSubmit}
-            setPersonState={setPersonState}
-            personState={personState}
-            setIsSelected={setIsSelected}
-            setEditPerson={setEditPerson}
-            theme={theme}
-            setList={setList}
-            list={list}
-            editPerson={editPerson}
-            handleDeletePerson={handleDeletePerson}
-            lang={lang}
-            userId={userId}
-          ></EditPerson>
-        </CSSTransition>
+  in={editPerson && userId !== null} // Only render when editPerson is true and userId is not null
+  timeout={300}
+  classNames="fade"
+  unmountOnExit
+>
+  <EditPerson
+    addPerson={addPerson}
+    setAddPerson={setAddPerson}
+    personName={personName}
+    setPersonName={setPersonName}
+    setPersonPhone={setPersonPhone}
+    setPersonEmail={setPersonEmail}
+    setPersonOwing={setPersonOwing}
+    personEmail={personEmail}
+    personPhone={personPhone}
+    personOwing={personOwing}
+    handleSubmit={handleSubmit}
+    handleEditSubmit={handleEditSubmit}
+    setPersonState={setPersonState}
+    personState={personState}
+    setIsSelected={setIsSelected}
+    setEditPerson={setEditPerson}
+    theme={theme}
+    setList={setList}
+    list={list}
+    editPerson={editPerson}
+    handleDeletePerson={handleDeletePerson}
+    lang={lang}
+    userId={userId}
+  ></EditPerson>
+</CSSTransition>
       </main>
     </>
   );

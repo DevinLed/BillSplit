@@ -38,20 +38,28 @@ export default function SplitBill({
 }) {
   const [list, setList] = useState([]);
   const [selectPersonList, setSelectPersonList] = useState(true);
+  
   useEffect(() => {
     async function fetchUserData() {
       try {
-        const userData = await API.graphql(graphqlOperation(listUserData));
+        const userData = await API.graphql(
+          graphqlOperation(listUserData, {
+            limit: 100,
+            sortField: "createdAt",
+            sortDirection: "DESC",
+          })
+        );
+  
         const userDataList = userData.data.listUserData.items;
         setList(userDataList);
       } catch (error) {
         console.error("Error fetching UserData", error);
       }
     }
-
+  
     fetchUserData();
-  }, []);
-
+  }, [personName, personPhone, personEmail, personOwing, addPerson]);
+  
   return (
     <>
       <main

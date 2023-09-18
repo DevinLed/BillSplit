@@ -150,24 +150,55 @@ function App({ signOut, user }) {
     setTaxRate(0);
   };
   // used to update values of balance for contacts
-  const addNum = (id, val, val2) => {
-    setList((prevList) => {
-      const newList = prevList.map((item) => {
-        if (item.id === id) {
-          const a = parseFloat(item.personOwing, 0);
-          const b = parseFloat(val);
-          const c = parseFloat(val2);
-          const prevalue = a + b;
-          const value = prevalue + c;
-          return { ...item, personOwing: parseFloat(value).toFixed(2) };
-        }
-        return item;
+  const addNum = async (id, val, val2) => {
+    try {
+      // Fetch the existing user data from DynamoDB
+      const userDataResponse = await API.graphql(
+        graphqlOperation(getUserData, { id })
+      );
+  
+      const userData = userDataResponse.data.getUserData;
+  
+      if (!userData) {
+        // Handle the case where the user data doesn't exist
+        return;
+      }
+  
+      // Calculate the updated personOwing value
+      const a = parseFloat(userData.personOwing, 0);
+      const b = parseFloat(val);
+      const c = parseFloat(val2);
+      const prevalue = a + b;
+      const updatedValue = prevalue + c;
+  
+      // Update the user data in DynamoDB
+      const updatedUserData = {
+        id: userData.id,
+        personOwing: updatedValue.toFixed(2), // Convert to 2 decimal places
+      };
+  
+      await API.graphql(
+        graphqlOperation(updateUserData, { input: updatedUserData })
+      );
+  
+      // Update the local state if needed
+      setList((prevList) => {
+        const newList = prevList.map((item) => {
+          if (item.id === id) {
+            return { ...item, personOwing: updatedValue.toFixed(2) };
+          }
+          return item;
+        });
+        localStorage.setItem("list", JSON.stringify(newList));
+        return newList;
       });
-      localStorage.setItem("list", JSON.stringify(newList));
-      return newList;
-    });
-    setDisplayAdd(true);
-    console.log("this is to add");
+  
+      setDisplayAdd(true);
+      console.log("Value updated successfully");
+    } catch (error) {
+      console.error("Error updating value:", error);
+      // Handle the error as needed
+    }
   };
   const editRow = async (id) => {
     setIsEditing(true);
@@ -176,7 +207,7 @@ function App({ signOut, user }) {
     try {
       // Fetch the user data for the selected item from DynamoDB using the new query
       const userDataResponse = await API.graphql(
-        graphqlOperation(getUserData, { id }) // Replace GetUserData with the actual query name
+        graphqlOperation(getUserData, { id }) // 
       );
   
       const editingRow = userDataResponse.data.getUserData; // Assuming getUserData returns a single item
@@ -188,34 +219,64 @@ function App({ signOut, user }) {
         setPersonEmail(editingRow.personEmail);
         setPersonOwing(editingRow.personOwing);
       } else {
-        // Handle the case where the item with the specified ID was not found
-        // You can display an error message or take other appropriate actions
       }
     } catch (error) {
       console.error('Error fetching user data:', error);
       // Handle the error case as needed
     }
+    
   };
   
   // used to update values of balance for contacts
-  const subNum = (id, val, val2) => {
-    setList((prevList) => {
-      const newList = prevList.map((item) => {
-        if (item.id === id) {
-          const a = parseFloat(item.personOwing, 0);
-          const b = parseFloat(val);
-          const c = parseFloat(val2);
-          const prevalue = a - b;
-          const value = prevalue - c;
-          return { ...item, personOwing: parseFloat(value).toFixed(2) };
-        }
-        return item;
+  const subNum = async (id, val, val2) => {
+    try {
+      // Fetch the existing user data from DynamoDB
+      const userDataResponse = await API.graphql(
+        graphqlOperation(getUserData, { id })
+      );
+  
+      const userData = userDataResponse.data.getUserData;
+  
+      if (!userData) {
+        // Handle the case where the user data doesn't exist
+        return;
+      }
+  
+      // Calculate the updated personOwing value
+      const a = parseFloat(userData.personOwing, 0);
+      const b = parseFloat(val);
+      const c = parseFloat(val2);
+      const prevalue = a - b;
+      const updatedValue = prevalue - c;
+  
+      // Update the user data in DynamoDB
+      const updatedUserData = {
+        id: userData.id,
+        personOwing: updatedValue.toFixed(2), // Convert to 2 decimal places
+      };
+  
+      await API.graphql(
+        graphqlOperation(updateUserData, { input: updatedUserData })
+      );
+  
+      // Update the local state if needed
+      setList((prevList) => {
+        const newList = prevList.map((item) => {
+          if (item.id === id) {
+            return { ...item, personOwing: updatedValue.toFixed(2) };
+          }
+          return item;
+        });
+        localStorage.setItem("list", JSON.stringify(newList));
+        return newList;
       });
-      localStorage.setItem("list", JSON.stringify(newList));
-      return newList;
-    });
-    setDisplayAdd(false);
-    console.log("this is to sub");
+  
+      setDisplayAdd(false);
+      console.log("Value subtracted successfully");
+    } catch (error) {
+      console.error("Error subtracting value:", error);
+      // Handle the error as needed
+    }
   };
   // Handler for full reset of tables.
   const handleResetCombinedArray = () => {
@@ -269,20 +330,30 @@ function App({ signOut, user }) {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Validate input fields here (e.g., check if personName, personPhone, personEmail, and personOwing are valid)
-
-    if (editPerson !== null) {
-      // Editing an existing entry
-
-      // Find the index of the item in the list with the editPerson id
-      const itemIndex = list.findIndex((row) => row.id === editPerson);
-
-      if (itemIndex !== -1) {
-        // Update the item in the list with the edited values
-        const updatedList = list.map((item) =>
+  
+    try {
+      // Create an object with the input data
+      const inputData = {
+        id: editPerson, // Provide the user's ID you want to update
+        personName,
+        personPhone,
+        personEmail,
+        personOwing,
+      };
+  
+      // Send the GraphQL request to update user data
+      const response = await API.graphql(
+        graphqlOperation(updateUserData, { input: inputData })
+      );
+  
+      // Handle the response, e.g., show a success message
+      console.log("User data updated:", response);
+  
+      // Update the list state with the modified data
+      setList((prevList) =>
+        prevList.map((item) =>
           item.id === editPerson
             ? {
                 ...item,
@@ -292,32 +363,12 @@ function App({ signOut, user }) {
                 personOwing,
               }
             : item
-        );
-
-        // Set the updated list in the parent component
-        setList(updatedList);
-      }
-
-      // Reset the editPerson state to null
-      setEditPerson(null);
-    } else {
-      // Adding a new entry
-
-      const newItems = {
-        personName,
-        personPhone,
-        personEmail,
-        personOwing,
-        id: uuidv4(),
-      };
-
-      setList((prevList) => {
-        const newList = [...prevList, newItems];
-        localStorage.setItem("list", JSON.stringify(newList));
-        return newList;
-      });
+        )
+      );
+    } catch (error) {
+      console.error("Error while updating user data:", error);
     }
-
+  
     // Reset input fields and close the edit person popup
     setPersonName("");
     setPersonPhone("");
@@ -327,13 +378,27 @@ function App({ signOut, user }) {
     setIsEditing(false);
     setAddPerson(false);
   };
+  
 
-  const selectPerson = (id) => {
-    const selectingPerson = list.find((row) => row.id === id);
-    setPersonName(selectingPerson.personName);
-    setPersonOwing(selectingPerson.personOwing);
-    setPersonReceiptAmount(selectingPerson.personReceiptAmount);
-  };
+  const selectPerson = async (id) => {
+    try {
+      // Fetch user data from DynamoDB based on the selected id
+      const userData = await API.graphql(graphqlOperation(getUserData, { id }));
+      const selectingPerson = userData.data.getUserData;
+  
+      if (selectingPerson) {
+        setPersonName(selectingPerson.personName);
+        setPersonOwing(selectingPerson.personOwing);
+        setPersonReceiptAmount(selectingPerson.personReceiptAmount);
+      } else {
+        // Handle the case where no person with the specified id was found
+        console.error(`Person with id ${id} not found.`);
+      }
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+      // Handle the error as needed
+    }
+  };;
 
   // Used to send values to History component
   const [receipts, setReceipts] = useState(() => {

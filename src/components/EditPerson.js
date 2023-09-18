@@ -4,11 +4,11 @@ import "./../index.css";
 import { IoSaveOutline } from "react-icons/io5";
 import { AiOutlineDelete } from "react-icons/ai";
 import { CSSTransition } from "react-transition-group";
-import { API, graphqlOperation } from 'aws-amplify';
+
+import { API, graphqlOperation, Amplify } from 'aws-amplify';
 import { updateUserData } from '../graphql/mutations';
-
-
-import UseAnimations from "react-useanimations";
+import awsconfig from "../aws-exports";
+Amplify.configure(awsconfig);
 
 export default function EditPerson({
   personName,
@@ -30,6 +30,7 @@ export default function EditPerson({
   userData,
   userId
 }) {
+  
   const handleResetBalance = () => {
     setPersonOwing("0.00");
   };
@@ -334,7 +335,10 @@ const handlePhoneNumberChange = async (event, userId, personName, personEmail, p
                           ? "bg-gray-300 text-gray-800"
                           : "bg-gray-800")
                       }
-                      onClick={(e) => handleDeletePerson()}
+                      onClick={(e) => {
+                        console.log(userId);
+                        handleDeletePerson(userId.id);
+                      }}
                     >
                        {lang === "english"? "Yes": "Oui"}
                     </button>

@@ -9,17 +9,5 @@ type UserData @model {
   personPhone: String
   personEmail: String
   personOwing: Float
-}
-query GetUserData($id: ID!) {
-  getUserData(id: $id) {
-    id
-    username
-    personName
-    personPhone
-    personEmail
-    personOwing
-    createdAt
-    updatedAt
-    __typename
-  }
+  createdAt: AWSDateTime!
 }

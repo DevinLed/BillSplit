@@ -7,7 +7,9 @@
           "additionalAuthenticationProviders": [],
           "defaultAuthentication": {
             "apiKeyConfig": {
-              "apiKeyExpirationDays": 7
+              "apiKeyExpirationDate": "2023-09-24T19:41:36.250Z",
+              "apiKeyExpirationDays": 7,
+              "description": "divvy"
             },
             "authenticationType": "API_KEY"
           }
