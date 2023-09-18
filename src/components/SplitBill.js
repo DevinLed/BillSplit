@@ -35,6 +35,7 @@ export default function SplitBill({
   handleAddSubmit,
   lang,
   setLang,
+  loggedInUsername,
 }) {
   const [list, setList] = useState([]);
   const [selectPersonList, setSelectPersonList] = useState(true);
@@ -51,14 +52,19 @@ export default function SplitBill({
         );
   
         const userDataList = userData.data.listUserData.items;
-        setList(userDataList);
+        // Filter the list to show entries only for the currently logged-in user
+        const filteredList = userDataList.filter((item) => {
+          return item.username === loggedInUsername;
+        });
+        setList(filteredList);
+        console.log(loggedInUsername);
       } catch (error) {
         console.error("Error fetching UserData", error);
       }
     }
   
     fetchUserData();
-  }, [personName, personPhone, personEmail, personOwing, addPerson]);
+  }, [loggedInUsername, personName, personPhone, personEmail, personOwing, addPerson]);
   
   return (
     <>

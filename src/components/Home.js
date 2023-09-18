@@ -18,6 +18,13 @@ import { CSSTransition } from "react-transition-group";
 import { withAuthenticator, Button, Heading } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
 
+import { Amplify, API, graphqlOperation, Auth } from 'aws-amplify';
+import { listUserData } from '../graphql/queries';
+import { updateUserData, deleteUserData } from "../graphql/mutations";
+
+import awsconfig from "../aws-exports";
+Amplify.configure(awsconfig);
+
 export default function Home({
   theme,
   toggleTheme,
@@ -44,12 +51,12 @@ export default function Home({
   const changeText = (text) => setButtonText(text);
 
   const yAxisCallback = (value) => `$${value.toFixed(2)}`;
-  const chartData = {
-    labels: list.map(({ personName }) => personName),
+  const [chartData, setChartData] = useState({
+    labels: [],
     datasets: [
       {
         label: "Owing Amount",
-        data: list.map(({ personOwing }) => personOwing),
+        data: [],
         backgroundColor: [
           "rgba(75, 192, 192, 0.6)",
           "rgba(54, 162, 235, 0.6)",
@@ -69,8 +76,54 @@ export default function Home({
         borderWidth: 1,
       },
     ],
-  };
+  });
 
+  useEffect(() => {
+    // Function to fetch data from DynamoDB
+    async function fetchData() {
+      try {
+        // Get the currently authenticated user's information
+        const user = await Auth.currentAuthenticatedUser();
+        const loggedInUsername = user.username;
+
+        const userData = await API.graphql(
+          graphqlOperation(listUserData, {
+            limit: 100,
+            sortField: "createdAt",
+            sortDirection: "DESC",
+            filter: {
+              username: {
+                eq: loggedInUsername,
+              },
+            },
+          })
+        );
+
+        const userDataList = userData.data.listUserData.items;
+        
+        // Extract labels and data from userDataList
+        const labels = userDataList.map(({ personName }) => personName);
+        const data = userDataList.map(({ personOwing }) => personOwing);
+
+        // Update the chartData state with the fetched data
+        setChartData({
+          ...chartData,
+          labels: labels,
+          datasets: [
+            {
+              ...chartData.datasets[0],
+              data: data,
+            },
+          ],
+        });
+      } catch (error) {
+        console.error("Error fetching UserData", error);
+      }
+    }
+
+    // Call fetchData to fetch data when the component mounts
+    fetchData();
+  }, []); //
   const tooltipCallbacks = {
     title: (tooltipItems) => {
       if (tooltipItems.length > 0) {

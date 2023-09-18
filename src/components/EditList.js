@@ -38,6 +38,7 @@ export default function EditList({
   handleAddSubmit,
   lang,
   setLang,
+  loggedInUsername
 }) {
   const [list, setList] = useState([]);
   const [selectEditPersonList, setEditSelectPersonList] = useState(true);
@@ -81,8 +82,12 @@ export default function EditList({
           })
         );
         const userDataList = userData.data.listUserData.items;
-        setList(userDataList);
-  
+        // Filter the list to show entries only for the currently logged-in user
+        const filteredList = userDataList.filter((item) => {
+          return item.username === loggedInUsername;
+        });
+        setList(filteredList);
+        console.log(loggedInUsername);
         // Get the user ID and set it in the state
         const id = await getUserId();
         setUserId(id);

@@ -115,6 +115,23 @@ function App({ signOut, user }) {
   const [themPictureTotal, setThemPictureTotal] = useState(0);
 
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [loggedInUsername, setLoggedInUsername] = useState(""); // Set the logged-in username
+  useEffect(() => {
+    const fetchAuthenticatedUser = async () => {
+      try {
+        const user = await Auth.currentAuthenticatedUser();
+        const username = user.username;
+        setLoggedInUsername(username);
+      } catch (error) {
+        console.error('Error getting authenticated user', error);
+        // Handle the error here, e.g., show an error message to the user.
+      }
+    };
+  
+    fetchAuthenticatedUser();
+  }, []); // Empty dependency array to run this effect once on component mount
+  
+
 
   const [combinedArray, setCombinedArray] = useState([]);
 
@@ -541,6 +558,7 @@ function App({ signOut, user }) {
               handleAddSubmit={handleAddSubmit}
               lang={lang}
               setLang={setLang}
+              loggedInUsername={loggedInUsername}
             />
           }
         />
@@ -573,6 +591,7 @@ function App({ signOut, user }) {
               handleAddSubmit={handleAddSubmit}
               lang={lang}
               setLang={setLang}
+              loggedInUsername={loggedInUsername}
             />
           }
         />
@@ -601,6 +620,7 @@ function App({ signOut, user }) {
               theme={theme}
               lang={lang}
               setLang={setLang}
+              loggedInUsername={loggedInUsername}
             />
           }
         />
