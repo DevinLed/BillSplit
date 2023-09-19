@@ -1,22 +1,55 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Header from "./Header";
-
+import { API, graphqlOperation, Amplify } from "aws-amplify";
+import { listHistoryData } from "../graphql/queries";
 import { CSSTransition } from "react-transition-group";
+import awsconfig from "../aws-exports";
+Amplify.configure(awsconfig);
 
-export default function History({ receipts, theme, lang, setLang }) {
+export default function History({
+  receipts,
+  theme,
+  lang,
+  setLang,
+  loggedInUsername,
+  historyData,
+  setHistoryData,
+}) {
   const { id } = useParams();
   const [selectedPerson, setSelectedPerson] = useState("");
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const historyDataResponse = await API.graphql(
+          graphqlOperation(listHistoryData, {
+            limit: 10, // Adjust the limit as needed
+            sortDirection: "DESC", // Sort direction
+          })
+        );
+        const historyDataList = historyDataResponse.data.listHistoryData.items;
+  
+        setHistoryData(historyDataList);
+      } catch (error) {
+        console.error("Error fetching HistoryData", error);
+      }
+    };
+  
+    fetchData();
+  }, []);
+
   const filteredReceipts = useMemo(() => {
     if (selectedPerson) {
-      return receipts.filter(
-        (receipt) => receipt.personName === selectedPerson
+      return historyData.filter(
+        (data) =>
+          data.personName === selectedPerson &&
+          data.username === loggedInUsername
       );
     } else {
-      return receipts;
+      return historyData.filter((data) => data.username === loggedInUsername);
     }
-  }, [receipts, selectedPerson]);
+  }, [historyData, selectedPerson, loggedInUsername]);
 
   const receiptList = useMemo(() => {
     return filteredReceipts
@@ -57,10 +90,7 @@ export default function History({ receipts, theme, lang, setLang }) {
             <div className="flex justify-center items-center">
               <p className="font-bold">
                 $
-                {(
-                  parseFloat(receipt.personReceiptAmount) +
-                  parseFloat(receipt.taxActual)
-                ).toFixed(2)}
+                (oweTotal)
               </p>
             </div>
 
@@ -89,7 +119,9 @@ export default function History({ receipts, theme, lang, setLang }) {
                 <div>
                   <p className="text-sm mb-2">{`Invoice Number: ${receipt.invoiceNumber}`}</p>
                 </div>
-              ):""}
+              ) : (
+                ""
+              )}
             </div>
           </div>
         );

@@ -143,7 +143,8 @@ function App({ signOut, user }) {
   const [personReceiptAmount, setPersonReceiptAmount] = useState("");
   const [value] = useState("");
 
-  // History tab work
+  // History tab work  
+  const [historyData, setHistoryData] = useState([]);
   const [displayAdd, setDisplayAdd] = useState(true);
   const [selectedValue, setSelectedValue] = useState("you");
   const [history, setHistory] = useState([]);
@@ -524,6 +525,8 @@ function App({ signOut, user }) {
               combinedArray={combinedArray}
               setCombinedArray={setCombinedArray}
               handleResetCombinedArray={handleResetCombinedArray}
+              historyData={historyData}
+              setHistoryData={setHistoryData}
               obtainedInfo={obtainedInfo}
               setObtainedInfo={setObtainedInfo}
             />
@@ -621,6 +624,8 @@ function App({ signOut, user }) {
               lang={lang}
               setLang={setLang}
               loggedInUsername={loggedInUsername}
+              historyData={historyData}
+              setHistoryData={setHistoryData}
             />
           }
         />

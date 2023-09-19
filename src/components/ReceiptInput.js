@@ -30,7 +30,8 @@ import "rc-slider/assets/index.css";
 import "react-datepicker/dist/react-datepicker.css";
 import { Amplify, API, graphqlOperation, Auth } from 'aws-amplify';
 import { listUserData } from '../graphql/queries';
-import { updateUserData, deleteUserData } from "../graphql/mutations";
+import { createHistoryData } from "../graphql/mutations";
+
 import awsconfig from "../aws-exports";
 Amplify.configure(awsconfig);
 
@@ -74,7 +75,8 @@ export default function ReceiptInput({
   handleResetCombinedArray,
   obtainedInfo,
   setObtainedInfo,
-  
+  historyData,
+  setHistoryData,
 }) {
   registerLocale("en", en);
   registerLocale("fr", fr);
@@ -316,23 +318,29 @@ export default function ReceiptInput({
     return parseFloat(total).toFixed(2);
   };
   // Handler to push entries into the History tab array
-  const handleHistorySubmit = () => {
-    const newReceipt = {
-      personName,
-      personOwing,
-      personReceiptAmount,
-      taxActual,
-      selectedValue,
-      merchantName,
-      startDate,
-      invoiceNumber,
-      displayMerchant,
-      displayDate,
-      displayInvoice,
-      receiptTotal,
-    };
-
-    addReceipt(newReceipt);
+  const handleHistorySubmit = async () => {
+    try {
+      const user = await Auth.currentAuthenticatedUser();
+      const loggedInUsername = user.username;
+    
+      const newHistoryData = {
+        username: loggedInUsername, // Add the username here
+        personName,
+        receiptStore: merchantName,
+        receiptDate: startDate,
+        receiptInvoice: invoiceNumber,
+        receiptTotal,
+        personPurchase: selectedValue,
+        oweTotal: personReceiptAmount,
+      };
+  
+      // Call the GraphQL mutation to create a new HistoryData entry
+      const response = await API.graphql(graphqlOperation(createHistoryData, { input: newHistoryData }));
+      setHistoryData(response);
+      console.log('HistoryData entry created:', response);
+    } catch (error) {
+      console.error('Error creating HistoryData entry:', error);
+    }
   };
   const getUserId = async () => {
     try {

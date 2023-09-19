@@ -11,3 +11,22 @@ type UserData @model {
   personOwing: Float
   createdAt: AWSDateTime!
 }
+type HistoryData @model {
+  id: ID!
+  username: String!
+  personName: String!
+  receiptStore: String!
+  receiptDate: AWSDateTime!
+  receiptInvoice: Float!
+  receiptTotal: Float!
+  personPurchase: Float!
+  oweTotal: Float!
+  createdAt: AWSDateTime!
+}
+type AccountData @model {
+  id: ID!
+  username: String!
+  theme: String!
+  language: String!
+  createdAt: AWSDateTime!
+}
