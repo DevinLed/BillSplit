@@ -128,7 +128,9 @@ export default function Home({
     title: (tooltipItems) => {
       if (tooltipItems.length > 0) {
         const index = tooltipItems[0].dataIndex;
-        return list[index].personName;
+        if (index >= 0 && index < list.length) {
+          return list[index].personName;
+        }
       }
       return "";
     },

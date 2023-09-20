@@ -1,35 +1,38 @@
 import React, { useMemo, useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Header from "./Header";
-import { API, graphqlOperation, Amplify } from "aws-amplify";
+import { API, graphqlOperation, Amplify, Auth } from "aws-amplify";
 import { listHistoryData } from "../graphql/queries";
 import { CSSTransition } from "react-transition-group";
 import awsconfig from "../aws-exports";
 Amplify.configure(awsconfig);
 
 export default function History({
-  receipts,
   theme,
   lang,
-  setLang,
   loggedInUsername,
   historyData,
   setHistoryData,
 }) {
   const { id } = useParams();
   const [selectedPerson, setSelectedPerson] = useState("");
-
   useEffect(() => {
     const fetchData = async () => {
       try {
+        const user = await Auth.currentAuthenticatedUser();
+        const loggedInUsername = user.username;
+  
         const historyDataResponse = await API.graphql(
           graphqlOperation(listHistoryData, {
-            limit: 10, // Adjust the limit as needed
-            sortDirection: "DESC", // Sort direction
+            limit: 10,
+            sortDirection: "DESC",
+            filter: {
+              username: { eq: loggedInUsername },
+            },
           })
         );
-        const historyDataList = historyDataResponse.data.listHistoryData.items;
   
+        const historyDataList = historyDataResponse.data.listHistoryData.items;
         setHistoryData(historyDataList);
       } catch (error) {
         console.error("Error fetching HistoryData", error);
@@ -37,9 +40,14 @@ export default function History({
     };
   
     fetchData();
-  }, []);
+  }, [setHistoryData]);
 
   const filteredReceipts = useMemo(() => {
+    if (!Array.isArray(historyData)) {
+      console.error("historyData is not an array:", historyData);
+      return [];
+    }
+  
     if (selectedPerson) {
       return historyData.filter(
         (data) =>
@@ -50,7 +58,7 @@ export default function History({
       return historyData.filter((data) => data.username === loggedInUsername);
     }
   }, [historyData, selectedPerson, loggedInUsername]);
-
+  
   const receiptList = useMemo(() => {
     return filteredReceipts
       .slice(-10)
@@ -90,7 +98,10 @@ export default function History({
             <div className="flex justify-center items-center">
               <p className="font-bold">
                 $
-                (oweTotal)
+                 {(
+                  parseFloat(receipt.personReceiptAmount) +
+                  parseFloat(receipt.taxActual)
+                ).toFixed(2)}
               </p>
             </div>
 
@@ -137,10 +148,10 @@ export default function History({
 
   const personNames = useMemo(() => {
     const uniquePersons = Array.from(
-      new Set(receipts.map((receipt) => receipt.personName))
+      new Set(filteredReceipts.map((data) => data.personName))
     );
     return uniquePersons;
-  }, [receipts]);
+  }, [filteredReceipts]);
 
   const handlePersonNameChange = (event) => {
     setSelectedPerson(event.target.value);

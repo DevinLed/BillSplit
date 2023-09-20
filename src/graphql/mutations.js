@@ -64,12 +64,13 @@ export const createHistoryData = /* GraphQL */ `
       id
       username
       personName
-      receiptStore
-      receiptDate
-      receiptInvoice
+      merchantName
+      startDate
+      invoiceNumber
       receiptTotal
-      personPurchase
-      oweTotal
+      selectedValue
+      personReceiptAmount
+      taxActual
       createdAt
       updatedAt
       __typename
@@ -85,12 +86,13 @@ export const updateHistoryData = /* GraphQL */ `
       id
       username
       personName
-      receiptStore
-      receiptDate
-      receiptInvoice
+      merchantName
+      startDate
+      invoiceNumber
       receiptTotal
-      personPurchase
-      oweTotal
+      selectedValue
+      personReceiptAmount
+      taxActual
       createdAt
       updatedAt
       __typename
@@ -106,12 +108,13 @@ export const deleteHistoryData = /* GraphQL */ `
       id
       username
       personName
-      receiptStore
-      receiptDate
-      receiptInvoice
+      merchantName
+      startDate
+      invoiceNumber
       receiptTotal
-      personPurchase
-      oweTotal
+      selectedValue
+      personReceiptAmount
+      taxActual
       createdAt
       updatedAt
       __typename
@@ -128,6 +131,7 @@ export const createAccountData = /* GraphQL */ `
       username
       theme
       language
+      taxRate
       createdAt
       updatedAt
       __typename
@@ -144,6 +148,7 @@ export const updateAccountData = /* GraphQL */ `
       username
       theme
       language
+      taxRate
       createdAt
       updatedAt
       __typename
@@ -160,6 +165,7 @@ export const deleteAccountData = /* GraphQL */ `
       username
       theme
       language
+      taxRate
       createdAt
       updatedAt
       __typename

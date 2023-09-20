@@ -45,12 +45,13 @@ export const getHistoryData = /* GraphQL */ `
       id
       username
       personName
-      receiptStore
-      receiptDate
-      receiptInvoice
+      merchantName
+      startDate
+      invoiceNumber
       receiptTotal
-      personPurchase
-      oweTotal
+      selectedValue
+      personReceiptAmount
+      taxActual
       createdAt
       updatedAt
       __typename
@@ -68,12 +69,13 @@ export const listHistoryData = /* GraphQL */ `
         id
         username
         personName
-        receiptStore
-        receiptDate
-        receiptInvoice
+        merchantName
+        startDate
+        invoiceNumber
         receiptTotal
-        personPurchase
-        oweTotal
+        selectedValue
+        personReceiptAmount
+        taxActual
         createdAt
         updatedAt
         __typename
@@ -90,6 +92,7 @@ export const getAccountData = /* GraphQL */ `
       username
       theme
       language
+      taxRate
       createdAt
       updatedAt
       __typename
@@ -108,6 +111,7 @@ export const listAccountData = /* GraphQL */ `
         username
         theme
         language
+        taxRate
         createdAt
         updatedAt
         __typename

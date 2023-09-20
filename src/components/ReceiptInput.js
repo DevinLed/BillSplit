@@ -28,13 +28,12 @@ import UseAnimations from "react-useanimations";
 import github from "react-useanimations/lib/github";
 import "rc-slider/assets/index.css";
 import "react-datepicker/dist/react-datepicker.css";
-import { Amplify, API, graphqlOperation, Auth } from 'aws-amplify';
-import { listUserData } from '../graphql/queries';
+import { Amplify, API, graphqlOperation, Auth } from "aws-amplify";
+import { listUserData } from "../graphql/queries";
 import { createHistoryData } from "../graphql/mutations";
 
 import awsconfig from "../aws-exports";
 Amplify.configure(awsconfig);
-
 
 export default function ReceiptInput({
   personName,
@@ -77,6 +76,8 @@ export default function ReceiptInput({
   setObtainedInfo,
   historyData,
   setHistoryData,
+  combinedTotal,
+  setCombinedTotal,
 }) {
   registerLocale("en", en);
   registerLocale("fr", fr);
@@ -317,49 +318,68 @@ export default function ReceiptInput({
 
     return parseFloat(total).toFixed(2);
   };
+  const taxOwing =
+  selectedValue === "you"
+    ? parseFloat(splitPictureTotal) / 2 + parseFloat(themPictureTotal)
+    : parseFloat(splitPictureTotal) / 2 + parseFloat(youPictureTotal);
+
+
+  const taxOwingPerc = taxOwing / parseFloat(getPictureTotal());
+
+  const taxActual = parseFloat(pictureTax) * parseFloat(taxOwingPerc);
+
+  setCombinedTotal(taxActual + parseFloat(personReceiptAmount));
+
   // Handler to push entries into the History tab array
   const handleHistorySubmit = async () => {
     try {
       const user = await Auth.currentAuthenticatedUser();
       const loggedInUsername = user.username;
-    
+  
+      if (!loggedInUsername) {
+        console.error("Error: loggedInUsername is null or undefined.");
+        return; // Handle the case where loggedInUsername is not available.
+      }
+  
       const newHistoryData = {
-        username: loggedInUsername, // Add the username here
-        personName,
-        receiptStore: merchantName,
-        receiptDate: startDate,
-        receiptInvoice: invoiceNumber,
+        username: loggedInUsername,
+        personName, 
+        merchantName,
+        startDate,
+        invoiceNumber,
         receiptTotal,
-        personPurchase: selectedValue,
-        oweTotal: personReceiptAmount,
+        selectedValue,
+        personReceiptAmount,
+        taxActual,
       };
   
       // Call the GraphQL mutation to create a new HistoryData entry
-      const response = await API.graphql(graphqlOperation(createHistoryData, { input: newHistoryData }));
-      setHistoryData(response);
-      console.log('HistoryData entry created:', response);
+      const response = await API.graphql(
+        graphqlOperation(createHistoryData, { input: newHistoryData })
+      );
+  
+      // Extract the newly created historyData object from the response
+      const createdHistoryData = response.data.createHistoryData;
+  
+      // Update the historyData state by appending the new data
+      setHistoryData((prevHistoryData) => [...prevHistoryData, createdHistoryData]);
+  
+      console.log("HistoryData entry created:", createdHistoryData);
     } catch (error) {
-      console.error('Error creating HistoryData entry:', error);
+      console.error("Error creating HistoryData entry:", error);
     }
   };
+  
   const getUserId = async () => {
     try {
       const user = await Auth.currentAuthenticatedUser();
       return user.attributes.sub; // 'sub' is the unique user ID
     } catch (error) {
       // Handle authentication error
-      console.error('Error getting user ID:', error);
+      console.error("Error getting user ID:", error);
       return null;
     }
   };
-  const taxOwing =
-    selectedValue === "you"
-      ? parseFloat(splitPictureTotal) / 2 + parseFloat(themPictureTotal)
-      : parseFloat(splitPictureTotal) / 2 + parseFloat(youPictureTotal);
-
-  const taxOwingPerc = taxOwing / parseFloat(getPictureTotal());
-
-  const taxActual = parseFloat(pictureTax) * parseFloat(taxOwingPerc);
 
   // Used to update the balance of the person you are splitting receipt with
   const getFinalTotal = () => {
@@ -425,9 +445,7 @@ export default function ReceiptInput({
                         <IoCreateOutline size={24} />
                       </div>
                       <span className="whitespace-no-wrap">
-                        {lang === "english"
-                          ? "Manual"
-                          : "À la main"}
+                        {lang === "english" ? "Manual" : "À la main"}
                       </span>
                     </label>
                   </Link>
@@ -462,7 +480,6 @@ export default function ReceiptInput({
         timeout={500} // Adjust the duration of the transition as needed
         classNames="fade"
         unmountOnExit
-        
         nodeRef={csstransitionRef}
       >
         <main

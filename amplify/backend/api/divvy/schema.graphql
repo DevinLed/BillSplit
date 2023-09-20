@@ -15,12 +15,13 @@ type HistoryData @model {
   id: ID!
   username: String!
   personName: String!
-  receiptStore: String!
-  receiptDate: AWSDateTime!
-  receiptInvoice: Float!
+  merchantName: String!
+  startDate: AWSDateTime!
+  invoiceNumber: String!
   receiptTotal: Float!
-  personPurchase: Float!
-  oweTotal: Float!
+  selectedValue: String!
+  personReceiptAmount: String!
+  taxActual: String!
   createdAt: AWSDateTime!
 }
 type AccountData @model {
@@ -28,5 +29,6 @@ type AccountData @model {
   username: String!
   theme: String!
   language: String!
+  taxRate: Float!
   createdAt: AWSDateTime!
 }
