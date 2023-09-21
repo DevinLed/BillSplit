@@ -194,7 +194,7 @@ export default function Home({
 
   return (
     <>
-    <div>
+    <div className={`App ${theme}`}>
       <div className="flex items-center justify-center mt-4">
     <Heading className={
                       theme === "dark"
@@ -216,7 +216,7 @@ export default function Home({
         }
         style={{ maxWidth: "600px" }}
       >
-        <div className={`App ${theme}`}>
+        <div>
           <div className="flex flex-col items-center justify-center">
             {/*  Header narrative for the Main Screen + 6 button selection screens */}
             <Header

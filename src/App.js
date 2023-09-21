@@ -49,6 +49,9 @@ function App({ signOut, user }) {
     // Toggle the theme between "light" and "dark"
     const newTheme = theme === "light" ? "dark" : "light";
     setTheme(newTheme);
+  
+    // Apply the theme class to the body element
+    document.body.className = newTheme;
   };
 
   useEffect(() => {
@@ -77,7 +80,6 @@ function App({ signOut, user }) {
 
     fetchData();
   }, []);
- console.log(updateAccountData);
   useEffect(() => {
     const updateAccountDataInDynamoDB = async () => {
       try {
@@ -88,7 +90,7 @@ function App({ signOut, user }) {
         await API.graphql(
           graphqlOperation(updateAccountData, {
             input: {
-              usernamer: loggedInUsername,
+              username: loggedInUsername,
               theme,
               language: lang,
               taxRate,
@@ -249,7 +251,6 @@ function App({ signOut, user }) {
       });
 
       setDisplayAdd(true);
-      console.log("Value updated successfully");
     } catch (error) {
       console.error("Error updating value:", error);
       // Handle the error as needed
@@ -326,7 +327,6 @@ function App({ signOut, user }) {
       });
 
       setDisplayAdd(false);
-      console.log("Value subtracted successfully");
     } catch (error) {
       console.error("Error subtracting value:", error);
       // Handle the error as needed
@@ -336,7 +336,6 @@ function App({ signOut, user }) {
   const handleResetCombinedArray = () => {
     setCombinedArray([]);
     setObtainedInfo([]);
-    console.log("being accessed");
   };
   const handleAddSubmit = async (e) => {
     e.preventDefault();
@@ -493,6 +492,7 @@ function App({ signOut, user }) {
 
   return (
     <>
+    <div  className={`App ${theme}`}>
       <Routes>
         <Route
           path="/Home"
@@ -712,6 +712,7 @@ function App({ signOut, user }) {
           element={<EditPerson theme={theme} lang={lang} setLang={setLang} />}
         />
       </Routes>
+      </div>
     </>
   );
 }
