@@ -4,8 +4,8 @@ import Header from "./Header";
 import EditPerson from "./EditPerson";
 import { IoPersonAddSharp } from "react-icons/io5";
 import { Amplify, API, graphqlOperation, Auth } from 'aws-amplify';
-import { listUserData } from '../graphql/queries';
-import { updateUserData, deleteUserData } from "../graphql/mutations";
+import { listUsersDBS } from '../graphql/queries';
+import { updateUsersDB, deleteUsersDB } from "../graphql/mutations";
 import Avatar from "react-avatar";
 import { CSSTransition } from "react-transition-group";
 
@@ -58,7 +58,7 @@ export default function EditList({
     try {
       // Call the deleteUser mutation with the user's ID to delete them
       const response = await API.graphql(
-        graphqlOperation(deleteUserData, { input: { id: editPerson } })
+        graphqlOperation(deleteUsersDB, { input: { id: editPerson } })
       );
   
       // Handle the response as needed 
@@ -74,17 +74,17 @@ export default function EditList({
     async function fetchData() {
       try {
         // Fetch the updated list of users after a user is deleted
-        const userData = await API.graphql(
-          graphqlOperation(listUserData, {
+        const UsersDB = await API.graphql(
+          graphqlOperation(listUsersDBS, {
             limit: 100,
             sortField: "createdAt",
             sortDirection: "DESC",
           })
         );
-        const userDataList = userData.data.listUserData.items;
+        const UsersDBList = UsersDBList.data.listUsersDBS.items;
         // Filter the list to show entries only for the currently logged-in user
-        const filteredList = userDataList.filter((item) => {
-          return item.username === loggedInUsername;
+        const filteredList = UsersDBList.filter((item) => {
+          return item.email === loggedInUsername;
         });
   
         // Sort the filtered list alphabetically by personName

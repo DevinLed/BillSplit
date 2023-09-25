@@ -7,7 +7,7 @@ import { IoPersonAddSharp } from "react-icons/io5";
 import Avatar from "react-avatar";
 import { CSSTransition } from "react-transition-group";
 import { API, graphqlOperation } from "aws-amplify";
-import { listUserData } from "../graphql/queries";
+import { listUsersDBS } from "../graphql/queries";
 
 export default function SplitBill({
   addPerson,
@@ -41,20 +41,20 @@ export default function SplitBill({
   const [selectPersonList, setSelectPersonList] = useState(true);
   
   useEffect(() => {
-    async function fetchUserData() {
+    async function fetchUsersDB() {
       try {
-        const userData = await API.graphql(
-          graphqlOperation(listUserData, {
+        const UsersDB = await API.graphql(
+          graphqlOperation(listUsersDBS, {
             limit: 100,
             sortField: "createdAt",
             sortDirection: "DESC",
           })
         );
   
-        const userDataList = userData.data.listUserData.items;
+        const UsersDBList = UsersDB.data.listUsersDBS.items;
         // Filter the list to show entries only for the currently logged-in user
-        const filteredList = userDataList.filter((item) => {
-          return item.username === loggedInUsername;
+        const filteredList = UsersDBList.filter((item) => {
+          return item.email === loggedInUsername;
         });
   
         // Sort the filtered list alphabetically by personName
@@ -67,7 +67,7 @@ export default function SplitBill({
       }
     }
   
-    fetchUserData();
+    fetchUsersDB();
   }, [loggedInUsername, personName, personPhone, personEmail, personOwing, addPerson]);
   
   return (

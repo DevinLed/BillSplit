@@ -17,12 +17,14 @@ export declare type AccountDataCreateFormInputValues = {
     theme?: string;
     language?: string;
     taxRate?: number;
+    email?: string;
 };
 export declare type AccountDataCreateFormValidationValues = {
     username?: ValidationFunction<string>;
     theme?: ValidationFunction<string>;
     language?: ValidationFunction<string>;
     taxRate?: ValidationFunction<number>;
+    email?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type AccountDataCreateFormOverridesProps = {
@@ -31,6 +33,7 @@ export declare type AccountDataCreateFormOverridesProps = {
     theme?: PrimitiveOverrideProps<TextFieldProps>;
     language?: PrimitiveOverrideProps<TextFieldProps>;
     taxRate?: PrimitiveOverrideProps<TextFieldProps>;
+    email?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type AccountDataCreateFormProps = React.PropsWithChildren<{
     overrides?: AccountDataCreateFormOverridesProps | undefined | null;

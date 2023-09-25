@@ -20,7 +20,7 @@
     }
   },
   "auth": {
-    "divvyad54b6de": {
+    "divvy73bb5d51": {
       "customAuth": false,
       "dependsOn": [],
       "frontendAuthConfig": {
@@ -33,36 +33,27 @@
           "passwordPolicyMinLength": 8
         },
         "signupAttributes": [
-          "EMAIL"
+          "EMAIL",
+          "NICKNAME"
         ],
         "socialProviders": [],
-        "usernameAttributes": [],
+        "usernameAttributes": [
+          "EMAIL"
+        ],
         "verificationMechanisms": [
           "EMAIL"
         ]
       },
       "providerPlugin": "awscloudformation",
       "service": "Cognito"
-    },
-    "userPoolGroups": {
-      "dependsOn": [
-        {
-          "attributes": [
-            "UserPoolId",
-            "AppClientIDWeb",
-            "AppClientID",
-            "IdentityPoolId"
-          ],
-          "category": "auth",
-          "resourceName": "divvyad54b6de"
-        }
-      ],
-      "providerPlugin": "awscloudformation",
-      "service": "Cognito-UserPool-Groups"
     }
   },
   "storage": {
     "Users": {
+      "providerPlugin": "awscloudformation",
+      "service": "DynamoDB"
+    },
+    "UsersDB": {
       "providerPlugin": "awscloudformation",
       "service": "DynamoDB"
     }

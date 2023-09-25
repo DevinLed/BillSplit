@@ -13,7 +13,7 @@ export declare type ValidationResponse = {
 };
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
 export declare type HistoryDataCreateFormInputValues = {
-    username?: string;
+    email?: string;
     personName?: string;
     merchantName?: string;
     startDate?: string;
@@ -25,7 +25,7 @@ export declare type HistoryDataCreateFormInputValues = {
     createdAt?: string;
 };
 export declare type HistoryDataCreateFormValidationValues = {
-    username?: ValidationFunction<string>;
+    email?: ValidationFunction<string>;
     personName?: ValidationFunction<string>;
     merchantName?: ValidationFunction<string>;
     startDate?: ValidationFunction<string>;
@@ -39,7 +39,7 @@ export declare type HistoryDataCreateFormValidationValues = {
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type HistoryDataCreateFormOverridesProps = {
     HistoryDataCreateFormGrid?: PrimitiveOverrideProps<GridProps>;
-    username?: PrimitiveOverrideProps<TextFieldProps>;
+    email?: PrimitiveOverrideProps<TextFieldProps>;
     personName?: PrimitiveOverrideProps<TextFieldProps>;
     merchantName?: PrimitiveOverrideProps<TextFieldProps>;
     startDate?: PrimitiveOverrideProps<TextFieldProps>;

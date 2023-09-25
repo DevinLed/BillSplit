@@ -15,12 +15,12 @@ import {
 } from "react-icons/io5";
 
 import { CSSTransition } from "react-transition-group";
-import { withAuthenticator, Button, Heading } from '@aws-amplify/ui-react';
-import '@aws-amplify/ui-react/styles.css';
+import { withAuthenticator, Button, Heading } from "@aws-amplify/ui-react";
+import "@aws-amplify/ui-react/styles.css";
 
-import { Amplify, API, graphqlOperation, Auth } from 'aws-amplify';
-import { listUserData } from '../graphql/queries';
-import { updateUserData, deleteUserData } from "../graphql/mutations";
+import { Amplify, API, graphqlOperation, Auth } from "aws-amplify";
+import { listUsersDBS } from "../graphql/queries";
+import { updateUsersDB, deleteUsersDB } from "../graphql/mutations";
 
 import awsconfig from "../aws-exports";
 Amplify.configure(awsconfig);
@@ -32,8 +32,8 @@ export default function Home({
   list,
   lang,
   setLang,
-  signOut, 
-  user
+  signOut,
+  user,
 }) {
   const [startBill, setStartBill] = useState(true);
   const [showPersonEdit, setPersonEdit] = useState(false);
@@ -47,7 +47,9 @@ export default function Home({
   }, []);
 
   // For Dark/Bright mode. Keeps mode storage for page refresh.
-  const [buttonText, setButtonText] = useState(lang === "english" ? "Dark Mode" : "Mode Sombre");
+  const [buttonText, setButtonText] = useState(
+    lang === "english" ? "Dark Mode" : "Mode Sombre"
+  );
   const changeText = (text) => setButtonText(text);
 
   const yAxisCallback = (value) => `$${value.toFixed(2)}`;
@@ -84,26 +86,26 @@ export default function Home({
       try {
         // Get the currently authenticated user's information
         const user = await Auth.currentAuthenticatedUser();
-        const loggedInUsername = user.username;
+        const loggedInUsername = user.email;
 
-        const userData = await API.graphql(
-          graphqlOperation(listUserData, {
+        const UsersDB = await API.graphql(
+          graphqlOperation(listUsersDBS, {
             limit: 100,
             sortField: "createdAt",
             sortDirection: "DESC",
             filter: {
-              username: {
+              email: {
                 eq: loggedInUsername,
               },
             },
           })
         );
 
-        const userDataList = userData.data.listUserData.items;
-        
+        const UsersDBList = UsersDB.data.listUsersDBS.items;
+
         // Extract labels and data from userDataList
-        const labels = userDataList.map(({ personName }) => personName);
-        const data = userDataList.map(({ personOwing }) => personOwing);
+        const labels = UsersDBList.map(({ personName }) => personName);
+        const data = UsersDBList.map(({ personOwing }) => personOwing);
 
         // Update the chartData state with the fetched data
         setChartData({
@@ -158,7 +160,7 @@ export default function Home({
     plugins: {
       title: {
         display: true,
-        text: (lang === "english" ? "Current Balances" : "Soldes actuels"),
+        text: lang === "english" ? "Current Balances" : "Soldes actuels",
         font: {
           size: 16,
         },
@@ -194,58 +196,151 @@ export default function Home({
 
   return (
     <>
-    <div className={`App ${theme}`}>
-      <div className="flex items-center justify-center mt-4">
-    <Heading className={
+      <div className={`App ${theme}`}>
+        <div className="flex items-center justify-center mt-4">
+          <Heading
+            className={
+              theme === "dark"
+                ? "text-white text-center"
+                : "text-gray-800 text-center"
+            }
+            level={1}
+          >
+            {lang === "english" ? "Hello" : "Bonjour"} {user.attributes.nickname}
+          </Heading>
+        </div>
+        <div className="flex items-center justify-center mt-4">
+          <Button
+            onClick={signOut}
+            className={
+              theme === "dark"
+                ? "text-white text-center"
+                : "text-gray-800 text-center"
+            }
+          >
+            {lang === "english" ? "Sign out" : "Se déconnecter"}
+          </Button>
+        </div>
+        <main
+          className={
+            "xs:max-w-xl mt-5 rounded p-0 pt-3 shadow sm:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl " +
+            (theme === "dark"
+              ? "border-2 border-gray-800 lg-rounded bg-gray-650"
+              : "bg-white-500 ")
+          }
+          style={{ maxWidth: "600px" }}
+        >
+          <div>
+            <div className="flex flex-col items-center justify-center">
+              {/*  Header narrative for the Main Screen + 6 button selection screens */}
+              <Header
+                startBill={startBill}
+                showPersonEdit={showPersonEdit}
+                selectPersonEdit={selectPersonEdit}
+                setSelectPersonEdit={setSelectPersonEdit}
+                setPersonEdit={setPersonEdit}
+                theme={theme}
+                lang={lang}
+              />
+              <div>
+                {chartData.labels.length > 0 ? (
+                  <Bar data={chartData} options={chartOptions} />
+                ) : (
+                  ""
+                )}
+              </div>
+              <div className="grid grid-cols-3 gap-y-0 gap-x-1 py-4">
+                <Link to="/SplitBill" className="mb-0 p-0">
+                  <label
+                    className={
                       theme === "dark"
-                        ? "text-white text-center"
-                        : "text-gray-800 text-center"
-                    } level={1}>{lang === "english" ? "Hello" : "Bonjour"} {user.username}</Heading>
-    </div>
-    <div className="flex items-center justify-center mt-4">
-    <Button onClick={signOut} className={
+                        ? "mb-0 flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-700 hover:no-underline"
+                        : "mb-0 flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
+                    }
+                  >
+                    <div style={{ width: "24px", height: "24px" }}>
+                      <IoReceiptOutline size={24} />
+                    </div>
+                    <span
+                      className={
+                        theme === "dark"
+                          ? "text-white text-center"
+                          : "text-gray-800 text-center"
+                      }
+                    >
+                      {lang === "english"
+                        ? "Split a Bill"
+                        : "Partager la facture"}
+                    </span>
+                  </label>
+                </Link>
+                <Link to="/EditList">
+                  <label
+                    className={
                       theme === "dark"
-                        ? "text-white text-center"
-                        : "text-gray-800 text-center"
-                    }>{lang === "english" ? "Sign out" : "Se déconnecter"}</Button>
-    </div>
-      <main
-        className={
-          "xs:max-w-xl mt-5 rounded p-0 pt-3 shadow sm:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl " +
-          (theme === "dark" ? "border-2 border-gray-800 lg-rounded bg-gray-650" : "bg-white-500 ")
-        }
-        style={{ maxWidth: "600px" }}
-      >
-        <div>
-          <div className="flex flex-col items-center justify-center">
-            {/*  Header narrative for the Main Screen + 6 button selection screens */}
-            <Header
-              startBill={startBill}
-              showPersonEdit={showPersonEdit}
-              selectPersonEdit={selectPersonEdit}
-              setSelectPersonEdit={setSelectPersonEdit}
-              setPersonEdit={setPersonEdit}
-              theme={theme}
-              lang={lang}
-            />
-            <div>
-              {chartData.labels.length > 0 ? (
-                <Bar data={chartData} options={chartOptions} />
-              ) : (
-                ""
-              )}
-            </div>
-            <div className="grid grid-cols-3 gap-y-0 gap-x-1 py-4">
-              <Link to="/SplitBill" className="mb-0 p-0">
+                        ? "flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-700 hover:no-underline"
+                        : "flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
+                    }
+                  >
+                    <div style={{ width: "24px", height: "24px" }}>
+                      <IoPersonCircleOutline size={24} />
+                    </div>
+                    <span
+                      className={
+                        theme === "dark"
+                          ? "text-white text-center"
+                          : "text-gray-800 text-center"
+                      }
+                    >
+                      {lang === "english"
+                        ? "Edit Person"
+                        : "Modifier la personne"}
+                    </span>
+                  </label>
+                </Link>
+                <Link to="/History">
+                  <label
+                    className={
+                      theme === "dark"
+                        ? "flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-700 hover:no-underline"
+                        : "flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
+                    }
+                  >
+                    <div style={{ width: "24px", height: "24px" }}>
+                      <IoListOutline size={24} />
+                    </div>
+                    <span
+                      className={
+                        theme === "dark"
+                          ? "text-white text-center"
+                          : "text-gray-800 text-center"
+                      }
+                    >
+                      {lang === "english" ? "History" : "Historique"}
+                    </span>
+                  </label>
+                </Link>
                 <label
+                  onClick={() => {
+                    toggleTheme();
+                    if (theme === "light") {
+                      changeText(
+                        lang === "english" ? "Light Mode" : "Mode Lumière"
+                      );
+                    } else {
+                      changeText(
+                        lang === "english" ? "Dark Mode" : "Mode Sombre"
+                      );
+                    }
+                  }}
                   className={
                     theme === "dark"
-                      ? "mb-0 flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-700 hover:no-underline"
-                      : "mb-0 flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
+                      ? "flex h-24 w-full cursor-pointer flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-700 hover:no-underline"
+                      : "flex h-24 w-full cursor-pointer flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
                   }
                 >
                   <div style={{ width: "24px", height: "24px" }}>
-                    <IoReceiptOutline size={24} />
+                    <IoInvertModeSharp size={24} />
                   </div>
                   <span
                     className={
@@ -254,132 +349,59 @@ export default function Home({
                         : "text-gray-800 text-center"
                     }
                   >
-                    {lang === "english" ? "Split a Bill" : "Partager la facture"}
+                    {buttonText}
                   </span>
                 </label>
-              </Link>
-              <Link to="/EditList">
-                <label
-                  className={
-                    theme === "dark"
-                      ? "flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-700 hover:no-underline"
-                      : "flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
-                  }
-                >
-                  <div style={{ width: "24px", height: "24px" }}>
-                    <IoPersonCircleOutline size={24} />
-                  </div>
-                  <span
+                <Link to="/LandingPage">
+                  <label
                     className={
                       theme === "dark"
-                        ? "text-white text-center"
-                        : "text-gray-800 text-center"
+                        ? "flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-700 hover:no-underline"
+                        : "flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
                     }
                   >
-                  {lang === "english" ? "Edit Person" : "Modifier la personne"}
-                  </span>
-                </label>
-              </Link>
-              <Link to="/History">
-                <label
-                  className={
-                    theme === "dark"
-                      ? "flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-700 hover:no-underline"
-                      : "flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
-                  }
-                >
-                  <div style={{ width: "24px", height: "24px" }}>
-                    <IoListOutline size={24} />
-                  </div>
-                  <span
+                    <div style={{ width: "24px", height: "24px" }}>
+                      <IoHomeOutline size={24} />
+                    </div>
+                    <span
+                      className={
+                        theme === "dark"
+                          ? "text-white text-center"
+                          : "text-gray-800 text-center"
+                      }
+                    >
+                      {lang === "english" ? "Home Page" : "Page d'accueil"}
+                    </span>
+                  </label>
+                </Link>
+                <Link to="/Settings">
+                  <label
                     className={
                       theme === "dark"
-                        ? "text-white text-center"
-                        : "text-gray-800 text-center"
+                        ? "flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-700 hover:no-underline"
+                        : "flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
                     }
                   >
-                     {lang === "english" ? "History" : "Historique"}
-                  </span>
-                </label>
-              </Link>
-              <label
-                onClick={() => {
-                  toggleTheme();
-                  if (theme === "light") {
-                    changeText(lang === "english" ? "Light Mode" : "Mode Lumière");
-                  } else {
-                    changeText(lang === "english" ? "Dark Mode" : "Mode Sombre");
-                  }
-                }}
-                className={
-                  theme === "dark"
-                    ? "flex h-24 w-full cursor-pointer flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-700 hover:no-underline"
-                    : "flex h-24 w-full cursor-pointer flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
-                }
-              >
-                <div style={{ width: "24px", height: "24px" }}>
-                  <IoInvertModeSharp size={24} />
-                </div>
-                <span
-                  className={
-                    theme === "dark"
-                      ? "text-white text-center"
-                      : "text-gray-800 text-center"
-                  }
-                >
-                  {buttonText} 
-                </span>
-              </label>
-              <Link to="/LandingPage">
-                <label
-                  className={
-                    theme === "dark"
-                      ? "flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-700 hover:no-underline"
-                      : "flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
-                  }
-                >
-                  <div style={{ width: "24px", height: "24px" }}>
-                    <IoHomeOutline size={24} />
-                  </div>
-                  <span
-                    className={
-                      theme === "dark"
-                        ? "text-white text-center"
-                        : "text-gray-800 text-center"
-                    }
-                  >
-                    {lang === "english" ? "Home Page" : "Page d'accueil"}
-                  </span>
-                </label>
-              </Link>
-              <Link to="/Settings">
-                <label
-                  className={
-                    theme === "dark"
-                      ? "flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-700 hover:no-underline"
-                      : "flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
-                  }
-                >
-                  <div style={{ width: "24px", height: "24px" }}>
-                    <IoSettingsOutline size={24} />
-                  </div>
-                  <span
-                    className={
-                      theme === "dark"
-                        ? "text-white text-center"
-                        : "text-gray-800 text-center"
-                    }
-                  >
-                    {lang === "english" ? "Settings" : "Paramètres"}
-                  </span>
-                </label>
-              </Link>
+                    <div style={{ width: "24px", height: "24px" }}>
+                      <IoSettingsOutline size={24} />
+                    </div>
+                    <span
+                      className={
+                        theme === "dark"
+                          ? "text-white text-center"
+                          : "text-gray-800 text-center"
+                      }
+                    >
+                      {lang === "english" ? "Settings" : "Paramètres"}
+                    </span>
+                  </label>
+                </Link>
+              </div>
             </div>
           </div>
-        </div>
 
-        <Footer theme={theme} lang={lang}/>
-      </main>
+          <Footer theme={theme} lang={lang} />
+        </main>
       </div>
     </>
   );

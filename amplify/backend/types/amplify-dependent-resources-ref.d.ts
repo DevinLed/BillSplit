@@ -7,7 +7,7 @@ export type AmplifyDependentResourcesAttributes = {
     }
   },
   "auth": {
-    "divvyad54b6de": {
+    "divvy73bb5d51": {
       "AppClientID": "string",
       "AppClientIDWeb": "string",
       "IdentityPoolId": "string",
@@ -15,9 +15,6 @@ export type AmplifyDependentResourcesAttributes = {
       "UserPoolArn": "string",
       "UserPoolId": "string",
       "UserPoolName": "string"
-    },
-    "userPoolGroups": {
-      "UsersEmailRegGroupRole": "string"
     }
   },
   "storage": {
@@ -27,6 +24,16 @@ export type AmplifyDependentResourcesAttributes = {
       "PartitionKeyName": "string",
       "PartitionKeyType": "string",
       "Region": "string",
+      "StreamArn": "string"
+    },
+    "UsersDB": {
+      "Arn": "string",
+      "Name": "string",
+      "PartitionKeyName": "string",
+      "PartitionKeyType": "string",
+      "Region": "string",
+      "SortKeyName": "string",
+      "SortKeyType": "string",
       "StreamArn": "string"
     }
   }

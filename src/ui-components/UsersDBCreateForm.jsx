@@ -10,12 +10,10 @@ import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
 import { getOverrideProps } from "@aws-amplify/ui-react/internal";
 import { fetchByPath, validateField } from "./utils";
 import { API } from "aws-amplify";
-import { getUserData } from "../graphql/queries";
-import { updateUserData } from "../graphql/mutations";
-export default function UserDataUpdateForm(props) {
+import { createUsersDB } from "../graphql/mutations";
+export default function UsersDBCreateForm(props) {
   const {
-    id: idProp,
-    userData: userDataModelProp,
+    clearOnSuccess = true,
     onSuccess,
     onError,
     onSubmit,
@@ -46,33 +44,14 @@ export default function UserDataUpdateForm(props) {
   const [createdAt, setCreatedAt] = React.useState(initialValues.createdAt);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    const cleanValues = userDataRecord
-      ? { ...initialValues, ...userDataRecord }
-      : initialValues;
-    setEmail(cleanValues.email);
-    setPersonName(cleanValues.personName);
-    setPersonPhone(cleanValues.personPhone);
-    setPersonEmail(cleanValues.personEmail);
-    setPersonOwing(cleanValues.personOwing);
-    setCreatedAt(cleanValues.createdAt);
+    setEmail(initialValues.email);
+    setPersonName(initialValues.personName);
+    setPersonPhone(initialValues.personPhone);
+    setPersonEmail(initialValues.personEmail);
+    setPersonOwing(initialValues.personOwing);
+    setCreatedAt(initialValues.createdAt);
     setErrors({});
   };
-  const [userDataRecord, setUserDataRecord] = React.useState(userDataModelProp);
-  React.useEffect(() => {
-    const queryData = async () => {
-      const record = idProp
-        ? (
-            await API.graphql({
-              query: getUserData,
-              variables: { id: idProp },
-            })
-          )?.data?.getUserData
-        : userDataModelProp;
-      setUserDataRecord(record);
-    };
-    queryData();
-  }, [idProp, userDataModelProp]);
-  React.useEffect(resetStateValues, [userDataRecord]);
   const validations = {
     email: [{ type: "Required" }],
     personName: [{ type: "Required" }],
@@ -126,9 +105,9 @@ export default function UserDataUpdateForm(props) {
         let modelFields = {
           email,
           personName,
-          personPhone: personPhone ?? null,
-          personEmail: personEmail ?? null,
-          personOwing: personOwing ?? null,
+          personPhone,
+          personEmail,
+          personOwing,
           createdAt,
         };
         const validationResponses = await Promise.all(
@@ -160,16 +139,18 @@ export default function UserDataUpdateForm(props) {
             }
           });
           await API.graphql({
-            query: updateUserData,
+            query: createUsersDB,
             variables: {
               input: {
-                id: userDataRecord.id,
                 ...modelFields,
               },
             },
           });
           if (onSuccess) {
             onSuccess(modelFields);
+          }
+          if (clearOnSuccess) {
+            resetStateValues();
           }
         } catch (err) {
           if (onError) {
@@ -178,7 +159,7 @@ export default function UserDataUpdateForm(props) {
           }
         }
       }}
-      {...getOverrideProps(overrides, "UserDataUpdateForm")}
+      {...getOverrideProps(overrides, "UsersDBCreateForm")}
       {...rest}
     >
       <TextField
@@ -366,14 +347,13 @@ export default function UserDataUpdateForm(props) {
         {...getOverrideProps(overrides, "CTAFlex")}
       >
         <Button
-          children="Reset"
+          children="Clear"
           type="reset"
           onClick={(event) => {
             event.preventDefault();
             resetStateValues();
           }}
-          isDisabled={!(idProp || userDataModelProp)}
-          {...getOverrideProps(overrides, "ResetButton")}
+          {...getOverrideProps(overrides, "ClearButton")}
         ></Button>
         <Flex
           gap="15px"
@@ -383,10 +363,7 @@ export default function UserDataUpdateForm(props) {
             children="Submit"
             type="submit"
             variation="primary"
-            isDisabled={
-              !(idProp || userDataModelProp) ||
-              Object.values(errors).some((e) => e?.hasError)
-            }
+            isDisabled={Object.values(errors).some((e) => e?.hasError)}
             {...getOverrideProps(overrides, "SubmitButton")}
           ></Button>
         </Flex>

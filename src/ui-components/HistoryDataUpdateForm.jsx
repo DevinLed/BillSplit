@@ -25,7 +25,7 @@ export default function HistoryDataUpdateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    username: "",
+    email: "",
     personName: "",
     merchantName: "",
     startDate: "",
@@ -36,7 +36,7 @@ export default function HistoryDataUpdateForm(props) {
     taxActual: "",
     createdAt: "",
   };
-  const [username, setUsername] = React.useState(initialValues.username);
+  const [email, setEmail] = React.useState(initialValues.email);
   const [personName, setPersonName] = React.useState(initialValues.personName);
   const [merchantName, setMerchantName] = React.useState(
     initialValues.merchantName
@@ -61,7 +61,7 @@ export default function HistoryDataUpdateForm(props) {
     const cleanValues = historyDataRecord
       ? { ...initialValues, ...historyDataRecord }
       : initialValues;
-    setUsername(cleanValues.username);
+    setEmail(cleanValues.email);
     setPersonName(cleanValues.personName);
     setMerchantName(cleanValues.merchantName);
     setStartDate(cleanValues.startDate);
@@ -91,7 +91,7 @@ export default function HistoryDataUpdateForm(props) {
   }, [idProp, historyDataModelProp]);
   React.useEffect(resetStateValues, [historyDataRecord]);
   const validations = {
-    username: [{ type: "Required" }],
+    email: [{ type: "Required" }],
     personName: [{ type: "Required" }],
     merchantName: [{ type: "Required" }],
     startDate: [{ type: "Required" }],
@@ -145,7 +145,7 @@ export default function HistoryDataUpdateForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
-          username,
+          email,
           personName,
           merchantName,
           startDate,
@@ -207,15 +207,15 @@ export default function HistoryDataUpdateForm(props) {
       {...rest}
     >
       <TextField
-        label="Username"
+        label="Email"
         isRequired={true}
         isReadOnly={false}
-        value={username}
+        value={email}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              username: value,
+              email: value,
               personName,
               merchantName,
               startDate,
@@ -227,17 +227,17 @@ export default function HistoryDataUpdateForm(props) {
               createdAt,
             };
             const result = onChange(modelFields);
-            value = result?.username ?? value;
+            value = result?.email ?? value;
           }
-          if (errors.username?.hasError) {
-            runValidationTasks("username", value);
+          if (errors.email?.hasError) {
+            runValidationTasks("email", value);
           }
-          setUsername(value);
+          setEmail(value);
         }}
-        onBlur={() => runValidationTasks("username", username)}
-        errorMessage={errors.username?.errorMessage}
-        hasError={errors.username?.hasError}
-        {...getOverrideProps(overrides, "username")}
+        onBlur={() => runValidationTasks("email", email)}
+        errorMessage={errors.email?.errorMessage}
+        hasError={errors.email?.hasError}
+        {...getOverrideProps(overrides, "email")}
       ></TextField>
       <TextField
         label="Person name"
@@ -248,7 +248,7 @@ export default function HistoryDataUpdateForm(props) {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              username,
+              email,
               personName: value,
               merchantName,
               startDate,
@@ -281,7 +281,7 @@ export default function HistoryDataUpdateForm(props) {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              username,
+              email,
               personName,
               merchantName: value,
               startDate,
@@ -316,7 +316,7 @@ export default function HistoryDataUpdateForm(props) {
             e.target.value === "" ? "" : new Date(e.target.value).toISOString();
           if (onChange) {
             const modelFields = {
-              username,
+              email,
               personName,
               merchantName,
               startDate: value,
@@ -349,7 +349,7 @@ export default function HistoryDataUpdateForm(props) {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              username,
+              email,
               personName,
               merchantName,
               startDate,
@@ -386,7 +386,7 @@ export default function HistoryDataUpdateForm(props) {
             : parseFloat(e.target.value);
           if (onChange) {
             const modelFields = {
-              username,
+              email,
               personName,
               merchantName,
               startDate,
@@ -419,7 +419,7 @@ export default function HistoryDataUpdateForm(props) {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              username,
+              email,
               personName,
               merchantName,
               startDate,
@@ -452,7 +452,7 @@ export default function HistoryDataUpdateForm(props) {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              username,
+              email,
               personName,
               merchantName,
               startDate,
@@ -487,7 +487,7 @@ export default function HistoryDataUpdateForm(props) {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              username,
+              email,
               personName,
               merchantName,
               startDate,
@@ -522,7 +522,7 @@ export default function HistoryDataUpdateForm(props) {
             e.target.value === "" ? "" : new Date(e.target.value).toISOString();
           if (onChange) {
             const modelFields = {
-              username,
+              email,
               personName,
               merchantName,
               startDate,

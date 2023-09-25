@@ -12,7 +12,7 @@ export declare type ValidationResponse = {
     errorMessage?: string;
 };
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
-export declare type UserDataUpdateFormInputValues = {
+export declare type UsersDBCreateFormInputValues = {
     email?: string;
     personName?: string;
     personPhone?: string;
@@ -20,7 +20,7 @@ export declare type UserDataUpdateFormInputValues = {
     personOwing?: number;
     createdAt?: string;
 };
-export declare type UserDataUpdateFormValidationValues = {
+export declare type UsersDBCreateFormValidationValues = {
     email?: ValidationFunction<string>;
     personName?: ValidationFunction<string>;
     personPhone?: ValidationFunction<string>;
@@ -29,8 +29,8 @@ export declare type UserDataUpdateFormValidationValues = {
     createdAt?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
-export declare type UserDataUpdateFormOverridesProps = {
-    UserDataUpdateFormGrid?: PrimitiveOverrideProps<GridProps>;
+export declare type UsersDBCreateFormOverridesProps = {
+    UsersDBCreateFormGrid?: PrimitiveOverrideProps<GridProps>;
     email?: PrimitiveOverrideProps<TextFieldProps>;
     personName?: PrimitiveOverrideProps<TextFieldProps>;
     personPhone?: PrimitiveOverrideProps<TextFieldProps>;
@@ -38,15 +38,14 @@ export declare type UserDataUpdateFormOverridesProps = {
     personOwing?: PrimitiveOverrideProps<TextFieldProps>;
     createdAt?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
-export declare type UserDataUpdateFormProps = React.PropsWithChildren<{
-    overrides?: UserDataUpdateFormOverridesProps | undefined | null;
+export declare type UsersDBCreateFormProps = React.PropsWithChildren<{
+    overrides?: UsersDBCreateFormOverridesProps | undefined | null;
 } & {
-    id?: string;
-    userData?: any;
-    onSubmit?: (fields: UserDataUpdateFormInputValues) => UserDataUpdateFormInputValues;
-    onSuccess?: (fields: UserDataUpdateFormInputValues) => void;
-    onError?: (fields: UserDataUpdateFormInputValues, errorMessage: string) => void;
-    onChange?: (fields: UserDataUpdateFormInputValues) => UserDataUpdateFormInputValues;
-    onValidate?: UserDataUpdateFormValidationValues;
+    clearOnSuccess?: boolean;
+    onSubmit?: (fields: UsersDBCreateFormInputValues) => UsersDBCreateFormInputValues;
+    onSuccess?: (fields: UsersDBCreateFormInputValues) => void;
+    onError?: (fields: UsersDBCreateFormInputValues, errorMessage: string) => void;
+    onChange?: (fields: UsersDBCreateFormInputValues) => UsersDBCreateFormInputValues;
+    onValidate?: UsersDBCreateFormValidationValues;
 } & React.CSSProperties>;
-export default function UserDataUpdateForm(props: UserDataUpdateFormProps): React.ReactElement;
+export default function UsersDBCreateForm(props: UsersDBCreateFormProps): React.ReactElement;

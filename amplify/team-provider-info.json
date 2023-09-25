@@ -46,15 +46,15 @@
     "categories": {
       "auth": {
         "divvy412182fd": {},
-        "divvyad54b6de": {},
-        "userPoolGroups": {}
+        "divvy73bb5d51": {}
       },
       "function": {
         "divvy25172621": {},
         "divvystorage": {}
       },
       "storage": {
-        "Users": {}
+        "Users": {},
+        "UsersDB": {}
       },
       "api": {
         "divvy": {}

@@ -5,7 +5,7 @@ export const onCreateUserData = /* GraphQL */ `
   subscription OnCreateUserData($filter: ModelSubscriptionUserDataFilterInput) {
     onCreateUserData(filter: $filter) {
       id
-      username
+      email
       personName
       personPhone
       personEmail
@@ -20,7 +20,7 @@ export const onUpdateUserData = /* GraphQL */ `
   subscription OnUpdateUserData($filter: ModelSubscriptionUserDataFilterInput) {
     onUpdateUserData(filter: $filter) {
       id
-      username
+      email
       personName
       personPhone
       personEmail
@@ -35,7 +35,52 @@ export const onDeleteUserData = /* GraphQL */ `
   subscription OnDeleteUserData($filter: ModelSubscriptionUserDataFilterInput) {
     onDeleteUserData(filter: $filter) {
       id
-      username
+      email
+      personName
+      personPhone
+      personEmail
+      personOwing
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const onCreateUsersDB = /* GraphQL */ `
+  subscription OnCreateUsersDB($filter: ModelSubscriptionUsersDBFilterInput) {
+    onCreateUsersDB(filter: $filter) {
+      id
+      email
+      personName
+      personPhone
+      personEmail
+      personOwing
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const onUpdateUsersDB = /* GraphQL */ `
+  subscription OnUpdateUsersDB($filter: ModelSubscriptionUsersDBFilterInput) {
+    onUpdateUsersDB(filter: $filter) {
+      id
+      email
+      personName
+      personPhone
+      personEmail
+      personOwing
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const onDeleteUsersDB = /* GraphQL */ `
+  subscription OnDeleteUsersDB($filter: ModelSubscriptionUsersDBFilterInput) {
+    onDeleteUsersDB(filter: $filter) {
+      id
+      email
       personName
       personPhone
       personEmail
@@ -52,7 +97,7 @@ export const onCreateHistoryData = /* GraphQL */ `
   ) {
     onCreateHistoryData(filter: $filter) {
       id
-      username
+      email
       personName
       merchantName
       startDate
@@ -73,7 +118,7 @@ export const onUpdateHistoryData = /* GraphQL */ `
   ) {
     onUpdateHistoryData(filter: $filter) {
       id
-      username
+      email
       personName
       merchantName
       startDate
@@ -94,7 +139,7 @@ export const onDeleteHistoryData = /* GraphQL */ `
   ) {
     onDeleteHistoryData(filter: $filter) {
       id
-      username
+      email
       personName
       merchantName
       startDate
@@ -115,7 +160,7 @@ export const onCreateAccountData = /* GraphQL */ `
   ) {
     onCreateAccountData(filter: $filter) {
       id
-      username
+      email
       theme
       language
       taxRate
@@ -131,7 +176,7 @@ export const onUpdateAccountData = /* GraphQL */ `
   ) {
     onUpdateAccountData(filter: $filter) {
       id
-      username
+      email
       theme
       language
       taxRate
@@ -147,7 +192,7 @@ export const onDeleteAccountData = /* GraphQL */ `
   ) {
     onDeleteAccountData(filter: $filter) {
       id
-      username
+      email
       theme
       language
       taxRate

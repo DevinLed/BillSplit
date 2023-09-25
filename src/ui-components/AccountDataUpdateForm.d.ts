@@ -13,14 +13,14 @@ export declare type ValidationResponse = {
 };
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
 export declare type AccountDataUpdateFormInputValues = {
-    username?: string;
+    email?: string;
     theme?: string;
     language?: string;
     taxRate?: number;
     createdAt?: string;
 };
 export declare type AccountDataUpdateFormValidationValues = {
-    username?: ValidationFunction<string>;
+    email?: ValidationFunction<string>;
     theme?: ValidationFunction<string>;
     language?: ValidationFunction<string>;
     taxRate?: ValidationFunction<number>;
@@ -29,7 +29,7 @@ export declare type AccountDataUpdateFormValidationValues = {
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type AccountDataUpdateFormOverridesProps = {
     AccountDataUpdateFormGrid?: PrimitiveOverrideProps<GridProps>;
-    username?: PrimitiveOverrideProps<TextFieldProps>;
+    email?: PrimitiveOverrideProps<TextFieldProps>;
     theme?: PrimitiveOverrideProps<TextFieldProps>;
     language?: PrimitiveOverrideProps<TextFieldProps>;
     taxRate?: PrimitiveOverrideProps<TextFieldProps>;

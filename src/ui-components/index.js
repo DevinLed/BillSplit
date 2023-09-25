@@ -10,4 +10,6 @@ export { default as HistoryDataCreateForm } from "./HistoryDataCreateForm";
 export { default as HistoryDataUpdateForm } from "./HistoryDataUpdateForm";
 export { default as UserDataCreateForm } from "./UserDataCreateForm";
 export { default as UserDataUpdateForm } from "./UserDataUpdateForm";
+export { default as UsersDBCreateForm } from "./UsersDBCreateForm";
+export { default as UsersDBUpdateForm } from "./UsersDBUpdateForm";
 export { default as studioTheme } from "./studioTheme";

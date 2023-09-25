@@ -27,24 +27,28 @@ export default function AccountDataCreateForm(props) {
     theme: "",
     language: "",
     taxRate: "",
+    email: "",
   };
   const [username, setUsername] = React.useState(initialValues.username);
   const [theme, setTheme] = React.useState(initialValues.theme);
   const [language, setLanguage] = React.useState(initialValues.language);
   const [taxRate, setTaxRate] = React.useState(initialValues.taxRate);
+  const [email, setEmail] = React.useState(initialValues.email);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setUsername(initialValues.username);
     setTheme(initialValues.theme);
     setLanguage(initialValues.language);
     setTaxRate(initialValues.taxRate);
+    setEmail(initialValues.email);
     setErrors({});
   };
   const validations = {
-    username: [{ type: "Required" }],
+    username: [],
     theme: [{ type: "Required" }],
     language: [{ type: "Required" }],
     taxRate: [{ type: "Required" }],
+    email: [{ type: "Required" }],
   };
   const runValidationTasks = async (
     fieldName,
@@ -76,6 +80,7 @@ export default function AccountDataCreateForm(props) {
           theme,
           language,
           taxRate,
+          email,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -105,11 +110,17 @@ export default function AccountDataCreateForm(props) {
               modelFields[key] = null;
             }
           });
+          const modelFieldsToSave = {
+            theme: modelFields.theme,
+            language: modelFields.language,
+            taxRate: modelFields.taxRate,
+            email: modelFields.email,
+          };
           await API.graphql({
             query: createAccountData,
             variables: {
               input: {
-                ...modelFields,
+                ...modelFieldsToSave,
               },
             },
           });
@@ -130,9 +141,7 @@ export default function AccountDataCreateForm(props) {
       {...rest}
     >
       <TextField
-        label="Username"
-        isRequired={true}
-        isReadOnly={false}
+        label="Label"
         value={username}
         onChange={(e) => {
           let { value } = e.target;
@@ -142,6 +151,7 @@ export default function AccountDataCreateForm(props) {
               theme,
               language,
               taxRate,
+              email,
             };
             const result = onChange(modelFields);
             value = result?.username ?? value;
@@ -169,6 +179,7 @@ export default function AccountDataCreateForm(props) {
               theme: value,
               language,
               taxRate,
+              email,
             };
             const result = onChange(modelFields);
             value = result?.theme ?? value;
@@ -196,6 +207,7 @@ export default function AccountDataCreateForm(props) {
               theme,
               language: value,
               taxRate,
+              email,
             };
             const result = onChange(modelFields);
             value = result?.language ?? value;
@@ -227,6 +239,7 @@ export default function AccountDataCreateForm(props) {
               theme,
               language,
               taxRate: value,
+              email,
             };
             const result = onChange(modelFields);
             value = result?.taxRate ?? value;
@@ -240,6 +253,34 @@ export default function AccountDataCreateForm(props) {
         errorMessage={errors.taxRate?.errorMessage}
         hasError={errors.taxRate?.hasError}
         {...getOverrideProps(overrides, "taxRate")}
+      ></TextField>
+      <TextField
+        label="Email"
+        isRequired={true}
+        isReadOnly={false}
+        value={email}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              username,
+              theme,
+              language,
+              taxRate,
+              email: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.email ?? value;
+          }
+          if (errors.email?.hasError) {
+            runValidationTasks("email", value);
+          }
+          setEmail(value);
+        }}
+        onBlur={() => runValidationTasks("email", email)}
+        errorMessage={errors.email?.errorMessage}
+        hasError={errors.email?.hasError}
+        {...getOverrideProps(overrides, "email")}
       ></TextField>
       <Flex
         justifyContent="space-between"

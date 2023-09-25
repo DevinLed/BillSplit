@@ -8,7 +8,7 @@ export const createUserData = /* GraphQL */ `
   ) {
     createUserData(input: $input, condition: $condition) {
       id
-      username
+      email
       personName
       personPhone
       personEmail
@@ -26,7 +26,7 @@ export const updateUserData = /* GraphQL */ `
   ) {
     updateUserData(input: $input, condition: $condition) {
       id
-      username
+      email
       personName
       personPhone
       personEmail
@@ -44,7 +44,61 @@ export const deleteUserData = /* GraphQL */ `
   ) {
     deleteUserData(input: $input, condition: $condition) {
       id
-      username
+      email
+      personName
+      personPhone
+      personEmail
+      personOwing
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const createUsersDB = /* GraphQL */ `
+  mutation CreateUsersDB(
+    $input: CreateUsersDBInput!
+    $condition: ModelUsersDBConditionInput
+  ) {
+    createUsersDB(input: $input, condition: $condition) {
+      id
+      email
+      personName
+      personPhone
+      personEmail
+      personOwing
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const updateUsersDB = /* GraphQL */ `
+  mutation UpdateUsersDB(
+    $input: UpdateUsersDBInput!
+    $condition: ModelUsersDBConditionInput
+  ) {
+    updateUsersDB(input: $input, condition: $condition) {
+      id
+      email
+      personName
+      personPhone
+      personEmail
+      personOwing
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const deleteUsersDB = /* GraphQL */ `
+  mutation DeleteUsersDB(
+    $input: DeleteUsersDBInput!
+    $condition: ModelUsersDBConditionInput
+  ) {
+    deleteUsersDB(input: $input, condition: $condition) {
+      id
+      email
       personName
       personPhone
       personEmail
@@ -62,7 +116,7 @@ export const createHistoryData = /* GraphQL */ `
   ) {
     createHistoryData(input: $input, condition: $condition) {
       id
-      username
+      email
       personName
       merchantName
       startDate
@@ -84,7 +138,7 @@ export const updateHistoryData = /* GraphQL */ `
   ) {
     updateHistoryData(input: $input, condition: $condition) {
       id
-      username
+      email
       personName
       merchantName
       startDate
@@ -106,7 +160,7 @@ export const deleteHistoryData = /* GraphQL */ `
   ) {
     deleteHistoryData(input: $input, condition: $condition) {
       id
-      username
+      email
       personName
       merchantName
       startDate
@@ -128,7 +182,7 @@ export const createAccountData = /* GraphQL */ `
   ) {
     createAccountData(input: $input, condition: $condition) {
       id
-      username
+      email
       theme
       language
       taxRate
@@ -145,7 +199,7 @@ export const updateAccountData = /* GraphQL */ `
   ) {
     updateAccountData(input: $input, condition: $condition) {
       id
-      username
+      email
       theme
       language
       taxRate
@@ -162,7 +216,7 @@ export const deleteAccountData = /* GraphQL */ `
   ) {
     deleteAccountData(input: $input, condition: $condition) {
       id
-      username
+      email
       theme
       language
       taxRate

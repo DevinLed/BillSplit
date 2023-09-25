@@ -25,13 +25,13 @@ export default function AccountDataUpdateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    username: "",
+    email: "",
     theme: "",
     language: "",
     taxRate: "",
     createdAt: "",
   };
-  const [username, setUsername] = React.useState(initialValues.username);
+  const [email, setEmail] = React.useState(initialValues.email);
   const [theme, setTheme] = React.useState(initialValues.theme);
   const [language, setLanguage] = React.useState(initialValues.language);
   const [taxRate, setTaxRate] = React.useState(initialValues.taxRate);
@@ -41,7 +41,7 @@ export default function AccountDataUpdateForm(props) {
     const cleanValues = accountDataRecord
       ? { ...initialValues, ...accountDataRecord }
       : initialValues;
-    setUsername(cleanValues.username);
+    setEmail(cleanValues.email);
     setTheme(cleanValues.theme);
     setLanguage(cleanValues.language);
     setTaxRate(cleanValues.taxRate);
@@ -66,7 +66,7 @@ export default function AccountDataUpdateForm(props) {
   }, [idProp, accountDataModelProp]);
   React.useEffect(resetStateValues, [accountDataRecord]);
   const validations = {
-    username: [{ type: "Required" }],
+    email: [{ type: "Required" }],
     theme: [{ type: "Required" }],
     language: [{ type: "Required" }],
     taxRate: [{ type: "Required" }],
@@ -115,7 +115,7 @@ export default function AccountDataUpdateForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
-          username,
+          email,
           theme,
           language,
           taxRate,
@@ -172,32 +172,32 @@ export default function AccountDataUpdateForm(props) {
       {...rest}
     >
       <TextField
-        label="Username"
+        label="Email"
         isRequired={true}
         isReadOnly={false}
-        value={username}
+        value={email}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              username: value,
+              email: value,
               theme,
               language,
               taxRate,
               createdAt,
             };
             const result = onChange(modelFields);
-            value = result?.username ?? value;
+            value = result?.email ?? value;
           }
-          if (errors.username?.hasError) {
-            runValidationTasks("username", value);
+          if (errors.email?.hasError) {
+            runValidationTasks("email", value);
           }
-          setUsername(value);
+          setEmail(value);
         }}
-        onBlur={() => runValidationTasks("username", username)}
-        errorMessage={errors.username?.errorMessage}
-        hasError={errors.username?.hasError}
-        {...getOverrideProps(overrides, "username")}
+        onBlur={() => runValidationTasks("email", email)}
+        errorMessage={errors.email?.errorMessage}
+        hasError={errors.email?.hasError}
+        {...getOverrideProps(overrides, "email")}
       ></TextField>
       <TextField
         label="Theme"
@@ -208,7 +208,7 @@ export default function AccountDataUpdateForm(props) {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              username,
+              email,
               theme: value,
               language,
               taxRate,
@@ -236,7 +236,7 @@ export default function AccountDataUpdateForm(props) {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              username,
+              email,
               theme,
               language: value,
               taxRate,
@@ -268,7 +268,7 @@ export default function AccountDataUpdateForm(props) {
             : parseFloat(e.target.value);
           if (onChange) {
             const modelFields = {
-              username,
+              email,
               theme,
               language,
               taxRate: value,
@@ -298,7 +298,7 @@ export default function AccountDataUpdateForm(props) {
             e.target.value === "" ? "" : new Date(e.target.value).toISOString();
           if (onChange) {
             const modelFields = {
-              username,
+              email,
               theme,
               language,
               taxRate,

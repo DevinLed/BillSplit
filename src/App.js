@@ -27,15 +27,15 @@ import "./darkMode.css";
 import "./index.css";
 import ReceiptTable from "./components/ReceiptTable";
 import {
-  createUserData,
-  updateUserData,
-  deleteUserData,
+  createUsersDB,
+  updateUsersDB,
+  deleteUsersDB,
   updateAccountData
 } from "./graphql/mutations"; // Import the mutations
 
 import { Amplify, API, graphqlOperation, Auth, Storage } from "aws-amplify";
 import awsconfig from "./aws-exports";
-import { getUserData, getAccountData } from "./graphql/queries";
+import { getUsersDB, getAccountData } from "./graphql/queries";
 Amplify.configure(awsconfig);
 
 function App({ signOut, user }) {
@@ -58,7 +58,7 @@ function App({ signOut, user }) {
     const fetchData = async () => {
       try {
         const user = await Auth.currentAuthenticatedUser();
-        const loggedInUsername = user.username;
+        const loggedInUsername = user.email;
 
         // Fetch the account data for the logged-in user
         const accountDataResponse = await API.graphql(
@@ -84,13 +84,13 @@ function App({ signOut, user }) {
     const updateAccountDataInDynamoDB = async () => {
       try {
         const user = await Auth.currentAuthenticatedUser();
-        const loggedInUsername = user.username;
+        const loggedInUsername = user.email;
 
         // Update the account data in DynamoDB
         await API.graphql(
           graphqlOperation(updateAccountData, {
             input: {
-              username: loggedInUsername,
+              email: loggedInUsername,
               theme,
               language: lang,
               taxRate,
@@ -154,16 +154,15 @@ function App({ signOut, user }) {
   const [themPictureTotal, setThemPictureTotal] = useState(0);
 
   const [formSubmitted, setFormSubmitted] = useState(false);
-  const [loggedInUsername, setLoggedInUsername] = useState(""); // Set the logged-in username
+  const [loggedInUsername, setLoggedInUsername] = useState(""); // Set the logged-in email
   useEffect(() => {
     const fetchAuthenticatedUser = async () => {
       try {
         const user = await Auth.currentAuthenticatedUser();
-        const username = user.username;
-        setLoggedInUsername(username);
+        const email = user.email;
+        setLoggedInUsername(email);
       } catch (error) {
         console.error("Error getting authenticated user", error);
-        // Handle the error here, e.g., show an error message to the user.
       }
     };
 
@@ -202,32 +201,32 @@ function App({ signOut, user }) {
   const addNum = async (id, val, val2) => {
     try {
       // Fetch the existing user data from DynamoDB
-      const userDataResponse = await API.graphql(
-        graphqlOperation(getUserData, { id })
+      const UsersDBResponse = await API.graphql(
+        graphqlOperation(getUsersDB, { id })
       );
 
-      const userData = userDataResponse.data.getUserData;
+      const UsersDB = UsersDBResponse.data.getUsersDB;
 
-      if (!userData) {
+      if (!UsersDB) {
         // Handle the case where the user data doesn't exist
         return;
       }
 
       // Calculate the updated personOwing value
-      const a = parseFloat(userData.personOwing, 0);
+      const a = parseFloat(UsersDB.personOwing, 0);
       const b = parseFloat(val);
       const c = parseFloat(val2);
       const prevalue = a + b;
       const updatedValue = prevalue + c;
 
       // Update the user data in DynamoDB
-      const updatedUserData = {
-        id: userData.id,
+      const updatedUsersDB = {
+        id: UsersDB.id,
         personOwing: updatedValue.toFixed(2), // Convert to 2 decimal places
       };
 
       await API.graphql(
-        graphqlOperation(updateUserData, { input: updatedUserData })
+        graphqlOperation(updateUsersDB, { input: updatedUsersDB })
       );
 
       // Update the local state if needed
@@ -254,11 +253,11 @@ function App({ signOut, user }) {
 
     try {
       // Fetch the user data for the selected item from DynamoDB using the new query
-      const userDataResponse = await API.graphql(
-        graphqlOperation(getUserData, { id }) //
+      const UsersDBResponse = await API.graphql(
+        graphqlOperation(getUsersDB, { id }) //
       );
 
-      const editingRow = userDataResponse.data.getUserData; // Assuming getUserData returns a single item
+      const editingRow = UsersDBResponse.data.getUsersDB; // Assuming getUsersDB returns a single item
 
       if (editingRow) {
         // Update state variables with the values from the selected item
@@ -278,32 +277,32 @@ function App({ signOut, user }) {
   const subNum = async (id, val, val2) => {
     try {
       // Fetch the existing user data from DynamoDB
-      const userDataResponse = await API.graphql(
-        graphqlOperation(getUserData, { id })
+      const UsersDBResponse = await API.graphql(
+        graphqlOperation(getUsersDB, { id })
       );
 
-      const userData = userDataResponse.data.getUserData;
+      const UsersDB = UsersDBResponse.data.getUsersDB;
 
-      if (!userData) {
+      if (!UsersDB) {
         // Handle the case where the user data doesn't exist
         return;
       }
 
       // Calculate the updated personOwing value
-      const a = parseFloat(userData.personOwing, 0);
+      const a = parseFloat(UsersDB.personOwing, 0);
       const b = parseFloat(val);
       const c = parseFloat(val2);
       const prevalue = a - b;
       const updatedValue = prevalue - c;
 
       // Update the user data in DynamoDB
-      const updatedUserData = {
-        id: userData.id,
+      const updatedUsersDB = {
+        id: UsersDB.id,
         personOwing: updatedValue.toFixed(2), // Convert to 2 decimal places
       };
 
       await API.graphql(
-        graphqlOperation(updateUserData, { input: updatedUserData })
+        graphqlOperation(updateUsersDB, { input: updatedUsersDB })
       );
 
       // Update the local state if needed
@@ -336,8 +335,8 @@ function App({ signOut, user }) {
       // Check if the user is authenticated
       const user = await Auth.currentAuthenticatedUser();
 
-      const newUserData = {
-        username: user.username, // Use the authenticated user's username as a reference
+      const newUsersDB = {
+        email: user.email, // Use the authenticated user's email as a reference
         personName: personName,
         personPhone: personPhone,
         personEmail: personEmail,
@@ -346,10 +345,10 @@ function App({ signOut, user }) {
 
       // Add the user data to DynamoDB
       const result = await API.graphql(
-        graphqlOperation(createUserData, { input: newUserData })
+        graphqlOperation(createUsersDB, { input: newUsersDB })
       );
 
-      console.log("User data created:", result.data.createUserData);
+      console.log("User data created:", result.data.createUsersDB);
 
       // Handle the response as needed
 
@@ -390,7 +389,7 @@ function App({ signOut, user }) {
 
       // Send the GraphQL request to update user data
       const response = await API.graphql(
-        graphqlOperation(updateUserData, { input: inputData })
+        graphqlOperation(updateUsersDB, { input: inputData })
       );
 
       // Handle the response, e.g., show a success message
@@ -427,8 +426,8 @@ function App({ signOut, user }) {
   const selectPerson = async (id) => {
     try {
       // Fetch user data from DynamoDB based on the selected id
-      const userData = await API.graphql(graphqlOperation(getUserData, { id }));
-      const selectingPerson = userData.data.getUserData;
+      const UsersDB = await API.graphql(graphqlOperation(getUsersDB, { id }));
+      const selectingPerson = UsersDB.data.getUsersDB;
 
       if (selectingPerson) {
         setPersonName(selectingPerson.personName);

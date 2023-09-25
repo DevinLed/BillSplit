@@ -1,0 +1,14 @@
+{
+  "resourceName": "UsersDB",
+  "tableName": "UsersDB",
+  "partitionKey": {
+    "fieldName": "email",
+    "fieldType": "string"
+  },
+  "sortKey": {
+    "fieldName": "personName",
+    "fieldType": "binary"
+  },
+  "gsi": [],
+  "triggerFunctions": []
+}

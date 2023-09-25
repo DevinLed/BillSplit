@@ -5,7 +5,7 @@ export const getUserData = /* GraphQL */ `
   query GetUserData($id: ID!) {
     getUserData(id: $id) {
       id
-      username
+      email
       personName
       personPhone
       personEmail
@@ -25,7 +25,45 @@ export const listUserData = /* GraphQL */ `
     listUserData(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
-        username
+        email
+        personName
+        personPhone
+        personEmail
+        personOwing
+        createdAt
+        updatedAt
+        __typename
+      }
+      nextToken
+      __typename
+    }
+  }
+`;
+export const getUsersDB = /* GraphQL */ `
+  query GetUsersDB($id: ID!) {
+    getUsersDB(id: $id) {
+      id
+      email
+      personName
+      personPhone
+      personEmail
+      personOwing
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const listUsersDBS = /* GraphQL */ `
+  query ListUsersDBS(
+    $filter: ModelUsersDBFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listUsersDBS(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        email
         personName
         personPhone
         personEmail
@@ -43,7 +81,7 @@ export const getHistoryData = /* GraphQL */ `
   query GetHistoryData($id: ID!) {
     getHistoryData(id: $id) {
       id
-      username
+      email
       personName
       merchantName
       startDate
@@ -67,7 +105,7 @@ export const listHistoryData = /* GraphQL */ `
     listHistoryData(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
-        username
+        email
         personName
         merchantName
         startDate
@@ -89,7 +127,7 @@ export const getAccountData = /* GraphQL */ `
   query GetAccountData($id: ID!) {
     getAccountData(id: $id) {
       id
-      username
+      email
       theme
       language
       taxRate
@@ -108,7 +146,7 @@ export const listAccountData = /* GraphQL */ `
     listAccountData(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
-        username
+        email
         theme
         language
         taxRate

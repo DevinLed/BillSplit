@@ -4,7 +4,16 @@ input AMPLIFY { globalAuthRule: AuthRule = { allow: public } } # FOR TESTING ONL
 
 type UserData @model {
   id: ID!
-  username: String!
+  email: String!
+  personName: String!
+  personPhone: String
+  personEmail: String
+  personOwing: Float
+  createdAt: AWSDateTime!
+}
+type UsersDB @model {
+  id: ID!
+  email: String!
   personName: String!
   personPhone: String
   personEmail: String
@@ -13,7 +22,7 @@ type UserData @model {
 }
 type HistoryData @model {
   id: ID!
-  username: String!
+  email: String!
   personName: String!
   merchantName: String!
   startDate: AWSDateTime!
@@ -26,7 +35,7 @@ type HistoryData @model {
 }
 type AccountData @model {
   id: ID!
-  username: String!
+  email: String!
   theme: String!
   language: String!
   taxRate: Float!

@@ -23,14 +23,14 @@ export default function UserDataCreateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    username: "",
+    email: "",
     personName: "",
     personPhone: "",
     personEmail: "",
     personOwing: "",
     createdAt: "",
   };
-  const [username, setUsername] = React.useState(initialValues.username);
+  const [email, setEmail] = React.useState(initialValues.email);
   const [personName, setPersonName] = React.useState(initialValues.personName);
   const [personPhone, setPersonPhone] = React.useState(
     initialValues.personPhone
@@ -44,7 +44,7 @@ export default function UserDataCreateForm(props) {
   const [createdAt, setCreatedAt] = React.useState(initialValues.createdAt);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    setUsername(initialValues.username);
+    setEmail(initialValues.email);
     setPersonName(initialValues.personName);
     setPersonPhone(initialValues.personPhone);
     setPersonEmail(initialValues.personEmail);
@@ -53,7 +53,7 @@ export default function UserDataCreateForm(props) {
     setErrors({});
   };
   const validations = {
-    username: [{ type: "Required" }],
+    email: [{ type: "Required" }],
     personName: [{ type: "Required" }],
     personPhone: [],
     personEmail: [],
@@ -103,7 +103,7 @@ export default function UserDataCreateForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
-          username,
+          email,
           personName,
           personPhone,
           personEmail,
@@ -163,15 +163,15 @@ export default function UserDataCreateForm(props) {
       {...rest}
     >
       <TextField
-        label="Username"
+        label="Email"
         isRequired={true}
         isReadOnly={false}
-        value={username}
+        value={email}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              username: value,
+              email: value,
               personName,
               personPhone,
               personEmail,
@@ -179,17 +179,17 @@ export default function UserDataCreateForm(props) {
               createdAt,
             };
             const result = onChange(modelFields);
-            value = result?.username ?? value;
+            value = result?.email ?? value;
           }
-          if (errors.username?.hasError) {
-            runValidationTasks("username", value);
+          if (errors.email?.hasError) {
+            runValidationTasks("email", value);
           }
-          setUsername(value);
+          setEmail(value);
         }}
-        onBlur={() => runValidationTasks("username", username)}
-        errorMessage={errors.username?.errorMessage}
-        hasError={errors.username?.hasError}
-        {...getOverrideProps(overrides, "username")}
+        onBlur={() => runValidationTasks("email", email)}
+        errorMessage={errors.email?.errorMessage}
+        hasError={errors.email?.hasError}
+        {...getOverrideProps(overrides, "email")}
       ></TextField>
       <TextField
         label="Person name"
@@ -200,7 +200,7 @@ export default function UserDataCreateForm(props) {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              username,
+              email,
               personName: value,
               personPhone,
               personEmail,
@@ -229,7 +229,7 @@ export default function UserDataCreateForm(props) {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              username,
+              email,
               personName,
               personPhone: value,
               personEmail,
@@ -258,7 +258,7 @@ export default function UserDataCreateForm(props) {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              username,
+              email,
               personName,
               personPhone,
               personEmail: value,
@@ -291,7 +291,7 @@ export default function UserDataCreateForm(props) {
             : parseFloat(e.target.value);
           if (onChange) {
             const modelFields = {
-              username,
+              email,
               personName,
               personPhone,
               personEmail,
@@ -322,7 +322,7 @@ export default function UserDataCreateForm(props) {
             e.target.value === "" ? "" : new Date(e.target.value).toISOString();
           if (onChange) {
             const modelFields = {
-              username,
+              email,
               personName,
               personPhone,
               personEmail,

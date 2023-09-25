@@ -10,12 +10,12 @@ import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
 import { getOverrideProps } from "@aws-amplify/ui-react/internal";
 import { fetchByPath, validateField } from "./utils";
 import { API } from "aws-amplify";
-import { getUserData } from "../graphql/queries";
-import { updateUserData } from "../graphql/mutations";
-export default function UserDataUpdateForm(props) {
+import { getUsersDB } from "../graphql/queries";
+import { updateUsersDB } from "../graphql/mutations";
+export default function UsersDBUpdateForm(props) {
   const {
     id: idProp,
-    userData: userDataModelProp,
+    usersDB: usersDBModelProp,
     onSuccess,
     onError,
     onSubmit,
@@ -46,8 +46,8 @@ export default function UserDataUpdateForm(props) {
   const [createdAt, setCreatedAt] = React.useState(initialValues.createdAt);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    const cleanValues = userDataRecord
-      ? { ...initialValues, ...userDataRecord }
+    const cleanValues = usersDBRecord
+      ? { ...initialValues, ...usersDBRecord }
       : initialValues;
     setEmail(cleanValues.email);
     setPersonName(cleanValues.personName);
@@ -57,22 +57,22 @@ export default function UserDataUpdateForm(props) {
     setCreatedAt(cleanValues.createdAt);
     setErrors({});
   };
-  const [userDataRecord, setUserDataRecord] = React.useState(userDataModelProp);
+  const [usersDBRecord, setUsersDBRecord] = React.useState(usersDBModelProp);
   React.useEffect(() => {
     const queryData = async () => {
       const record = idProp
         ? (
             await API.graphql({
-              query: getUserData,
+              query: getUsersDB,
               variables: { id: idProp },
             })
-          )?.data?.getUserData
-        : userDataModelProp;
-      setUserDataRecord(record);
+          )?.data?.getUsersDB
+        : usersDBModelProp;
+      setUsersDBRecord(record);
     };
     queryData();
-  }, [idProp, userDataModelProp]);
-  React.useEffect(resetStateValues, [userDataRecord]);
+  }, [idProp, usersDBModelProp]);
+  React.useEffect(resetStateValues, [usersDBRecord]);
   const validations = {
     email: [{ type: "Required" }],
     personName: [{ type: "Required" }],
@@ -160,10 +160,10 @@ export default function UserDataUpdateForm(props) {
             }
           });
           await API.graphql({
-            query: updateUserData,
+            query: updateUsersDB,
             variables: {
               input: {
-                id: userDataRecord.id,
+                id: usersDBRecord.id,
                 ...modelFields,
               },
             },
@@ -178,7 +178,7 @@ export default function UserDataUpdateForm(props) {
           }
         }
       }}
-      {...getOverrideProps(overrides, "UserDataUpdateForm")}
+      {...getOverrideProps(overrides, "UsersDBUpdateForm")}
       {...rest}
     >
       <TextField
@@ -372,7 +372,7 @@ export default function UserDataUpdateForm(props) {
             event.preventDefault();
             resetStateValues();
           }}
-          isDisabled={!(idProp || userDataModelProp)}
+          isDisabled={!(idProp || usersDBModelProp)}
           {...getOverrideProps(overrides, "ResetButton")}
         ></Button>
         <Flex
@@ -384,7 +384,7 @@ export default function UserDataUpdateForm(props) {
             type="submit"
             variation="primary"
             isDisabled={
-              !(idProp || userDataModelProp) ||
+              !(idProp || usersDBModelProp) ||
               Object.values(errors).some((e) => e?.hasError)
             }
             {...getOverrideProps(overrides, "SubmitButton")}
