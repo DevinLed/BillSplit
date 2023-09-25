@@ -41,9 +41,9 @@ Amplify.configure(awsconfig);
 function App({ signOut, user }) {
   // dark mode theme switching
   
-  const [theme, setTheme] = useState("light");
+  const [theme, setTheme] = useState("");
   const [lang, setLang] = useState("english");
-  const [taxRate, setTaxRate] = useState(0);
+  const [taxRate, setTaxRate] = useState(0.15);
 
   const toggleTheme = () => {
     // Toggle the theme between "light" and "dark"
@@ -71,7 +71,7 @@ function App({ signOut, user }) {
         if (accountData) {
           setTheme(accountData.theme || "light");
           setLang(accountData.language || "english");
-          setTaxRate(accountData.taxRate || 0);
+          setTaxRate(accountData.taxRate || 0.15);
         }
       } catch (error) {
         console.error("Error fetching account data", error);
@@ -197,15 +197,7 @@ function App({ signOut, user }) {
 
   // Settings page
   const [showConfirmation, setShowConfirmation] = useState(false);
-  const handleClearData = () => {
-    localStorage.clear();
-    setList([]);
-    setReceipts([]);
-    setTheme("light");
-    setLang("english");
-    setShowConfirmation(false);
-    setTaxRate(0);
-  };
+
   // used to update values of balance for contacts
   const addNum = async (id, val, val2) => {
     try {
@@ -501,7 +493,6 @@ function App({ signOut, user }) {
               theme={theme}
               setTheme={setTheme}
               toggleTheme={toggleTheme}
-              handleClearData={handleClearData}
               personOwing={personOwing}
               personName={personName}
               list={list}
@@ -639,7 +630,6 @@ function App({ signOut, user }) {
           path="/Settings"
           element={
             <Settings
-              handleClearData={handleClearData}
               showConfirmation={showConfirmation}
               setShowConfirmation={setShowConfirmation}
               taxRate={taxRate}
@@ -648,6 +638,7 @@ function App({ signOut, user }) {
               setTheme={setTheme}
               lang={lang}
               setLang={setLang}
+              loggedInUsername={loggedInUsername}
             />
           }
         />
@@ -718,3 +709,38 @@ function App({ signOut, user }) {
 }
 
 export default withAuthenticator(App);
+
+
+/*
+  Primary Key:
+   - Required
+   - Unique
+  Sort Key:
+   - Optional
+*/
+
+
+
+/*
+// Who owes me money?
+// Get all debt/IOUs related to me (the current user)
+QUERY WHERE PK = devin@
+
+PK: devin@ | SK: bob@ | RECEIPT: SOBEYS | AMOUNT: 10
+PK: devin@ | SK: bob@ | RECEIPT: BURGERS | AMOUNT: 20
+
+
+*/
+
+
+
+
+
+/*
+New GSI
+// Who do i owe money to?
+
+PK: bob@ | SK: devin@ | AMOUNT: 10
+PK: devin@ | SK: bob@ | AMOUNT: -10
+
+*/

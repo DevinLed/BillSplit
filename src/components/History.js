@@ -21,7 +21,7 @@ export default function History({
       try {
         const user = await Auth.currentAuthenticatedUser();
         const loggedInUsername = user.username;
-  
+
         const historyDataResponse = await API.graphql(
           graphqlOperation(listHistoryData, {
             limit: 10,
@@ -31,14 +31,14 @@ export default function History({
             },
           })
         );
-  
+
         const historyDataList = historyDataResponse.data.listHistoryData.items;
         setHistoryData(historyDataList);
       } catch (error) {
         console.error("Error fetching HistoryData", error);
       }
     };
-  
+
     fetchData();
   }, [setHistoryData]);
 
@@ -47,7 +47,7 @@ export default function History({
       console.error("historyData is not an array:", historyData);
       return [];
     }
-  
+
     if (selectedPerson) {
       return historyData.filter(
         (data) =>
@@ -58,11 +58,11 @@ export default function History({
       return historyData.filter((data) => data.username === loggedInUsername);
     }
   }, [historyData, selectedPerson, loggedInUsername]);
-  
+
   const receiptList = useMemo(() => {
     return filteredReceipts
-      .slice(-10)
       .reverse()
+      .slice(-10)
       .map((receipt, index) => {
         const startDate =
           receipt.startDate instanceof Date
@@ -98,7 +98,7 @@ export default function History({
             <div className="flex justify-center items-center">
               <p className="font-bold">
                 $
-                 {(
+                {(
                   parseFloat(receipt.personReceiptAmount) +
                   parseFloat(receipt.taxActual)
                 ).toFixed(2)}

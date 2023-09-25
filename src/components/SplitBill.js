@@ -56,6 +56,10 @@ export default function SplitBill({
         const filteredList = userDataList.filter((item) => {
           return item.username === loggedInUsername;
         });
+  
+        // Sort the filtered list alphabetically by personName
+        filteredList.sort((a, b) => a.personName.localeCompare(b.personName));
+  
         setList(filteredList);
         console.log(loggedInUsername);
       } catch (error) {

@@ -86,6 +86,10 @@ export default function EditList({
         const filteredList = userDataList.filter((item) => {
           return item.username === loggedInUsername;
         });
+  
+        // Sort the filtered list alphabetically by personName
+        filteredList.sort((a, b) => a.personName.localeCompare(b.personName));
+  
         setList(filteredList);
         console.log(loggedInUsername);
         // Get the user ID and set it in the state
@@ -97,7 +101,7 @@ export default function EditList({
     }
   
     fetchData(); // Call fetchData to fetch data and set userId
-  }, [personName, personPhone, personEmail, personOwing, editPerson]);
+  }, [loggedInUsername, personName, personPhone, personEmail, personOwing, editPerson]);
   
   return (
     <>

@@ -40,18 +40,9 @@ export default function Settings({
   const handleRegionSelect = (selectedTaxRate) => {
     setSelectedTaxRate(selectedTaxRate); // Update the selected tax rate
     setTaxRate(selectedTaxRate); // Update the tax rate
-    setTheme(!theme);
   };
 
   const [customTaxRate, setCustomTaxRate] = useState("");
-
-  const handleConfirmClearData = () => {
-    setShowConfirmation(true); // Show the confirmation popup
-  };
-
-  const handleCancelClearData = () => {
-    setShowConfirmation(false); // Hide the confirmation popup
-  };
 
   const handleLanguageChange = () => {
     if (lang === "english") {
@@ -61,7 +52,6 @@ export default function Settings({
       setLang("english");
       setShowLang(false);
     }
-    setTheme(!theme);
   };
   const handleCancelLang = () => {
     setShowLang(false);
@@ -159,7 +149,7 @@ export default function Settings({
             </CSSTransition>
 
             {/* Display current tax rate */}
-            <p className="text-center mt-4">
+            <p className="text-center mt-4 p-2 bg-white border border-gray-300 rounded">
               {lang === "english"
                 ? "Current Tax Rate"
                 : "Taux d'imposition actuel"}
@@ -169,12 +159,16 @@ export default function Settings({
           {/* Language Label */}
           <label
             onClick={(e) => setShowLang(true)}
-            className={
-              `mb-3 flex h-24 w-fit cursor-pointer flex-col items-center justify-center 
-               rounded-lg border ${theme === "dark" ? "border-gray-900 bg-gray-900 text-white" : "border-gray-200 bg-white"} 
+            className={`mb-3 flex h-24 w-fit cursor-pointer flex-col items-center justify-center 
+               rounded-lg border ${
+                 theme === "dark"
+                   ? "border-gray-900 bg-gray-900 text-white"
+                   : "border-gray-200 bg-white"
+               } 
                py-4 px-6 text-sm font-semibold shadow-md 
-               hover:bg-${theme === "dark" ? "gray-700" : "gray-200"} hover:no-underline`
-            }
+               hover:bg-${
+                 theme === "dark" ? "gray-700" : "gray-200"
+               } hover:no-underline`}
           >
             <div style={{ width: "24px", height: "24px" }}>
               <IoLanguage size={24} />
@@ -233,77 +227,6 @@ export default function Settings({
                       {lang === "english" ? "No" : "Non"}
                     </button>
                   </div>
-                </div>
-              </div>
-            </div>
-          </CSSTransition>
-
-          {/* Clear Data Label */}
-          <label
-            onClick={handleConfirmClearData}
-            className={
-              theme === "dark"
-                ? "flex h-24 w-fit cursor-pointer flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-700 hover:no-underline"
-                : "flex h-24 w-fit cursor-pointer flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
-            }
-          >
-            <div style={{ width: "24px", height: "24px" }}>
-              <IoAlertCircle size={24} />
-            </div>
-            <span
-              className={
-                theme === "dark"
-                  ? "text-white text-center"
-                  : "text-gray-800 text-center"
-              }
-            >
-              {lang === "english" ? "Clear Data" : "Tout effacer"}
-            </span>
-          </label>
-
-          {/* Confirmation Popup */}
-          <CSSTransition
-            in={showConfirmation}
-            timeout={500} // Adjust the duration of the transition as needed
-            classNames="fade"
-            unmountOnExit
-          >
-            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 ">
-              <div
-                className={
-                  "p-6 rounded shadow-md " +
-                  (theme === "dark" ? "bg-gray-800" : "bg-gray-100")
-                }
-              >
-                <p
-                  className={
-                    theme === "dark"
-                      ? "text-white whitespace-nowrap"
-                      : "text-black whitespace-nowrap"
-                  }
-                >
-                  {lang === "english"
-                    ? "Are you sure you want to clear all data?"
-                    : "Voulez-vous vraiment effacer toutes les données ?"}
-                </p>
-                <div className="flex justify-end mt-4">
-                  <button
-                    className="px-4 py-2 mr-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400"
-                    onClick={handleClearData}
-                  >
-                    {lang === "english" ? "Yes" : "Oui"}
-                  </button>
-                  <button
-                    className={
-                      "px-4 py-2 rounded hover:bg-gray-900 " +
-                      (theme === "dark"
-                        ? "bg-gray-300 text-gray-800"
-                        : "bg-gray-800")
-                    }
-                    onClick={handleCancelClearData}
-                  >
-                    {lang === "english" ? "No" : "Non"}
-                  </button>
                 </div>
               </div>
             </div>

@@ -46,7 +46,8 @@
     "categories": {
       "auth": {
         "divvy412182fd": {},
-        "divvyad54b6de": {}
+        "divvyad54b6de": {},
+        "userPoolGroups": {}
       },
       "function": {
         "divvy25172621": {},
