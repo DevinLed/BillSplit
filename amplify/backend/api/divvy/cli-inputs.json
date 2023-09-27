@@ -4,12 +4,16 @@
     "apiName": "divvy",
     "serviceName": "AppSync",
     "defaultAuthType": {
-      "mode": "API_KEY",
-      "expirationTime": 7,
-      "apiKeyExpirationDate": "2023-09-24T19:41:36.250Z",
-      "keyDescription": "divvy"
+      "mode": "AWS_IAM"
     },
     "conflictResolution": {},
-    "additionalAuthTypes": []
+    "additionalAuthTypes": [
+      {
+        "mode": "API_KEY",
+        "expirationTime": 365,
+        "apiKeyExpirationDate": "2024-09-26T02:05:30.211Z",
+        "keyDescription": "sandbox"
+      }
+    ]
   }
 }

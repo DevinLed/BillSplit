@@ -27,60 +27,53 @@ import "./darkMode.css";
 import "./index.css";
 import ReceiptTable from "./components/ReceiptTable";
 import {
-  createUsersDB,
-  updateUsersDB,
-  deleteUsersDB,
+  createUserData,
+  updateUserData,
+  deleteUserData,
   updateAccountData
 } from "./graphql/mutations"; // Import the mutations
 
 import { Amplify, API, graphqlOperation, Auth, Storage } from "aws-amplify";
 import awsconfig from "./aws-exports";
-import { getUsersDB, getAccountData } from "./graphql/queries";
+import { getUserData, getAccountData } from "./graphql/queries";
 Amplify.configure(awsconfig);
 
 function App({ signOut, user }) {
   // dark mode theme switching
   
   const [theme, setTheme] = useState("");
-  const [lang, setLang] = useState("english");
-  const [taxRate, setTaxRate] = useState(0.15);
 
   const toggleTheme = () => {
-    // Toggle the theme between "light" and "dark"
-    const newTheme = theme === "light" ? "dark" : "light";
-    setTheme(newTheme);
-  
-    // Apply the theme class to the body element
-    document.body.className = newTheme;
+    if (theme === "light") {
+      setTheme("dark");
+      console.log("now in dark mode");
+    } else {
+      setTheme("light");
+      console.log("now in lite mode");
+    }
   };
-
+  // useEffect to track dark mode
   useEffect(() => {
-    
-    const fetchData = async () => {
-      try {
-        const user = await Auth.currentAuthenticatedUser();
-        const loggedInUsername = user.attributes.email;
+    localStorage.setItem("theme", theme);
+    document.body.className = theme;
+  }, [theme]);
+  // language select
+  const [lang, setLang] = useState(localStorage.getItem("lang") || "english");
+  // useEffect to track language
+  useEffect(() => {
+    localStorage.setItem("lang", lang);
+    document.body.className = lang;
+  }, [lang]);
+  // tax rate select
 
-        // Fetch the account data for the logged-in user
-        const accountDataResponse = await API.graphql(
-          graphqlOperation(getAccountData, {
-            id: loggedInUsername, 
-          })
-        );
+  const [taxRate, setTaxRate] = useState(localStorage.getItem("taxRate"));
+  // useEffect to track tax rate
+  useEffect(() => {
+    localStorage.setItem("taxRate", taxRate);
+    document.body.className = taxRate;
+  }, [taxRate]);
 
-        const accountData = accountDataResponse.data.getAccountData;
-        if (accountData) {
-          setTheme(accountData.theme || "light");
-          setLang(accountData.language || "english");
-          setTaxRate(accountData.taxRate || 0.15);
-        }
-      } catch (error) {
-        console.error("Error fetching account data", error);
-      }
-    };
-
-    fetchData();
-  }, []);
+/*Testing still
   useEffect(() => {
     const updateAccountDataInDynamoDB = async () => {
       try {
@@ -91,7 +84,7 @@ function App({ signOut, user }) {
         await API.graphql(
           graphqlOperation(updateAccountData, {
             input: {
-              email: loggedInUsername,
+              username: loggedInUsername,
               theme,
               language: lang,
               taxRate,
@@ -106,6 +99,8 @@ function App({ signOut, user }) {
     // Call the update function when theme, lang, or taxRate changes
     updateAccountDataInDynamoDB();
   }, [theme, lang, taxRate]);
+
+  */
   //styling for login prompt
   const styles = {
     container: {
@@ -160,10 +155,11 @@ function App({ signOut, user }) {
     const fetchAuthenticatedUser = async () => {
       try {
         const user = await Auth.currentAuthenticatedUser();
-        const email = user.attributes.email;
-        setLoggedInUsername(email);
+        const username = user.attributes.email;
+        setLoggedInUsername(username);
       } catch (error) {
         console.error("Error getting authenticated user", error);
+        // Handle the error here, e.g., show an error message to the user.
       }
     };
 
@@ -202,32 +198,32 @@ function App({ signOut, user }) {
   const addNum = async (id, val, val2) => {
     try {
       // Fetch the existing user data from DynamoDB
-      const UsersDBResponse = await API.graphql(
-        graphqlOperation(getUsersDB, { id })
+      const userDataResponse = await API.graphql(
+        graphqlOperation(getUserData, { id })
       );
 
-      const UsersDB = UsersDBResponse.data.getUsersDB;
+      const userData = userDataResponse.data.getUserData;
 
-      if (!UsersDB) {
+      if (!userData) {
         // Handle the case where the user data doesn't exist
         return;
       }
 
       // Calculate the updated personOwing value
-      const a = parseFloat(UsersDB.personOwing, 0);
+      const a = parseFloat(userData.personOwing, 0);
       const b = parseFloat(val);
       const c = parseFloat(val2);
       const prevalue = a + b;
       const updatedValue = prevalue + c;
 
       // Update the user data in DynamoDB
-      const updatedUsersDB = {
-        id: UsersDB.id,
+      const updatedUserData = {
+        id: userData.id,
         personOwing: updatedValue.toFixed(2), // Convert to 2 decimal places
       };
 
       await API.graphql(
-        graphqlOperation(updateUsersDB, { input: updatedUsersDB })
+        graphqlOperation(updateUserData, { input: updatedUserData })
       );
 
       // Update the local state if needed
@@ -243,6 +239,7 @@ function App({ signOut, user }) {
       });
 
       setDisplayAdd(true);
+      console.log("Value updated successfully");
     } catch (error) {
       console.error("Error updating value:", error);
       // Handle the error as needed
@@ -254,11 +251,11 @@ function App({ signOut, user }) {
 
     try {
       // Fetch the user data for the selected item from DynamoDB using the new query
-      const UsersDBResponse = await API.graphql(
-        graphqlOperation(getUsersDB, { id }) //
+      const userDataResponse = await API.graphql(
+        graphqlOperation(getUserData, { id }) //
       );
 
-      const editingRow = UsersDBResponse.data.getUsersDB; // Assuming getUsersDB returns a single item
+      const editingRow = userDataResponse.data.getUserData; // Assuming getUserData returns a single item
 
       if (editingRow) {
         // Update state variables with the values from the selected item
@@ -273,37 +270,36 @@ function App({ signOut, user }) {
       // Handle the error case as needed
     }
   };
-
   // used to update values of balance for contacts
   const subNum = async (id, val, val2) => {
     try {
       // Fetch the existing user data from DynamoDB
-      const UsersDBResponse = await API.graphql(
-        graphqlOperation(getUsersDB, { id })
+      const userDataResponse = await API.graphql(
+        graphqlOperation(getUserData, { id })
       );
 
-      const UsersDB = UsersDBResponse.data.getUsersDB;
+      const userData = userDataResponse.data.getUserData;
 
-      if (!UsersDB) {
+      if (!userData) {
         // Handle the case where the user data doesn't exist
         return;
       }
 
       // Calculate the updated personOwing value
-      const a = parseFloat(UsersDB.personOwing, 0);
+      const a = parseFloat(userData.personOwing, 0);
       const b = parseFloat(val);
       const c = parseFloat(val2);
       const prevalue = a - b;
       const updatedValue = prevalue - c;
 
       // Update the user data in DynamoDB
-      const updatedUsersDB = {
-        id: UsersDB.id,
+      const updatedUserData = {
+        id: userData.id,
         personOwing: updatedValue.toFixed(2), // Convert to 2 decimal places
       };
 
       await API.graphql(
-        graphqlOperation(updateUsersDB, { input: updatedUsersDB })
+        graphqlOperation(updateUserData, { input: updatedUserData })
       );
 
       // Update the local state if needed
@@ -319,6 +315,7 @@ function App({ signOut, user }) {
       });
 
       setDisplayAdd(false);
+      console.log("Value subtracted successfully");
     } catch (error) {
       console.error("Error subtracting value:", error);
       // Handle the error as needed
@@ -336,8 +333,8 @@ function App({ signOut, user }) {
       // Check if the user is authenticated
       const user = await Auth.currentAuthenticatedUser();
 
-      const newUsersDB = {
-        email: user.attributes.email, // Use the authenticated user's email as a reference
+      const newUserData = {
+        username: user.attributes.email, // Use the authenticated user's username as a reference
         personName: personName,
         personPhone: personPhone,
         personEmail: personEmail,
@@ -346,10 +343,10 @@ function App({ signOut, user }) {
 
       // Add the user data to DynamoDB
       const result = await API.graphql(
-        graphqlOperation(createUsersDB, { input: newUsersDB })
+        graphqlOperation(createUserData, { input: newUserData })
       );
 
-      console.log("User data created:", result.data.createUsersDB);
+      console.log("User data created:", result.data.createUserData);
 
       // Handle the response as needed
 
@@ -390,7 +387,7 @@ function App({ signOut, user }) {
 
       // Send the GraphQL request to update user data
       const response = await API.graphql(
-        graphqlOperation(updateUsersDB, { input: inputData })
+        graphqlOperation(updateUserData, { input: inputData })
       );
 
       // Handle the response, e.g., show a success message
@@ -427,8 +424,8 @@ function App({ signOut, user }) {
   const selectPerson = async (id) => {
     try {
       // Fetch user data from DynamoDB based on the selected id
-      const UsersDB = await API.graphql(graphqlOperation(getUsersDB, { id }));
-      const selectingPerson = UsersDB.data.getUsersDB;
+      const userData = await API.graphql(graphqlOperation(getUserData, { id }));
+      const selectingPerson = userData.data.getUserData;
 
       if (selectingPerson) {
         setPersonName(selectingPerson.personName);

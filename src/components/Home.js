@@ -18,9 +18,9 @@ import { CSSTransition } from "react-transition-group";
 import { withAuthenticator, Button, Heading } from "@aws-amplify/ui-react";
 import "@aws-amplify/ui-react/styles.css";
 
-import { Amplify, API, graphqlOperation, Auth } from "aws-amplify";
-import { listUsersDBS } from "../graphql/queries";
-import { updateUsersDB, deleteUsersDB } from "../graphql/mutations";
+import { Amplify, API, graphqlOperation, Auth } from 'aws-amplify';
+import { listUserData } from '../graphql/queries';
+import { updateUserData, deleteUserData } from "../graphql/mutations";
 
 import awsconfig from "../aws-exports";
 Amplify.configure(awsconfig);
@@ -44,7 +44,7 @@ export default function Home({
     setPersonEdit(false);
     setSelectPersonEdit(false);
     setLang(lang);
-  }, []);
+  }, [lang, setLang]);
 
   // For Dark/Bright mode. Keeps mode storage for page refresh.
   const [buttonText, setButtonText] = useState(
@@ -87,24 +87,24 @@ export default function Home({
         // Get the currently authenticated user's information
         const user = await Auth.currentAuthenticatedUser();
         const loggedInUsername = user.attributes.email;
-        const UsersDB = await API.graphql(
-          graphqlOperation(listUsersDBS, {
+        const userData = await API.graphql(
+          graphqlOperation(listUserData, {
             limit: 100,
             sortField: "createdAt",
             sortDirection: "DESC",
             filter: {
               email: {
                 eq: loggedInUsername,
+                
               },
             },
           })
+          
         );
-
-        const UsersDBList = UsersDB.data.listUsersDBS.items;
-          console.log(UsersDB.data.listUsersDBS.items);
+        const userDataList = userData.data.listUserData.items;
         // Extract labels and data from userDataList
-        const labels = UsersDBList.map(({ personName }) => personName);
-        const data = UsersDBList.map(({ personOwing }) => personOwing);
+        const labels = userDataList.map(({ personName }) => personName);
+        const data = userDataList.map(({ personOwing }) => personOwing);
 
         // Update the chartData state with the fetched data
         setChartData({
@@ -118,7 +118,7 @@ export default function Home({
           ],
         });
       } catch (error) {
-        console.error("Error fetching UserDB", error);
+        console.error("Error fetching User Data", error);
       }
     }
 

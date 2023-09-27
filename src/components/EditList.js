@@ -4,8 +4,8 @@ import Header from "./Header";
 import EditPerson from "./EditPerson";
 import { IoPersonAddSharp } from "react-icons/io5";
 import { Amplify, API, graphqlOperation, Auth } from 'aws-amplify';
-import { listUsersDBS } from '../graphql/queries';
-import { updateUsersDB, deleteUsersDB } from "../graphql/mutations";
+import { listUserData } from '../graphql/queries';
+import { updateUserData, deleteUserData } from "../graphql/mutations";
 import Avatar from "react-avatar";
 import { CSSTransition } from "react-transition-group";
 
@@ -58,7 +58,7 @@ export default function EditList({
     try {
       // Call the deleteUser mutation with the user's ID to delete them
       const response = await API.graphql(
-        graphqlOperation(deleteUsersDB, { input: { id: editPerson } })
+        graphqlOperation(deleteUserData, { input: { id: editPerson } })
       );
   
       // Handle the response as needed 
@@ -74,22 +74,18 @@ export default function EditList({
     async function fetchData() {
       try {
         // Fetch the updated list of users after a user is deleted
-        const UsersDB = await API.graphql(
-          graphqlOperation(listUsersDBS, {
+        const userData = await API.graphql(
+          graphqlOperation(listUserData, {
             limit: 100,
             sortField: "createdAt",
             sortDirection: "DESC",
           })
         );
-        const UsersDBList = UsersDBList.data.listUsersDBS.items;
+        const userDataList = userData.data.listUserData.items;
         // Filter the list to show entries only for the currently logged-in user
-        const filteredList = UsersDBList.filter((item) => {
-          return item.email === loggedInUsername;
+        const filteredList = userDataList.filter((item) => {
+          return item.attributes.email === loggedInUsername;
         });
-  
-        // Sort the filtered list alphabetically by personName
-        filteredList.sort((a, b) => a.personName.localeCompare(b.personName));
-  
         setList(filteredList);
         console.log(loggedInUsername);
         // Get the user ID and set it in the state
@@ -102,7 +98,7 @@ export default function EditList({
   
     fetchData(); // Call fetchData to fetch data and set userId
   }, [loggedInUsername, personName, personPhone, personEmail, personOwing, editPerson]);
-  
+ 
   return (
     <>
       <main

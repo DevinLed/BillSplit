@@ -7,7 +7,7 @@ import { IoPersonAddSharp } from "react-icons/io5";
 import Avatar from "react-avatar";
 import { CSSTransition } from "react-transition-group";
 import { API, graphqlOperation, Auth } from "aws-amplify";
-import { listUsersDBS } from "../graphql/queries";
+import { listUserData } from "../graphql/queries";
 
 export default function SplitBill({
   addPerson,
@@ -41,33 +41,29 @@ export default function SplitBill({
   const [selectPersonList, setSelectPersonList] = useState(true);
   
   useEffect(() => {
-    async function fetchUsersDB() {
+    async function fetchUserData() {
       try {
-        const UsersDB = await API.graphql(
-          graphqlOperation(listUsersDBS, {
+        const userData = await API.graphql(
+          graphqlOperation(listUserData, {
             limit: 100,
             sortField: "createdAt",
             sortDirection: "DESC",
           })
         );
   
-        const UsersDBList = UsersDB.data.listUsersDBS.items;
+        const userDataList = userData.data.listUserData.items;
         // Filter the list to show entries only for the currently logged-in user
-        const filteredList = UsersDBList.filter((item) => {
-          return item.email === loggedInUsername;
+        const filteredList = userDataList.filter((item) => {
+          return item.attributes.email === loggedInUsername;
         });
-  
-        // Sort the filtered list alphabetically by personName
-        filteredList.sort((a, b) => a.personName.localeCompare(b.personName));
-  
         setList(filteredList);
         console.log(loggedInUsername);
       } catch (error) {
-        console.error("Error fetching UserDB", error);
+        console.error("Error fetching UserData", error);
       }
     }
   
-    fetchUsersDB();
+    fetchUserData();
   }, [loggedInUsername, personName, personPhone, personEmail, personOwing, addPerson]);
   
   return (
