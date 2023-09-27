@@ -6,7 +6,7 @@ import Header from "./Header";
 import { IoPersonAddSharp } from "react-icons/io5";
 import Avatar from "react-avatar";
 import { CSSTransition } from "react-transition-group";
-import { API, graphqlOperation } from "aws-amplify";
+import { API, graphqlOperation, Auth } from "aws-amplify";
 import { listUsersDBS } from "../graphql/queries";
 
 export default function SplitBill({
@@ -63,7 +63,7 @@ export default function SplitBill({
         setList(filteredList);
         console.log(loggedInUsername);
       } catch (error) {
-        console.error("Error fetching UserData", error);
+        console.error("Error fetching UserDB", error);
       }
     }
   

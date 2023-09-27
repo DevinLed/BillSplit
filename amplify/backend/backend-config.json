@@ -48,6 +48,32 @@
       "service": "Cognito"
     }
   },
+  "parameters": {
+    "AMPLIFY_function_divvy73bb5d51CustomMessage_EMAILMESSAGE": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "divvy73bb5d51CustomMessage"
+        }
+      ]
+    },
+    "AMPLIFY_function_divvy73bb5d51CustomMessage_EMAILSUBJECT": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "divvy73bb5d51CustomMessage"
+        }
+      ]
+    },
+    "AMPLIFY_function_divvy73bb5d51CustomMessage_REDIRECTURL": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "divvy73bb5d51CustomMessage"
+        }
+      ]
+    }
+  },
   "storage": {
     "Users": {
       "providerPlugin": "awscloudformation",

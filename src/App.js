@@ -55,10 +55,11 @@ function App({ signOut, user }) {
   };
 
   useEffect(() => {
+    
     const fetchData = async () => {
       try {
         const user = await Auth.currentAuthenticatedUser();
-        const loggedInUsername = user.email;
+        const loggedInUsername = user.attributes.email;
 
         // Fetch the account data for the logged-in user
         const accountDataResponse = await API.graphql(
@@ -84,7 +85,7 @@ function App({ signOut, user }) {
     const updateAccountDataInDynamoDB = async () => {
       try {
         const user = await Auth.currentAuthenticatedUser();
-        const loggedInUsername = user.email;
+        const loggedInUsername = user.attributes.email;
 
         // Update the account data in DynamoDB
         await API.graphql(
@@ -159,7 +160,7 @@ function App({ signOut, user }) {
     const fetchAuthenticatedUser = async () => {
       try {
         const user = await Auth.currentAuthenticatedUser();
-        const email = user.email;
+        const email = user.attributes.email;
         setLoggedInUsername(email);
       } catch (error) {
         console.error("Error getting authenticated user", error);
@@ -336,7 +337,7 @@ function App({ signOut, user }) {
       const user = await Auth.currentAuthenticatedUser();
 
       const newUsersDB = {
-        email: user.email, // Use the authenticated user's email as a reference
+        email: user.attributes.email, // Use the authenticated user's email as a reference
         personName: personName,
         personPhone: personPhone,
         personEmail: personEmail,

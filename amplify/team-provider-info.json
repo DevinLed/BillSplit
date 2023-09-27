@@ -41,7 +41,8 @@
       "UnauthRoleName": "amplify-divvy-divvy-190057-unauthRole",
       "StackName": "amplify-divvy-divvy-190057",
       "StackId": "arn:aws:cloudformation:us-east-1:365430784720:stack/amplify-divvy-divvy-190057/ac907c10-51b3-11ee-9d5c-1279e81109c3",
-      "AmplifyAppId": "d2xuv8xhtmcgm8"
+      "AmplifyAppId": "d2xuv8xhtmcgm8",
+      "AuthTriggerTemplateURL": "https://s3.amazonaws.com/amplify-divvy-divvy-190057-deployment/amplify-cfn-templates/auth/auth-trigger-cloudformation-template.json"
     },
     "categories": {
       "auth": {
@@ -50,7 +51,12 @@
       },
       "function": {
         "divvy25172621": {},
-        "divvystorage": {}
+        "divvystorage": {},
+        "divvy73bb5d51CustomMessage": {
+          "REDIRECTURL": "",
+          "EMAILSUBJECT": "",
+          "EMAILMESSAGE": ""
+        }
       },
       "storage": {
         "Users": {},

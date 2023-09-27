@@ -86,8 +86,7 @@ export default function Home({
       try {
         // Get the currently authenticated user's information
         const user = await Auth.currentAuthenticatedUser();
-        const loggedInUsername = user.email;
-
+        const loggedInUsername = user.attributes.email;
         const UsersDB = await API.graphql(
           graphqlOperation(listUsersDBS, {
             limit: 100,
@@ -102,7 +101,7 @@ export default function Home({
         );
 
         const UsersDBList = UsersDB.data.listUsersDBS.items;
-
+          console.log(UsersDB.data.listUsersDBS.items);
         // Extract labels and data from userDataList
         const labels = UsersDBList.map(({ personName }) => personName);
         const data = UsersDBList.map(({ personOwing }) => personOwing);
@@ -119,13 +118,13 @@ export default function Home({
           ],
         });
       } catch (error) {
-        console.error("Error fetching UserData", error);
+        console.error("Error fetching UserDB", error);
       }
     }
 
     // Call fetchData to fetch data when the component mounts
     fetchData();
-  }, []); //
+  }, [chartData]); //
   const tooltipCallbacks = {
     title: (tooltipItems) => {
       if (tooltipItems.length > 0) {
