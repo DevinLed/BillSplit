@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "paths": {
+    "/SplitBill": {
+      "name": "/SplitBill",
+      "lambdaFunction": "divvyb054cbc8",
+      "permissions": {
+        "setting": "open"
+      }
+    }
+  }
+}

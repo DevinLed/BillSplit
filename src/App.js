@@ -32,7 +32,6 @@ import {
   deleteUserData,
   updateAccountData
 } from "./graphql/mutations"; // Import the mutations
-
 import { Amplify, API, graphqlOperation, Auth, Storage } from "aws-amplify";
 import awsconfig from "./aws-exports";
 import { getUserData, getAccountData } from "./graphql/queries";
@@ -328,28 +327,38 @@ function App({ signOut, user }) {
   };
   const handleAddSubmit = async (e) => {
     e.preventDefault();
-
+  
     try {
       // Check if the user is authenticated
       const user = await Auth.currentAuthenticatedUser();
-
+  
       const newUserData = {
-        username: user.attributes.email, // Use the authenticated user's username as a reference
         personName: personName,
         personPhone: personPhone,
         personEmail: personEmail,
         personOwing: parseFloat(personOwing),
+        loggedInUsername: user.attributes.email, // Include the authenticated user's email as needed
       };
-
-      // Add the user data to DynamoDB
-      const result = await API.graphql(
-        graphqlOperation(createUserData, { input: newUserData })
-      );
-
-      console.log("User data created:", result.data.createUserData);
-
+  
+      // Make a POST request using the Fetch API
+      const response = await fetch("https://o3rdvdayni.execute-api.us-east-1.amazonaws.com/Div", {
+        method: "POST",
+        headers: {
+          // Add any necessary headers, such as authentication tokens
+          // Example: "Authorization": "Bearer YOUR_ACCESS_TOKEN"
+          "Content-Type": "application/json", // Specify the content type
+        },
+        body: JSON.stringify(newUserData), // Convert the data to JSON format
+      });
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+  
+      console.log("User data created");
+  
       // Handle the response as needed
-
+  
       // Clear form fields and set editing state
       setPersonName("");
       setPersonPhone("");
@@ -359,9 +368,9 @@ function App({ signOut, user }) {
       setIsEditing(false);
     } catch (error) {
       console.error("Error creating user data:", error);
-
+  
       // Handle the error appropriately
-
+  
       // Clear form fields and set editing state
       setPersonName("");
       setPersonPhone("");
@@ -371,7 +380,8 @@ function App({ signOut, user }) {
       setIsEditing(false);
     }
   };
-
+  
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
 

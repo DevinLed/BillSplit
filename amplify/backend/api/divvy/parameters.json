@@ -1,6 +1,0 @@
-{
-  "AppSyncApiName": "divvy",
-  "DynamoDBBillingMode": "PAY_PER_REQUEST",
-  "DynamoDBEnableServerSideEncryption": false,
-  "AuthModeLastUpdated": "2023-09-27T02:00:14.152Z"
-}

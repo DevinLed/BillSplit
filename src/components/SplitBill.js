@@ -6,9 +6,6 @@ import Header from "./Header";
 import { IoPersonAddSharp } from "react-icons/io5";
 import Avatar from "react-avatar";
 import { CSSTransition } from "react-transition-group";
-import { API, graphqlOperation, Auth } from "aws-amplify";
-import { listUserData } from "../graphql/queries";
-
 export default function SplitBill({
   addPerson,
   setAddPerson,
@@ -41,30 +38,23 @@ export default function SplitBill({
   const [selectPersonList, setSelectPersonList] = useState(true);
   
   useEffect(() => {
-    async function fetchUserData() {
-      try {
-        const userData = await API.graphql(
-          graphqlOperation(listUserData, {
-            limit: 100,
-            sortField: "createdAt",
-            sortDirection: "DESC",
-          })
-        );
+    fetch("https://o3rdvdayni.execute-api.us-east-1.amazonaws.com/Div/SplitBill")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        // Handle the successful response and update the state
+        setList(data);
+      })
+      .catch((error) => {
+        // Handle errors
+        console.error("Error fetching data:", error);
+      });
+  }, [loggedInUsername]);
   
-        const userDataList = userData.data.listUserData.items;
-        // Filter the list to show entries only for the currently logged-in user
-        const filteredList = userDataList.filter((item) => {
-          return item.attributes.email === loggedInUsername;
-        });
-        setList(filteredList);
-        console.log(loggedInUsername);
-      } catch (error) {
-        console.error("Error fetching UserData", error);
-      }
-    }
-  
-    fetchUserData();
-  }, [loggedInUsername, personName, personPhone, personEmail, personOwing, addPerson]);
   
   return (
     <>
@@ -74,9 +64,7 @@ export default function SplitBill({
       >
         <Header selectPersonList={selectPersonList} lang={lang} theme={theme} />
         <div
-          className={`flex flex-col items-center justify-center transition-opacity duration-300 ${
-            list.length > 0 ? "opacity-100" : "opacity-0"
-          }`}
+          className={`flex flex-col items-center justify-center transition-opacity duration-300`}
         >
           <ul className="m-0 py-1 w-3/4">
             {list.map(({ id, personName, personOwing }) => (

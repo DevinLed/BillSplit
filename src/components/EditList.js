@@ -110,9 +110,7 @@ export default function EditList({
           theme={theme}
           lang={lang}
         />
-        <div className={`flex flex-col items-center justify-center transition-opacity duration-300 ${
-          list.length > 0 ? "opacity-100" : "opacity-0"
-        }`}>
+        <div className={`flex flex-col items-center justify-center transition-opacity duration-300`}>
 
           <ul className="m-0 py-1 w-3/4">
             {list.map(

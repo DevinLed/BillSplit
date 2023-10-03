@@ -80,51 +80,6 @@ export default function Home({
     ],
   });
 
-  useEffect(() => {
-    // Function to fetch data from DynamoDB
-    async function fetchData() {
-      try {
-        // Get the currently authenticated user's information
-        const user = await Auth.currentAuthenticatedUser();
-        const loggedInUsername = user.attributes.email;
-        const userData = await API.graphql(
-          graphqlOperation(listUserData, {
-            limit: 100,
-            sortField: "createdAt",
-            sortDirection: "DESC",
-            filter: {
-              email: {
-                eq: loggedInUsername,
-                
-              },
-            },
-          })
-          
-        );
-        const userDataList = userData.data.listUserData.items;
-        // Extract labels and data from userDataList
-        const labels = userDataList.map(({ personName }) => personName);
-        const data = userDataList.map(({ personOwing }) => personOwing);
-
-        // Update the chartData state with the fetched data
-        setChartData({
-          ...chartData,
-          labels: labels,
-          datasets: [
-            {
-              ...chartData.datasets[0],
-              data: data,
-            },
-          ],
-        });
-      } catch (error) {
-        console.error("Error fetching User Data", error);
-      }
-    }
-
-    // Call fetchData to fetch data when the component mounts
-    fetchData();
-  }, [chartData]); //
   const tooltipCallbacks = {
     title: (tooltipItems) => {
       if (tooltipItems.length > 0) {
