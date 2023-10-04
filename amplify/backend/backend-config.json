@@ -80,6 +80,25 @@
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
+    "ExpenseManagementFunction": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributeEnvMap": {
+            "Arn": "TABLE_ARN",
+            "Name": "TABLE_NAME"
+          },
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "storage",
+          "resourceName": "DivvyUsersContacts"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
     "divvyb054cbc8": {
       "build": true,
       "dependsOn": [
@@ -130,6 +149,22 @@
         {
           "category": "function",
           "resourceName": "DivvyUsersContactsTrigger06611c45"
+        }
+      ]
+    },
+    "AMPLIFY_function_ExpenseManagementFunction_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "ExpenseManagementFunction"
+        }
+      ]
+    },
+    "AMPLIFY_function_ExpenseManagementFunction_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "ExpenseManagementFunction"
         }
       ]
     },

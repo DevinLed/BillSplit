@@ -133,13 +133,93 @@
         "divvyb054cbc8": {
           "deploymentBucketName": "amplify-divvy-div-144936-deployment",
           "s3Key": "amplify-builds/divvyb054cbc8-4e5a3553317136393858-build.zip"
-        }
+        },
+        "ExpenseManagementFunction": {
+          "deploymentBucketName": "amplify-divvy-div-144936-deployment",
+          "s3Key": "amplify-builds/ExpenseManagementFunction-59786f3272764b677a67-build.zip"
+        },
+        "DivvyUsersContacts": {}
       },
       "storage": {
         "DivvyUsersContacts": {}
       },
       "api": {
         "DivvyRestAPI": {}
+      }
+    }
+  },
+  "envirotest": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-divvy-envirotest-215348-authRole",
+      "UnauthRoleArn": "arn:aws:iam::365430784720:role/amplify-divvy-envirotest-215348-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::365430784720:role/amplify-divvy-envirotest-215348-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-divvy-envirotest-215348-deployment",
+      "UnauthRoleName": "amplify-divvy-envirotest-215348-unauthRole",
+      "StackName": "amplify-divvy-envirotest-215348",
+      "StackId": "arn:aws:cloudformation:us-east-1:365430784720:stack/amplify-divvy-envirotest-215348/4c0ef7f0-624c-11ee-9ba3-0a938eb2e9d3",
+      "AmplifyAppId": "d3fv81xpb4opjs"
+    },
+    "categories": {
+      "auth": {
+        "divvy6cc998df": {}
+      },
+      "function": {
+        "DivvyLambdaPrime": {},
+        "DivvyUsersContactsTrigger06611c45": {},
+        "ExpenseManagementFunction": {},
+        "divvyb054cbc8": {},
+        "DivvyUsersContacts": {}
+      }
+    }
+  },
+  "testenv": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-divvy-testenv-215619-authRole",
+      "UnauthRoleArn": "arn:aws:iam::365430784720:role/amplify-divvy-testenv-215619-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::365430784720:role/amplify-divvy-testenv-215619-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-divvy-testenv-215619-deployment",
+      "UnauthRoleName": "amplify-divvy-testenv-215619-unauthRole",
+      "StackName": "amplify-divvy-testenv-215619",
+      "StackId": "arn:aws:cloudformation:us-east-1:365430784720:stack/amplify-divvy-testenv-215619/a6762060-624c-11ee-8c22-12d2d2a31ce9",
+      "AmplifyAppId": "d3fv81xpb4opjs"
+    },
+    "categories": {
+      "auth": {
+        "divvy6cc998df": {}
+      },
+      "function": {
+        "DivvyLambdaPrime": {},
+        "DivvyUsersContactsTrigger06611c45": {},
+        "ExpenseManagementFunction": {},
+        "divvyb054cbc8": {},
+        "DivvyUsersContacts": {}
+      }
+    }
+  },
+  "newtest": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-divvy-newtest-215808-authRole",
+      "UnauthRoleArn": "arn:aws:iam::365430784720:role/amplify-divvy-newtest-215808-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::365430784720:role/amplify-divvy-newtest-215808-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-divvy-newtest-215808-deployment",
+      "UnauthRoleName": "amplify-divvy-newtest-215808-unauthRole",
+      "StackName": "amplify-divvy-newtest-215808",
+      "StackId": "arn:aws:cloudformation:us-east-1:365430784720:stack/amplify-divvy-newtest-215808/e68dbff0-624c-11ee-9e8a-120c54af8533",
+      "AmplifyAppId": "d3fv81xpb4opjs"
+    },
+    "categories": {
+      "auth": {
+        "divvy6cc998df": {}
+      },
+      "function": {
+        "DivvyLambdaPrime": {},
+        "DivvyUsersContactsTrigger06611c45": {},
+        "ExpenseManagementFunction": {},
+        "divvyb054cbc8": {},
+        "DivvyUsersContacts": {}
       }
     }
   }

@@ -30,16 +30,17 @@ import {
   createUserData,
   updateUserData,
   deleteUserData,
-  updateAccountData
+  updateAccountData,
 } from "./graphql/mutations"; // Import the mutations
 import { Amplify, API, graphqlOperation, Auth, Storage } from "aws-amplify";
 import awsconfig from "./aws-exports";
+import axios from "axios";
 import { getUserData, getAccountData } from "./graphql/queries";
 Amplify.configure(awsconfig);
 
 function App({ signOut, user }) {
   // dark mode theme switching
-  
+
   const [theme, setTheme] = useState("");
 
   const toggleTheme = () => {
@@ -72,7 +73,7 @@ function App({ signOut, user }) {
     document.body.className = taxRate;
   }, [taxRate]);
 
-/*Testing still
+  /*Testing still
   useEffect(() => {
     const updateAccountDataInDynamoDB = async () => {
       try {
@@ -150,20 +151,29 @@ function App({ signOut, user }) {
 
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [loggedInUsername, setLoggedInUsername] = useState(""); // Set the logged-in email
+  const API_URL =
+    "https://8pv6eqwqq8.execute-api.us-east-1.amazonaws.com/production";
+
+  // ...
+
   useEffect(() => {
-    const fetchAuthenticatedUser = async () => {
+    const fetchData = async () => {
       try {
-        const user = await Auth.currentAuthenticatedUser();
-        const username = user.attributes.email;
-        setLoggedInUsername(username);
+        // Make a GET request to your API Gateway endpoint
+        const response = await axios.get(API_URL);
+
+        // Handle the response data as needed
+        const data = response.data;
+        setLoggedInUsername(data.username);
+        console.log(loggedInUsername);
       } catch (error) {
-        console.error("Error getting authenticated user", error);
-        // Handle the error here, e.g., show an error message to the user.
+        console.error("Error fetching data:", error);
+        // Handle errors, e.g., show an error message to the user.
       }
     };
 
-    fetchAuthenticatedUser();
-  }, []); // Empty dependency array to run this effect once on component mount
+    fetchData();
+  }, [loggedInUsername]);
 
   const [combinedArray, setCombinedArray] = useState([]);
 
@@ -176,7 +186,7 @@ function App({ signOut, user }) {
   const [value] = useState("");
 
   // History tab work
-  const initialCombinedTotal = 0; 
+  const initialCombinedTotal = 0;
   const [combinedTotal, setCombinedTotal] = useState(initialCombinedTotal);
   const [historyData, setHistoryData] = useState([]);
   const [displayAdd, setDisplayAdd] = useState(true);
@@ -327,11 +337,11 @@ function App({ signOut, user }) {
   };
   const handleAddSubmit = async (e) => {
     e.preventDefault();
-  
+
     try {
       // Check if the user is authenticated
       const user = await Auth.currentAuthenticatedUser();
-  
+
       const newUserData = {
         personName: personName,
         personPhone: personPhone,
@@ -339,26 +349,29 @@ function App({ signOut, user }) {
         personOwing: parseFloat(personOwing),
         loggedInUsername: user.attributes.email, // Include the authenticated user's email as needed
       };
-  
+
       // Make a POST request using the Fetch API
-      const response = await fetch("https://o3rdvdayni.execute-api.us-east-1.amazonaws.com/Div", {
-        method: "POST",
-        headers: {
-          // Add any necessary headers, such as authentication tokens
-          // Example: "Authorization": "Bearer YOUR_ACCESS_TOKEN"
-          "Content-Type": "application/json", // Specify the content type
-        },
-        body: JSON.stringify(newUserData), // Convert the data to JSON format
-      });
-  
+      const response = await fetch(
+        "https://8pv6eqwqq8.execute-api.us-east-1.amazonaws.com/production",
+        {
+          method: "POST",
+          headers: {
+            // Add any necessary headers, such as authentication tokens
+            // Example: "Authorization": "Bearer YOUR_ACCESS_TOKEN"
+            "Content-Type": "application/json", // Specify the content type
+          },
+          body: JSON.stringify(newUserData), // Convert the data to JSON format
+        }
+      );
+
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-  
+
       console.log("User data created");
-  
+
       // Handle the response as needed
-  
+
       // Clear form fields and set editing state
       setPersonName("");
       setPersonPhone("");
@@ -368,9 +381,9 @@ function App({ signOut, user }) {
       setIsEditing(false);
     } catch (error) {
       console.error("Error creating user data:", error);
-  
+
       // Handle the error appropriately
-  
+
       // Clear form fields and set editing state
       setPersonName("");
       setPersonPhone("");
@@ -380,8 +393,7 @@ function App({ signOut, user }) {
       setIsEditing(false);
     }
   };
-  
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -491,232 +503,233 @@ function App({ signOut, user }) {
 
   return (
     <>
-    <div  className={`App ${theme}`}>
-      <Routes>
-        <Route
-          path="/Home"
-          element={
-            <Home
-              theme={theme}
-              setTheme={setTheme}
-              toggleTheme={toggleTheme}
-              personOwing={personOwing}
-              personName={personName}
-              list={list}
-              showConfirmation={showConfirmation}
-              setShowConfirmation={setShowConfirmation}
-              lang={lang}
-              setLang={setLang}
-              signOut={signOut}
-              user={user}
-            />
-          }
-        />
-        <Route
-          path="/LandingPage"
-          element={<LandingPage theme={theme} lang={lang} setLang={setLang} />}
-        />
-        <Route path="/" element={<Navigate to="/LandingPage" />} />
+      <div className={`App ${theme}`}>
+        <Routes>
+          <Route
+            path="/Home"
+            element={
+              <Home
+                theme={theme}
+                setTheme={setTheme}
+                toggleTheme={toggleTheme}
+                personOwing={personOwing}
+                personName={personName}
+                list={list}
+                showConfirmation={showConfirmation}
+                setShowConfirmation={setShowConfirmation}
+                lang={lang}
+                setLang={setLang}
+                signOut={signOut}
+                user={user}
+              />
+            }
+          />
+          <Route
+            path="/LandingPage"
+            element={
+              <LandingPage theme={theme} lang={lang} setLang={setLang} />
+            }
+          />
+          <Route path="/" element={<Navigate to="/LandingPage" />} />
 
-        <Route
-          path="/ReceiptInput/:id"
-          element={
-            <ReceiptInput
-              combinedTotal={combinedTotal}
-              setCombinedTotal={setCombinedTotal}
-              personName={personName}
-              personOwing={personOwing}
-              startDate={startDate}
-              setStartDate={setStartDate}
-              merchantName={merchantName}
-              setMerchantName={setMerchantName}
-              invoiceNumber={invoiceNumber}
-              setInvoiceNumber={setInvoiceNumber}
-              personReceiptAmount={personReceiptAmount}
-              setPersonReceiptAmount={setPersonReceiptAmount}
-              addNum={addNum}
-              subNum={subNum}
-              value={value}
-              addReceipt={addReceipt}
-              selectedValue={selectedValue}
-              setSelectedValue={setSelectedValue}
-              displayMerchant={displayMerchant}
-              displayDate={displayDate}
-              displayInvoice={displayInvoice}
-              setDisplayMerchant={setDisplayMerchant}
-              setDisplayDate={setDisplayDate}
-              setDisplayInvoice={setDisplayInvoice}
-              setIsReceiptSubmitted={setIsReceiptSubmitted}
-              youPictureTotal={youPictureTotal}
-              splitPictureTotal={splitPictureTotal}
-              themPictureTotal={themPictureTotal}
-              setYouPictureTotal={setYouPictureTotal}
-              setSplitPictureTotal={setSplitPictureTotal}
-              setThemPictureTotal={setThemPictureTotal}
-              theme={theme}
-              taxRate={taxRate}
-              lang={lang}
-              setLang={setLang}
-              combinedArray={combinedArray}
-              setCombinedArray={setCombinedArray}
-              handleResetCombinedArray={handleResetCombinedArray}
-              historyData={historyData}
-              setHistoryData={setHistoryData}
-              obtainedInfo={obtainedInfo}
-              setObtainedInfo={setObtainedInfo}
-            />
-          }
-        />
-        <Route
-          path="/SplitBill"
-          element={
-            <SplitBill
-              addPerson={addPerson}
-              setAddPerson={setAddPerson}
-              selectPerson={selectPerson}
-              personName={personName}
-              personEmail={personEmail}
-              personPhone={personPhone}
-              personOwing={personOwing}
-              setPersonName={setPersonName}
-              setPersonEmail={setPersonEmail}
-              setPersonPhone={setPersonPhone}
-              setPersonOwing={setPersonOwing}
-              handleSubmit={handleSubmit}
-              setPersonState={setPersonState}
-              personState={personState}
-              setIsSelected={setIsSelected}
-              list={list}
-              value={value}
-              addNum={addNum}
-              subNum={subNum}
-              personReceiptAmount={personReceiptAmount}
-              setFormSubmitted={setFormSubmitted}
-              theme={theme}
-              handleAddSubmit={handleAddSubmit}
-              lang={lang}
-              setLang={setLang}
-              loggedInUsername={loggedInUsername}
-            />
-          }
-        />
-        <Route
-          path="/EditList"
-          element={
-            <EditList
-              addPerson={addPerson}
-              setAddPerson={setAddPerson}
-              selectPerson={selectPerson}
-              personName={personName}
-              personEmail={personEmail}
-              personPhone={personPhone}
-              personOwing={personOwing}
-              setPersonName={setPersonName}
-              setPersonEmail={setPersonEmail}
-              setPersonPhone={setPersonPhone}
-              setPersonOwing={setPersonOwing}
-              handleSubmit={handleSubmit}
-              setPersonState={setPersonState}
-              personState={personState}
-              setIsSelected={setIsSelected}
-              editPerson={editPerson}
-              editRow={editRow}
-              setEditPerson={setEditPerson}
-              list={list}
-              setList={setList}
-              value={value}
-              theme={theme}
-              handleAddSubmit={handleAddSubmit}
-              lang={lang}
-              setLang={setLang}
-              loggedInUsername={loggedInUsername}
-            />
-          }
-        />
-        <Route
-          path="/Settings"
-          element={
-            <Settings
-              showConfirmation={showConfirmation}
-              setShowConfirmation={setShowConfirmation}
-              taxRate={taxRate}
-              setTaxRate={setTaxRate}
-              theme={theme}
-              setTheme={setTheme}
-              lang={lang}
-              setLang={setLang}
-              loggedInUsername={loggedInUsername}
-            />
-          }
-        />
+          <Route
+            path="/ReceiptInput/:id"
+            element={
+              <ReceiptInput
+                combinedTotal={combinedTotal}
+                setCombinedTotal={setCombinedTotal}
+                personName={personName}
+                personOwing={personOwing}
+                startDate={startDate}
+                setStartDate={setStartDate}
+                merchantName={merchantName}
+                setMerchantName={setMerchantName}
+                invoiceNumber={invoiceNumber}
+                setInvoiceNumber={setInvoiceNumber}
+                personReceiptAmount={personReceiptAmount}
+                setPersonReceiptAmount={setPersonReceiptAmount}
+                addNum={addNum}
+                subNum={subNum}
+                value={value}
+                addReceipt={addReceipt}
+                selectedValue={selectedValue}
+                setSelectedValue={setSelectedValue}
+                displayMerchant={displayMerchant}
+                displayDate={displayDate}
+                displayInvoice={displayInvoice}
+                setDisplayMerchant={setDisplayMerchant}
+                setDisplayDate={setDisplayDate}
+                setDisplayInvoice={setDisplayInvoice}
+                setIsReceiptSubmitted={setIsReceiptSubmitted}
+                youPictureTotal={youPictureTotal}
+                splitPictureTotal={splitPictureTotal}
+                themPictureTotal={themPictureTotal}
+                setYouPictureTotal={setYouPictureTotal}
+                setSplitPictureTotal={setSplitPictureTotal}
+                setThemPictureTotal={setThemPictureTotal}
+                theme={theme}
+                taxRate={taxRate}
+                lang={lang}
+                setLang={setLang}
+                combinedArray={combinedArray}
+                setCombinedArray={setCombinedArray}
+                handleResetCombinedArray={handleResetCombinedArray}
+                historyData={historyData}
+                setHistoryData={setHistoryData}
+                obtainedInfo={obtainedInfo}
+                setObtainedInfo={setObtainedInfo}
+              />
+            }
+          />
+          <Route
+            path="/SplitBill"
+            element={
+              <SplitBill
+                addPerson={addPerson}
+                setAddPerson={setAddPerson}
+                selectPerson={selectPerson}
+                personName={personName}
+                personEmail={personEmail}
+                personPhone={personPhone}
+                personOwing={personOwing}
+                setPersonName={setPersonName}
+                setPersonEmail={setPersonEmail}
+                setPersonPhone={setPersonPhone}
+                setPersonOwing={setPersonOwing}
+                handleSubmit={handleSubmit}
+                setPersonState={setPersonState}
+                personState={personState}
+                setIsSelected={setIsSelected}
+                list={list}
+                value={value}
+                addNum={addNum}
+                subNum={subNum}
+                personReceiptAmount={personReceiptAmount}
+                setFormSubmitted={setFormSubmitted}
+                theme={theme}
+                handleAddSubmit={handleAddSubmit}
+                lang={lang}
+                setLang={setLang}
+                loggedInUsername={loggedInUsername}
+              />
+            }
+          />
+          <Route
+            path="/EditList"
+            element={
+              <EditList
+                addPerson={addPerson}
+                setAddPerson={setAddPerson}
+                selectPerson={selectPerson}
+                personName={personName}
+                personEmail={personEmail}
+                personPhone={personPhone}
+                personOwing={personOwing}
+                setPersonName={setPersonName}
+                setPersonEmail={setPersonEmail}
+                setPersonPhone={setPersonPhone}
+                setPersonOwing={setPersonOwing}
+                handleSubmit={handleSubmit}
+                setPersonState={setPersonState}
+                personState={personState}
+                setIsSelected={setIsSelected}
+                editPerson={editPerson}
+                editRow={editRow}
+                setEditPerson={setEditPerson}
+                list={list}
+                setList={setList}
+                value={value}
+                theme={theme}
+                handleAddSubmit={handleAddSubmit}
+                lang={lang}
+                setLang={setLang}
+                loggedInUsername={loggedInUsername}
+              />
+            }
+          />
+          <Route
+            path="/Settings"
+            element={
+              <Settings
+                showConfirmation={showConfirmation}
+                setShowConfirmation={setShowConfirmation}
+                taxRate={taxRate}
+                setTaxRate={setTaxRate}
+                theme={theme}
+                setTheme={setTheme}
+                lang={lang}
+                setLang={setLang}
+                loggedInUsername={loggedInUsername}
+              />
+            }
+          />
 
-        <Route
-          path="/History"
-          element={
-            <History
-              combinedTotal={combinedTotal}
-              setCombinedTotal={setCombinedTotal}
-              receipts={receipts}
-              theme={theme}
-              lang={lang}
-              setLang={setLang}
-              loggedInUsername={loggedInUsername}
-              historyData={historyData}
-              setHistoryData={setHistoryData}
-            />
-          }
-        />
+          <Route
+            path="/History"
+            element={
+              <History
+                combinedTotal={combinedTotal}
+                setCombinedTotal={setCombinedTotal}
+                receipts={receipts}
+                theme={theme}
+                lang={lang}
+                setLang={setLang}
+                loggedInUsername={loggedInUsername}
+                historyData={historyData}
+                setHistoryData={setHistoryData}
+              />
+            }
+          />
 
-        <Route
-          path="/AddPerson"
-          element={
-            <AddPerson
-              formSubmitted={formSubmitted}
-              setFormSubmitted={setFormSubmitted}
-              theme={theme}
-              handleAddSubmit={handleAddSubmit}
-              lang={lang}
-              setLang={setLang}
-            />
-          }
-        />
-        <Route
-          path="/ReceiptTable"
-          element={
-            <ReceiptTable
-              setThemPictureTotal={setThemPictureTotal}
-              setSplitPictureTotal={setSplitPictureTotal}
-              setYouPictureTotal={setYouPictureTotal}
-              youPictureTotal={youPictureTotal}
-              splitPictureTotal={splitPictureTotal}
-              themPictureTotal={themPictureTotal}
-              selectedValue={selectedValue}
-              personName={personName}
-              personReceiptAmount={personReceiptAmount}
-              setPersonReceiptAmount={setPersonReceiptAmount}
-              theme={theme}
-              lang={lang}
-              setLang={setLang}
-              combinedArray={combinedArray}
-              setCombinedArray={setCombinedArray}
-              handleResetCombinedArray={handleResetCombinedArray}
-              obtainedInfo={obtainedInfo}
-              setObtainedInfo={setObtainedInfo}
-            />
-          }
-        />
-        <Route
-          path="/EditPerson"
-          element={<EditPerson theme={theme} lang={lang} setLang={setLang} />}
-        />
-      </Routes>
+          <Route
+            path="/AddPerson"
+            element={
+              <AddPerson
+                formSubmitted={formSubmitted}
+                setFormSubmitted={setFormSubmitted}
+                theme={theme}
+                handleAddSubmit={handleAddSubmit}
+                lang={lang}
+                setLang={setLang}
+              />
+            }
+          />
+          <Route
+            path="/ReceiptTable"
+            element={
+              <ReceiptTable
+                setThemPictureTotal={setThemPictureTotal}
+                setSplitPictureTotal={setSplitPictureTotal}
+                setYouPictureTotal={setYouPictureTotal}
+                youPictureTotal={youPictureTotal}
+                splitPictureTotal={splitPictureTotal}
+                themPictureTotal={themPictureTotal}
+                selectedValue={selectedValue}
+                personName={personName}
+                personReceiptAmount={personReceiptAmount}
+                setPersonReceiptAmount={setPersonReceiptAmount}
+                theme={theme}
+                lang={lang}
+                setLang={setLang}
+                combinedArray={combinedArray}
+                setCombinedArray={setCombinedArray}
+                handleResetCombinedArray={handleResetCombinedArray}
+                obtainedInfo={obtainedInfo}
+                setObtainedInfo={setObtainedInfo}
+              />
+            }
+          />
+          <Route
+            path="/EditPerson"
+            element={<EditPerson theme={theme} lang={lang} setLang={setLang} />}
+          />
+        </Routes>
       </div>
     </>
   );
 }
 
 export default withAuthenticator(App);
-
 
 /*
   Primary Key:
@@ -725,8 +738,6 @@ export default withAuthenticator(App);
   Sort Key:
    - Optional
 */
-
-
 
 /*
 // Who owes me money?
@@ -738,10 +749,6 @@ PK: devin@ | SK: bob@ | RECEIPT: BURGERS | AMOUNT: 20
 
 
 */
-
-
-
-
 
 /*
 New GSI

@@ -6,6 +6,7 @@ import Header from "./Header";
 import { IoPersonAddSharp } from "react-icons/io5";
 import Avatar from "react-avatar";
 import { CSSTransition } from "react-transition-group";
+import axios from 'axios'
 export default function SplitBill({
   addPerson,
   setAddPerson,
@@ -38,12 +39,15 @@ export default function SplitBill({
   const [selectPersonList, setSelectPersonList] = useState(true);
   
   useEffect(() => {
-    fetch("https://o3rdvdayni.execute-api.us-east-1.amazonaws.com/Div/SplitBill")
+    // Use Axios for fetching data
+    axios.get("https://8pv6eqwqq8.execute-api.us-east-1.amazonaws.com/production")
       .then((response) => {
-        if (!response.ok) {
+        // Check for a successful response
+        if (response.status !== 200) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
-        return response.json();
+        // Parse the response data
+        return response.data;
       })
       .then((data) => {
         // Handle the successful response and update the state
@@ -54,8 +58,7 @@ export default function SplitBill({
         console.error("Error fetching data:", error);
       });
   }, [loggedInUsername]);
-  
-  
+
   return (
     <>
       <main
