@@ -1,6 +1,6 @@
 {
   "api": {
-    "DivvyRestAPI": {
+    "BillSplitAPI": {
       "dependsOn": [
         {
           "attributes": [
@@ -8,7 +8,49 @@
             "Arn"
           ],
           "category": "function",
-          "resourceName": "divvyb054cbc8"
+          "resourceName": "LambdaBonkinbaconStream"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
+    },
+    "Test2Label": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "Test2Lambda"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
+    },
+    "TesterAPI": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "TestLambda"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
+    },
+    "apic4e2607e": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "divvyapp828bd0c6"
         }
       ],
       "providerPlugin": "awscloudformation",
@@ -16,7 +58,7 @@
     }
   },
   "auth": {
-    "divvy6cc998df": {
+    "DivvyResource": {
       "customAuth": false,
       "dependsOn": [],
       "frontendAuthConfig": {
@@ -30,7 +72,7 @@
         },
         "signupAttributes": [
           "EMAIL",
-          "NICKNAME"
+          "NAME"
         ],
         "socialProviders": [],
         "usernameAttributes": [
@@ -45,7 +87,7 @@
     }
   },
   "function": {
-    "DivvyLambdaPrime": {
+    "ExpenseLambda": {
       "build": true,
       "dependsOn": [
         {
@@ -58,48 +100,28 @@
             "Arn"
           ],
           "category": "storage",
-          "resourceName": "DivvyUsersContacts"
+          "resourceName": "UsersDynamoDB"
         }
       ],
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
-    "DivvyUsersContactsTrigger06611c45": {
+    "LambdaBonkinbaconStream": {
       "build": true,
-      "dependsOn": [
-        {
-          "attributes": [
-            "Name",
-            "Arn",
-            "StreamArn"
-          ],
-          "category": "storage",
-          "resourceName": "DivvyUsersContacts"
-        }
-      ],
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
-    "ExpenseManagementFunction": {
+    "Test2Lambda": {
       "build": true,
-      "dependsOn": [
-        {
-          "attributeEnvMap": {
-            "Arn": "TABLE_ARN",
-            "Name": "TABLE_NAME"
-          },
-          "attributes": [
-            "Name",
-            "Arn"
-          ],
-          "category": "storage",
-          "resourceName": "DivvyUsersContacts"
-        }
-      ],
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
-    "divvyb054cbc8": {
+    "TestLambda": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "divvyapp828bd0c6": {
       "build": true,
       "dependsOn": [
         {
@@ -112,7 +134,7 @@
             "Arn"
           ],
           "category": "storage",
-          "resourceName": "DivvyUsersContacts"
+          "resourceName": "UsersDynamoDB"
         }
       ],
       "providerPlugin": "awscloudformation",
@@ -120,73 +142,89 @@
     }
   },
   "parameters": {
-    "AMPLIFY_function_DivvyLambdaPrime_deploymentBucketName": {
+    "AMPLIFY_function_ExpenseLambda_deploymentBucketName": {
       "usedBy": [
         {
           "category": "function",
-          "resourceName": "DivvyLambdaPrime"
+          "resourceName": "ExpenseLambda"
         }
       ]
     },
-    "AMPLIFY_function_DivvyLambdaPrime_s3Key": {
+    "AMPLIFY_function_ExpenseLambda_s3Key": {
       "usedBy": [
         {
           "category": "function",
-          "resourceName": "DivvyLambdaPrime"
+          "resourceName": "ExpenseLambda"
         }
       ]
     },
-    "AMPLIFY_function_DivvyUsersContactsTrigger06611c45_deploymentBucketName": {
+    "AMPLIFY_function_LambdaBonkinbaconStream_deploymentBucketName": {
       "usedBy": [
         {
           "category": "function",
-          "resourceName": "DivvyUsersContactsTrigger06611c45"
+          "resourceName": "LambdaBonkinbaconStream"
         }
       ]
     },
-    "AMPLIFY_function_DivvyUsersContactsTrigger06611c45_s3Key": {
+    "AMPLIFY_function_LambdaBonkinbaconStream_s3Key": {
       "usedBy": [
         {
           "category": "function",
-          "resourceName": "DivvyUsersContactsTrigger06611c45"
+          "resourceName": "LambdaBonkinbaconStream"
         }
       ]
     },
-    "AMPLIFY_function_ExpenseManagementFunction_deploymentBucketName": {
+    "AMPLIFY_function_Test2Lambda_deploymentBucketName": {
       "usedBy": [
         {
           "category": "function",
-          "resourceName": "ExpenseManagementFunction"
+          "resourceName": "Test2Lambda"
         }
       ]
     },
-    "AMPLIFY_function_ExpenseManagementFunction_s3Key": {
+    "AMPLIFY_function_Test2Lambda_s3Key": {
       "usedBy": [
         {
           "category": "function",
-          "resourceName": "ExpenseManagementFunction"
+          "resourceName": "Test2Lambda"
         }
       ]
     },
-    "AMPLIFY_function_divvyb054cbc8_deploymentBucketName": {
+    "AMPLIFY_function_TestLambda_deploymentBucketName": {
       "usedBy": [
         {
           "category": "function",
-          "resourceName": "divvyb054cbc8"
+          "resourceName": "TestLambda"
         }
       ]
     },
-    "AMPLIFY_function_divvyb054cbc8_s3Key": {
+    "AMPLIFY_function_TestLambda_s3Key": {
       "usedBy": [
         {
           "category": "function",
-          "resourceName": "divvyb054cbc8"
+          "resourceName": "TestLambda"
+        }
+      ]
+    },
+    "AMPLIFY_function_divvyapp828bd0c6_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "divvyapp828bd0c6"
+        }
+      ]
+    },
+    "AMPLIFY_function_divvyapp828bd0c6_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "divvyapp828bd0c6"
         }
       ]
     }
   },
   "storage": {
-    "DivvyUsersContacts": {
+    "UsersDynamoDB": {
       "providerPlugin": "awscloudformation",
       "service": "DynamoDB"
     }

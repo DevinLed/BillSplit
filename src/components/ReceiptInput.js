@@ -28,9 +28,8 @@ import UseAnimations from "react-useanimations";
 import github from "react-useanimations/lib/github";
 import "rc-slider/assets/index.css";
 import "react-datepicker/dist/react-datepicker.css";
-import { Amplify, API, graphqlOperation, Auth } from "aws-amplify";
-import { listUserData } from "../graphql/queries";
-import { createHistoryData } from "../graphql/mutations";
+import { Amplify } from "aws-amplify";
+import axios from 'axios';
 
 import awsconfig from "../aws-exports";
 Amplify.configure(awsconfig);
@@ -333,17 +332,9 @@ export default function ReceiptInput({
   // Handler to push entries into the History tab array
   const handleHistorySubmit = async () => {
     try {
-      const user = await Auth.currentAuthenticatedUser();
-      const loggedInUsername = user.username;
-  
-      if (!loggedInUsername) {
-        console.error("Error: loggedInUsername is null or undefined.");
-        return; // Handle the case where loggedInUsername is not available.
-      }
-  
+      // Prepare the data for the new history entry
       const newHistoryData = {
-        username: loggedInUsername,
-        personName, 
+        personName,
         merchantName,
         startDate,
         invoiceNumber,
@@ -352,14 +343,10 @@ export default function ReceiptInput({
         personReceiptAmount,
         taxActual,
       };
-  
-      // Call the GraphQL mutation to create a new HistoryData entry
-      const response = await API.graphql(
-        graphqlOperation(createHistoryData, { input: newHistoryData })
-      );
+      const response = await axios.post("https://tbmb99cx6i.execute-api.us-east-1.amazonaws.com/dev/history", newHistoryData);
   
       // Extract the newly created historyData object from the response
-      const createdHistoryData = response.data.createHistoryData;
+      const createdHistoryData = response.data;
   
       // Update the historyData state by appending the new data
       setHistoryData((prevHistoryData) => [...prevHistoryData, createdHistoryData]);
@@ -370,16 +357,23 @@ export default function ReceiptInput({
     }
   };
   
+  
   const getUserId = async () => {
     try {
-      const user = await Auth.currentAuthenticatedUser();
-      return user.attributes.sub; // 'sub' is the unique user ID
+      // Make a GET request to your API endpoint to retrieve the user ID
+      const response = await axios.get("https://tbmb99cx6i.execute-api.us-east-1.amazonaws.com/dev/user-id");
+  
+      // Extract the user ID from the response data
+      const userId = response.data.userId;
+  
+      return userId;
     } catch (error) {
-      // Handle authentication error
+      // Handle any errors, e.g., authentication error or API error
       console.error("Error getting user ID:", error);
       return null;
     }
   };
+  
 
   // Used to update the balance of the person you are splitting receipt with
   const getFinalTotal = () => {

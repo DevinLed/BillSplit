@@ -5,12 +5,12 @@
   "private": true,
   "dependencies": {
     "@aws-amplify/ui-react": "^4.6.0",
+    "@aws-sdk/client-s3": "^3.216.0",
     "@popperjs/core": "^2.11.6",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "aws-amplify": "^5.3.11",
-    "aws-sdk": "^2.1455.0",
     "axios": "^1.5.1",
     "chart.js": "^4.3.3",
     "form-data": "^4.0.0",
@@ -66,6 +66,7 @@
   "devDependencies": {
     "gh-pages": "^5.0.0",
     "prettier-plugin-tailwindcss": "^0.3.0",
+    "uglify-es": "^3.3.9",
     "webpack-cli": "^5.1.4"
   }
 }

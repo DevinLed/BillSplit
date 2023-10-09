@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "paths": {
+    "/Billsplit/{id}": {
+      "name": "/Billsplit/{id}",
+      "lambdaFunction": "TestLambda",
+      "permissions": {
+        "setting": "open"
+      }
+    }
+  }
+}

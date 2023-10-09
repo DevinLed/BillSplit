@@ -26,16 +26,9 @@ import "@aws-amplify/ui-react/styles.css";
 import "./darkMode.css";
 import "./index.css";
 import ReceiptTable from "./components/ReceiptTable";
-import {
-  createUserData,
-  updateUserData,
-  deleteUserData,
-  updateAccountData,
-} from "./graphql/mutations"; // Import the mutations
 import { Amplify, API, graphqlOperation, Auth, Storage } from "aws-amplify";
 import awsconfig from "./aws-exports";
 import axios from "axios";
-import { getUserData, getAccountData } from "./graphql/queries";
 Amplify.configure(awsconfig);
 
 function App({ signOut, user }) {
@@ -152,28 +145,14 @@ function App({ signOut, user }) {
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [loggedInUsername, setLoggedInUsername] = useState(""); // Set the logged-in email
   const API_URL =
-    "https://8pv6eqwqq8.execute-api.us-east-1.amazonaws.com/production";
+    "https://lvwglduu26.execute-api.us-east-1.amazonaws.com/dev";
 
-  // ...
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // Make a GET request to your API Gateway endpoint
-        const response = await axios.get(API_URL);
-
-        // Handle the response data as needed
-        const data = response.data;
-        setLoggedInUsername(data.username);
-        console.log(loggedInUsername);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        // Handle errors, e.g., show an error message to the user.
-      }
-    };
-
-    fetchData();
-  }, [loggedInUsername]);
+    useEffect(() => {
+      Auth.currentAuthenticatedUser().then(user => {
+        setLoggedInUsername(user.attributes.name);
+      });
+    }, [loggedInUsername]);
+    
 
   const [combinedArray, setCombinedArray] = useState([]);
 
@@ -204,37 +183,31 @@ function App({ signOut, user }) {
   const [showConfirmation, setShowConfirmation] = useState(false);
 
   // used to update values of balance for contacts
+
   const addNum = async (id, val, val2) => {
     try {
-      // Fetch the existing user data from DynamoDB
-      const userDataResponse = await API.graphql(
-        graphqlOperation(getUserData, { id })
-      );
-
-      const userData = userDataResponse.data.getUserData;
-
+      const userDataResponse = await axios.get(`${API_URL}/path/to/endpoint/${id}`);
+      const userData = userDataResponse.data;
+  
       if (!userData) {
         // Handle the case where the user data doesn't exist
         return;
       }
-
+  
       // Calculate the updated personOwing value
       const a = parseFloat(userData.personOwing, 0);
       const b = parseFloat(val);
       const c = parseFloat(val2);
       const prevalue = a + b;
       const updatedValue = prevalue + c;
-
-      // Update the user data in DynamoDB
+  
       const updatedUserData = {
         id: userData.id,
         personOwing: updatedValue.toFixed(2), // Convert to 2 decimal places
       };
-
-      await API.graphql(
-        graphqlOperation(updateUserData, { input: updatedUserData })
-      );
-
+  
+      await axios.put(`${API_URL}/path/to/endpoint/${id}`, updatedUserData);
+  
       // Update the local state if needed
       setList((prevList) => {
         const newList = prevList.map((item) => {
@@ -246,7 +219,7 @@ function App({ signOut, user }) {
         localStorage.setItem("list", JSON.stringify(newList));
         return newList;
       });
-
+  
       setDisplayAdd(true);
       console.log("Value updated successfully");
     } catch (error) {
@@ -254,18 +227,16 @@ function App({ signOut, user }) {
       // Handle the error as needed
     }
   };
+  
+
   const editRow = async (id) => {
     setIsEditing(true);
     setEditPerson(id); // Store the selected item's ID to be edited
-
+  
     try {
-      // Fetch the user data for the selected item from DynamoDB using the new query
-      const userDataResponse = await API.graphql(
-        graphqlOperation(getUserData, { id }) //
-      );
-
-      const editingRow = userDataResponse.data.getUserData; // Assuming getUserData returns a single item
-
+      const userDataResponse = await axios.get(`${API_URL}/path/to/endpoint/${id}`);
+      const editingRow = userDataResponse.data;
+  
       if (editingRow) {
         // Update state variables with the values from the selected item
         setPersonName(editingRow.personName);
@@ -273,44 +244,43 @@ function App({ signOut, user }) {
         setPersonEmail(editingRow.personEmail);
         setPersonOwing(editingRow.personOwing);
       } else {
+        // Handle the case where no user data was found for the given id
+        console.error(`User data with id ${id} not found.`);
       }
     } catch (error) {
       console.error("Error fetching user data:", error);
       // Handle the error case as needed
     }
   };
-  // used to update values of balance for contacts
+  
+
   const subNum = async (id, val, val2) => {
     try {
       // Fetch the existing user data from DynamoDB
-      const userDataResponse = await API.graphql(
-        graphqlOperation(getUserData, { id })
-      );
-
-      const userData = userDataResponse.data.getUserData;
-
+      const userDataResponse = await axios.get(`${API_URL}/path/to/endpoint/${id}`);
+      const userData = userDataResponse.data;
+  
       if (!userData) {
         // Handle the case where the user data doesn't exist
         return;
       }
-
+  
       // Calculate the updated personOwing value
       const a = parseFloat(userData.personOwing, 0);
       const b = parseFloat(val);
       const c = parseFloat(val2);
       const prevalue = a - b;
       const updatedValue = prevalue - c;
-
-      // Update the user data in DynamoDB
+  
+      // Create an object with the updated personOwing value
       const updatedUserData = {
         id: userData.id,
         personOwing: updatedValue.toFixed(2), // Convert to 2 decimal places
       };
-
-      await API.graphql(
-        graphqlOperation(updateUserData, { input: updatedUserData })
-      );
-
+  
+      // Make a PUT request to your Amplify API Gateway endpoint to update the user data
+      await axios.put(`${API_URL}/path/to/endpoint/${id}`, updatedUserData);
+  
       // Update the local state if needed
       setList((prevList) => {
         const newList = prevList.map((item) => {
@@ -322,7 +292,7 @@ function App({ signOut, user }) {
         localStorage.setItem("list", JSON.stringify(newList));
         return newList;
       });
-
+  
       setDisplayAdd(false);
       console.log("Value subtracted successfully");
     } catch (error) {
@@ -330,6 +300,7 @@ function App({ signOut, user }) {
       // Handle the error as needed
     }
   };
+  
   // Handler for full reset of tables.
   const handleResetCombinedArray = () => {
     setCombinedArray([]);
@@ -352,12 +323,10 @@ function App({ signOut, user }) {
 
       // Make a POST request using the Fetch API
       const response = await fetch(
-        "https://8pv6eqwqq8.execute-api.us-east-1.amazonaws.com/production",
+        "https://tbmb99cx6i.execute-api.us-east-1.amazonaws.com/dev",
         {
           method: "POST",
           headers: {
-            // Add any necessary headers, such as authentication tokens
-            // Example: "Authorization": "Bearer YOUR_ACCESS_TOKEN"
             "Content-Type": "application/json", // Specify the content type
           },
           body: JSON.stringify(newUserData), // Convert the data to JSON format
@@ -369,8 +338,6 @@ function App({ signOut, user }) {
       }
 
       console.log("User data created");
-
-      // Handle the response as needed
 
       // Clear form fields and set editing state
       setPersonName("");
@@ -396,7 +363,7 @@ function App({ signOut, user }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     try {
       // Create an object with the input data
       const inputData = {
@@ -406,15 +373,13 @@ function App({ signOut, user }) {
         personEmail,
         personOwing,
       };
-
-      // Send the GraphQL request to update user data
-      const response = await API.graphql(
-        graphqlOperation(updateUserData, { input: inputData })
-      );
-
+  
+      // Make a PUT request to your Amplify API Gateway endpoint
+      const response = await axios.put(`${API_URL}/path/to/endpoint`, inputData);
+  
       // Handle the response, e.g., show a success message
       console.log("User data updated:", response);
-
+  
       // Update the list state with the modified data
       setList((prevList) =>
         prevList.map((item) =>
@@ -432,7 +397,7 @@ function App({ signOut, user }) {
     } catch (error) {
       console.error("Error while updating user data:", error);
     }
-
+  
     // Reset input fields and close the edit person popup
     setPersonName("");
     setPersonPhone("");
@@ -442,13 +407,15 @@ function App({ signOut, user }) {
     setIsEditing(false);
     setAddPerson(false);
   };
-
+  
   const selectPerson = async (id) => {
     try {
-      // Fetch user data from DynamoDB based on the selected id
-      const userData = await API.graphql(graphqlOperation(getUserData, { id }));
-      const selectingPerson = userData.data.getUserData;
-
+      // Make a GET request to your Amplify API Gateway endpoint
+      const response = await axios.get(`${API_URL}/path/to/endpoint/${id}`);
+  
+      // Handle the response data as needed
+      const selectingPerson = response.data;
+  
       if (selectingPerson) {
         setPersonName(selectingPerson.personName);
         setPersonOwing(selectingPerson.personOwing);
@@ -462,6 +429,7 @@ function App({ signOut, user }) {
       // Handle the error as needed
     }
   };
+  
 
   // Used to send values to History component
   const [receipts, setReceipts] = useState(() => {

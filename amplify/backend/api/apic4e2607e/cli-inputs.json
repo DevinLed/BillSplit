@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "paths": {
+    "/BillSplit": {
+      "name": "/BillSplit",
+      "lambdaFunction": "divvyapp828bd0c6",
+      "permissions": {
+        "setting": "open"
+      }
+    }
+  }
+}

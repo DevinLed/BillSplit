@@ -3,11 +3,10 @@ import AddPerson from "./AddPerson";
 import Header from "./Header";
 import EditPerson from "./EditPerson";
 import { IoPersonAddSharp } from "react-icons/io5";
-import { Amplify, API, graphqlOperation, Auth } from 'aws-amplify';
-import { listUserData } from '../graphql/queries';
-import { updateUserData, deleteUserData } from "../graphql/mutations";
+import { Amplify, Auth } from 'aws-amplify';
 import Avatar from "react-avatar";
 import { CSSTransition } from "react-transition-group";
+import axios from 'axios';
 
 import awsconfig from "../aws-exports";
 Amplify.configure(awsconfig);
@@ -56,38 +55,32 @@ export default function EditList({
   };
   const handleDeletePerson = async () => {
     try {
-      // Call the deleteUser mutation with the user's ID to delete them
-      const response = await API.graphql(
-        graphqlOperation(deleteUserData, { input: { id: editPerson } })
-      );
-  
-      // Handle the response as needed 
-      console.log('User deleted:', response);
-  
+      // Call your API to delete the user using the editPerson ID
+      const response = await axios.delete(`https://tbmb99cx6i.execute-api.us-east-1.amazonaws.com/dev/user/${editPerson}`);
+
+      // Handle the response as needed
+      console.log("User deleted:", response);
+
       // Close the edit person popup
       setEditPerson(null); // Clear the editPerson state to exit editing mode
     } catch (error) {
-      console.error('Error deleting user:', error);
+      console.error("Error deleting user:", error);
     }
   };
+
   useEffect(() => {
     async function fetchData() {
       try {
         // Fetch the updated list of users after a user is deleted
-        const userData = await API.graphql(
-          graphqlOperation(listUserData, {
-            limit: 100,
-            sortField: "createdAt",
-            sortDirection: "DESC",
-          })
-        );
-        const userDataList = userData.data.listUserData.items;
-        // Filter the list to show entries only for the currently logged-in user
-        const filteredList = userDataList.filter((item) => {
-          return item.attributes.email === loggedInUsername;
+        const response = await axios.get("https://tbmb99cx6i.execute-api.us-east-1.amazonaws.com/dev/user");
+
+        // Filter the results based on the loggedInUsername
+        const userDataList = response.data.filter((item) => {
+          return item.email === loggedInUsername;
         });
-        setList(filteredList);
-        console.log(loggedInUsername);
+
+        setList(userDataList);
+
         // Get the user ID and set it in the state
         const id = await getUserId();
         setUserId(id);
@@ -95,9 +88,10 @@ export default function EditList({
         console.error("Error fetching UserData", error);
       }
     }
-  
-    fetchData(); // Call fetchData to fetch data and set userId
-  }, [loggedInUsername, personName, personPhone, personEmail, personOwing, editPerson]);
+
+    fetchData(); // 
+  }, [loggedInUsername, editPerson, personName, personPhone, personEmail, personOwing]);
+
  
   return (
     <>

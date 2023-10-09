@@ -1,10 +1,10 @@
 import React, { useMemo, useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Header from "./Header";
-import { API, graphqlOperation, Amplify, Auth } from "aws-amplify";
-import { listHistoryData } from "../graphql/queries";
+import { Amplify, Auth } from "aws-amplify";
 import { CSSTransition } from "react-transition-group";
 import awsconfig from "../aws-exports";
+import axios from 'axios';
 Amplify.configure(awsconfig);
 
 export default function History({
@@ -16,31 +16,26 @@ export default function History({
 }) {
   const { id } = useParams();
   const [selectedPerson, setSelectedPerson] = useState("");
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
         const user = await Auth.currentAuthenticatedUser();
         const loggedInUsername = user.username;
-
-        const historyDataResponse = await API.graphql(
-          graphqlOperation(listHistoryData, {
-            limit: 10,
-            sortDirection: "DESC",
-            filter: {
-              username: { eq: loggedInUsername },
-            },
-          })
-        );
-
-        const historyDataList = historyDataResponse.data.listHistoryData.items;
+  
+        // Fetch history data for the selected person based on the person's ID
+        const response = await axios.get(`https://tbmb99cx6i.execute-api.us-east-1.amazonaws.com/dev/history/${id}`);
+        const historyDataList = response.data;
+  
         setHistoryData(historyDataList);
       } catch (error) {
         console.error("Error fetching HistoryData", error);
       }
     };
-
+  
     fetchData();
-  }, [setHistoryData]);
+  }, [id, setHistoryData]);
+  
 
   const filteredReceipts = useMemo(() => {
     if (!Array.isArray(historyData)) {

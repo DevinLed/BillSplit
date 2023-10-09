@@ -4,9 +4,8 @@ import "./../index.css";
 import { IoSaveOutline } from "react-icons/io5";
 import { AiOutlineDelete } from "react-icons/ai";
 import { CSSTransition } from "react-transition-group";
-
+import axios from 'axios';
 import { API, graphqlOperation, Amplify } from 'aws-amplify';
-import { updateUserData } from '../graphql/mutations';
 import awsconfig from "../aws-exports";
 Amplify.configure(awsconfig);
 
@@ -58,19 +57,41 @@ export default function EditPerson({
   const [errorMsg, setErrorMsg] = useState("");
   const [submissionError, setSubmissionError] = useState(true);
 
-  const handleNameChange = (event) => {
+  const handleNameChange = async (event, userId, personEmail, personPhone, personOwing) => {
     const inputName = event.target.value;
     setPersonName(inputName);
     setErrorName(false);
-
-    // Check if name contains at least 1 character
+  
+    // Check if the name contains at least 1 character
     if (inputName.trim().length >= 1) {
       setIsValidName(true);
       setErrorName(true);
+  
+      // Create an object with the updated name
+      const updatedUserData = {
+        id: userId,
+        personName: inputName,
+        personPhone: personPhone,
+        personEmail: personEmail,
+        personOwing: personOwing,
+      };
+  
+      try {
+        const response = await axios.put(`https://tbmb99cx6i.execute-api.us-east-1.amazonaws.com/dev/user/${userId}`, updatedUserData);
+  
+        if (response.status === 200) {
+          console.log('User name updated');
+        } else {
+          console.error('Error updating user name');
+        }
+      } catch (error) {
+        console.error('Error updating user name:', error);
+      }
     } else {
       setIsValidName(false);
     }
   };
+  
 
   const formatPhoneNumber = (inputValue) => {
     const numbersOnly = inputValue.replace(/[^\d]/g, ""); // Remove all non-numeric characters
@@ -84,51 +105,83 @@ export default function EditPerson({
   };
 
  
-const handlePhoneNumberChange = async (event, userId, personName, personEmail, personOwing) => {
-  const inputValue = event.target.value;
-  const formattedValue = formatPhoneNumber(inputValue);
-  setPersonPhone(formattedValue);
-
-  const phoneNumberRegex = /^\(\d{3}\) \d{3}-\d{4}$/; // matches a phone number in the format of (XXX) XXX-XXXX
-  const isValid = phoneNumberRegex.test(formattedValue);
-  setIsValidPhoneNumber(isValid);
-
-  // Check if the input is a valid phone number
-  if (isValid) {
-    setErrorPhone(true);
-    console.log("Phone accepted");
-
-    // Update the user's phone number in the UserData table
-    const success = await updateUserData(userId, personName, formattedValue, personEmail, personOwing);
-    
-    if (success) {
-      console.log('User phone number updated');
-      // Optionally, update the local state or perform other actions
+  const handlePhoneNumberChange = async (event, userId, personName, personEmail, personOwing) => {
+    const inputValue = event.target.value;
+    const formattedValue = formatPhoneNumber(inputValue);
+    setPersonPhone(formattedValue);
+  
+    const phoneNumberRegex = /^\(\d{3}\) \d{3}-\d{4}$/; // matches a phone number in the format of (XXX) XXX-XXXX
+    const isValid = phoneNumberRegex.test(formattedValue);
+    setIsValidPhoneNumber(isValid);
+  
+    // Check if the input is a valid phone number
+    if (isValid) {
+      setErrorPhone(true);
+      console.log("Phone accepted");
+  
+      // Create an object with the updated phone number
+      const updatedUserData = {
+        id: userId,
+        personName: personName,
+        personPhone: formattedValue,
+        personEmail: personEmail,
+        personOwing: personOwing,
+      };
+  
+      try {
+        const response = await axios.put(`https://tbmb99cx6i.execute-api.us-east-1.amazonaws.com/dev/user/${userId}`, updatedUserData);
+  
+        if (response.status === 200) {
+          console.log('User phone number updated');
+        } else {
+          console.error('Error updating user phone number');
+        }
+      } catch (error) {
+        console.error('Error updating user phone number:', error);
+      }
     } else {
-      console.error('Error updating user phone number');
-      // Handle the error case as needed
+      setIsValidPhoneNumber(false);
+      setErrorPhone(false);
+      console.log("Error in phone input");
     }
-  } else {
-    setIsValidPhoneNumber(false);
-    setErrorPhone(false);
-    console.log("Error in phone input");
-    // Handle invalid phone number input if needed
-  }
-};
-  const handleEmailChange = (event) => {
+  };
+  
+  const handleEmailChange = async (event, userId, personName, personPhone, personOwing) => {
     const inputEmail = event.target.value;
     setPersonEmail(inputEmail);
     setErrorEmail(false);
-
-    // Check if email contains "@"
+  
+    // Check if email contains "@" (basic email format validation)
     if (inputEmail.includes("@")) {
       setIsValidEmail(true);
       setErrorEmail(true);
-      console.log("email verified");
+      console.log("Email verified");
+  
+      // Create an object with the updated email
+      const updatedUserData = {
+        id: userId,
+        personName: personName,
+        personPhone: personPhone,
+        personEmail: inputEmail,
+        personOwing: personOwing,
+      };
+  
+      try {
+        const response = await axios.put(`https://tbmb99cx6i.execute-api.us-east-1.amazonaws.com/dev/user/${userId}`, updatedUserData);
+  
+        if (response.status === 200) {
+          console.log('User email updated');
+        } else {
+          console.error('Error updating user email');
+        }
+      } catch (error) {
+        console.error('Error updating user email:', error);
+      }
     } else {
       setIsValidEmail(false);
     }
   };
+  
 
   return (
     <>
@@ -337,7 +390,7 @@ const handlePhoneNumberChange = async (event, userId, personName, personEmail, p
                       }
                       onClick={(e) => {
                         console.log(userId);
-                        handleDeletePerson(userId.id);
+                        handleDeletePerson(userId);
                       }}
                     >
                        {lang === "english"? "Yes": "Oui"}

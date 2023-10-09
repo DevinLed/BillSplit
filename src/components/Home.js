@@ -19,8 +19,6 @@ import { withAuthenticator, Button, Heading } from "@aws-amplify/ui-react";
 import "@aws-amplify/ui-react/styles.css";
 
 import { Amplify, API, graphqlOperation, Auth } from 'aws-amplify';
-import { listUserData } from '../graphql/queries';
-import { updateUserData, deleteUserData } from "../graphql/mutations";
 
 import awsconfig from "../aws-exports";
 Amplify.configure(awsconfig);
@@ -39,6 +37,8 @@ export default function Home({
   const [showPersonEdit, setPersonEdit] = useState(false);
   const [selectPersonEdit, setSelectPersonEdit] = useState(false);
 
+
+  
   useEffect(() => {
     setStartBill(true);
     setPersonEdit(false);
@@ -160,7 +160,7 @@ export default function Home({
             }
             level={1}
           >
-            {lang === "english" ? "Hello" : "Bonjour"} {user.attributes.nickname}
+            {lang === "english" ? "Hello" : "Bonjour"} {user.attributes.name}
           </Heading>
         </div>
         <div className="flex items-center justify-center mt-4">

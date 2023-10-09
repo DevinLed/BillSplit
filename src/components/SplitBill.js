@@ -7,6 +7,10 @@ import { IoPersonAddSharp } from "react-icons/io5";
 import Avatar from "react-avatar";
 import { CSSTransition } from "react-transition-group";
 import axios from 'axios'
+import { Amplify, API } from 'aws-amplify';
+import awsconfig from '../aws-exports';
+
+Amplify.configure(awsconfig);
 export default function SplitBill({
   addPerson,
   setAddPerson,
@@ -38,26 +42,32 @@ export default function SplitBill({
   const [list, setList] = useState([]);
   const [selectPersonList, setSelectPersonList] = useState(true);
   
-  useEffect(() => {
-    // Use Axios for fetching data
-    axios.get("https://8pv6eqwqq8.execute-api.us-east-1.amazonaws.com/production")
-      .then((response) => {
-        // Check for a successful response
-        if (response.status !== 200) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        // Parse the response data
-        return response.data;
-      })
-      .then((data) => {
-        // Handle the successful response and update the state
-        setList(data);
-      })
-      .catch((error) => {
-        // Handle errors
-        console.error("Error fetching data:", error);
-      });
-  }, [loggedInUsername]);
+  const [users, setUsers] = useState([]);
+
+  const API_URL = 'https://kdj7rkk1yl.execute-api.us-east-1.amazonaws.com/dev';
+
+useEffect(() => {
+  const getData = async () => {
+    try {
+      const response = await axios.get(API_URL);
+      console.log('Response:', response); 
+
+      if (response.status === 200 && response.data) {
+        console.log('Response Data:', response.data); 
+        setUsers(response.data);
+      } else {
+        console.error('API request failed with status code:', response.status);
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  getData();
+}, []);
+
+
+  
 
   return (
     <>
@@ -70,49 +80,50 @@ export default function SplitBill({
           className={`flex flex-col items-center justify-center transition-opacity duration-300`}
         >
           <ul className="m-0 py-1 w-3/4">
-            {list.map(({ id, personName, personOwing }) => (
-              <React.Fragment key={id}>
-                {personName.length ? (
-                  <Link
-                    to={`/ReceiptInput/${id}`}
-                    onClick={() => selectPerson(id)}
-                    className="no-underline py-1"
-                  >
-                    <li
-                      className={
-                        "list-group-item flex justify-between m-1 p-2 rounded-lg shadow-sm " +
-                        (theme === "dark"
-                          ? "bg-gray-800 text-white"
-                          : "bg-white text-gray-800")
-                      }
-                    >
-                      <div className="flex items-center">
-                        <Avatar name={personName} size={32} round />
-                        <span className="ml-1">
-                          {personName.length > 8
-                            ? `${personName.substring(0, 8)}...`
-                            : personName}
-                        </span>
-                      </div>
-                      <span
-                        className={`badge badge-pill rounded px-1 pt-2 ml-2 text-xs ${
-                          personOwing < 0
-                            ? "bg-red-500 text-black"
-                            : "bg-blue-500 text-white"
-                        }`}
-                      >
-                        $
-                        {value
-                          ? parseFloat(value).toFixed(2)
-                          : parseFloat(personOwing).toString() === "NaN"
-                          ? "0.00"
-                          : parseFloat(personOwing).toFixed(2)}
-                      </span>
-                    </li>
-                  </Link>
-                ) : null}
-              </React.Fragment>
-            ))}
+          {users.map((user) => (
+  <React.Fragment key={user.userId}>
+    {user.personName ? (
+      <Link
+        to={`/ReceiptInput/${user.userId}`}
+        onClick={() => selectPerson(user.userId)}
+        className="no-underline py-1"
+      >
+        <li
+          className={
+            "list-group-item flex justify-between m-1 p-2 rounded-lg shadow-sm " +
+            (theme === "dark"
+              ? "bg-gray-800 text-white"
+              : "bg-white text-gray-800")
+          }
+        >
+          <div className="flex items-center">
+            <Avatar name={user.personName.S} size={32} round /> {/* Convert to string */}
+            <span className="ml-1">
+              {user.personName.S.length > 8
+                ? `${user.personName.S.substring(0, 8)}...`
+                : user.personName.S}
+            </span>
+          </div>
+          <span
+            className={`badge badge-pill rounded px-1 pt-2 ml-2 text-xs ${
+              user.personOwing.N < 0 // Convert to string
+                ? "bg-red-500 text-black"
+                : "bg-blue-500 text-white"
+            }`}
+          >
+            $
+            {value
+              ? parseFloat(value).toFixed(2)
+              : parseFloat(user.personOwing.S).toString() === "NaN" // Convert to string
+              ? "0.00"
+              : parseFloat(user.personOwing.S).toFixed(2)} {/* Convert to string */}
+          </span>
+        </li>
+      </Link>
+    ) : null}
+  </React.Fragment>
+))}
+
           </ul>
 
           <label
@@ -168,3 +179,27 @@ export default function SplitBill({
     </>
   );
 }
+
+
+
+/*
+  BASE_URL = https://tbmb99cx6i.execute-api.us-east-1.amazonaws.com/dev
+  resource
+  http method
+  path parameters
+  query strings
+
+  METHOD ${BASE_URL}/${resource}/${path_parameters}?${query_strings}
+
+  url/bill/{id}
+  GET url/user/1
+   - HTTP Method is GET
+   - resource is bill
+   - path parameter is { id: 1,  }
+   - no query strings
+
+
+   client -> backend/server -> server processes -> database -> server return data
+   react app -> rest api -> lambda function -> dynamo -> return data
+
+*/

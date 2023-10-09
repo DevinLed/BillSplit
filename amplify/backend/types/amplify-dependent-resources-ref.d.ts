@@ -1,13 +1,28 @@
 export type AmplifyDependentResourcesAttributes = {
   "api": {
-    "DivvyRestAPI": {
+    "BillSplitAPI": {
+      "ApiId": "string",
+      "ApiName": "string",
+      "RootUrl": "string"
+    },
+    "Test2Label": {
+      "ApiId": "string",
+      "ApiName": "string",
+      "RootUrl": "string"
+    },
+    "TesterAPI": {
+      "ApiId": "string",
+      "ApiName": "string",
+      "RootUrl": "string"
+    },
+    "apic4e2607e": {
       "ApiId": "string",
       "ApiName": "string",
       "RootUrl": "string"
     }
   },
   "auth": {
-    "divvy6cc998df": {
+    "DivvyResource": {
       "AppClientID": "string",
       "AppClientIDWeb": "string",
       "IdentityPoolId": "string",
@@ -18,28 +33,35 @@ export type AmplifyDependentResourcesAttributes = {
     }
   },
   "function": {
-    "DivvyLambdaPrime": {
+    "ExpenseLambda": {
       "Arn": "string",
       "LambdaExecutionRole": "string",
       "LambdaExecutionRoleArn": "string",
       "Name": "string",
       "Region": "string"
     },
-    "DivvyUsersContactsTrigger06611c45": {
+    "LambdaBonkinbaconStream": {
       "Arn": "string",
       "LambdaExecutionRole": "string",
       "LambdaExecutionRoleArn": "string",
       "Name": "string",
       "Region": "string"
     },
-    "ExpenseManagementFunction": {
+    "Test2Lambda": {
       "Arn": "string",
       "LambdaExecutionRole": "string",
       "LambdaExecutionRoleArn": "string",
       "Name": "string",
       "Region": "string"
     },
-    "divvyb054cbc8": {
+    "TestLambda": {
+      "Arn": "string",
+      "LambdaExecutionRole": "string",
+      "LambdaExecutionRoleArn": "string",
+      "Name": "string",
+      "Region": "string"
+    },
+    "divvyapp828bd0c6": {
       "Arn": "string",
       "LambdaExecutionRole": "string",
       "LambdaExecutionRoleArn": "string",
@@ -48,7 +70,7 @@ export type AmplifyDependentResourcesAttributes = {
     }
   },
   "storage": {
-    "DivvyUsersContacts": {
+    "UsersDynamoDB": {
       "Arn": "string",
       "Name": "string",
       "PartitionKeyName": "string",
