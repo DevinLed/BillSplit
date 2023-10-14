@@ -1,13 +1,6 @@
 {
   "version": 1,
   "paths": {
-    "/Billsplit": {
-      "name": "/Billsplit",
-      "lambdaFunction": "Test2Lambda",
-      "permissions": {
-        "setting": "open"
-      }
-    },
     "/users": {
       "name": "/users",
       "lambdaFunction": "Test2Lambda",

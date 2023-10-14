@@ -34,7 +34,7 @@
         },
         "Test2Lambda": {
           "deploymentBucketName": "amplify-divvyapp-dev-223108-deployment",
-          "s3Key": "amplify-builds/Test2Lambda-44686d6a582b6d584d7a-build.zip"
+          "s3Key": "amplify-builds/Test2Lambda-6f4d567061416b6d7966-build.zip"
         }
       },
       "storage": {
@@ -44,7 +44,8 @@
         "BillSplitAPI": {},
         "apic4e2607e": {},
         "TesterAPI": {},
-        "Test2Label": {}
+        "Test2Label": {},
+        "FinalUsers": {}
       }
     }
   }

@@ -66,34 +66,6 @@ function App({ signOut, user }) {
     document.body.className = taxRate;
   }, [taxRate]);
 
-  /*Testing still
-  useEffect(() => {
-    const updateAccountDataInDynamoDB = async () => {
-      try {
-        const user = await Auth.currentAuthenticatedUser();
-        const loggedInUsername = user.attributes.email;
-
-        // Update the account data in DynamoDB
-        await API.graphql(
-          graphqlOperation(updateAccountData, {
-            input: {
-              username: loggedInUsername,
-              theme,
-              language: lang,
-              taxRate,
-            },
-          })
-        );
-      } catch (error) {
-        console.error("Error updating account data", error);
-      }
-    };
-
-    // Call the update function when theme, lang, or taxRate changes
-    updateAccountDataInDynamoDB();
-  }, [theme, lang, taxRate]);
-
-  */
   //styling for login prompt
   const styles = {
     container: {
@@ -145,7 +117,7 @@ function App({ signOut, user }) {
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [loggedInUsername, setLoggedInUsername] = useState(""); // Set the logged-in email
   const API_URL =
-    "https://lvwglduu26.execute-api.us-east-1.amazonaws.com/dev";
+    "https://kdj7rkk1yl.execute-api.us-east-1.amazonaws.com/dev";
 
     useEffect(() => {
       Auth.currentAuthenticatedUser().then(user => {
@@ -184,121 +156,57 @@ function App({ signOut, user }) {
 
   // used to update values of balance for contacts
 
-  const addNum = async (id, val, val2) => {
-    try {
-      const userDataResponse = await axios.get(`${API_URL}/path/to/endpoint/${id}`);
-      const userData = userDataResponse.data;
-  
-      if (!userData) {
-        // Handle the case where the user data doesn't exist
-        return;
-      }
-  
-      // Calculate the updated personOwing value
-      const a = parseFloat(userData.personOwing, 0);
-      const b = parseFloat(val);
-      const c = parseFloat(val2);
-      const prevalue = a + b;
-      const updatedValue = prevalue + c;
-  
-      const updatedUserData = {
-        id: userData.id,
-        personOwing: updatedValue.toFixed(2), // Convert to 2 decimal places
-      };
-  
-      await axios.put(`${API_URL}/path/to/endpoint/${id}`, updatedUserData);
-  
-      // Update the local state if needed
-      setList((prevList) => {
-        const newList = prevList.map((item) => {
-          if (item.id === id) {
-            return { ...item, personOwing: updatedValue.toFixed(2) };
-          }
-          return item;
-        });
-        localStorage.setItem("list", JSON.stringify(newList));
-        return newList;
+  const addNum = (id, val, val2) => {
+    setList((prevList) => {
+      const newList = prevList.map((item) => {
+        if (item.id === id) {
+          const a = parseFloat(item.personOwing, 0);
+          const b = parseFloat(val);
+          const c = parseFloat(val2);
+          const prevalue = a + b;
+          const value = prevalue + c;
+          return { ...item, personOwing: parseFloat(value).toFixed(2) };
+        }
+        return item;
       });
-  
-      setDisplayAdd(true);
-      console.log("Value updated successfully");
-    } catch (error) {
-      console.error("Error updating value:", error);
-      // Handle the error as needed
-    }
+      localStorage.setItem("list", JSON.stringify(newList));
+      return newList;
+    });
+    setDisplayAdd(true);
+    console.log("this is to add");
   };
   
 
-  const editRow = async (id) => {
+  const editRow = (id) => {
     setIsEditing(true);
     setEditPerson(id); // Store the selected item's ID to be edited
-  
-    try {
-      const userDataResponse = await axios.get(`${API_URL}/path/to/endpoint/${id}`);
-      const editingRow = userDataResponse.data;
-  
-      if (editingRow) {
-        // Update state variables with the values from the selected item
-        setPersonName(editingRow.personName);
-        setPersonPhone(editingRow.personPhone);
-        setPersonEmail(editingRow.personEmail);
-        setPersonOwing(editingRow.personOwing);
-      } else {
-        // Handle the case where no user data was found for the given id
-        console.error(`User data with id ${id} not found.`);
-      }
-    } catch (error) {
-      console.error("Error fetching user data:", error);
-      // Handle the error case as needed
-    }
+    const editingRow = list.find((row) => row.id === id);
+    setPersonName(editingRow.personName);
+    setPersonPhone(editingRow.personPhone);
+    setPersonEmail(editingRow.personEmail);
+    setPersonOwing(editingRow.personOwing);
   };
+
   
 
-  const subNum = async (id, val, val2) => {
-    try {
-      // Fetch the existing user data from DynamoDB
-      const userDataResponse = await axios.get(`${API_URL}/path/to/endpoint/${id}`);
-      const userData = userDataResponse.data;
-  
-      if (!userData) {
-        // Handle the case where the user data doesn't exist
-        return;
-      }
-  
-      // Calculate the updated personOwing value
-      const a = parseFloat(userData.personOwing, 0);
-      const b = parseFloat(val);
-      const c = parseFloat(val2);
-      const prevalue = a - b;
-      const updatedValue = prevalue - c;
-  
-      // Create an object with the updated personOwing value
-      const updatedUserData = {
-        id: userData.id,
-        personOwing: updatedValue.toFixed(2), // Convert to 2 decimal places
-      };
-  
-      // Make a PUT request to your Amplify API Gateway endpoint to update the user data
-      await axios.put(`${API_URL}/path/to/endpoint/${id}`, updatedUserData);
-  
-      // Update the local state if needed
-      setList((prevList) => {
-        const newList = prevList.map((item) => {
-          if (item.id === id) {
-            return { ...item, personOwing: updatedValue.toFixed(2) };
-          }
-          return item;
-        });
-        localStorage.setItem("list", JSON.stringify(newList));
-        return newList;
+  const subNum = (id, val, val2) => {
+    setList((prevList) => {
+      const newList = prevList.map((item) => {
+        if (item.id === id) {
+          const a = parseFloat(item.personOwing, 0);
+          const b = parseFloat(val);
+          const c = parseFloat(val2);
+          const prevalue = a - b;
+          const value = prevalue - c;
+          return { ...item, personOwing: parseFloat(value).toFixed(2) };
+        }
+        return item;
       });
-  
-      setDisplayAdd(false);
-      console.log("Value subtracted successfully");
-    } catch (error) {
-      console.error("Error subtracting value:", error);
-      // Handle the error as needed
-    }
+      localStorage.setItem("list", JSON.stringify(newList));
+      return newList;
+    });
+    setDisplayAdd(false);
+    console.log("this is to sub");
   };
   
   // Handler for full reset of tables.
@@ -306,83 +214,42 @@ function App({ signOut, user }) {
     setCombinedArray([]);
     setObtainedInfo([]);
   };
-  const handleAddSubmit = async (e) => {
-    e.preventDefault();
-
-    try {
-      // Check if the user is authenticated
-      const user = await Auth.currentAuthenticatedUser();
-
-      const newUserData = {
-        personName: personName,
-        personPhone: personPhone,
-        personEmail: personEmail,
-        personOwing: parseFloat(personOwing),
-        loggedInUsername: user.attributes.email, // Include the authenticated user's email as needed
-      };
-
-      // Make a POST request using the Fetch API
-      const response = await fetch(
-        "https://tbmb99cx6i.execute-api.us-east-1.amazonaws.com/dev",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json", // Specify the content type
-          },
-          body: JSON.stringify(newUserData), // Convert the data to JSON format
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-
-      console.log("User data created");
-
-      // Clear form fields and set editing state
-      setPersonName("");
-      setPersonPhone("");
-      setPersonEmail("");
-      setPersonOwing("");
-      setAddPerson(false);
-      setIsEditing(false);
-    } catch (error) {
-      console.error("Error creating user data:", error);
-
-      // Handle the error appropriately
-
-      // Clear form fields and set editing state
-      setPersonName("");
-      setPersonPhone("");
-      setPersonEmail("");
-      setPersonOwing("");
-      setAddPerson(false);
-      setIsEditing(false);
-    }
+  const handleAddSubmit = (e) => {
+    const newItems = {
+      personName,
+      personPhone,
+      personEmail,
+      personOwing,
+      id: uuidv4(),
+    };
+    setPersonName("");
+    setPersonPhone("");
+    setPersonEmail("");
+    setPersonOwing("");
+    setSelectedValue("");
+    setAddPerson(false);
+    setList((prevList) => {
+      const newList = [...prevList, newItems];
+      localStorage.setItem("list", JSON.stringify(newList));
+      return newList;
+    });
+    setIsEditing(false);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-  
-    try {
-      // Create an object with the input data
-      const inputData = {
-        id: editPerson, // Provide the user's ID you want to update
-        personName,
-        personPhone,
-        personEmail,
-        personOwing,
-      };
-  
-      // Make a PUT request to your Amplify API Gateway endpoint
-      const response = await axios.put(`${API_URL}/path/to/endpoint`, inputData);
-  
-      // Handle the response, e.g., show a success message
-      console.log("User data updated:", response);
-  
-      // Update the list state with the modified data
-      setList((prevList) =>
-        prevList.map((item) =>
+
+    // Validate input fields here (e.g., check if personName, personPhone, personEmail, and personOwing are valid)
+
+    if (editPerson !== null) {
+      // Editing an existing entry
+
+      // Find the index of the item in the list with the editPerson id
+      const itemIndex = list.findIndex((row) => row.id === editPerson);
+
+      if (itemIndex !== -1) {
+        // Update the item in the list with the edited values
+        const updatedList = list.map((item) =>
           item.id === editPerson
             ? {
                 ...item,
@@ -392,12 +259,32 @@ function App({ signOut, user }) {
                 personOwing,
               }
             : item
-        )
-      );
-    } catch (error) {
-      console.error("Error while updating user data:", error);
+        );
+
+        // Set the updated list in the parent component
+        setList(updatedList);
+      }
+
+      // Reset the editPerson state to null
+      setEditPerson(null);
+    } else {
+      // Adding a new entry
+
+      const newItems = {
+        personName,
+        personPhone,
+        personEmail,
+        personOwing,
+        id: uuidv4(),
+      };
+
+      setList((prevList) => {
+        const newList = [...prevList, newItems];
+        localStorage.setItem("list", JSON.stringify(newList));
+        return newList;
+      });
     }
-  
+
     // Reset input fields and close the edit person popup
     setPersonName("");
     setPersonPhone("");
@@ -407,27 +294,12 @@ function App({ signOut, user }) {
     setIsEditing(false);
     setAddPerson(false);
   };
-  
-  const selectPerson = async (id) => {
-    try {
-      // Make a GET request to your Amplify API Gateway endpoint
-      const response = await axios.get(`${API_URL}/path/to/endpoint/${id}`);
-  
-      // Handle the response data as needed
-      const selectingPerson = response.data;
-  
-      if (selectingPerson) {
-        setPersonName(selectingPerson.personName);
-        setPersonOwing(selectingPerson.personOwing);
-        setPersonReceiptAmount(selectingPerson.personReceiptAmount);
-      } else {
-        // Handle the case where no person with the specified id was found
-        console.error(`Person with id ${id} not found.`);
-      }
-    } catch (error) {
-      console.error("Error fetching user data:", error);
-      // Handle the error as needed
-    }
+
+  const selectPerson = (id) => {
+    const selectingPerson = list.find((row) => row.id === id);
+    setPersonName(selectingPerson.personName);
+    setPersonOwing(selectingPerson.personOwing);
+    setPersonReceiptAmount(selectingPerson.personReceiptAmount);
   };
   
 

@@ -1,63 +1,27 @@
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import Header from "./Header";
-import { Amplify, Auth } from "aws-amplify";
-import { CSSTransition } from "react-transition-group";
-import awsconfig from "../aws-exports";
-import axios from 'axios';
-Amplify.configure(awsconfig);
 
-export default function History({
-  theme,
-  lang,
-  loggedInUsername,
-  historyData,
-  setHistoryData,
-}) {
+import { CSSTransition } from "react-transition-group";
+
+export default function History({ receipts, theme, lang, setLang }) {
   const { id } = useParams();
   const [selectedPerson, setSelectedPerson] = useState("");
-  
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const user = await Auth.currentAuthenticatedUser();
-        const loggedInUsername = user.username;
-  
-        // Fetch history data for the selected person based on the person's ID
-        const response = await axios.get(`https://tbmb99cx6i.execute-api.us-east-1.amazonaws.com/dev/history/${id}`);
-        const historyDataList = response.data;
-  
-        setHistoryData(historyDataList);
-      } catch (error) {
-        console.error("Error fetching HistoryData", error);
-      }
-    };
-  
-    fetchData();
-  }, [id, setHistoryData]);
-  
 
   const filteredReceipts = useMemo(() => {
-    if (!Array.isArray(historyData)) {
-      console.error("historyData is not an array:", historyData);
-      return [];
-    }
-
     if (selectedPerson) {
-      return historyData.filter(
-        (data) =>
-          data.personName === selectedPerson &&
-          data.username === loggedInUsername
+      return receipts.filter(
+        (receipt) => receipt.personName === selectedPerson
       );
     } else {
-      return historyData.filter((data) => data.username === loggedInUsername);
+      return receipts;
     }
-  }, [historyData, selectedPerson, loggedInUsername]);
+  }, [receipts, selectedPerson]);
 
   const receiptList = useMemo(() => {
     return filteredReceipts
-      .reverse()
       .slice(-10)
+      .reverse()
       .map((receipt, index) => {
         const startDate =
           receipt.startDate instanceof Date
@@ -125,9 +89,7 @@ export default function History({
                 <div>
                   <p className="text-sm mb-2">{`Invoice Number: ${receipt.invoiceNumber}`}</p>
                 </div>
-              ) : (
-                ""
-              )}
+              ):""}
             </div>
           </div>
         );
@@ -143,10 +105,10 @@ export default function History({
 
   const personNames = useMemo(() => {
     const uniquePersons = Array.from(
-      new Set(filteredReceipts.map((data) => data.personName))
+      new Set(receipts.map((receipt) => receipt.personName))
     );
     return uniquePersons;
-  }, [filteredReceipts]);
+  }, [receipts]);
 
   const handlePersonNameChange = (event) => {
     setSelectedPerson(event.target.value);

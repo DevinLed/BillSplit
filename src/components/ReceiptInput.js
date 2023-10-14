@@ -28,11 +28,6 @@ import UseAnimations from "react-useanimations";
 import github from "react-useanimations/lib/github";
 import "rc-slider/assets/index.css";
 import "react-datepicker/dist/react-datepicker.css";
-import { Amplify } from "aws-amplify";
-import axios from 'axios';
-
-import awsconfig from "../aws-exports";
-Amplify.configure(awsconfig);
 
 export default function ReceiptInput({
   personName,
@@ -73,10 +68,6 @@ export default function ReceiptInput({
   handleResetCombinedArray,
   obtainedInfo,
   setObtainedInfo,
-  historyData,
-  setHistoryData,
-  combinedTotal,
-  setCombinedTotal,
 }) {
   registerLocale("en", en);
   registerLocale("fr", fr);
@@ -101,14 +92,13 @@ export default function ReceiptInput({
   const [amount, setAmount] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [receiptTotal, setReceiptTotal] = useState(0);
-  const [showTable, setShowTable] = useState(false);
+  const [showTable, setShowTable] = useState("");
   const [youTotal, setYouTotal] = useState(0);
   const [splitTotal, setSplitTotal] = useState(0);
   const [themTotal, setThemTotal] = useState(0);
   const [selected, setSelected] = useState(null);
   const [isMerchantNameFocused, setMerchantNameFocused] = useState(false);
   const [isInvoiceNumberFocused, setInvoiceNumberFocused] = useState(false);
-  const csstransitionRef = useRef(null);
 
   const [filledIn, setFilledIn] = useState(false);
   const handleMerchantNameFocus = () => {
@@ -295,7 +285,6 @@ export default function ReceiptInput({
 
   // Used to calculate the amount by adding up all the item.amount of entries in the table array
   const getPictureTotal = () => {
-    // Calculate the total without setting state
     let total =
       parseFloat(splitPictureTotal) +
       parseFloat(themPictureTotal) +
@@ -305,75 +294,42 @@ export default function ReceiptInput({
     let themValue = parseFloat(themPictureTotal);
     let youValue = parseFloat(youPictureTotal);
 
-    let personReceiptAmount;
-
     if (selectedValue === "you") {
-      // Calculate the personReceiptAmount without setting state
-      personReceiptAmount = splitValue + themValue;
+      setPersonReceiptAmount(splitValue + themValue);
     } else if (selectedValue === "them") {
-      // Calculate the personReceiptAmount without setting state
-      personReceiptAmount = splitValue + youValue;
+      setPersonReceiptAmount(splitValue + youValue);
     }
-
     return parseFloat(total).toFixed(2);
   };
-  const taxOwing =
-  selectedValue === "you"
-    ? parseFloat(splitPictureTotal) / 2 + parseFloat(themPictureTotal)
-    : parseFloat(splitPictureTotal) / 2 + parseFloat(youPictureTotal);
 
+  // Handler to push entries into the History tab array
+  const handleHistorySubmit = () => {
+    const newReceipt = {
+      personName,
+      personOwing,
+      personReceiptAmount,
+      taxActual,
+      selectedValue,
+      merchantName,
+      startDate,
+      invoiceNumber,
+      displayMerchant,
+      displayDate,
+      displayInvoice,
+      receiptTotal,
+    };
+
+    addReceipt(newReceipt);
+  };
+
+  const taxOwing =
+    selectedValue === "you"
+      ? parseFloat(splitPictureTotal) / 2 + parseFloat(themPictureTotal)
+      : parseFloat(splitPictureTotal) / 2 + parseFloat(youPictureTotal);
 
   const taxOwingPerc = taxOwing / parseFloat(getPictureTotal());
 
   const taxActual = parseFloat(pictureTax) * parseFloat(taxOwingPerc);
-
-  setCombinedTotal(taxActual + parseFloat(personReceiptAmount));
-
-  // Handler to push entries into the History tab array
-  const handleHistorySubmit = async () => {
-    try {
-      // Prepare the data for the new history entry
-      const newHistoryData = {
-        personName,
-        merchantName,
-        startDate,
-        invoiceNumber,
-        receiptTotal,
-        selectedValue,
-        personReceiptAmount,
-        taxActual,
-      };
-      const response = await axios.post("https://tbmb99cx6i.execute-api.us-east-1.amazonaws.com/dev/history", newHistoryData);
-  
-      // Extract the newly created historyData object from the response
-      const createdHistoryData = response.data;
-  
-      // Update the historyData state by appending the new data
-      setHistoryData((prevHistoryData) => [...prevHistoryData, createdHistoryData]);
-  
-      console.log("HistoryData entry created:", createdHistoryData);
-    } catch (error) {
-      console.error("Error creating HistoryData entry:", error);
-    }
-  };
-  
-  
-  const getUserId = async () => {
-    try {
-      // Make a GET request to your API endpoint to retrieve the user ID
-      const response = await axios.get("https://tbmb99cx6i.execute-api.us-east-1.amazonaws.com/dev/user-id");
-  
-      // Extract the user ID from the response data
-      const userId = response.data.userId;
-  
-      return userId;
-    } catch (error) {
-      // Handle any errors, e.g., authentication error or API error
-      console.error("Error getting user ID:", error);
-      return null;
-    }
-  };
-  
 
   // Used to update the balance of the person you are splitting receipt with
   const getFinalTotal = () => {
@@ -439,7 +395,9 @@ export default function ReceiptInput({
                         <IoCreateOutline size={24} />
                       </div>
                       <span className="whitespace-no-wrap">
-                        {lang === "english" ? "Manual" : "À la main"}
+                        {lang === "english"
+                          ? "Manual"
+                          : "À la main"}
                       </span>
                     </label>
                   </Link>
@@ -474,12 +432,10 @@ export default function ReceiptInput({
         timeout={500} // Adjust the duration of the transition as needed
         classNames="fade"
         unmountOnExit
-        nodeRef={csstransitionRef}
       >
         <main
           className="xs:max-w-xl bg-white-500 mt-5 rounded p-0 pt-3 shadow sm:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl"
           style={{ maxWidth: "600px" }}
-          ref={csstransitionRef}
         >
           <div className="mt-0 flex flex-col items-center justify-center">
             <Header
