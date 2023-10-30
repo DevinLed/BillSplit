@@ -115,16 +115,28 @@ function App({ signOut, user }) {
   const [themPictureTotal, setThemPictureTotal] = useState(0);
 
   const [formSubmitted, setFormSubmitted] = useState(false);
-  const [loggedInUsername, setLoggedInUsername] = useState(""); // Set the logged-in email
+  const [loggedInUsername, setLoggedInUsername] = useState(""); // Set the logged-in name
+  
+const [loggedInUserEmail, setLoggedInUserEmail] = useState('');
   const API_URL =
-    "https://kdj7rkk1yl.execute-api.us-east-1.amazonaws.com/dev";
+    "https://wwbikuv18g.execute-api.us-east-1.amazonaws.com/prod/users";
 
     useEffect(() => {
       Auth.currentAuthenticatedUser().then(user => {
         setLoggedInUsername(user.attributes.name);
+        setLoggedInUserEmail(user.attributes.email)
+        
       });
     }, [loggedInUsername]);
     
+  const [dataThrow, setDataThrow] = useState([]);
+
+  useEffect(() => {
+    fetch(API_URL)
+      .then((response) => response.json())
+      .then((data) => setDataThrow(data))
+      .catch((error) => console.error('Error fetching data:', error));
+  }, []); 
 
   const [combinedArray, setCombinedArray] = useState([]);
 
@@ -215,26 +227,40 @@ function App({ signOut, user }) {
     setObtainedInfo([]);
   };
   const handleAddSubmit = (e) => {
-    const newItems = {
-      personName,
-      personPhone,
-      personEmail,
-      personOwing,
-      id: uuidv4(),
+    const itemData = {
+      UserEmail: { S: loggedInUserEmail },
+      PersonEmail: { S: personEmail },
+      PersonName: { S: personName },
+      PersonOwing: { S: personOwing },
     };
+  
+    fetch(API_URL, {
+      method: 'POST',
+      body: JSON.stringify(itemData),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((response) => response.json())
+      .then((newItem) => {
+        console.log('Item created successfully', newItem);
+        setList((prevList) => [...prevList, newItem]);
+      })
+      .catch((error) => {
+        console.error('Error creating item:', error);
+      });
+  
     setPersonName("");
     setPersonPhone("");
     setPersonEmail("");
     setPersonOwing("");
     setSelectedValue("");
-    setAddPerson(false);
-    setList((prevList) => {
-      const newList = [...prevList, newItems];
-      localStorage.setItem("list", JSON.stringify(newList));
-      return newList;
-    });
     setIsEditing(false);
+  
+    setAddPerson(false);
   };
+  
+  
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -451,6 +477,7 @@ function App({ signOut, user }) {
                 lang={lang}
                 setLang={setLang}
                 loggedInUsername={loggedInUsername}
+                loggedInUserEmail={loggedInUserEmail}
               />
             }
           />

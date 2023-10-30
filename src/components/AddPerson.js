@@ -21,6 +21,7 @@ export default function AddPerson({
   handleAddSubmit,
   lang,
   setLang,
+  loggedInUserEmail,
 }) {
   const [isValidName, setIsValidName] = useState(false);
   const [isValidPhoneNumber, setIsValidPhoneNumber] = useState(false);
