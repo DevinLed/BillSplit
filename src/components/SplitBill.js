@@ -41,19 +41,33 @@ export default function SplitBill({
 }) {
   const [selectPersonList, setSelectPersonList] = useState(true);
   const API_URL =
-    "https://wwbikuv18g.execute-api.us-east-1.amazonaws.com/prod/users";
-  const [dataThrow, setDataThrow] = useState([]);
-  useEffect(() => {
-    fetch(API_URL)
-      .then((response) => response.json())
-      .then((data) => {
-        setDataThrow(data);
-        console.log(data); // Log the data to the console
-        console.log(loggedInUserEmail);
+  "https://wwbikuv18g.execute-api.us-east-1.amazonaws.com/prod/users";
+const [dataThrow, setDataThrow] = useState([]);
 
-      })
-      .catch((error) => console.error('Error fetching data:', error));
-  }, []);
+useEffect(() => {
+  // Function to fetch data
+  const fetchData = async () => {
+    try {
+      const response = await fetch(API_URL);
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const data = await response.json();
+      setDataThrow(data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  fetchData(); // Fetch data when component mounts
+
+  // Set up an interval to fetch data every 2 seconds
+  const intervalId = setInterval(fetchData, 2000);
+
+  // Clean up the interval when the component unmounts
+  return () => clearInterval(intervalId);
+}, []);
+
   return (
     <>
       <main

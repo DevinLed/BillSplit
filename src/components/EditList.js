@@ -3,10 +3,10 @@ import AddPerson from "./AddPerson";
 import Header from "./Header";
 import EditPerson from "./EditPerson";
 import { IoPersonAddSharp } from "react-icons/io5";
-import { Amplify, Auth } from 'aws-amplify';
+import { Amplify, Auth } from "aws-amplify";
 import Avatar from "react-avatar";
 import { CSSTransition } from "react-transition-group";
-import axios from 'axios';
+import axios from "axios";
 
 import awsconfig from "../aws-exports";
 Amplify.configure(awsconfig);
@@ -37,8 +37,11 @@ export default function EditList({
   handleAddSubmit,
   lang,
   setLang,
-  loggedInUsername
+  loggedInUserEmail,
+  setFormSubmitted,
 }) {
+  const API_URL =
+    "https://wwbikuv18g.execute-api.us-east-1.amazonaws.com/prod/users";
   const [list, setList] = useState([]);
   const [selectEditPersonList, setEditSelectPersonList] = useState(true);
   const [userId, setUserId] = useState(null); // Initialize userId as null
@@ -49,14 +52,16 @@ export default function EditList({
       return user.attributes.sub; // 'sub' is the unique user ID
     } catch (error) {
       // Handle authentication error
-      console.error('Error getting user ID:', error);
+      console.error("Error getting user ID:", error);
       return null;
     }
   };
   const handleDeletePerson = async () => {
     try {
       // Call your API to delete the user using the editPerson ID
-      const response = await axios.delete(`https://tbmb99cx6i.execute-api.us-east-1.amazonaws.com/dev/user/${editPerson}`);
+      const response = await axios.delete(
+        `https://tbmb99cx6i.execute-api.us-east-1.amazonaws.com/dev/user/${editPerson}`
+      );
 
       // Handle the response as needed
       console.log("User deleted:", response);
@@ -68,31 +73,32 @@ export default function EditList({
     }
   };
 
+  const [dataThrow, setDataThrow] = useState([]);
+
   useEffect(() => {
-    async function fetchData() {
+    // Function to fetch data
+    const fetchData = async () => {
       try {
-        // Fetch the updated list of users after a user is deleted
-        const response = await axios.get("https://tbmb99cx6i.execute-api.us-east-1.amazonaws.com/dev/user");
-
-        // Filter the results based on the loggedInUsername
-        const userDataList = response.data.filter((item) => {
-          return item.email === loggedInUsername;
-        });
-
-        setList(userDataList);
-
-        // Get the user ID and set it in the state
-        const id = await getUserId();
-        setUserId(id);
+        const response = await fetch(API_URL);
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        setDataThrow(data);
       } catch (error) {
-        console.error("Error fetching UserData", error);
+        console.error("Error fetching data:", error);
       }
-    }
+    };
 
-    fetchData(); // 
-  }, [loggedInUsername, editPerson, personName, personPhone, personEmail, personOwing]);
+    fetchData(); // Fetch data when component mounts
 
- 
+    // Set up an interval to fetch data every 2 seconds
+    const intervalId = setInterval(fetchData, 2000);
+
+    // Clean up the interval when the component unmounts
+    return () => clearInterval(intervalId);
+  }, []);
+
   return (
     <>
       <main
@@ -104,62 +110,52 @@ export default function EditList({
           theme={theme}
           lang={lang}
         />
-        <div className={`flex flex-col items-center justify-center transition-opacity duration-300`}>
-
+        <div
+          className={`flex flex-col items-center justify-center transition-opacity duration-300`}
+        >
           <ul className="m-0 py-1 w-3/4">
-            {list.map(
-              ({ id, personName, personPhone, personEmail, personOwing }) => (
-                <React.Fragment key={id}>
-                  {personName.length ? (
-                    <button
-                      className="text-primary outline-none focus:outline-none w-full"
-                      onClick={() => {
-                        editRow(id); // Call editRow function with the selected item's ID
-                      }}
-                    >
-                      <li
-                        className={
-                          "list-group-item flex justify-between m-1 p-2 rounded-lg shadow-sm " +
-                          (theme === "dark"
-                            ? "bg-gray-800 text-white"
-                            : "bg-white text-gray-800")
-                        }
-                      >
-                        <div className="flex items-center">
-                          {/* Avatar component to display the person's avatar */}
-                          <Avatar
-                            name={personName} // Pass the person's name to the Avatar component
-                            size={32} // Set the size of the avatar (adjust as needed)
-                            round // Make the avatar circular
-                          />
-                          {/* Div to display the person's name */}
-                          <span className="ml-1">
-                            {/* Div to display the person's name */}
-                            {personName.length > 8
-                              ? `${personName.substring(0, 8)}...`
-                              : personName}
-                          </span>
-                        </div>
-                        <span
-                          className={`badge badge-primary badge-pill rounded px-1 pt-2 ml-2 text-xs ${
-                            personOwing < 0
-                              ? "bg-red-500 text-black"
-                              : "bg-blue-500 text-white"
-                          }`}
-                        >
-                          $
-                          {value
-                            ? parseFloat(value).toFixed(2)
-                            : parseFloat(personOwing).toString() === "NaN"
-                            ? "0.00"
-                            : parseFloat(personOwing).toFixed(2)}
-                        </span>
-                      </li>
-                    </button>
-                  ) : null}
-                </React.Fragment>
-              )
-            )}
+          {dataThrow
+  .filter((item) => item.UserEmail?.S === loggedInUserEmail)
+  .map((item) => (
+    <React.Fragment key={item.id}> {/* Assuming there's a unique identifier like 'id' */}
+      {item.PersonName && item.PersonOwing ? (
+        <button
+          className="text-primary outline-none focus:outline-none w-full"
+          onClick={() => {
+            editRow(item.PersonEmail.S); // Pass a unique identifier like email
+          }}
+        >
+          <li
+            className={
+              "list-group-item flex justify-between m-1 p-2 rounded-lg shadow-sm " +
+              (theme === "dark"
+                ? "bg-gray-800 text-white"
+                : "bg-white text-gray-800")
+            }
+          >
+            <div className="flex items-center">
+              <Avatar name={item.PersonName.S} size={32} round />
+              <span className="ml-1">
+                {item.PersonName.S.length > 8
+                  ? `${item.PersonName.S.substring(0, 8)}...`
+                  : item.PersonName.S}
+              </span>
+            </div>
+            <span
+              className={`badge badge-pill rounded px-1 pt-2 ml-2 text-xs ${
+                parseFloat(item.PersonOwing.S) < 0
+                  ? "bg-red-500 text-black"
+                  : "bg-blue-500 text-white"
+              }`}
+            >
+              ${parseFloat(item.PersonOwing.S).toFixed(2)}
+            </span>
+          </li>
+        </button>
+      ) : null}
+    </React.Fragment>
+  ))}
+
           </ul>
 
           <label
@@ -199,41 +195,42 @@ export default function EditList({
             setIsSelected={setIsSelected}
             theme={theme}
             handleAddSubmit={handleAddSubmit}
+            setFormSubmitted={setFormSubmitted}
             lang={lang}
           ></AddPerson>
         </CSSTransition>
         <CSSTransition
-  in={editPerson && userId !== null} // Only render when editPerson is true and userId is not null
-  timeout={300}
-  classNames="fade"
-  unmountOnExit
->
-  <EditPerson
-    addPerson={addPerson}
-    setAddPerson={setAddPerson}
-    personName={personName}
-    setPersonName={setPersonName}
-    setPersonPhone={setPersonPhone}
-    setPersonEmail={setPersonEmail}
-    setPersonOwing={setPersonOwing}
-    personEmail={personEmail}
-    personPhone={personPhone}
-    personOwing={personOwing}
-    handleSubmit={handleSubmit}
-    handleEditSubmit={handleEditSubmit}
-    setPersonState={setPersonState}
-    personState={personState}
-    setIsSelected={setIsSelected}
-    setEditPerson={setEditPerson}
-    theme={theme}
-    setList={setList}
-    list={list}
-    editPerson={editPerson}
-    handleDeletePerson={handleDeletePerson}
-    lang={lang}
-    userId={userId}
-  ></EditPerson>
-</CSSTransition>
+          in={editPerson} // Only render when editPerson is true and userId is not null
+          timeout={300}
+          classNames="fade"
+          unmountOnExit
+        >
+          <EditPerson
+            addPerson={addPerson}
+            setAddPerson={setAddPerson}
+            personName={personName}
+            setPersonName={setPersonName}
+            setPersonPhone={setPersonPhone}
+            setPersonEmail={setPersonEmail}
+            setPersonOwing={setPersonOwing}
+            personEmail={personEmail}
+            personPhone={personPhone}
+            personOwing={personOwing}
+            handleSubmit={handleSubmit}
+            handleEditSubmit={handleEditSubmit}
+            setPersonState={setPersonState}
+            personState={personState}
+            setIsSelected={setIsSelected}
+            setEditPerson={setEditPerson}
+            theme={theme}
+            setList={setList}
+            list={list}
+            editPerson={editPerson}
+            handleDeletePerson={handleDeletePerson}
+            lang={lang}
+            userId={userId}
+          ></EditPerson>
+        </CSSTransition>
       </main>
     </>
   );
