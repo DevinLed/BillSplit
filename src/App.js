@@ -190,15 +190,36 @@ const [loggedInUserEmail, setLoggedInUserEmail] = useState('');
   
 
   const editRow = (uniqueIdentifier) => {
-    setIsEditing(true);
     setEditPerson(uniqueIdentifier); 
-    const editingItem = dataThrow.find((item) => item.PersonEmail.S === uniqueIdentifier);
     
+    setIsEditing(true);
+    const editingItem = dataThrow.find((item) => item.PersonEmail.S === uniqueIdentifier);
     if (editingItem) {
       const personName = editingItem.PersonName.S;
       const personOwing = parseFloat(editingItem.PersonOwing.S);
       setPersonName(personName);
       setPersonOwing(personOwing);
+    }
+  };
+  
+
+  const handleDeletePerson = async (personEmail) => {
+    try {
+      console.log('person email is '+ personEmail);
+      const response = await fetch(`${API_URL}/${personEmail}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+  
+      if (response.status === 204) {
+        console.log('Person deleted successfully');
+      } else {
+        console.error('Failed to delete person');
+      }
+    } catch (error) {
+      console.error('Error deleting person:', error);
     }
   };
   
@@ -570,6 +591,7 @@ const [loggedInUserEmail, setLoggedInUserEmail] = useState('');
                 setLang={setLang}
                 loggedInUsername={loggedInUsername}
                 loggedInUserEmail={loggedInUserEmail}
+                handleDeletePerson={handleDeletePerson}
               />
             }
           />

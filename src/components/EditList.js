@@ -6,7 +6,6 @@ import { IoPersonAddSharp } from "react-icons/io5";
 import { Amplify, Auth } from "aws-amplify";
 import Avatar from "react-avatar";
 import { CSSTransition } from "react-transition-group";
-import axios from "axios";
 
 import awsconfig from "../aws-exports";
 Amplify.configure(awsconfig);
@@ -39,6 +38,7 @@ export default function EditList({
   setLang,
   loggedInUserEmail,
   setFormSubmitted,
+  handleDeletePerson
 }) {
   const API_URL =
     "https://wwbikuv18g.execute-api.us-east-1.amazonaws.com/prod/users";
@@ -56,25 +56,9 @@ export default function EditList({
       return null;
     }
   };
-  const handleDeletePerson = async () => {
-    try {
-      // Call your API to delete the user using the editPerson ID
-      const response = await axios.delete(
-        `https://tbmb99cx6i.execute-api.us-east-1.amazonaws.com/dev/user/${editPerson}`
-      );
-
-      // Handle the response as needed
-      console.log("User deleted:", response);
-
-      // Close the edit person popup
-      setEditPerson(null); // Clear the editPerson state to exit editing mode
-    } catch (error) {
-      console.error("Error deleting user:", error);
-    }
-  };
 
   const [dataThrow, setDataThrow] = useState([]);
-
+  const [passedEmail, setPassedEmail] = useState([]);
   useEffect(() => {
     // Function to fetch data
     const fetchData = async () => {
@@ -114,48 +98,52 @@ export default function EditList({
           className={`flex flex-col items-center justify-center transition-opacity duration-300`}
         >
           <ul className="m-0 py-1 w-3/4">
-          {dataThrow
-  .filter((item) => item.UserEmail?.S === loggedInUserEmail)
-  .map((item) => (
-    <React.Fragment key={item.id}> {/* Assuming there's a unique identifier like 'id' */}
-      {item.PersonName && item.PersonOwing ? (
-        <button
-          className="text-primary outline-none focus:outline-none w-full"
-          onClick={() => {
-            editRow(item.PersonEmail.S); // Pass a unique identifier like email
-          }}
-        >
-          <li
-            className={
-              "list-group-item flex justify-between m-1 p-2 rounded-lg shadow-sm " +
-              (theme === "dark"
-                ? "bg-gray-800 text-white"
-                : "bg-white text-gray-800")
-            }
-          >
-            <div className="flex items-center">
-              <Avatar name={item.PersonName.S} size={32} round />
-              <span className="ml-1">
-                {item.PersonName.S.length > 8
-                  ? `${item.PersonName.S.substring(0, 8)}...`
-                  : item.PersonName.S}
-              </span>
-            </div>
-            <span
-              className={`badge badge-pill rounded px-1 pt-2 ml-2 text-xs ${
-                parseFloat(item.PersonOwing.S) < 0
-                  ? "bg-red-500 text-black"
-                  : "bg-blue-500 text-white"
-              }`}
-            >
-              ${parseFloat(item.PersonOwing.S).toFixed(2)}
-            </span>
-          </li>
-        </button>
-      ) : null}
-    </React.Fragment>
-  ))}
-
+            {dataThrow
+              .filter((item) => item.UserEmail?.S === loggedInUserEmail)
+              .map((item) => (
+                
+                <React.Fragment key={item.id}>
+                  {" "}
+                  {/* Assuming there's a unique identifier like 'id' */}
+                  {item.PersonName && item.PersonOwing ? (
+                    <button
+                      className="text-primary outline-none focus:outline-none w-full"
+                      onClick={() => {
+                        editRow(item.PersonEmail.S); 
+                        console.log(item.PersonEmail.S);
+                        setPassedEmail(item.PersonEmail.S);
+                      }}
+                    >
+                      <li
+                        className={
+                          "list-group-item flex justify-between m-1 p-2 rounded-lg shadow-sm " +
+                          (theme === "dark"
+                            ? "bg-gray-800 text-white"
+                            : "bg-white text-gray-800")
+                        }
+                      >
+                        <div className="flex items-center">
+                          <Avatar name={item.PersonName.S} size={32} round />
+                          <span className="ml-1">
+                            {item.PersonName.S.length > 8
+                              ? `${item.PersonName.S.substring(0, 8)}...`
+                              : item.PersonName.S}
+                          </span>
+                        </div>
+                        <span
+                          className={`badge badge-pill rounded px-1 pt-2 ml-2 text-xs ${
+                            parseFloat(item.PersonOwing.S) < 0
+                              ? "bg-red-500 text-black"
+                              : "bg-blue-500 text-white"
+                          }`}
+                        >
+                          ${parseFloat(item.PersonOwing.S).toFixed(2)}
+                        </span>
+                      </li>
+                    </button>
+                  ) : null}
+                </React.Fragment>
+              ))}
           </ul>
 
           <label
@@ -229,6 +217,7 @@ export default function EditList({
             handleDeletePerson={handleDeletePerson}
             lang={lang}
             userId={userId}
+            passedEmail={passedEmail}
           ></EditPerson>
         </CSSTransition>
       </main>
