@@ -6,7 +6,7 @@ import Header from "./Header";
 import { IoPersonAddSharp } from "react-icons/io5";
 import Avatar from "react-avatar";
 import { CSSTransition } from "react-transition-group";
-import { API } from "aws-amplify"; // Import AWS Amplify
+import { API } from "aws-amplify"; 
 
 
 export default function SplitBill({
@@ -59,12 +59,11 @@ useEffect(() => {
     }
   };
 
-  fetchData(); // Fetch data when component mounts
+  fetchData(); 
 
   // Set up an interval to fetch data every 2 seconds
   const intervalId = setInterval(fetchData, 2000);
 
-  // Clean up the interval when the component unmounts
   return () => clearInterval(intervalId);
 }, []);
 

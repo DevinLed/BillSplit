@@ -90,11 +90,13 @@ export default function EditPerson({
     )}-${numbersOnly.slice(6, 10)}`;
   };
 
+
+
+
   const [dataThrow, setDataThrow] = useState([]);
 const handleDeletePerson = (personEmail) => {
-  const encodedEmail = encodeURIComponent(personEmail);
-
-  const url = `${API_URL}/${encodedEmail}`;
+  console.log(personEmail);
+  const url = `${API_URL}/${personEmail}`;
 
   fetch(url, {
     method: 'DELETE',
@@ -115,6 +117,8 @@ const handleDeletePerson = (personEmail) => {
     .catch((error) => {
       console.error('Error deleting person:', error);
     });
+    
+    setEditPerson(false);
 };
 
 
@@ -148,7 +152,7 @@ const handleDeletePerson = (personEmail) => {
       };
 
       try {
-        const response = await fetch(`${API_URL}/users/${userId}`);
+        const response = await fetch(`${API_URL}/${userId}`);
 
         if (response.status === 200) {
           console.log("User phone number updated");
@@ -417,9 +421,8 @@ const handleDeletePerson = (personEmail) => {
                           : "bg-gray-800")
                       }
                       onClick={(e) => {
-                        console.log(passedEmail);
                         setPersonEmail(passedEmail);
-                        handleDeletePerson(passedEmail);
+                        handleDeletePerson(personEmail);
                       }}
                     >
                       {lang === "english" ? "Yes" : "Oui"}
