@@ -28,7 +28,6 @@ import "./index.css";
 import ReceiptTable from "./components/ReceiptTable";
 import { Amplify, API, graphqlOperation, Auth, Storage } from "aws-amplify";
 import awsconfig from "./aws-exports";
-import axios from "axios";
 Amplify.configure(awsconfig);
 
 function App({ signOut, user }) {
@@ -116,28 +115,30 @@ function App({ signOut, user }) {
 
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [loggedInUsername, setLoggedInUsername] = useState(""); // Set the logged-in name
-  
-const [loggedInUserEmail, setLoggedInUserEmail] = useState('');
-  const API_URL =
-    "https://wwbikuv18g.execute-api.us-east-1.amazonaws.com/prod/users";
 
-    useEffect(() => {
-      Auth.currentAuthenticatedUser().then(user => {
-        setLoggedInUsername(user.attributes.name);
-        setLoggedInUserEmail(user.attributes.email)
-        
-      });
-    }, [loggedInUsername]);
-    
+  const [loggedInUserEmail, setLoggedInUserEmail] = useState("");
+  const API_URL =
+    "https://48f95wy514.execute-api.us-east-1.amazonaws.com/prod/contacts";
+
+  useEffect(() => {
+    Auth.currentAuthenticatedUser().then((user) => {
+      setLoggedInUsername(user.attributes.name);
+      setLoggedInUserEmail(user.attributes.email);
+    });
+  }, [loggedInUsername]);
+
   const [dataThrow, setDataThrow] = useState([]);
 
   useEffect(() => {
-    fetch(API_URL)
-      .then((response) => response.json())
-      .then((data) => setDataThrow(data))
-      .catch((error) => console.error('Error fetching data:', error));
-  }, []); 
+    const fetchData = () => {
+      fetch(API_URL)
+        .then((response) => response.json())
+        .then((data) => setDataThrow(data))
+        .catch((error) => console.error("Error fetching data:", error));
+    };
 
+    fetchData();
+  }, []);
   const [combinedArray, setCombinedArray] = useState([]);
 
   const [obtainedInfo, setObtainedInfo] = useState([]);
@@ -187,42 +188,18 @@ const [loggedInUserEmail, setLoggedInUserEmail] = useState('');
     setDisplayAdd(true);
     console.log("this is to add");
   };
-  
 
-  const editRow = (uniqueIdentifier) => {
-    setEditPerson(uniqueIdentifier); 
-    
-    setIsEditing(true);
-    const editingItem = dataThrow.find((item) => item.PersonEmail.S === uniqueIdentifier);
-    if (editingItem) {
-      const personName = editingItem.PersonName.S;
-      const personOwing = parseFloat(editingItem.PersonOwing.S);
-      setPersonName(personName);
-      setPersonOwing(personOwing);
-    }
+  const editRow = (personEmail) => {
+    const selectedPerson = dataThrow.find(
+      (item) => item.PersonEmail === personEmail
+    );
+    setPersonName(selectedPerson.PersonName);
+    setPersonEmail(selectedPerson.PersonEmail);
+    setPersonPhone(selectedPerson.PersonPhone);
+    setPersonOwing(selectedPerson.PersonOwing);
+    setEditPerson(true);
   };
-  
 
-  const handleDeletePerson = async (personEmail) => {
-    try {
-      console.log('person email is '+ personEmail);
-      const response = await fetch(`${API_URL}/${personEmail}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-  
-      if (response.status === 204) {
-        console.log('Person deleted successfully');
-      } else {
-        console.error('Failed to delete person');
-      }
-    } catch (error) {
-      console.error('Error deleting person:', error);
-    }
-  };
-  
   const subNum = (id, val, val2) => {
     setList((prevList) => {
       const newList = prevList.map((item) => {
@@ -242,35 +219,35 @@ const [loggedInUserEmail, setLoggedInUserEmail] = useState('');
     setDisplayAdd(false);
     console.log("this is to sub");
   };
-  
+
   // Handler for full reset of tables.
   const handleResetCombinedArray = () => {
     setCombinedArray([]);
     setObtainedInfo([]);
   };
   const handleAddSubmit = (e) => {
+    e.preventDefault();
+
     const itemData = {
-      UserEmail: { S: loggedInUserEmail },
-      PersonEmail: { S: personEmail },
-      PersonName: { S: personName },
-      PersonOwing: { S: personOwing },
-      itemId: { S: uuidv4() }, 
+      Name: personName,
+      Email: personEmail,
+      Phone: personPhone,
+      ContactId: Date.now().toString(), 
     };
+
     fetch(API_URL, {
-      method: 'POST',
+      method: "POST",
       body: JSON.stringify(itemData),
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     })
       .then((response) => response.json())
       .then((newItem) => {
-        console.log('Item created successfully', newItem);
-  
-        // Update the list in dataThrow state
+        console.log("Item created successfully", newItem);
+
         setDataThrow((prevData) => [...prevData, newItem]);
-  
-        // Clear the input fields and other state variables
+
         setPersonName("");
         setPersonPhone("");
         setPersonEmail("");
@@ -280,38 +257,39 @@ const [loggedInUserEmail, setLoggedInUserEmail] = useState('');
         setAddPerson(false);
       })
       .catch((error) => {
-        console.error('Error creating item:', error);
+        console.error("Error creating item:", error);
+        setAddPerson(false);
       });
   };
-  
+
   const handleEditSubmit = (e, personEmail, personPhone, personOwing) => {
     e.preventDefault();
-  
+
     const updatedUserData = {
       UserEmail: { S: loggedInUserEmail },
       PersonEmail: { S: personEmail },
       PersonName: { S: personName },
       PersonOwing: { S: personOwing },
+      PersonPhone: { S: personPhone },
     };
-  
-    // Make a PUT request to update the user's data
-    fetch(`${API_URL}/${personEmail}`, { // Assuming your API URL includes the unique identifier (personEmail)
-      method: 'PUT', // Use PUT method to update the existing item
+
+    fetch(`${API_URL}/${personEmail}`, {
+      method: "PUT",
       body: JSON.stringify(updatedUserData),
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     })
       .then((response) => {
         if (response.ok) {
           return response.json();
         } else {
-          throw new Error('Failed to update item');
+          throw new Error("Failed to update item");
         }
       })
       .then((updatedItem) => {
-        console.log('Item updated successfully', updatedItem);
-  
+        console.log("Item updated successfully", updatedItem);
+
         // Update the list in dataThrow state
         setDataThrow((prevData) => {
           // Map over the previous data and replace the updated item
@@ -322,7 +300,7 @@ const [loggedInUserEmail, setLoggedInUserEmail] = useState('');
             return item;
           });
         });
-  
+
         // Clear the input fields and other state variables
         setPersonName("");
         setPersonPhone("");
@@ -332,70 +310,43 @@ const [loggedInUserEmail, setLoggedInUserEmail] = useState('');
         setIsEditing(false);
       })
       .catch((error) => {
-        console.error('Error updating item:', error);
+        console.error("Error updating item:", error);
       });
   };
-  
-  
-  
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const updatedData = {
+      userEmail: loggedInUserEmail,
+      PersonEmail: personEmail,
+      PersonName: personName,
+      PersonPhone: personPhone,
+      PersonOwing: personOwing,
+    };
 
-    // Validate input fields here (e.g., check if personName, personPhone, personEmail, and personOwing are valid)
-
-    if (editPerson !== null) {
-      // Editing an existing entry
-
-      // Find the index of the item in the list with the editPerson id
-      const itemIndex = list.findIndex((row) => row.id === editPerson);
-
-      if (itemIndex !== -1) {
-        // Update the item in the list with the edited values
-        const updatedList = list.map((item) =>
-          item.id === editPerson
-            ? {
-                ...item,
-                personName,
-                personPhone,
-                personEmail,
-                personOwing,
-              }
-            : item
-        );
-
-        // Set the updated list in the parent component
-        setList(updatedList);
-      }
-
-      // Reset the editPerson state to null
-      setEditPerson(null);
-    } else {
-      // Adding a new entry
-
-      const newItems = {
-        personName,
-        personPhone,
-        personEmail,
-        personOwing,
-        id: uuidv4(),
-      };
-
-      setList((prevList) => {
-        const newList = [...prevList, newItems];
-        localStorage.setItem("list", JSON.stringify(newList));
-        return newList;
+    fetch(`${API_URL}/${personEmail}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updatedData),
+    })
+      .then((response) => {
+        if (response.ok) {
+          console.log("Entry updated successfully");
+        } else {
+          console.error("Error updating entry");
+        }
+      })
+      .catch((error) => {
+        console.error("Network error:", error);
       });
-    }
 
-    // Reset input fields and close the edit person popup
     setPersonName("");
     setPersonPhone("");
     setPersonEmail("");
     setPersonOwing("");
-    setSelectedValue("");
     setIsEditing(false);
-    setAddPerson(false);
   };
 
   const selectPerson = (id) => {
@@ -404,7 +355,6 @@ const [loggedInUserEmail, setLoggedInUserEmail] = useState('');
     setPersonOwing(selectingPerson.personOwing);
     setPersonReceiptAmount(selectingPerson.personReceiptAmount);
   };
-  
 
   // Used to send values to History component
   const [receipts, setReceipts] = useState(() => {
@@ -528,6 +478,7 @@ const [loggedInUserEmail, setLoggedInUserEmail] = useState('');
             path="/SplitBill"
             element={
               <SplitBill
+                dataThrow={dataThrow}
                 addPerson={addPerson}
                 setAddPerson={setAddPerson}
                 selectPerson={selectPerson}
@@ -562,8 +513,10 @@ const [loggedInUserEmail, setLoggedInUserEmail] = useState('');
             path="/EditList"
             element={
               <EditList
-              handleEditSubmit={handleEditSubmit}
-              setFormSubmitted={setFormSubmitted}
+                dataThrow={dataThrow}
+                setDataThrow={setDataThrow}
+                handleEditSubmit={handleEditSubmit}
+                setFormSubmitted={setFormSubmitted}
                 addPerson={addPerson}
                 setAddPerson={setAddPerson}
                 selectPerson={selectPerson}
@@ -591,7 +544,6 @@ const [loggedInUserEmail, setLoggedInUserEmail] = useState('');
                 setLang={setLang}
                 loggedInUsername={loggedInUsername}
                 loggedInUserEmail={loggedInUserEmail}
-                handleDeletePerson={handleDeletePerson}
               />
             }
           />
@@ -669,7 +621,15 @@ const [loggedInUserEmail, setLoggedInUserEmail] = useState('');
           />
           <Route
             path="/EditPerson"
-            element={<EditPerson theme={theme} lang={lang} setLang={setLang} />}
+            element={
+              <EditPerson
+                theme={theme}
+                lang={lang}
+                setLang={setLang}
+                dataThrow={dataThrow}
+                setDataThrow={setDataThrow}
+              />
+            }
           />
         </Routes>
       </div>
