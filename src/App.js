@@ -128,17 +128,19 @@ function App({ signOut, user }) {
   }, [loggedInUsername]);
 
   const [dataThrow, setDataThrow] = useState([]);
-
   useEffect(() => {
-    const fetchData = () => {
-      fetch(API_URL)
-        .then((response) => response.json())
-        .then((data) => setDataThrow(data))
-        .catch((error) => console.error("Error fetching data:", error));
+    const fetchData = async () => {
+      try {
+        const response = await fetch(API_URL);
+        const data = await response.json();
+        setDataThrow(data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
     };
-
+  
     fetchData();
-  }, []);
+  }, [dataThrow]);
   const [combinedArray, setCombinedArray] = useState([]);
 
   const [obtainedInfo, setObtainedInfo] = useState([]);
@@ -225,42 +227,49 @@ function App({ signOut, user }) {
     setCombinedArray([]);
     setObtainedInfo([]);
   };
-  const handleAddSubmit = (e) => {
+  const handleAddSubmit = async (e) => {
     e.preventDefault();
-
+  
     const itemData = {
       Name: personName,
       Email: personEmail,
       Phone: personPhone,
-      ContactId: Date.now().toString(), 
+      ContactId: uuidv4(), 
+      UserEmail: loggedInUserEmail, 
     };
-
-    fetch(API_URL, {
-      method: "POST",
-      body: JSON.stringify(itemData),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((newItem) => {
-        console.log("Item created successfully", newItem);
-
-        setDataThrow((prevData) => [...prevData, newItem]);
-
-        setPersonName("");
-        setPersonPhone("");
-        setPersonEmail("");
-        setPersonOwing("");
-        setSelectedValue("");
-        setIsEditing(false);
-        setAddPerson(false);
-      })
-      .catch((error) => {
-        console.error("Error creating item:", error);
-        setAddPerson(false);
+  
+    try {
+      const response = await fetch(API_URL, {
+        method: "POST",
+        body: JSON.stringify(itemData),
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
+  
+      if (!response.ok) {
+        throw new Error("Failed to add item");
+      }
+  
+      const newItem = await response.json();
+      console.log("Item created successfully", newItem);
+  
+      // Update local state with the new item
+      setDataThrow((prevData) => [...prevData, newItem]);
+  
+      // Reset form fields
+      setPersonName("");
+      setPersonPhone("");
+      setPersonEmail("");
+      setPersonOwing("");
+      setAddPerson(false);
+      setFormSubmitted(true);
+  
+    } catch (error) {
+      console.error("Error creating item:", error);
+    }
   };
+  
 
   const handleEditSubmit = (e, personEmail, personPhone, personOwing) => {
     e.preventDefault();
