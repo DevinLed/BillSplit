@@ -274,7 +274,7 @@ export default function AddPerson({
 
                   <CSSTransition
                     in={showInput}
-                    timeout={300} // Adjust the duration of the transition as needed
+                    timeout={300} 
                     classNames="fade"
                     unmountOnExit
                   >

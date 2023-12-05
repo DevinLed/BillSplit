@@ -30,6 +30,7 @@ import "rc-slider/assets/index.css";
 import "react-datepicker/dist/react-datepicker.css";
 
 export default function ReceiptInput({
+  API_URL,
   personName,
   personOwing,
   startDate,
