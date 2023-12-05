@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import "./../index.css";
 import { IoSaveOutline } from "react-icons/io5";
 import { AiOutlineDelete } from "react-icons/ai";
@@ -21,12 +21,16 @@ export default function EditPerson({
   theme,
   setList,
   lang,
-  setLang,
-  userData,
-  userId,
   handleEditSubmit,
   passedEmail,
+  dataThrow,
+  setDataThrow,
+  loggedInUserEmail,
+  passedId,
+  setPassedId,
+  API_URL,
 }) {
+  const myElementRef = useRef(null);
   const handleResetBalance = () => {
     setPersonOwing("0.00");
   };
@@ -37,6 +41,7 @@ export default function EditPerson({
     }
   }
   const handleDeletePrompt = () => {
+    console.log(passedId);
     setShowConfirmation(true);
   };
   const handleCancelDeletePrompt = () => {
@@ -54,30 +59,35 @@ export default function EditPerson({
   const [errorMsg, setErrorMsg] = useState("");
   const [submissionError, setSubmissionError] = useState(true);
 
-  const API_URL =
-    "https://wwbikuv18g.execute-api.us-east-1.amazonaws.com/prod/users";
-
-  const handleNameChange = async (e, personEmail, personPhone, personOwing) => {
+  const handleNameChange = async (e, ContactId, ) => {
     const inputName = e.target.value;
     setPersonName(inputName);
     setErrorName(false);
-
+  
     if (inputName.trim().length >= 1) {
       setIsValidName(true);
       setErrorName(true);
+  
+       
+      try {
+        const response = await fetch(`${API_URL}/${ContactId}`);
 
-      const updatedUserData = {
-        personEmail, // Use the email as the identifier
-        personName: inputName,
-        personPhone,
-        personOwing,
-      };
-
-      console.log(updatedUserData);
-      setIsValidName(false);
-      handleEditSubmit(e, personEmail, personPhone, personOwing);
+        if (response.status === 200) {
+          console.log("User name updated");
+        } else {
+          console.error("Error updating user name");
+        }
+      } catch (error) {
+        console.error("Error updating user name:", error);
+      }
+    } else {
+      setIsValidPhoneNumber(false);
+      setErrorPhone(false);
+      console.log("Error in name input");
     }
   };
+  
+    
 
   const formatPhoneNumber = (inputValue) => {
     const numbersOnly = inputValue.replace(/[^\d]/g, ""); // Remove all non-numeric characters
@@ -90,44 +100,38 @@ export default function EditPerson({
     )}-${numbersOnly.slice(6, 10)}`;
   };
 
+  const handleDeletePerson = (ContactId, passedId) => {
+    const url = `${API_URL}/${ContactId}`;
+    console.log(url);
+    console.log(ContactId);
 
-
-
-  const [dataThrow, setDataThrow] = useState([]);
-const handleDeletePerson = (personEmail) => {
-  console.log(personEmail);
-  const url = `${API_URL}/${personEmail}`;
-
-  fetch(url, {
-    method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  })
-    .then((response) => {
-      if (response.status === 204) {
-        console.log('Person deleted successfully');
-        
-        const updatedData = dataThrow.filter(item => item.PersonEmail.S !== personEmail);
-        setDataThrow(updatedData);
-      } else {
-        console.error('Failed to delete person');
-      }
+    fetch(url, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
     })
-    .catch((error) => {
-      console.error('Error deleting person:', error);
-    });
-    
-    setEditPerson(false);
-};
-
+      .then((response) => {
+        if (response.status === 204) {
+          console.log("Person deleted successfully");
+          console.log(passedId);
+          const updatedData = dataThrow.filter(
+            (item) => item.ContactId !== passedId
+          );
+          setDataThrow(updatedData);
+          setEditPerson(false);
+        } else {
+          console.error("Failed to delete person");
+        }
+      })
+      .catch((error) => {
+        console.error("Error deleting person:", error);
+      });
+  };
 
   const handlePhoneNumberChange = async (
     event,
-    userId,
-    personName,
-    personEmail,
-    personOwing
+    ContactId,
   ) => {
     const inputValue = event.target.value;
     const formattedValue = formatPhoneNumber(inputValue);
@@ -142,17 +146,8 @@ const handleDeletePerson = (personEmail) => {
       setErrorPhone(true);
       console.log("Phone accepted");
 
-      // Create an object with the updated phone number
-      const updatedUserData = {
-        id: userId,
-        personName: personName,
-        personPhone: formattedValue,
-        personEmail: personEmail,
-        personOwing: personOwing,
-      };
-
       try {
-        const response = await fetch(`${API_URL}/${userId}`);
+        const response = await fetch(`${API_URL}/${ContactId}`);
 
         if (response.status === 200) {
           console.log("User phone number updated");
@@ -171,10 +166,10 @@ const handleDeletePerson = (personEmail) => {
 
   const handleEmailChange = async (
     event,
-    userId,
-    personName,
-    personPhone,
-    personOwing
+    ContactId,
+    Name,
+    Phone,
+    Owing
   ) => {
     const inputEmail = event.target.value;
     setPersonEmail(inputEmail);
@@ -188,15 +183,15 @@ const handleDeletePerson = (personEmail) => {
 
       // Create an object with the updated email
       const updatedUserData = {
-        id: userId,
-        personName: personName,
-        personPhone: personPhone,
+        id: ContactId,
+        personName: Name,
+        personPhone: Phone,
         personEmail: inputEmail,
-        personOwing: personOwing,
+        personOwing: Owing,
       };
 
       try {
-        const response = await fetch(`${API_URL}/users/${userId}`);
+        const response = await fetch(`${API_URL}/${ContactId}`);
 
         if (response.status === 200) {
           console.log("User email updated");
@@ -369,7 +364,7 @@ const handleDeletePerson = (personEmail) => {
                       ? "flex w-fit flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-700 hover:no-underline"
                       : "flex w-fit flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-800 hover:no-underline"
                   }
-                  onClick={(e) => handleDeletePrompt()}
+                  onClick={(e) => handleDeletePrompt(passedId)}
                 >
                   <AiOutlineDelete size={24} />
                 </label>
@@ -396,11 +391,15 @@ const handleDeletePerson = (personEmail) => {
             </div>
             <CSSTransition
               in={showConfirmation}
-              timeout={500} // Adjust the duration of the transition as needed
+              timeout={500}
               classNames="fade"
               unmountOnExit
+              nodeRef={myElementRef}
             >
-              <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 ">
+              <div
+                ref={myElementRef}
+                className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 "
+              >
                 <div
                   className={
                     "p-6 rounded shadow-md " +
@@ -422,7 +421,8 @@ const handleDeletePerson = (personEmail) => {
                       }
                       onClick={(e) => {
                         setPersonEmail(passedEmail);
-                        handleDeletePerson(personEmail);
+                        handleDeletePerson(passedId);
+                        console.log(passedId);
                       }}
                     >
                       {lang === "english" ? "Yes" : "Oui"}

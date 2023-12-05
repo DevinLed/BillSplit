@@ -38,10 +38,14 @@ export default function EditList({
   setLang,
   loggedInUserEmail,
   setFormSubmitted,
-  handleDeletePerson
+  handleDeletePerson,
+  dataThrow,
+  setDataThrow,
+  passedId,
+  setPassedId,
 }) {
   const API_URL =
-    "https://wwbikuv18g.execute-api.us-east-1.amazonaws.com/prod/users";
+    "https://48f95wy514.execute-api.us-east-1.amazonaws.com/prod/contacts";
   const [list, setList] = useState([]);
   const [selectEditPersonList, setEditSelectPersonList] = useState(true);
   const [userId, setUserId] = useState(null); // Initialize userId as null
@@ -57,8 +61,6 @@ export default function EditList({
     }
   };
 
-  const [dataThrow, setDataThrow] = useState([]);
-  const [passedEmail, setPassedEmail] = useState([]);
   useEffect(() => {
     // Function to fetch data
     const fetchData = async () => {
@@ -74,15 +76,8 @@ export default function EditList({
       }
     };
 
-    fetchData(); // Fetch data when component mounts
-
-    // Set up an interval to fetch data every 2 seconds
-    const intervalId = setInterval(fetchData, 2000);
-
-    // Clean up the interval when the component unmounts
-    return () => clearInterval(intervalId);
+    fetchData();
   }, []);
-
   return (
     <>
       <main
@@ -98,22 +93,12 @@ export default function EditList({
           className={`flex flex-col items-center justify-center transition-opacity duration-300`}
         >
           <ul className="m-0 py-1 w-3/4">
-            {dataThrow
-              .filter((item) => item.UserEmail?.S === loggedInUserEmail)
-              .map((item) => (
-                
-                <React.Fragment key={item.id}>
-                  {" "}
-                  {/* Assuming there's a unique identifier like 'id' */}
-                  {item.PersonName && item.PersonOwing ? (
-                    <button
-                      className="text-primary outline-none focus:outline-none w-full"
-                      onClick={() => {
-                        editRow(item.PersonEmail.S); 
-                        console.log(item.PersonEmail.S);
-                        setPassedEmail(item.PersonEmail.S);
-                      }}
-                    >
+            {dataThrow.length > 0 &&
+              dataThrow
+                .filter((item) => item.UserEmail === loggedInUserEmail)
+                .map((item, index) => (
+                  <React.Fragment key={index}>
+                    {item.Name && item.Owing ? (
                       <li
                         className={
                           "list-group-item flex justify-between m-1 p-2 rounded-lg shadow-sm " +
@@ -121,29 +106,31 @@ export default function EditList({
                             ? "bg-gray-800 text-white"
                             : "bg-white text-gray-800")
                         }
+                        onClick={() => {
+                          editRow(item.ContactId);
+                        }}
                       >
                         <div className="flex items-center">
-                          <Avatar name={item.PersonName.S} size={32} round />
+                          <Avatar name={item.Name} size={32} round />
                           <span className="ml-1">
-                            {item.PersonName.S.length > 8
-                              ? `${item.PersonName.S.substring(0, 8)}...`
-                              : item.PersonName.S}
+                            {item.Name.length > 8
+                              ? `${item.Name.substring(0, 8)}...`
+                              : item.Name}
                           </span>
                         </div>
                         <span
                           className={`badge badge-pill rounded px-1 pt-2 ml-2 text-xs ${
-                            parseFloat(item.PersonOwing.S) < 0
+                            parseFloat(item.Owing) < 0
                               ? "bg-red-500 text-black"
                               : "bg-blue-500 text-white"
                           }`}
                         >
-                          ${parseFloat(item.PersonOwing.S).toFixed(2)}
+                          ${parseFloat(item.Owing).toFixed(2)}
                         </span>
                       </li>
-                    </button>
-                  ) : null}
-                </React.Fragment>
-              ))}
+                    ) : null}
+                  </React.Fragment>
+                ))}
           </ul>
 
           <label
@@ -159,10 +146,9 @@ export default function EditList({
             <IoPersonAddSharp size={24} />
           </label>
         </div>
-
         <CSSTransition
           in={addPerson}
-          timeout={300} // Adjust the duration of the transition as needed
+          timeout={300}
           classNames="fade"
           unmountOnExit
         >
@@ -216,8 +202,12 @@ export default function EditList({
             editPerson={editPerson}
             handleDeletePerson={handleDeletePerson}
             lang={lang}
-            userId={userId}
-            passedEmail={passedEmail}
+            passedId={passedId}
+            setPassedId={setPassedId}
+            dataThrow={dataThrow}
+            setDataThrow={setDataThrow}
+            loggedInUserEmail={loggedInUserEmail}
+            API_URL={API_URL}
           ></EditPerson>
         </CSSTransition>
       </main>
