@@ -94,6 +94,7 @@ function App({ signOut, user }) {
     },
   };
   // Menus for edit person and edit group
+  const [passedId, setPassedId] = useState(0);
   const [addPerson, setAddPerson] = useState(false);
   const [editPerson, setEditPerson] = useState(false);
   const [personName, setPersonName] = useState("");
@@ -191,14 +192,15 @@ function App({ signOut, user }) {
     console.log("this is to add");
   };
 
-  const editRow = (personEmail) => {
+  const editRow = (ContactId) => {
     const selectedPerson = dataThrow.find(
-      (item) => item.PersonEmail === personEmail
+      (item) => item.ContactId === ContactId
     );
-    setPersonName(selectedPerson.PersonName);
-    setPersonEmail(selectedPerson.PersonEmail);
-    setPersonPhone(selectedPerson.PersonPhone);
-    setPersonOwing(selectedPerson.PersonOwing);
+    setPersonName(selectedPerson.Name);
+    setPersonEmail(selectedPerson.Email);
+    setPersonPhone(selectedPerson.Phone);
+    setPersonOwing(selectedPerson.Owing);
+    setPassedId(selectedPerson.ContactId);
     setEditPerson(true);
   };
 
@@ -230,14 +232,15 @@ function App({ signOut, user }) {
   const handleAddSubmit = async (e) => {
     e.preventDefault();
   
+    const owingValue = personOwing !== "" ? personOwing : 0;
+
     const itemData = {
       Name: personName,
       Email: personEmail,
       Phone: personPhone,
-      ContactId: uuidv4(), 
+      Owing: owingValue,
       UserEmail: loggedInUserEmail, 
     };
-  
     try {
       const response = await fetch(API_URL, {
         method: "POST",
@@ -246,6 +249,7 @@ function App({ signOut, user }) {
           "Content-Type": "application/json",
         },
       });
+    
   
       if (!response.ok) {
         throw new Error("Failed to add item");
@@ -271,18 +275,18 @@ function App({ signOut, user }) {
   };
   
 
-  const handleEditSubmit = (e, personEmail, personPhone, personOwing) => {
+  const handleEditSubmit = (e, Name, Email, Phone, Owing, ContactId) => {
     e.preventDefault();
 
     const updatedUserData = {
       UserEmail: { S: loggedInUserEmail },
-      PersonEmail: { S: personEmail },
-      PersonName: { S: personName },
-      PersonOwing: { S: personOwing },
-      PersonPhone: { S: personPhone },
+      Email: { S: Email },
+      Name: { S: Name },
+      Owing: { S: Owing },
+      Phone: { S: Phone },
     };
 
-    fetch(`${API_URL}/${personEmail}`, {
+    fetch(`${API_URL}/${ContactId}`, {
       method: "PUT",
       body: JSON.stringify(updatedUserData),
       headers: {
@@ -299,11 +303,9 @@ function App({ signOut, user }) {
       .then((updatedItem) => {
         console.log("Item updated successfully", updatedItem);
 
-        // Update the list in dataThrow state
         setDataThrow((prevData) => {
-          // Map over the previous data and replace the updated item
           return prevData.map((item) => {
-            if (item.PersonEmail.S === updatedItem.PersonEmail.S) {
+            if (item.Email.S === updatedItem.Email.S) {
               return updatedItem;
             }
             return item;
@@ -323,48 +325,52 @@ function App({ signOut, user }) {
       });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+  
     const updatedData = {
-      userEmail: loggedInUserEmail,
-      PersonEmail: personEmail,
-      PersonName: personName,
-      PersonPhone: personPhone,
-      PersonOwing: personOwing,
+      ContactId: passedId,
+      Name: personName,
+      Email: personEmail,
+      Phone: personPhone,
+      Owing: personOwing,
     };
-
-    fetch(`${API_URL}/${personEmail}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(updatedData),
-    })
-      .then((response) => {
-        if (response.ok) {
-          console.log("Entry updated successfully");
-        } else {
-          console.error("Error updating entry");
-        }
-      })
-      .catch((error) => {
-        console.error("Network error:", error);
+  
+    try {
+      console.log(passedId);
+      console.log("ContactId:", passedId);
+      const response = await fetch(`${API_URL}/${passedId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedData),
       });
-
+  
+      if (response.ok) {
+        console.log("Entry updated successfully");
+      } else {
+        throw new Error("Error updating entry");
+      }
+    } catch (error) {
+      console.error("Network error:", error);
+    }
+  
+    // Clear the input fields and other state variables
     setPersonName("");
     setPersonPhone("");
     setPersonEmail("");
     setPersonOwing("");
     setIsEditing(false);
   };
-
+  
   const selectPerson = (id) => {
-    const selectingPerson = list.find((row) => row.id === id);
-    setPersonName(selectingPerson.personName);
-    setPersonOwing(selectingPerson.personOwing);
-    setPersonReceiptAmount(selectingPerson.personReceiptAmount);
+    const selectingPerson = list.find((contact) => contact.ContactId === id);
+    setPersonName(selectingPerson.Name);
+    setPersonOwing(selectingPerson.Owing);
+    setPersonReceiptAmount(selectingPerson.ReceiptAmount);
   };
-
+  
   // Used to send values to History component
   const [receipts, setReceipts] = useState(() => {
     const storedReceipts = localStorage.getItem("receipts");
@@ -553,6 +559,8 @@ function App({ signOut, user }) {
                 setLang={setLang}
                 loggedInUsername={loggedInUsername}
                 loggedInUserEmail={loggedInUserEmail}
+                passedId={passedId}
+                API_URL={API_URL}
               />
             }
           />
@@ -637,6 +645,7 @@ function App({ signOut, user }) {
                 setLang={setLang}
                 dataThrow={dataThrow}
                 setDataThrow={setDataThrow}
+                API_URL={API_URL}
               />
             }
           />
