@@ -30,7 +30,6 @@ import "rc-slider/assets/index.css";
 import "react-datepicker/dist/react-datepicker.css";
 
 export default function ReceiptInput({
-  API_URL,
   personName,
   personOwing,
   startDate,
@@ -100,6 +99,8 @@ export default function ReceiptInput({
   const [selected, setSelected] = useState(null);
   const [isMerchantNameFocused, setMerchantNameFocused] = useState(false);
   const [isInvoiceNumberFocused, setInvoiceNumberFocused] = useState(false);
+  const API_URL =
+    "https://48f95wy514.execute-api.us-east-1.amazonaws.com/prod/transaction";
 
   const [filledIn, setFilledIn] = useState(false);
   const handleMerchantNameFocus = () => {

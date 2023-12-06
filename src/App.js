@@ -241,6 +241,8 @@ function App({ signOut, user }) {
       Owing: owingValue,
       UserEmail: loggedInUserEmail, 
     };
+    
+    setAddPerson(false);
     try {
       const response = await fetch(API_URL, {
         method: "POST",
@@ -266,7 +268,6 @@ function App({ signOut, user }) {
       setPersonPhone("");
       setPersonEmail("");
       setPersonOwing("");
-      setAddPerson(false);
       setFormSubmitted(true);
   
     } catch (error) {
@@ -364,8 +365,8 @@ function App({ signOut, user }) {
     setIsEditing(false);
   };
   
-  const selectPerson = (id) => {
-    const selectingPerson = list.find((contact) => contact.ContactId === id);
+  const selectPerson = (ContactId) => {
+    const selectingPerson = dataThrow.find((contact) => contact.ContactId === ContactId);
     setPersonName(selectingPerson.Name);
     setPersonOwing(selectingPerson.Owing);
     setPersonReceiptAmount(selectingPerson.ReceiptAmount);
