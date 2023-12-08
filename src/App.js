@@ -398,8 +398,33 @@ function App({ signOut, user }) {
   useEffect(() => {
     localStorage.setItem("list", JSON.stringify(list));
   }, [list]);
+  const API_TRANSACTION =
+  "https://48f95wy514.execute-api.us-east-1.amazonaws.com/prod/transaction";
 
-  const addReceipt = (receipt) => {
+
+  const addReceipt = async (receipt) => {
+    console.log("this actually works");
+    try {
+      const response = await fetch(API_TRANSACTION, {
+        method: 'POST',
+        body: JSON.stringify(receipt),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to add receipt');
+      }
+  
+      console.log('Receipt added successfully');
+  
+      localStorage.removeItem('receipts');
+    } catch (error) {
+      console.error('Error adding receipt:', error);
+    }
+  };
+  /*const addReceipt = (receipt) => {
     setReceipts((prevReceipts) => {
       const newReceipts = [...prevReceipts, receipt];
       localStorage.setItem(
@@ -409,6 +434,7 @@ function App({ signOut, user }) {
       return newReceipts;
     });
   };
+  */
 
   return (
     <>

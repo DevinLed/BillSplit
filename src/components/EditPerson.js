@@ -1,7 +1,7 @@
 import React from "react";
 import { useState, useRef } from "react";
 import "./../index.css";
-import { IoSaveOutline } from "react-icons/io5";
+import { IoSaveOutline, IoCloseCircleOutline } from "react-icons/io5";
 import { AiOutlineDelete } from "react-icons/ai";
 import { CSSTransition } from "react-transition-group";
 import { API, graphqlOperation, Amplify } from "aws-amplify";
@@ -386,6 +386,20 @@ export default function EditPerson({
                   }}
                 >
                   <IoSaveOutline size={24} />
+                </label>
+              </div>
+              <div className="flex justify-center p-2">
+                <label
+                  className={
+                    theme === "dark"
+                      ? "flex w-fit flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-700 hover:no-underline"
+                      : "flex w-fit flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-800 hover:no-underline"
+                  }
+                  onClick={(e) => {
+                      setEditPerson(false);
+                  }}
+                >
+                  <IoCloseCircleOutline size={24} />
                 </label>
               </div>
             </div>
