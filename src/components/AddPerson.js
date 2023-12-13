@@ -22,6 +22,7 @@ export default function AddPerson({
   lang,
   setLang,
   loggedInUserEmail,
+  handleUpdate,
 }) {
   const [isValidName, setIsValidName] = useState(false);
   const [isValidPhoneNumber, setIsValidPhoneNumber] = useState(false);

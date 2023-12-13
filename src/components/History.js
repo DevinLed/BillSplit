@@ -1,114 +1,118 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import Header from "./Header";
 
-import { CSSTransition } from "react-transition-group";
-
-export default function History({ receipts, theme, lang, setLang }) {
+export default function History({ theme, lang }) {
   const { id } = useParams();
   const [selectedPerson, setSelectedPerson] = useState("");
+  const [transactions, setTransactions] = useState([]);
 
-  const filteredReceipts = useMemo(() => {
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("https://48f95wy514.execute-api.us-east-1.amazonaws.com/prod/transaction");
+        const data = await response.json();
+        setTransactions(data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const filteredTransactions = useMemo(() => {
     if (selectedPerson) {
-      return receipts.filter(
-        (receipt) => receipt.personName === selectedPerson
-      );
+      return transactions.filter((transaction) => transaction.personName === selectedPerson);
     } else {
-      return receipts;
+      return transactions;
     }
-  }, [receipts, selectedPerson]);
+  }, [transactions, selectedPerson]);
 
-  const receiptList = useMemo(() => {
-    return filteredReceipts
-      .slice(-10)
-      .reverse()
-      .map((receipt, index) => {
-        const startDate =
-          receipt.startDate instanceof Date
-            ? receipt.startDate.toLocaleDateString("en-US")
-            : "";
+  const transactionList = useMemo(() => {
+    return filteredTransactions.slice(-10).reverse().map((transaction, index) => {
+      const startDate =
+        transaction.startDate instanceof Date ? transaction.startDate.toLocaleDateString("en-US") : "";
 
-        return (
-          <div key={index} className="border-b border-gray-300 py-2 my-2 px-8">
-            <div>
-              <div className="flex justify-center items-center">
-                <p className="font-bold">{receipt.personName}</p>
-              </div>
-
-              <div className="flex justify-center items-center mt-2">
-                {receipt.merchantName && <p>{`${receipt.merchantName}`}</p>}
-              </div>
-
-              <div className="flex justify-center items-center mt-2">
-                <p className="text-sm">{startDate}</p>
-              </div>
-            </div>
-            <div className="flex justify-center items-center mt-2">
-              <p className="text-sm">
-                {receipt.selectedValue === "you"
-                  ? lang === "english"
-                    ? "You are Owed"
-                    : "On vous doit"
-                  : lang === "english"
-                  ? "You owe"
-                  : "Tu dois"}
-              </p>
-            </div>
+      return (
+        <div key={index} className="border-b border-gray-300 py-2 my-2 px-8">
+          <div>
             <div className="flex justify-center items-center">
-              <p className="font-bold">
-                $
-                {(
-                  parseFloat(receipt.personReceiptAmount) +
-                  parseFloat(receipt.taxActual)
-                ).toFixed(2)}
-              </p>
-            </div>
-
-            <div className="flex justify-center items-center">
-              {receipt.taxActual !== 0 && (
-                <p className="text-sm mt-2">
-                  {lang === "english" ? "Taxes: " : "Impôts: "}
-                  {`$${
-                    isNaN(receipt.taxActual)
-                      ? 0
-                      : Math.abs(parseFloat(receipt.taxActual)).toFixed(2)
-                  }`}
-                </p>
-              )}
+              <p className="font-bold">{transaction.personName}</p>
             </div>
 
             <div className="flex justify-center items-center mt-2">
-              <p className="text-sm">
-                {lang === "english" ? "Receipt Total" : "Total des reçus"}: $
-                {receipt.receiptTotal || 0}
-              </p>
+              {transaction.merchantName && <p>{`${transaction.merchantName}`}</p>}
             </div>
 
             <div className="flex justify-center items-center mt-2">
-              {receipt.invoiceNumber ? (
-                <div>
-                  <p className="text-sm mb-2">{`Invoice Number: ${receipt.invoiceNumber}`}</p>
-                </div>
-              ):""}
+              <p className="text-sm">{startDate}</p>
             </div>
           </div>
-        );
-      });
-  }, [filteredReceipts]);
+          <div className="flex justify-center items-center mt-2">
+            <p className="text-sm">
+              {transaction.selectedValue === "you"
+                ? lang === "english"
+                  ? "You are Owed"
+                  : "On vous doit"
+                : lang === "english"
+                ? "You owe"
+                : "Tu dois"}
+            </p>
+          </div>
+          <div className="flex justify-center items-center">
+            <p className="font-bold">
+              $
+              {(
+                parseFloat(transaction.personReceiptAmount) +
+                parseFloat(transaction.taxActual)
+              ).toFixed(2)}
+            </p>
+          </div>
 
-  const noReceiptsMessage = useMemo(() => {
-    if (filteredReceipts.length === 0) {
-      return <p>No receipts found.</p>;
+          <div className="flex justify-center items-center">
+            {transaction.taxActual !== 0 && (
+              <p className="text-sm mt-2">
+                {lang === "english" ? "Taxes: " : "Impôts: "}
+                {`$${
+                  isNaN(transaction.taxActual)
+                    ? 0
+                    : Math.abs(parseFloat(transaction.taxActual)).toFixed(2)
+                }`}
+              </p>
+            )}
+          </div>
+
+          <div className="flex justify-center items-center mt-2">
+            <p className="text-sm">
+              {lang === "english" ? "Receipt Total" : "Total des reçus"}: $
+              {transaction.receiptTotal || 0}
+            </p>
+          </div>
+
+          <div className="flex justify-center items-center mt-2">
+            {transaction.invoiceNumber ? (
+              <div>
+                <p className="text-sm mb-2">{`Invoice Number: ${transaction.invoiceNumber}`}</p>
+              </div>
+            ) : ""}
+          </div>
+        </div>
+      );
+    });
+  }, [filteredTransactions]);
+
+  const noTransactionsMessage = useMemo(() => {
+    if (filteredTransactions.length === 0) {
+      return <p>No transactions found.</p>;
     }
     return null;
-  }, [filteredReceipts]);
+  }, [filteredTransactions]);
 
   const personNames = useMemo(() => {
-    const uniquePersons = Array.from(
-      new Set(receipts.map((receipt) => receipt.personName))
-    );
+    const uniquePersons = Array.from(new Set(transactions.map((transaction) => transaction.personName)));
     return uniquePersons;
-  }, [receipts]);
+  }, [transactions]);
 
   const handlePersonNameChange = (event) => {
     setSelectedPerson(event.target.value);
@@ -155,7 +159,7 @@ export default function History({ receipts, theme, lang, setLang }) {
               </select>
             </div>
 
-            {receiptList.length > 0 ? receiptList : noReceiptsMessage}
+            {transactionList.length > 0 ? transactionList : noTransactionsMessage}
           </div>
         </div>
       </main>

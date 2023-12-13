@@ -1195,7 +1195,7 @@ export default function ReceiptInput({
       <div>
         <CSSTransition
           in={pictureError}
-          timeout={500} // Adjust the duration of the transition as needed
+          timeout={500}
           classNames="fade"
           unmountOnExit
         >
