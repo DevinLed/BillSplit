@@ -29,6 +29,8 @@ export default function EditPerson({
   passedId,
   setPassedId,
   API_URL,
+  updateDataHandler,
+  updateEditHandler,
 }) {
   const myElementRef = useRef(null);
   const handleResetBalance = () => {
@@ -120,6 +122,7 @@ export default function EditPerson({
           );
           setDataThrow(updatedData);
           setEditPerson(false);
+          updateEditHandler();
         } else {
           console.error("Failed to delete person");
         }
@@ -127,6 +130,7 @@ export default function EditPerson({
       .catch((error) => {
         console.error("Error deleting person:", error);
       });
+      
   };
 
   const handlePhoneNumberChange = async (

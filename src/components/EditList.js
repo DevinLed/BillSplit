@@ -43,6 +43,7 @@ export default function EditList({
   setDataThrow,
   passedId,
   setPassedId,
+  updateDataHandler,
 }) {
   const API_URL =
     "https://48f95wy514.execute-api.us-east-1.amazonaws.com/prod/contacts";
@@ -60,22 +61,19 @@ export default function EditList({
       return null;
     }
   };
-
+  const fetchData = async () => {
+    try {
+      const response = await fetch(API_URL);
+      const data = await response.json();
+      setDataThrow(data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+  const updateEditHandler = () => {
+    fetchData();
+  };
   useEffect(() => {
-    // Function to fetch data
-    const fetchData = async () => {
-      try {
-        const response = await fetch(API_URL);
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        const data = await response.json();
-        setDataThrow(data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
     fetchData();
   }, []);
   return (
@@ -208,6 +206,8 @@ export default function EditList({
             setDataThrow={setDataThrow}
             loggedInUserEmail={loggedInUserEmail}
             API_URL={API_URL}
+            updateDataHandler={updateDataHandler}
+            updateEditHandler={updateEditHandler}
           ></EditPerson>
         </CSSTransition>
       </main>

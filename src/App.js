@@ -129,19 +129,22 @@ function App({ signOut, user }) {
   }, [loggedInUsername]);
 
   const [dataThrow, setDataThrow] = useState([]);
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(API_URL);
-        const data = await response.json();
-        setDataThrow(data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-  
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch(API_URL);
+      const data = await response.json();
+      setDataThrow(data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+  const updateDataHandler = () => {
     fetchData();
-  }, [dataThrow]);
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
   const [combinedArray, setCombinedArray] = useState([]);
 
   const [obtainedInfo, setObtainedInfo] = useState([]);
@@ -172,26 +175,7 @@ function App({ signOut, user }) {
 
   // used to update values of balance for contacts
 
-  const addNum = (id, val, val2) => {
-    setList((prevList) => {
-      const newList = prevList.map((item) => {
-        if (item.id === id) {
-          const a = parseFloat(item.personOwing, 0);
-          const b = parseFloat(val);
-          const c = parseFloat(val2);
-          const prevalue = a + b;
-          const value = prevalue + c;
-          return { ...item, personOwing: parseFloat(value).toFixed(2) };
-        }
-        return item;
-      });
-      localStorage.setItem("list", JSON.stringify(newList));
-      return newList;
-    });
-    setDisplayAdd(true);
-    console.log("this is to add");
-  };
-
+  
   const editRow = (ContactId) => {
     const selectedPerson = dataThrow.find(
       (item) => item.ContactId === ContactId
@@ -203,7 +187,45 @@ function App({ signOut, user }) {
     setPassedId(selectedPerson.ContactId);
     setEditPerson(true);
   };
-
+  const updateOwingInBackend = async (contactId, newOwing) => {
+    try {
+      const response = await fetch(`${API_URL}/${contactId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ Owing: newOwing }),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Error updating Owing amount');
+      }
+    } catch (error) {
+      console.error('Network error:', error);
+    }
+  };
+  
+  const addNum = (id, val, val2) => {
+    setList((prevList) => {
+      const newList = prevList.map((item) => {
+        const a = parseFloat(item.personOwing, 0);
+        console.log("item.personOwing:", item.personOwing, "val:", val, "val2:", val2);
+        const b = parseFloat(val);
+        const c = parseFloat(val2);
+        const prevalue = a + b;
+        const value = prevalue + c;
+        console.log("value:",value);
+  
+        updateOwingInBackend(item.id, parseFloat(value).toFixed(2));
+  
+        return { ...item, personOwing: parseFloat(value).toFixed(2) };
+      });
+  
+      setDisplayAdd(true);
+      console.log('this is to add');
+      return newList;
+    });
+  };
   const subNum = (id, val, val2) => {
     setList((prevList) => {
       const newList = prevList.map((item) => {
@@ -213,16 +235,20 @@ function App({ signOut, user }) {
           const c = parseFloat(val2);
           const prevalue = a - b;
           const value = prevalue - c;
+  
+          updateOwingInBackend(id, parseFloat(value).toFixed(2));
+  
           return { ...item, personOwing: parseFloat(value).toFixed(2) };
         }
         return item;
       });
-      localStorage.setItem("list", JSON.stringify(newList));
+  
+      setDisplayAdd(false);
+      console.log('this is to sub');
       return newList;
     });
-    setDisplayAdd(false);
-    console.log("this is to sub");
   };
+  
 
   // Handler for full reset of tables.
   const handleResetCombinedArray = () => {
@@ -269,6 +295,7 @@ function App({ signOut, user }) {
       setPersonEmail("");
       setPersonOwing("");
       setFormSubmitted(true);
+      updateDataHandler();
   
     } catch (error) {
       console.error("Error creating item:", error);
@@ -320,6 +347,7 @@ function App({ signOut, user }) {
         setPersonOwing("");
         setSelectedValue("");
         setIsEditing(false);
+        updateDataHandler();
       })
       .catch((error) => {
         console.error("Error updating item:", error);
@@ -338,8 +366,6 @@ function App({ signOut, user }) {
     };
   
     try {
-      console.log(passedId);
-      console.log("ContactId:", passedId);
       const response = await fetch(`${API_URL}/${passedId}`, {
         method: "PUT",
         headers: {
@@ -363,6 +389,7 @@ function App({ signOut, user }) {
     setPersonEmail("");
     setPersonOwing("");
     setIsEditing(false);
+    updateDataHandler();
   };
   
   const selectPerson = (ContactId) => {
@@ -588,6 +615,7 @@ function App({ signOut, user }) {
                 loggedInUserEmail={loggedInUserEmail}
                 passedId={passedId}
                 API_URL={API_URL}
+                updateDataHandler={updateDataHandler}
               />
             }
           />
