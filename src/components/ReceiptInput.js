@@ -27,6 +27,7 @@ import "react-datepicker/dist/react-datepicker.css";
 
 export default function ReceiptInput({
   personName,
+  personEmail,
   personOwing,
   startDate,
   setStartDate,
@@ -62,9 +63,13 @@ export default function ReceiptInput({
   handleResetCombinedArray,
   obtainedInfo,
   setObtainedInfo,
+  loggedInUserEmail,
+  additionValue,  
 }) {
   registerLocale("en", en);
   registerLocale("fr", fr);
+  const [payerId,setPayerId] = useState('');
+  const [debtorId,setDebtorId] = useState('');
   const {ContactId} = useParams();
   const [pictureError, setPictureError] = useState(false);
   const [submissionError, setSubmissionError] = useState(true);
@@ -91,8 +96,6 @@ export default function ReceiptInput({
   const [splitTotal, setSplitTotal] = useState(0);
   const [themTotal, setThemTotal] = useState(0);
   const [selected, setSelected] = useState(null);
-  const [isMerchantNameFocused, setMerchantNameFocused] = useState(false);
-  const [isInvoiceNumberFocused, setInvoiceNumberFocused] = useState(false);
   const API_URL =
     "https://48f95wy514.execute-api.us-east-1.amazonaws.com/prod/transaction";
 
@@ -281,7 +284,7 @@ export default function ReceiptInput({
     let splitValue = parseFloat(splitPictureTotal) / 2;
     let themValue = parseFloat(themPictureTotal);
     let youValue = parseFloat(youPictureTotal);
-
+     
     if (selectedValue === "you") {
       setPersonReceiptAmount(splitValue + themValue);
     } else if (selectedValue === "them") {
@@ -294,6 +297,8 @@ export default function ReceiptInput({
   const handleHistorySubmit = () => {
     const newReceipt = {
       personName,
+      personEmail,
+      loggedInUserEmail,
       personOwing,
       personReceiptAmount,
       taxActual,

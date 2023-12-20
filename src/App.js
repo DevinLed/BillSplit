@@ -201,10 +201,10 @@ function App({ signOut, user }) {
           const prevalue = a + b;
           const value = prevalue + c;
           setAdditionValue(value);
+          console.log("value?", b);
           updateOwingInBackend(ContactId, item.Owing, (parseFloat(value).toFixed(2)));
           return { ...item, Owing: parseFloat(value).toFixed(2) };
         }
-  
         return item;
       });
   
@@ -223,11 +223,6 @@ function App({ signOut, user }) {
           const c = parseFloat(val2);
           const prevalue = a - b;
           const value = prevalue - c;
-          console.log("a is coming up as:", a);
-          console.log("b is coming up as:", b);
-          console.log("c is coming up as:", c);
-          console.log("prevalue is coming up as:", prevalue);
-          console.log("value is coming up as:", value);
           setAdditionValue(value);
           updateSubOwingInBackend(ContactId, item.Owing, (parseFloat(value).toFixed(2)));
           return { ...item, Owing: parseFloat(value).toFixed(2) };
@@ -475,12 +470,11 @@ function App({ signOut, user }) {
   "https://48f95wy514.execute-api.us-east-1.amazonaws.com/prod/transaction";
 
 
-  const addReceipt = async (receipt) => {
-    console.log("this actually works");
+  const addReceipt = async (newReceipt) => {
     try {
       const response = await fetch(API_TRANSACTION, {
         method: 'POST',
-        body: JSON.stringify(receipt),
+        body: JSON.stringify(newReceipt),
         headers: {
           'Content-Type': 'application/json',
         },
@@ -497,18 +491,6 @@ function App({ signOut, user }) {
       console.error('Error adding receipt:', error);
     }
   };
-  /*const addReceipt = (receipt) => {
-    setReceipts((prevReceipts) => {
-      const newReceipts = [...prevReceipts, receipt];
-      localStorage.setItem(
-        "receipts",
-        JSON.stringify(newReceipts.map(JSON.stringify))
-      );
-      return newReceipts;
-    });
-  };
-  */
-
   return (
     <>
       <div className={`App ${theme}`}>
@@ -548,6 +530,8 @@ function App({ signOut, user }) {
                 setCombinedTotal={setCombinedTotal}
                 personName={personName}
                 personOwing={personOwing}
+                personEmail={personEmail}
+                loggedInUserEmail={loggedInUserEmail}
                 startDate={startDate}
                 setStartDate={setStartDate}
                 merchantName={merchantName}
@@ -586,6 +570,7 @@ function App({ signOut, user }) {
                 setHistoryData={setHistoryData}
                 obtainedInfo={obtainedInfo}
                 setObtainedInfo={setObtainedInfo}
+                additionValue={additionValue}
               />
             }
           />
