@@ -149,6 +149,7 @@ function App({ signOut, user }) {
 
   const [obtainedInfo, setObtainedInfo] = useState([]);
   // Calendar for manual receipt entry
+  const [additionValue, setAdditionValue] = useState(0);
   const [merchantName, setMerchantName] = useState("");
   const [invoiceNumber, setInvoiceNumber] = useState("");
   const [startDate, setStartDate] = useState(new Date());
@@ -187,38 +188,24 @@ function App({ signOut, user }) {
     setPassedId(selectedPerson.ContactId);
     setEditPerson(true);
   };
-  const updateOwingInBackend = async (contactId, newOwing) => {
-    try {
-      const response = await fetch(`${API_URL}/${contactId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ Owing: newOwing }),
-      });
+
   
-      if (!response.ok) {
-        throw new Error('Error updating Owing amount');
-      }
-    } catch (error) {
-      console.error('Network error:', error);
-    }
-  };
-  
-  const addNum = (id, val, val2) => {
-    setList((prevList) => {
+  const addNum = (ContactId, val, val2) => {
+    setDataThrow((prevList) => {
       const newList = prevList.map((item) => {
-        const a = parseFloat(item.personOwing, 0);
-        console.log("item.personOwing:", item.personOwing, "val:", val, "val2:", val2);
-        const b = parseFloat(val);
-        const c = parseFloat(val2);
-        const prevalue = a + b;
-        const value = prevalue + c;
-        console.log("value:",value);
+        if (item.ContactId === ContactId) {
+          const a = parseFloat(item.Owing);
+
+          const b = parseFloat(val);
+          const c = parseFloat(val2);
+          const prevalue = a + b;
+          const value = prevalue + c;
+          setAdditionValue(value);
+          updateOwingInBackend(ContactId, item.Owing, (parseFloat(value).toFixed(2)));
+          return { ...item, Owing: parseFloat(value).toFixed(2) };
+        }
   
-        updateOwingInBackend(item.id, parseFloat(value).toFixed(2));
-  
-        return { ...item, personOwing: parseFloat(value).toFixed(2) };
+        return item;
       });
   
       setDisplayAdd(true);
@@ -226,20 +213,26 @@ function App({ signOut, user }) {
       return newList;
     });
   };
-  const subNum = (id, val, val2) => {
-    setList((prevList) => {
+  
+  const subNum = (ContactId, val, val2) => {
+    setDataThrow((prevList) => {
       const newList = prevList.map((item) => {
-        if (item.id === id) {
-          const a = parseFloat(item.personOwing, 0);
-          const b = parseFloat(val);
+        if (item.ContactId === ContactId) {
+          const a = parseFloat(item.Owing);
+            const b = parseFloat(val);
           const c = parseFloat(val2);
           const prevalue = a - b;
           const value = prevalue - c;
-  
-          updateOwingInBackend(id, parseFloat(value).toFixed(2));
-  
-          return { ...item, personOwing: parseFloat(value).toFixed(2) };
+          console.log("a is coming up as:", a);
+          console.log("b is coming up as:", b);
+          console.log("c is coming up as:", c);
+          console.log("prevalue is coming up as:", prevalue);
+          console.log("value is coming up as:", value);
+          setAdditionValue(value);
+          updateSubOwingInBackend(ContactId, item.Owing, (parseFloat(value).toFixed(2)));
+          return { ...item, Owing: parseFloat(value).toFixed(2) };
         }
+  
         return item;
       });
   
@@ -247,6 +240,57 @@ function App({ signOut, user }) {
       console.log('this is to sub');
       return newList;
     });
+  };
+  
+  const updateOwingInBackend = async (ContactId, Owing, additionValue) => {
+    console.log(Owing, additionValue);
+    const updatedData = {
+      ContactId: ContactId,
+      Name: personName,
+      Phone: personPhone,
+      Email: personEmail,
+      Owing: additionValue,
+    };
+    try {
+      const response = await fetch(`${API_URL}/${ContactId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedData),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Error updating contact');
+      }
+    } catch (error) {
+      console.error('Network error:', error);
+    }
+  };
+  const updateSubOwingInBackend = async (ContactId, Owing, additionValue) => {
+    console.log(Owing, additionValue);
+    const updatedData = {
+      ContactId: ContactId,
+      Name: personName,
+      Phone: personPhone,
+      Email: personEmail,
+      Owing: additionValue,
+    };
+    try {
+      const response = await fetch(`${API_URL}/${ContactId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedData),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Error updating contact');
+      }
+    } catch (error) {
+      console.error('Network error:', error);
+    }
   };
   
 
@@ -395,6 +439,8 @@ function App({ signOut, user }) {
   const selectPerson = (ContactId) => {
     const selectingPerson = dataThrow.find((contact) => contact.ContactId === ContactId);
     setPersonName(selectingPerson.Name);
+    setPersonPhone(selectingPerson.Phone);
+    setPersonEmail(selectingPerson.Email);
     setPersonOwing(selectingPerson.Owing);
     setPersonReceiptAmount(selectingPerson.ReceiptAmount);
   };
@@ -495,7 +541,7 @@ function App({ signOut, user }) {
           <Route path="/" element={<Navigate to="/LandingPage" />} />
 
           <Route
-            path="/ReceiptInput/:id"
+            path="/ReceiptInput/:ContactId"
             element={
               <ReceiptInput
                 combinedTotal={combinedTotal}

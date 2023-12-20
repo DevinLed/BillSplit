@@ -11,7 +11,6 @@ import ReceiptTable from "./ReceiptTable";
 import { Link } from "react-router-dom";
 import "../darkMode.css";
 import {
-  IoCameraSharp,
   IoCameraOutline,
   IoCardOutline,
   IoExitOutline,
@@ -23,9 +22,6 @@ import {
 import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
 import { CSSTransition } from "react-transition-group";
-
-import UseAnimations from "react-useanimations";
-import github from "react-useanimations/lib/github";
 import "rc-slider/assets/index.css";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -42,7 +38,6 @@ export default function ReceiptInput({
   setPersonReceiptAmount,
   addNum,
   subNum,
-  value,
   addReceipt,
   selectedValue,
   setSelectedValue,
@@ -62,7 +57,6 @@ export default function ReceiptInput({
   theme,
   taxRate,
   lang,
-  setLang,
   combinedArray,
   setCombinedArray,
   handleResetCombinedArray,
@@ -71,6 +65,7 @@ export default function ReceiptInput({
 }) {
   registerLocale("en", en);
   registerLocale("fr", fr);
+  const {ContactId} = useParams();
   const [pictureError, setPictureError] = useState(false);
   const [submissionError, setSubmissionError] = useState(true);
   const [selectPersonReceipt, setSelectPersonReceipt] = useState(true);
@@ -86,7 +81,6 @@ export default function ReceiptInput({
   const [showRedoButton, setShowRedoButton] = useState(false);
   const [displayPictureInfo, setDisplayPictureInfo] = useState(false);
   const [isAddedManually, setIsAddedManually] = useState(false);
-  const { id } = useParams();
   const [items, setItems] = useState([]);
   const [name, setName] = useState("");
   const [amount, setAmount] = useState("");
@@ -103,20 +97,13 @@ export default function ReceiptInput({
     "https://48f95wy514.execute-api.us-east-1.amazonaws.com/prod/transaction";
 
   const [filledIn, setFilledIn] = useState(false);
-  const handleMerchantNameFocus = () => {
-    setMerchantNameFocused(true);
-  };
-
-  const handleInvoiceNumberFocus = () => {
-    setInvoiceNumberFocused(true);
-  };
   const resetCombinedArray = () => {
     setCombinedArray([]);
   };
 
   const handleScroll = () => {
     const scrollAmount = window.innerHeight * 1.5;
-    const duration = 500; // Adjust the duration (in milliseconds) as needed
+    const duration = 500; 
     const start = window.scrollY;
     const startTime = performance.now();
 
@@ -130,7 +117,6 @@ export default function ReceiptInput({
       }
     }
 
-    // Easing function for smoother scrolling
     function easeInOutQuad(t, b, c, d) {
       t /= d / 2;
       if (t < 1) return (c / 2) * t * t + b;
@@ -334,11 +320,11 @@ export default function ReceiptInput({
   const taxActual = parseFloat(pictureTax) * parseFloat(taxOwingPerc);
 
   // Used to update the balance of the person you are splitting receipt with
-  const getFinalTotal = () => {
+  const getFinalTotal = () => {;
     if (selectedValue === "you") {
-      addNum(id, personReceiptAmount, taxActual);
+      addNum(ContactId, personReceiptAmount, taxActual);
     } else {
-      subNum(id, personReceiptAmount, taxActual);
+      subNum(ContactId, personReceiptAmount, taxActual);
     }
   };
 
@@ -671,7 +657,7 @@ export default function ReceiptInput({
                   }
                 >
                   <div className="m-2 mb-4 flex flex-col justify-center items-center sm:flex-row">
-                    <Link to={`/ReceiptInput/${id}`}>
+                    <Link to={`/ReceiptInput/${ContactId}`}>
                       <label
                         className={
                           "flex h-24 w-28 flex-col items-center justify-center rounded-lg border border-gray-200 py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline " +
@@ -1097,7 +1083,7 @@ export default function ReceiptInput({
                             }
                           >
                             <div className="max-w-20 m-2 mb-4 flex flex-col justify-center sm:flex-row">
-                              <Link to={`/ReceiptInput/${id}`}>
+                              <Link to={`/ReceiptInput/${ContactId}`}>
                                 <button
                                   className={
                                     "flex h-24 w-fit flex-col items-center justify-center rounded-lg border border-gray-200 py-4 px-10 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline " +
@@ -1125,7 +1111,7 @@ export default function ReceiptInput({
                                       setShowTable(true);
                                       setShowCameraImage(false);
 
-                                      window.location.href = `/BillSplit#/ReceiptInput/${id}`;
+                                      window.location.href = `/BillSplit#/ReceiptInput/${ContactId}`;
                                     }
                                   }}
                                 >

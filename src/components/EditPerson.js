@@ -4,7 +4,6 @@ import "./../index.css";
 import { IoSaveOutline, IoCloseCircleOutline } from "react-icons/io5";
 import { AiOutlineDelete } from "react-icons/ai";
 import { CSSTransition } from "react-transition-group";
-import { API, graphqlOperation, Amplify } from "aws-amplify";
 
 export default function EditPerson({
   personName,
