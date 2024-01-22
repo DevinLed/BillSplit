@@ -1,19 +1,23 @@
 {
   "files": {
-    "main.css": "/BillSplit/static/css/main.a426a950.css",
-    "main.js": "/BillSplit/static/js/main.a373819d.js",
+    "main.css": "/BillSplit/static/css/main.6712e00a.css",
+    "main.js": "/BillSplit/static/js/main.74c3c692.js",
     "static/media/DivvySample.gif": "/BillSplit/static/media/DivvySample.caf0bdbd0ccb7aa0349e.gif",
     "static/media/Historyphoneoutline.png": "/BillSplit/static/media/Historyphoneoutline.f6eb387df3f764753806.png",
     "static/media/Receiptphoneoutline.png": "/BillSplit/static/media/Receiptphoneoutline.121c12b21fd4b2908ef8.png",
     "static/media/Historydarkoutline.png": "/BillSplit/static/media/Historydarkoutline.3a4d8773216e1cb10c37.png",
     "static/media/phoneoutline.png": "/BillSplit/static/media/phoneoutline.3a4d8773216e1cb10c37.png",
     "static/media/loading.gif": "/BillSplit/static/media/loading.ba4ecef0459ee75c99b2.gif",
+    "static/media/icomoon.svg?yjc9oj": "/BillSplit/static/media/icomoon.dd29f727badc9333c79f.svg",
+    "static/media/icomoon.eot?yjc9oj": "/BillSplit/static/media/icomoon.f832b9ce6a4c7823513d.eot",
+    "static/media/icomoon.woff?yjc9oj": "/BillSplit/static/media/icomoon.baa8c3df47645e50ef7f.woff",
+    "static/media/icomoon.ttf?yjc9oj": "/BillSplit/static/media/icomoon.bbc8a02e138d003f16fa.ttf",
     "index.html": "/BillSplit/index.html",
-    "main.a426a950.css.map": "/BillSplit/static/css/main.a426a950.css.map",
-    "main.a373819d.js.map": "/BillSplit/static/js/main.a373819d.js.map"
+    "main.6712e00a.css.map": "/BillSplit/static/css/main.6712e00a.css.map",
+    "main.74c3c692.js.map": "/BillSplit/static/js/main.74c3c692.js.map"
   },
   "entrypoints": [
-    "static/css/main.a426a950.css",
-    "static/js/main.a373819d.js"
+    "static/css/main.6712e00a.css",
+    "static/js/main.74c3c692.js"
   ]
 }
