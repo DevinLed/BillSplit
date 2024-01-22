@@ -30,6 +30,7 @@ export default function EditPerson({
   API_URL,
   updateDataHandler,
   updateEditHandler,
+  user,
 }) {
   const myElementRef = useRef(null);
   const handleResetBalance = () => {
@@ -101,10 +102,12 @@ export default function EditPerson({
     )}-${numbersOnly.slice(6, 10)}`;
   };
 
-  const handleDeletePerson = (ContactId, passedId) => {
-    const url = `${API_URL}/${ContactId}`;
+  const handleDeletePerson = (ContactId, passedId, UserEmail) => {
+    console.log("HandleDeletePerson - UserEmail?", user.attributes.email);
+    const url = `${API_URL}/${ContactId}/${user.attributes.email}`;
     console.log(url);
-    console.log(ContactId);
+    console.log("HandleDeletePerson - ContactId?",ContactId);
+    console.log("HandleDeletePerson - UserEmail?", user.attributes.email);
 
     fetch(url, {
       method: "DELETE",

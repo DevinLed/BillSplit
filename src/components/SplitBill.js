@@ -37,10 +37,10 @@ export default function SplitBill({
   loggedInUsername,
   loggedInUserEmail,
   dataThrow,
-  API_URL
+  API_URL,
 }) {
   const [selectPersonList, setSelectPersonList] = useState(true);
-  
+
   return (
     <>
       <main
@@ -51,48 +51,46 @@ export default function SplitBill({
         <div className="flex flex-col items-center justify-center">
           {/* Table generator for people added */}
           <ul className="m-0 py-1 w-3/4">
-          {dataThrow
-  .filter((item) => item.UserEmail === loggedInUserEmail)
-  .map((item, index) => (
-    <React.Fragment key={index}>
-      {item.Name ? (
-        <Link
-        to={`/ReceiptInput/${item.ContactId}`}
-        onClick={() => selectPerson(item.ContactId)}
-          className="no-underline py-1"
-        >
-          <li
-            className={
-              "list-group-item flex justify-between m-1 p-2 rounded-lg shadow-sm " +
-              (theme === "dark"
-                ? "bg-gray-800 text-white"
-                : "bg-white text-gray-800")
-            }
-          >
-            <div className="flex items-center">
-              <Avatar name={item.Name} size={32} round />
-              <span className="ml-1">
-                {item.Name.length > 8
-                  ? `${item.Name.substring(0, 8)}...`
-                  : item.Name}
-              </span>
-            </div>
-            <span
-              className={`badge badge-pill rounded px-1 pt-2 ml-2 text-xs ${
-                parseFloat(item.Owing) < 0
-                  ? "bg-red-500 text-black"
-                  : "bg-blue-500 text-white"
-              }`}
-            >
-              ${parseFloat(item.Owing).toFixed(2)}
-            </span>
-          </li>
-        </Link>
-      ) : null}
-    </React.Fragment>
-  ))}
-
-
+            {dataThrow
+              .filter((item) => item.UserEmail === loggedInUserEmail)
+              .map((item, index) => (
+                <React.Fragment key={index}>
+                  {item.Name ? (
+                    <Link
+                      to={`/ReceiptInput/${item.ContactId}`}
+                      onClick={() => selectPerson(item.ContactId)}
+                      className="no-underline py-1"
+                    >
+                      <li
+                        className={
+                          "list-group-item flex justify-between m-1 p-2 rounded-lg shadow-sm " +
+                          (theme === "dark"
+                            ? "bg-gray-800 text-white"
+                            : "bg-white text-gray-800")
+                        }
+                      >
+                        <div className="flex items-center">
+                          <Avatar name={item.Name} size={32} round />
+                          <span className="ml-1">
+                            {item.Name.length > 8
+                              ? `${item.Name.substring(0, 8)}...`
+                              : item.Name}
+                          </span>
+                        </div>
+                        <span
+                          className={`badge badge-pill rounded px-1 pt-2 ml-2 text-xs ${
+                            parseFloat(item.Owing) < 0
+                              ? "bg-red-500 text-black"
+                              : "bg-blue-500 text-white"
+                          }`}
+                        >
+                          ${parseFloat(item.Owing).toFixed(2)}
+                        </span>
+                      </li>
+                    </Link>
+                  ) : null}
+                </React.Fragment>
+              ))}
           </ul>
 
           <label

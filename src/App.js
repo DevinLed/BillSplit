@@ -28,6 +28,8 @@ import "./index.css";
 import ReceiptTable from "./components/ReceiptTable";
 import { Amplify, API, graphqlOperation, Auth, Storage } from "aws-amplify";
 import awsconfig from "./aws-exports";
+import NotificationAPIClient from "notificationapi-js-client-sdk";
+import NotificationAPIComponent from "./components/NotificationAPI";
 Amplify.configure(awsconfig);
 
 function App({ signOut, user }) {
@@ -113,7 +115,7 @@ function App({ signOut, user }) {
   const [youPictureTotal, setYouPictureTotal] = useState(0);
   const [splitPictureTotal, setSplitPictureTotal] = useState(0);
   const [themPictureTotal, setThemPictureTotal] = useState(0);
-
+  const [loggedInUserID, setLoggedInUserID] = useState("");
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [loggedInUsername, setLoggedInUsername] = useState(""); // Set the logged-in name
 
@@ -125,6 +127,8 @@ function App({ signOut, user }) {
     Auth.currentAuthenticatedUser().then((user) => {
       setLoggedInUsername(user.attributes.name);
       setLoggedInUserEmail(user.attributes.email);
+      setLoggedInUserID(user.attributes.sub);
+      console.log("user attributes?", user.attributes);
     });
   }, [loggedInUsername]);
 
@@ -177,6 +181,7 @@ function App({ signOut, user }) {
   // used to update values of balance for contacts
 
   
+  const currentUserName = user.attributes.name;
   const editRow = (ContactId) => {
     const selectedPerson = dataThrow.find(
       (item) => item.ContactId === ContactId
@@ -298,13 +303,14 @@ function App({ signOut, user }) {
     e.preventDefault();
   
     const owingValue = personOwing !== "" ? personOwing : 0;
-
+    console.log("current UserName?", currentUserName);
     const itemData = {
       Name: personName,
       Email: personEmail,
       Phone: personPhone,
       Owing: owingValue,
       UserEmail: loggedInUserEmail, 
+      UserName: currentUserName,
     };
     
     setAddPerson(false);
@@ -323,8 +329,15 @@ function App({ signOut, user }) {
       }
   
       const newItem = await response.json();
-      console.log("Item created successfully", newItem);
-  
+      console.log("Item created successfully 123", newItem);
+       
+      if (newItem.contactAlreadyExists) {
+        console.log("contactAlreadyExists?", newItem.contactAlreadyExists)
+        alert("Contact already had you added! Owing value has been updated from their input history");
+      }
+      else{        
+        console.log("Contact didn't exist, starting owing balance tracker.");
+      }
       // Update local state with the new item
       setDataThrow((prevData) => [...prevData, newItem]);
   
@@ -342,7 +355,7 @@ function App({ signOut, user }) {
   };
   
 
-  const handleEditSubmit = (e, Name, Email, Phone, Owing, ContactId) => {
+  const handleEditSubmit = (e, Name, Email, Phone, Owing, ContactId, UserName) => {
     e.preventDefault();
 
     const updatedUserData = {
@@ -351,9 +364,10 @@ function App({ signOut, user }) {
       Name: { S: Name },
       Owing: { S: Owing },
       Phone: { S: Phone },
+      UserName: { S: UserName },
     };
 
-    fetch(`${API_URL}/${ContactId}`, {
+    fetch(`${API_URL}/${ContactId}/${user.attributes.email}`, {
       method: "PUT",
       body: JSON.stringify(updatedUserData),
       headers: {
@@ -402,9 +416,12 @@ function App({ signOut, user }) {
       Email: personEmail,
       Phone: personPhone,
       Owing: personOwing,
+      UserEmail: loggedInUserEmail, 
+      UserName: currentUserName,
     };
   
     try {
+      console.log("attempting to update contact...");
       const response = await fetch(`${API_URL}/${passedId}`, {
         method: "PUT",
         headers: {
@@ -412,7 +429,7 @@ function App({ signOut, user }) {
         },
         body: JSON.stringify(updatedData),
       });
-  
+      console.log("this is the response from updating: ", response);
       if (response.ok) {
         console.log("Entry updated successfully");
       } else {
@@ -494,6 +511,7 @@ function App({ signOut, user }) {
   return (
     <>
       <div className={`App ${theme}`}>
+      <NotificationAPIComponent loggedInUserEmail={loggedInUserEmail}/>
         <Routes>
           <Route
             path="/Home"
@@ -613,6 +631,7 @@ function App({ signOut, user }) {
             path="/EditList"
             element={
               <EditList
+                user={user}
                 dataThrow={dataThrow}
                 setDataThrow={setDataThrow}
                 handleEditSubmit={handleEditSubmit}
@@ -732,6 +751,7 @@ function App({ signOut, user }) {
                 dataThrow={dataThrow}
                 setDataThrow={setDataThrow}
                 API_URL={API_URL}
+                user={user}
               />
             }
           />

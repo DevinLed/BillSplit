@@ -44,6 +44,7 @@ export default function EditList({
   passedId,
   setPassedId,
   updateDataHandler,
+  user,
 }) {
   const API_URL =
     "https://48f95wy514.execute-api.us-east-1.amazonaws.com/prod/contacts";
@@ -208,6 +209,7 @@ export default function EditList({
             API_URL={API_URL}
             updateDataHandler={updateDataHandler}
             updateEditHandler={updateEditHandler}
+            user={user}
           ></EditPerson>
         </CSSTransition>
       </main>
