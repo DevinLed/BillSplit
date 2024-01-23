@@ -7,14 +7,15 @@ const NotificationAPIComponent = memo((props) => {
   useEffect(() => {
     const notificationapi = new NotificationAPI({
       clientId: '49foj0su1nftfvk9p0rvmh31s1',
-      userId: props.loggedInUserEmail,
+      userId: props.userId,
+      markAsReadMode: "MANUAL_AND_CLICK",
     });
-    console.log("props?", props.loggedInUserEmail);
+    console.log("props?", props.userId);
     notificationapi.showInApp({
       root: 'CONTAINER_DIV_ID',
       popupPosition: PopupPosition.BottomRight
     });
-  }, [props.loggedInUserEmail]);
+  }, [props.userId]);
 
   return <div id="CONTAINER_DIV_ID"></div>;
 });

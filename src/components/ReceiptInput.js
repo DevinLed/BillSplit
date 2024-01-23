@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect, onBlur, useCamera } from "react";
 import { registerLocale } from "react-datepicker";
 import en from "date-fns/locale/en-US";
 import fr from "date-fns/locale/fr";
-import { useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";   
 import { Camera } from "react-html5-camera-photo";
 import "react-html5-camera-photo/build/css/index.css";
 import loading from "../img/loading.gif";

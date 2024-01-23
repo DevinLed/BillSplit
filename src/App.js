@@ -511,7 +511,7 @@ function App({ signOut, user }) {
   return (
     <>
       <div className={`App ${theme}`}>
-      <NotificationAPIComponent loggedInUserEmail={loggedInUserEmail}/>
+      <NotificationAPIComponent userId={loggedInUserEmail}/>
         <Routes>
           <Route
             path="/Home"
