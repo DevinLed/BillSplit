@@ -250,6 +250,8 @@ function App({ signOut, user }) {
       Phone: personPhone,
       Email: personEmail,
       Owing: additionValue,
+      UserEmail: loggedInUserEmail, 
+      UserName: currentUserName, 
     };
     try {
       const response = await fetch(`${API_URL}/${ContactId}`, {
@@ -275,6 +277,8 @@ function App({ signOut, user }) {
       Phone: personPhone,
       Email: personEmail,
       Owing: additionValue,
+      UserEmail: loggedInUserEmail,
+      UserName: currentUserName, 
     };
     try {
       const response = await fetch(`${API_URL}/${ContactId}`, {
@@ -510,8 +514,8 @@ function App({ signOut, user }) {
   };
   return (
     <>
-      <div className={`App ${theme}`}>
-      <NotificationAPIComponent userId={loggedInUserEmail}/>
+      <div className={`App ${theme}`}  style={{ paddingTop: '20px' }}>
+      <NotificationAPIComponent userId={loggedInUserEmail} />
         <Routes>
           <Route
             path="/Home"
