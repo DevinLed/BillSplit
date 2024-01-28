@@ -133,10 +133,8 @@ export default function ReceiptInput({
 
   // Picture handling API section
   const FormData = require("form-data");
-  const apiKey = "561e58edb1c93ab9fec230c1439fbf48";
-  const account = "mindee";
-  const endpoint = "expense_receipts";
-  const version = "5.0";
+  const apiKey = process.env.REACT_APP_MINDEE_API_KEY;
+  console.log("key?", process.env.REACT_APP_MINDEE_API_KEY);
   const handleCapturePhoto = (dataUri) => {
     setPhotoData(dataUri);
     setShowCameraImage(true);
@@ -161,7 +159,7 @@ export default function ReceiptInput({
       };
 
       const response = await fetch(
-        `https://api.mindee.net/v1/products/${account}/${endpoint}/v${version}/predict`,
+        `https://api.mindee.net/v1/products/mindee/expense_receipts/v5/predict`,
         config
       );
       const responseData = await response.json();

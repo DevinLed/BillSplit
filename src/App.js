@@ -30,10 +30,11 @@ import { Amplify, API, graphqlOperation, Auth, Storage } from "aws-amplify";
 import awsconfig from "./aws-exports";
 import NotificationAPIClient from "notificationapi-js-client-sdk";
 import NotificationAPIComponent from "./components/NotificationAPI";
+
 Amplify.configure(awsconfig);
 
 function App({ signOut, user }) {
-  // dark mode theme switching
+  
 
   const [theme, setTheme] = useState("");
 
