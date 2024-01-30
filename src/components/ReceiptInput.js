@@ -134,7 +134,6 @@ export default function ReceiptInput({
   // Picture handling API section
   const FormData = require("form-data");
   const apiKey = process.env.REACT_APP_MINDEE_API_KEY;
-  console.log("key?", process.env.REACT_APP_MINDEE_API_KEY);
   const handleCapturePhoto = (dataUri) => {
     setPhotoData(dataUri);
     setShowCameraImage(true);
@@ -324,6 +323,7 @@ export default function ReceiptInput({
 
   // Used to update the balance of the person you are splitting receipt with
   const getFinalTotal = () => {;
+    console.log("selected person??", selectedValue)
     if (selectedValue === "you") {
       addNum(ContactId, personReceiptAmount, taxActual);
     } else {

@@ -28,7 +28,6 @@ import "./index.css";
 import ReceiptTable from "./components/ReceiptTable";
 import { Amplify, API, graphqlOperation, Auth, Storage } from "aws-amplify";
 import awsconfig from "./aws-exports";
-import NotificationAPIClient from "notificationapi-js-client-sdk";
 import NotificationAPIComponent from "./components/NotificationAPI";
 
 Amplify.configure(awsconfig);
@@ -129,7 +128,6 @@ function App({ signOut, user }) {
       setLoggedInUsername(user.attributes.name);
       setLoggedInUserEmail(user.attributes.email);
       setLoggedInUserID(user.attributes.sub);
-      console.log("user attributes?", user.attributes);
     });
   }, [loggedInUsername]);
 
@@ -195,27 +193,39 @@ function App({ signOut, user }) {
     setEditPerson(true);
   };
 
-  
   const addNum = (ContactId, val, val2) => {
+    if (addNum.isRunning) {
+      console.log('addNum is already running, skipping...');
+      return;
+    }
+  
+    addNum.isRunning = true;
+  
     setDataThrow((prevList) => {
       const newList = prevList.map((item) => {
         if (item.ContactId === ContactId) {
           const a = parseFloat(item.Owing);
-
           const b = parseFloat(val);
           const c = parseFloat(val2);
           const prevalue = a + b;
           const value = prevalue + c;
-          setAdditionValue(value);
-          console.log("value?", b);
-          updateOwingInBackend(ContactId, item.Owing, (parseFloat(value).toFixed(2)));
+  
+          console.log("Adding:", a, b, c);
+          console.log("New value:", value);
+          console.log("Before updateOwingInBackend");
+          
+          updateOwingInBackend(ContactId, item.Owing, parseFloat(value).toFixed(2));
+  
+          console.log("After updateOwingInBackend");
+  
           return { ...item, Owing: parseFloat(value).toFixed(2) };
         }
         return item;
       });
   
       setDisplayAdd(true);
-      console.log('this is to add');
+      console.log('This is to add');
+      addNum.isRunning = false;
       return newList;
     });
   };
@@ -225,12 +235,19 @@ function App({ signOut, user }) {
       const newList = prevList.map((item) => {
         if (item.ContactId === ContactId) {
           const a = parseFloat(item.Owing);
-            const b = parseFloat(val);
+          const b = parseFloat(val);
           const c = parseFloat(val2);
           const prevalue = a - b;
           const value = prevalue - c;
-          setAdditionValue(value);
-          updateSubOwingInBackend(ContactId, item.Owing, (parseFloat(value).toFixed(2)));
+  
+          console.log("Subtracting:", a, b, c);
+          console.log("New value:", value);
+          console.log("Before updateSubOwingInBackend");
+  
+          updateSubOwingInBackend(ContactId, item.Owing, parseFloat(value).toFixed(2));
+  
+          console.log("After updateSubOwingInBackend");
+  
           return { ...item, Owing: parseFloat(value).toFixed(2) };
         }
   
@@ -238,23 +255,24 @@ function App({ signOut, user }) {
       });
   
       setDisplayAdd(false);
-      console.log('this is to sub');
+      console.log('This is to sub');
       return newList;
     });
   };
   
   const updateOwingInBackend = async (ContactId, Owing, additionValue) => {
-    console.log(Owing, additionValue);
+    console.log("updateOwingInBackend:", ContactId, Owing, additionValue);
     const updatedData = {
       ContactId: ContactId,
       Name: personName,
       Phone: personPhone,
       Email: personEmail,
       Owing: additionValue,
-      UserEmail: loggedInUserEmail, 
-      UserName: currentUserName, 
+      UserEmail: loggedInUserEmail,
+      UserName: currentUserName,
     };
     try {
+      console.log("Before fetch updateOwingInBackend");
       const response = await fetch(`${API_URL}/${ContactId}`, {
         method: 'PUT',
         headers: {
@@ -262,6 +280,8 @@ function App({ signOut, user }) {
         },
         body: JSON.stringify(updatedData),
       });
+  
+      console.log("After fetch updateOwingInBackend");
   
       if (!response.ok) {
         throw new Error('Error updating contact');
@@ -270,8 +290,9 @@ function App({ signOut, user }) {
       console.error('Network error:', error);
     }
   };
+  
   const updateSubOwingInBackend = async (ContactId, Owing, additionValue) => {
-    console.log(Owing, additionValue);
+    console.log("updateSubOwingInBackend:", ContactId, Owing, additionValue);
     const updatedData = {
       ContactId: ContactId,
       Name: personName,
@@ -279,9 +300,10 @@ function App({ signOut, user }) {
       Email: personEmail,
       Owing: additionValue,
       UserEmail: loggedInUserEmail,
-      UserName: currentUserName, 
+      UserName: currentUserName,
     };
     try {
+      console.log("Before fetch updateSubOwingInBackend");
       const response = await fetch(`${API_URL}/${ContactId}`, {
         method: 'PUT',
         headers: {
@@ -289,6 +311,8 @@ function App({ signOut, user }) {
         },
         body: JSON.stringify(updatedData),
       });
+  
+      console.log("After fetch updateSubOwingInBackend");
   
       if (!response.ok) {
         throw new Error('Error updating contact');
