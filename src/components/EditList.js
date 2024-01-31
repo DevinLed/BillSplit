@@ -7,6 +7,8 @@ import { Amplify, Auth } from "aws-amplify";
 import Avatar from "react-avatar";
 import { CSSTransition } from "react-transition-group";
 
+import { Link } from "react-router-dom";
+
 import awsconfig from "../aws-exports";
 Amplify.configure(awsconfig);
 
@@ -98,6 +100,16 @@ export default function EditList({
                 .map((item, index) => (
                   <React.Fragment key={index}>
                     {item.Name && item.Owing ? (
+                      <Link to={{
+                        pathname: "/ContactHistoryEdit",
+                        state: {
+                          personName: personName,
+                          personEmail: personEmail,
+                          personPhone: personPhone,
+                          personOwing: personOwing,
+                        }
+                      }}
+                      onClick={() => editRow(item.ContactId)}>
                       <li
                         className={
                           "list-group-item flex justify-between m-1 p-2 rounded-lg shadow-sm " +
@@ -105,9 +117,6 @@ export default function EditList({
                             ? "bg-gray-800 text-white"
                             : "bg-white text-gray-800")
                         }
-                        onClick={() => {
-                          editRow(item.ContactId);
-                        }}
                       >
                         <div className="flex items-center">
                           <Avatar name={item.Name} size={32} round />
@@ -127,6 +136,7 @@ export default function EditList({
                           ${parseFloat(item.Owing).toFixed(2)}
                         </span>
                       </li>
+                      </Link>
                     ) : null}
                   </React.Fragment>
                 ))}

@@ -70,11 +70,6 @@ export default function Header({
                 <Link to="/EditList">
                   <button className={theme === "dark" ? "dropdown-item bg-gray-900 text-white hover:bg-gray-800":"dropdown-item"}>{lang === "english" ? "Edit Person" : "Modifier la personne"}</button>
                 </Link>
-                <Link to="/History">
-                  <button className="dropdown-item" type="button">
-                  {lang === "english" ? "History" : "Historique"}
-                  </button>
-                </Link>
                 
                 <Link to="/Settings">
                   <button className="dropdown-item">
@@ -119,9 +114,6 @@ export default function Header({
               >
                 <Link to="/SplitBill">
                   <button className="dropdown-item">{lang === "english" ? "New Receipt" : "Nouveau reçu"}</button>
-                </Link>
-                <Link to="/History">
-                  <button className="dropdown-item">{lang === "english" ? "History" : "Historique"}</button>
                 </Link>
                 
                 <Link to="/Settings">

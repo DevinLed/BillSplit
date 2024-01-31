@@ -29,6 +29,7 @@ import ReceiptTable from "./components/ReceiptTable";
 import { Amplify, API, graphqlOperation, Auth, Storage } from "aws-amplify";
 import awsconfig from "./aws-exports";
 import NotificationAPIComponent from "./components/NotificationAPI";
+import ContactHistoryEdit from "./components/ContactHistoryEdit";
 
 Amplify.configure(awsconfig);
 
@@ -187,7 +188,7 @@ function App({ signOut, user }) {
     setPersonPhone(selectedPerson.Phone);
     setPersonOwing(selectedPerson.Owing);
     setPassedId(selectedPerson.ContactId);
-    setEditPerson(true);
+    setEditPerson(false);
   };
   const addNum = (ContactId, val, val2, personOwing, postedTransaction) => {
     const a = parseFloat(personOwing);
@@ -768,7 +769,38 @@ function App({ signOut, user }) {
               />
             }
           />
-        </Routes>
+        <Route 
+          path="/ContactHistoryEdit"
+          element={
+            <ContactHistoryEdit
+            
+            personName={personName}
+            personEmail={personEmail}
+            personPhone={personPhone}
+            personOwing={personOwing}
+            handleSubmit={handleSubmit}
+            setPersonName={setPersonName}
+            setPersonEmail={setPersonEmail}
+            setPersonPhone={setPersonPhone}
+            setPersonOwing={setPersonOwing}
+            theme={theme}
+            lang={lang}
+            setLang={setLang}
+            dataThrow={dataThrow}
+            setDataThrow={setDataThrow}
+            API_URL={API_URL}
+            user={user}
+            
+            combinedTotal={combinedTotal}
+            setCombinedTotal={setCombinedTotal}
+            receipts={receipts}
+            loggedInUsername={loggedInUsername}
+            historyData={historyData}
+            setHistoryData={setHistoryData}
+            />
+          }
+          />
+          </Routes>
       </div>
     </>
   );
