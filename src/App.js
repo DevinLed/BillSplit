@@ -33,8 +33,6 @@ import NotificationAPIComponent from "./components/NotificationAPI";
 Amplify.configure(awsconfig);
 
 function App({ signOut, user }) {
-  
-
   const [theme, setTheme] = useState("");
 
   const toggleTheme = () => {
@@ -179,7 +177,6 @@ function App({ signOut, user }) {
 
   // used to update values of balance for contacts
 
-  
   const currentUserName = user.attributes.name;
   const editRow = (ContactId) => {
     const selectedPerson = dataThrow.find(
@@ -192,76 +189,50 @@ function App({ signOut, user }) {
     setPassedId(selectedPerson.ContactId);
     setEditPerson(true);
   };
+  const addNum = (ContactId, val, val2, personOwing, postedTransaction) => {
+    const a = parseFloat(personOwing);
+    const b = parseFloat(val);
+    const c = parseFloat(val2);
+    const newValue = (a + b + c).toFixed(2);;
+    console.log(
+      "Existing owing?",
+      personOwing,
+      "val 1?",
+      val,
+      "val 2?",
+      val2,
+      "New Value?",
+      newValue
+    );
+    updateOwingInBackend(ContactId, personOwing, newValue, postedTransaction);
 
-  const addNum = (ContactId, val, val2) => {
-    if (addNum.isRunning) {
-      console.log('addNum is already running, skipping...');
-      return;
-    }
-  
-    addNum.isRunning = true;
-  
-    setDataThrow((prevList) => {
-      const newList = prevList.map((item) => {
-        if (item.ContactId === ContactId) {
-          const a = parseFloat(item.Owing);
-          const b = parseFloat(val);
-          const c = parseFloat(val2);
-          const prevalue = a + b;
-          const value = prevalue + c;
-  
-          console.log("Adding:", a, b, c);
-          console.log("New value:", value);
-          console.log("Before updateOwingInBackend");
-          
-          updateOwingInBackend(ContactId, item.Owing, parseFloat(value).toFixed(2));
-  
-          console.log("After updateOwingInBackend");
-  
-          return { ...item, Owing: parseFloat(value).toFixed(2) };
-        }
-        return item;
-      });
-  
-      setDisplayAdd(true);
-      console.log('This is to add');
-      addNum.isRunning = false;
-      return newList;
-    });
+    setDisplayAdd(true);
   };
-  
-  const subNum = (ContactId, val, val2) => {
-    setDataThrow((prevList) => {
-      const newList = prevList.map((item) => {
-        if (item.ContactId === ContactId) {
-          const a = parseFloat(item.Owing);
-          const b = parseFloat(val);
-          const c = parseFloat(val2);
-          const prevalue = a - b;
-          const value = prevalue - c;
-  
-          console.log("Subtracting:", a, b, c);
-          console.log("New value:", value);
-          console.log("Before updateSubOwingInBackend");
-  
-          updateSubOwingInBackend(ContactId, item.Owing, parseFloat(value).toFixed(2));
-  
-          console.log("After updateSubOwingInBackend");
-  
-          return { ...item, Owing: parseFloat(value).toFixed(2) };
-        }
-  
-        return item;
-      });
-  
-      setDisplayAdd(false);
-      console.log('This is to sub');
-      return newList;
-    });
+
+  const subNum = (ContactId, val, val2, personOwing, postedTransaction) => {
+    
+    const a = parseFloat(personOwing);
+    const b = parseFloat(val);
+    const c = parseFloat(val2);
+    const newValue = (a - b - c).toFixed(2);;
+    console.log(
+      "Existing owing?",
+      personOwing,
+      "val 1?",
+      val,
+      "val 2?",
+      val2,
+      "New Value?",
+      newValue
+    );
+    updateSubOwingInBackend(ContactId, personOwing, newValue, postedTransaction);
+
+    setDisplayAdd(true);
   };
-  
-  const updateOwingInBackend = async (ContactId, Owing, additionValue) => {
+
+  const updateOwingInBackend = async (ContactId, Owing, additionValue, postedTransaction) => {
     console.log("updateOwingInBackend:", ContactId, Owing, additionValue);
+    console.log("posted from a transaction?", postedTransaction);
     const updatedData = {
       ContactId: ContactId,
       Name: personName,
@@ -271,28 +242,32 @@ function App({ signOut, user }) {
       UserEmail: loggedInUserEmail,
       UserName: currentUserName,
     };
+    
     try {
+      console.log("posted transaction?", postedTransaction);
       console.log("Before fetch updateOwingInBackend");
       const response = await fetch(`${API_URL}/${ContactId}`, {
-        method: 'PUT',
+        method: "PUT",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(updatedData),
+        body: JSON.stringify({ ...updatedData, postedTransaction }),
       });
-  
+
+      updateDataHandler();
       console.log("After fetch updateOwingInBackend");
-  
+
       if (!response.ok) {
-        throw new Error('Error updating contact');
+        throw new Error("Error updating contact");
       }
     } catch (error) {
-      console.error('Network error:', error);
+      console.error("Network error:", error);
     }
   };
-  
-  const updateSubOwingInBackend = async (ContactId, Owing, additionValue) => {
+
+  const updateSubOwingInBackend = async (ContactId, Owing, additionValue, postedTransaction) => {
     console.log("updateSubOwingInBackend:", ContactId, Owing, additionValue);
+    console.log("posted from a transaction?", postedTransaction);
     const updatedData = {
       ContactId: ContactId,
       Name: personName,
@@ -305,23 +280,23 @@ function App({ signOut, user }) {
     try {
       console.log("Before fetch updateSubOwingInBackend");
       const response = await fetch(`${API_URL}/${ContactId}`, {
-        method: 'PUT',
+        method: "PUT",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(updatedData),
+        body: JSON.stringify({ ...updatedData, postedTransaction }),
       });
-  
+
+      updateDataHandler();
       console.log("After fetch updateSubOwingInBackend");
-  
+
       if (!response.ok) {
-        throw new Error('Error updating contact');
+        throw new Error("Error updating contact");
       }
     } catch (error) {
-      console.error('Network error:', error);
+      console.error("Network error:", error);
     }
   };
-  
 
   // Handler for full reset of tables.
   const handleResetCombinedArray = () => {
@@ -330,7 +305,7 @@ function App({ signOut, user }) {
   };
   const handleAddSubmit = async (e) => {
     e.preventDefault();
-  
+
     const owingValue = personOwing !== "" ? personOwing : 0;
     console.log("current UserName?", currentUserName);
     const itemData = {
@@ -338,10 +313,10 @@ function App({ signOut, user }) {
       Email: personEmail,
       Phone: personPhone,
       Owing: owingValue,
-      UserEmail: loggedInUserEmail, 
+      UserEmail: loggedInUserEmail,
       UserName: currentUserName,
     };
-    
+
     setAddPerson(false);
     try {
       const response = await fetch(API_URL, {
@@ -351,25 +326,25 @@ function App({ signOut, user }) {
           "Content-Type": "application/json",
         },
       });
-    
-  
+
       if (!response.ok) {
         throw new Error("Failed to add item");
       }
-  
+
       const newItem = await response.json();
       console.log("Item created successfully 123", newItem);
-       
+
       if (newItem.contactAlreadyExists) {
-        console.log("contactAlreadyExists?", newItem.contactAlreadyExists)
-        alert("Contact already had you added! Owing value has been updated from their input history");
-      }
-      else{        
+        console.log("contactAlreadyExists?", newItem.contactAlreadyExists);
+        alert(
+          "Contact already had you added! Owing value has been updated from their input history"
+        );
+      } else {
         console.log("Contact didn't exist, starting owing balance tracker.");
       }
       // Update local state with the new item
       setDataThrow((prevData) => [...prevData, newItem]);
-  
+
       // Reset form fields
       setPersonName("");
       setPersonPhone("");
@@ -377,14 +352,20 @@ function App({ signOut, user }) {
       setPersonOwing("");
       setFormSubmitted(true);
       updateDataHandler();
-  
     } catch (error) {
       console.error("Error creating item:", error);
     }
   };
-  
 
-  const handleEditSubmit = (e, Name, Email, Phone, Owing, ContactId, UserName) => {
+  const handleEditSubmit = (
+    e,
+    Name,
+    Email,
+    Phone,
+    Owing,
+    ContactId,
+    UserName
+  ) => {
     e.preventDefault();
 
     const updatedUserData = {
@@ -438,17 +419,17 @@ function App({ signOut, user }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     const updatedData = {
       ContactId: passedId,
       Name: personName,
       Email: personEmail,
       Phone: personPhone,
       Owing: personOwing,
-      UserEmail: loggedInUserEmail, 
+      UserEmail: loggedInUserEmail,
       UserName: currentUserName,
     };
-  
+
     try {
       console.log("attempting to update contact...");
       const response = await fetch(`${API_URL}/${passedId}`, {
@@ -467,7 +448,7 @@ function App({ signOut, user }) {
     } catch (error) {
       console.error("Network error:", error);
     }
-  
+
     // Clear the input fields and other state variables
     setPersonName("");
     setPersonPhone("");
@@ -476,16 +457,18 @@ function App({ signOut, user }) {
     setIsEditing(false);
     updateDataHandler();
   };
-  
+
   const selectPerson = (ContactId) => {
-    const selectingPerson = dataThrow.find((contact) => contact.ContactId === ContactId);
+    const selectingPerson = dataThrow.find(
+      (contact) => contact.ContactId === ContactId
+    );
     setPersonName(selectingPerson.Name);
     setPersonPhone(selectingPerson.Phone);
     setPersonEmail(selectingPerson.Email);
     setPersonOwing(selectingPerson.Owing);
     setPersonReceiptAmount(selectingPerson.ReceiptAmount);
   };
-  
+
   // Used to send values to History component
   const [receipts, setReceipts] = useState(() => {
     const storedReceipts = localStorage.getItem("receipts");
@@ -513,34 +496,35 @@ function App({ signOut, user }) {
     localStorage.setItem("list", JSON.stringify(list));
   }, [list]);
   const API_TRANSACTION =
-  "https://48f95wy514.execute-api.us-east-1.amazonaws.com/prod/transaction";
-
+    "https://48f95wy514.execute-api.us-east-1.amazonaws.com/prod/transaction";
 
   const addReceipt = async (newReceipt) => {
     try {
       const response = await fetch(API_TRANSACTION, {
-        method: 'POST',
+        method: "POST",
         body: JSON.stringify(newReceipt),
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
       });
-  
+
       if (!response.ok) {
-        throw new Error('Failed to add receipt');
+        throw new Error("Failed to add receipt");
       }
-  
-      console.log('Receipt added successfully');
-  
-      localStorage.removeItem('receipts');
+
+      console.log("Receipt added successfully");
+
+      localStorage.removeItem("receipts");
     } catch (error) {
-      console.error('Error adding receipt:', error);
+      console.error("Error adding receipt:", error);
     }
   };
   return (
     <>
-      <div className={`App ${theme}`}  style={{ paddingTop: '20px' }}>
-      <NotificationAPIComponent userId={loggedInUserEmail} />
+      <div className={`App ${theme}`} style={{ paddingTop: "20px" }}>
+        <div onClick={updateDataHandler}>
+        <NotificationAPIComponent userId={loggedInUserEmail}/>
+        </div>
         <Routes>
           <Route
             path="/Home"
