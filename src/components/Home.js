@@ -18,7 +18,7 @@ import { CSSTransition } from "react-transition-group";
 import { withAuthenticator, Button, Heading } from "@aws-amplify/ui-react";
 import "@aws-amplify/ui-react/styles.css";
 
-import { Amplify, API, graphqlOperation, Auth } from 'aws-amplify';
+import { Amplify, API, graphqlOperation, Auth } from "aws-amplify";
 
 import awsconfig from "../aws-exports";
 Amplify.configure(awsconfig);
@@ -37,8 +37,6 @@ export default function Home({
   const [showPersonEdit, setPersonEdit] = useState(false);
   const [selectPersonEdit, setSelectPersonEdit] = useState(false);
 
-
-  
   useEffect(() => {
     setStartBill(true);
     setPersonEdit(false);
@@ -203,152 +201,34 @@ export default function Home({
                   ""
                 )}
               </div>
-              <div className="grid grid-cols-3 gap-y-0 gap-x-1 py-4">
-                <Link to="/SplitBill" className="mb-0 p-0">
-                  <label
-                    className={
-                      theme === "dark"
-                        ? "mb-0 flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-700 hover:no-underline"
-                        : "mb-0 flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
-                    }
-                  >
-                    <div style={{ width: "24px", height: "24px" }}>
-                      <IoReceiptOutline size={24} />
-                    </div>
-                    <span
-                      className={
-                        theme === "dark"
-                          ? "text-white text-center"
-                          : "text-gray-800 text-center"
-                      }
-                    >
-                      {lang === "english"
-                        ? "Split a Bill"
-                        : "Partager la facture"}
-                    </span>
-                  </label>
-                </Link>
-                <Link to="/EditList">
-                  <label
-                    className={
-                      theme === "dark"
-                        ? "flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-700 hover:no-underline"
-                        : "flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
-                    }
-                  >
-                    <div style={{ width: "24px", height: "24px" }}>
-                      <IoPersonCircleOutline size={24} />
-                    </div>
-                    <span
-                      className={
-                        theme === "dark"
-                          ? "text-white text-center"
-                          : "text-gray-800 text-center"
-                      }
-                    >
-                      {lang === "english"
-                        ? "Edit Person"
-                        : "Modifier la personne"}
-                    </span>
-                  </label>
-                </Link>
-                <Link to="/History">
-                  <label
-                    className={
-                      theme === "dark"
-                        ? "flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-700 hover:no-underline"
-                        : "flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
-                    }
-                  >
-                    <div style={{ width: "24px", height: "24px" }}>
-                      <IoListOutline size={24} />
-                    </div>
-                    <span
-                      className={
-                        theme === "dark"
-                          ? "text-white text-center"
-                          : "text-gray-800 text-center"
-                      }
-                    >
-                      {lang === "english" ? "History" : "Historique"}
-                    </span>
-                  </label>
-                </Link>
-                <label
-                  onClick={() => {
-                    toggleTheme();
-                    if (theme === "light") {
-                      changeText(
-                        lang === "english" ? "Light Mode" : "Mode Lumière"
-                      );
-                    } else {
-                      changeText(
-                        lang === "english" ? "Dark Mode" : "Mode Sombre"
-                      );
-                    }
-                  }}
-                  className={
-                    theme === "dark"
-                      ? "flex h-24 w-full cursor-pointer flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-700 hover:no-underline"
-                      : "flex h-24 w-full cursor-pointer flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
-                  }
-                >
-                  <div style={{ width: "24px", height: "24px" }}>
-                    <IoInvertModeSharp size={24} />
-                  </div>
-                  <span
-                    className={
-                      theme === "dark"
-                        ? "text-white text-center"
-                        : "text-gray-800 text-center"
-                    }
-                  >
-                    {buttonText}
+              <div className="circle-menu">
+                <div class="center-circle"></div>
+                <Link to="/SplitBill" className="menu-item split-bill">
+                  <IoReceiptOutline size={24} />
+                  <span>
+                    {lang === "english"
+                      ? "Split a Bill"
+                      : "Partager la facture"}
                   </span>
-                </label>
-                <Link to="/LandingPage">
-                  <label
-                    className={
-                      theme === "dark"
-                        ? "flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-700 hover:no-underline"
-                        : "flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
-                    }
-                  >
-                    <div style={{ width: "24px", height: "24px" }}>
-                      <IoHomeOutline size={24} />
-                    </div>
-                    <span
-                      className={
-                        theme === "dark"
-                          ? "text-white text-center"
-                          : "text-gray-800 text-center"
-                      }
-                    >
-                      {lang === "english" ? "Home Page" : "Page d'accueil"}
-                    </span>
-                  </label>
                 </Link>
-                <Link to="/Settings">
-                  <label
-                    className={
-                      theme === "dark"
-                        ? "flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-700 hover:no-underline"
-                        : "flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
-                    }
-                  >
-                    <div style={{ width: "24px", height: "24px" }}>
-                      <IoSettingsOutline size={24} />
-                    </div>
-                    <span
-                      className={
-                        theme === "dark"
-                          ? "text-white text-center"
-                          : "text-gray-800 text-center"
-                      }
-                    >
-                      {lang === "english" ? "Settings" : "Paramètres"}
-                    </span>
-                  </label>
+
+                <Link to="/EditList" className="menu-item edit-list">
+                  <IoPersonCircleOutline size={24} />
+                  <span>
+                    {lang === "english"
+                      ? "Contacts"
+                      : "Contacts"}
+                  </span>
+                </Link>
+
+                <label onClick={toggleTheme} className="menu-item theme-toggle">
+                  <IoInvertModeSharp size={24} />
+                  <span>{buttonText}</span>
+                </label>
+
+                <Link to="/Settings" className="menu-item settings">
+                  <IoSettingsOutline size={24} />
+                  <span>{lang === "english" ? "Settings" : "Paramètres"}</span>
                 </Link>
               </div>
             </div>
