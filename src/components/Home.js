@@ -221,7 +221,19 @@ export default function Home({
                   </span>
                 </Link>
 
-                <label onClick={toggleTheme} className="menu-item theme-toggle">
+                <label className="menu-item theme-toggle"
+                 onClick={() => {
+                  toggleTheme();
+                  if (theme === "light") {
+                    changeText(
+                      lang === "english" ? "Light Mode" : "Mode Lumière"
+                    );
+                  } else {
+                    changeText(
+                      lang === "english" ? "Dark Mode" : "Mode Sombre"
+                    );
+                  }
+                }}>
                   <IoInvertModeSharp size={24} />
                   <span>{buttonText}</span>
                 </label>

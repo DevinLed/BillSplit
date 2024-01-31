@@ -290,7 +290,6 @@ label{
   height: 45vmin;
   border-radius: 50%;
   margin: 0 auto;
-  overflow: hidden;
   display: flex;
   flex-wrap: wrap;
 }
