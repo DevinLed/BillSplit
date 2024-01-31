@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect, onBlur, useCamera } from "react";
 import { registerLocale } from "react-datepicker";
 import en from "date-fns/locale/en-US";
 import fr from "date-fns/locale/fr";
-import { useParams } from "react-router-dom";   
+import { useParams } from "react-router-dom";
 import { Camera } from "react-html5-camera-photo";
 import "react-html5-camera-photo/build/css/index.css";
 import loading from "../img/loading.gif";
@@ -64,13 +64,13 @@ export default function ReceiptInput({
   obtainedInfo,
   setObtainedInfo,
   loggedInUserEmail,
-  additionValue,  
+  additionValue,
 }) {
   registerLocale("en", en);
   registerLocale("fr", fr);
-  const [payerId,setPayerId] = useState('');
-  const [debtorId,setDebtorId] = useState('');
-  const {ContactId} = useParams();
+  const [payerId, setPayerId] = useState("");
+  const [debtorId, setDebtorId] = useState("");
+  const { ContactId } = useParams();
   const [pictureError, setPictureError] = useState(false);
   const [submissionError, setSubmissionError] = useState(true);
   const [selectPersonReceipt, setSelectPersonReceipt] = useState(true);
@@ -106,7 +106,7 @@ export default function ReceiptInput({
 
   const handleScroll = () => {
     const scrollAmount = window.innerHeight * 1.5;
-    const duration = 500; 
+    const duration = 500;
     const start = window.scrollY;
     const startTime = performance.now();
 
@@ -281,7 +281,7 @@ export default function ReceiptInput({
     let splitValue = parseFloat(splitPictureTotal) / 2;
     let themValue = parseFloat(themPictureTotal);
     let youValue = parseFloat(youPictureTotal);
-     
+
     if (selectedValue === "you") {
       setPersonReceiptAmount(splitValue + themValue);
     } else if (selectedValue === "them") {
@@ -311,7 +311,7 @@ export default function ReceiptInput({
 
     addReceipt(newReceipt);
   };
-
+  const [postedTransaction] = useState(true);
   const taxOwing =
     selectedValue === "you"
       ? parseFloat(splitPictureTotal) / 2 + parseFloat(themPictureTotal)
@@ -322,12 +322,15 @@ export default function ReceiptInput({
   const taxActual = parseFloat(pictureTax) * parseFloat(taxOwingPerc);
 
   // Used to update the balance of the person you are splitting receipt with
-  const getFinalTotal = () => {;
-    console.log("selected person??", selectedValue)
+  const getFinalTotal = () => {
+    console.log("selected person??", selectedValue);
+    console.log("getFinalTotal is being called");
     if (selectedValue === "you") {
-      addNum(ContactId, personReceiptAmount, taxActual);
+      console.log("addNum from GFT is being called");
+      addNum(ContactId, personReceiptAmount, taxActual, personOwing, postedTransaction);
     } else {
-      subNum(ContactId, personReceiptAmount, taxActual);
+      console.log("subNum from GFT is being called");
+      subNum(ContactId, personReceiptAmount, taxActual, personOwing, postedTransaction);
     }
   };
 
@@ -386,9 +389,7 @@ export default function ReceiptInput({
                         <IoCreateOutline size={24} />
                       </div>
                       <span className="whitespace-no-wrap">
-                        {lang === "english"
-                          ? "Manual"
-                          : "À la main"}
+                        {lang === "english" ? "Manual" : "À la main"}
                       </span>
                     </label>
                   </Link>
@@ -675,6 +676,7 @@ export default function ReceiptInput({
                             console.error("Error: Invalid final total");
                             setSubmissionError(false);
                           } else {
+                            e.preventDefault();
                             getFinalTotal();
                             handleResetCombinedArray();
                             setSelectMethodManual(false);
@@ -704,8 +706,9 @@ export default function ReceiptInput({
                           console.error("Error: Invalid final total");
                           setSubmissionError(false);
                         } else {
+                          e.preventDefault();
                           setSubmissionError(true);
-                          getFinalTotal();
+                          getFinalTotal(e);
                           handleResetCombinedArray();
                           handleHistorySubmit(e);
                           resetReceiptForm();
@@ -1103,6 +1106,7 @@ export default function ReceiptInput({
                                       );
                                       setSubmissionError(false);
                                     } else {
+                                      e.preventDefault();
                                       getFinalTotal();
                                       handleResetCombinedArray();
                                       setSelectMethodPicture(false);
@@ -1137,6 +1141,7 @@ export default function ReceiptInput({
                                     console.error("Error: Invalid final total");
                                     setSubmissionError(false);
                                   } else {
+                                    e.preventDefault();
                                     setSubmissionError(true);
                                     getFinalTotal();
                                     handleResetCombinedArray();
