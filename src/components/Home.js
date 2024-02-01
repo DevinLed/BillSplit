@@ -205,42 +205,20 @@ export default function Home({
                 <div class="center-circle"></div>
                 <Link to="/SplitBill" className="menu-item split-bill">
                   <IoReceiptOutline size={24} />
-                  <span>
-                    {lang === "english"
-                      ? "Split a Bill"
-                      : "Partager la facture"}
-                  </span>
                 </Link>
 
                 <Link to="/EditList" className="menu-item edit-list">
                   <IoPersonCircleOutline size={24} />
-                  <span>
-                    {lang === "english"
-                      ? "Contacts"
-                      : "Contacts"}
-                  </span>
                 </Link>
 
                 <label className="menu-item theme-toggle"
                  onClick={() => {
-                  toggleTheme();
-                  if (theme === "light") {
-                    changeText(
-                      lang === "english" ? "Light Mode" : "Mode Lumière"
-                    );
-                  } else {
-                    changeText(
-                      lang === "english" ? "Dark Mode" : "Mode Sombre"
-                    );
-                  }
-                }}>
+                  toggleTheme();}}>
                   <IoInvertModeSharp size={24} />
-                  <span>{buttonText}</span>
                 </label>
 
                 <Link to="/Settings" className="menu-item settings">
                   <IoSettingsOutline size={24} />
-                  <span>{lang === "english" ? "Settings" : "Paramètres"}</span>
                 </Link>
               </div>
             </div>

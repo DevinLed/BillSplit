@@ -194,7 +194,7 @@ function App({ signOut, user }) {
     const a = parseFloat(personOwing);
     const b = parseFloat(val);
     const c = parseFloat(val2);
-    const newValue = (a + b + c).toFixed(2);;
+    const newValue = (a + b + c).toFixed(2);
     console.log(
       "Existing owing?",
       personOwing,
