@@ -45,15 +45,13 @@ export default function ContactHistoryEdit({
   user,
   API_URL,
   updateEditHandler,
+  combinedArray,
+  submissionArray,
 }) {
   const [selectEditPersonList, setEditSelectPersonList] = useState(true);
   const { id } = useParams();
   const [selectedPerson, setSelectedPerson] = useState("");
   const [transactions, setTransactions] = useState([]);
- useEffect(() => {
-    setSelectedPerson(personName);
-    console.log("selectedPerson?", selectedPerson);
-  }, [personName, selectedPerson]);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -70,95 +68,128 @@ export default function ContactHistoryEdit({
     fetchData();
   }, []);
 
+  useEffect(() => {
+    setSelectedPerson(personEmail);
+    console.log("selectedPerson?", selectedPerson);
+  }, [personEmail, selectedPerson]);
   const filteredTransactions = useMemo(() => {
     if (selectedPerson) {
       return transactions.filter(
-        (transaction) => transaction.personName === selectedPerson
+        (transaction) => transaction.personEmail === selectedPerson
       );
     } else {
       return transactions;
     }
   }, [transactions, selectedPerson]);
 
+  const [loading, setLoading] = useState(true);
+  
   const transactionList = useMemo(() => {
-    return filteredTransactions
-      .reverse()
-      .map((transaction, index) => {
-        const startDate =
-          transaction.startDate instanceof Date
-            ? transaction.startDate.toLocaleDateString("en-US")
-            : "";
+    return filteredTransactions.map((transaction, index) => {
+      const startDate =
+        transaction.startDate instanceof Date
+          ? transaction.startDate.toLocaleDateString("en-US")
+          : "";
 
-        return (
-          <div key={index} className="border-b border-gray-300 py-2 my-2 px-8">
-            <div>
-              <div className="flex justify-center items-center">
-                <p className="font-bold">{transaction.personName}</p>
-              </div>
-
-              <div className="flex justify-center items-center mt-2">
-                {transaction.merchantName && (
-                  <p>{`${transaction.merchantName}`}</p>
-                )}
-              </div>
-
-              <div className="flex justify-center items-center mt-2">
-                <p className="text-sm">{startDate}</p>
-              </div>
+      return (
+        <div
+          key={index}
+          className=" th-py-2 th-my-2 th-px-0"
+          id="th-invoice-POS"
+        >
+          <div>
+            <div className="flex justify-center items-center">
+              <p className="font-bold">{transaction.personName}</p>
             </div>
+
             <div className="flex justify-center items-center mt-2">
-              <p className="text-sm">
-                {transaction.selectedValue === "you"
-                  ? lang === "english"
-                    ? "You are Owed"
-                    : "On vous doit"
-                  : lang === "english"
-                  ? "You owe"
-                  : "Tu dois"}
-              </p>
-            </div>
-            <div className="flex justify-center items-center">
-              <p className="font-bold">
-                $
-                {(
-                  parseFloat(transaction.personReceiptAmount) +
-                  parseFloat(transaction.taxActual)
-                ).toFixed(2)}
-              </p>
-            </div>
-
-            <div className="flex justify-center items-center">
-              {transaction.taxActual !== 0 && (
-                <p className="text-sm mt-2">
-                  {lang === "english" ? "Taxes: " : "Impôts: "}
-                  {`$${
-                    isNaN(transaction.taxActual)
-                      ? 0
-                      : Math.abs(parseFloat(transaction.taxActual)).toFixed(2)
-                  }`}
-                </p>
+              {transaction.merchantName && (
+                <p>{`${transaction.merchantName}`}</p>
               )}
             </div>
 
             <div className="flex justify-center items-center mt-2">
-              <p className="text-sm">
-                {lang === "english" ? "Receipt Total" : "Total des reçus"}: $
-                {transaction.receiptTotal || 0}
-              </p>
-            </div>
-
-            <div className="flex justify-center items-center mt-2">
-              {transaction.invoiceNumber ? (
-                <div>
-                  <p className="text-sm mb-2">{`Invoice Number: ${transaction.invoiceNumber}`}</p>
-                </div>
-              ) : (
-                ""
-              )}
+              <p className="text-sm">{startDate}</p>
             </div>
           </div>
-        );
-      });
+          <div className="flex justify-center items-center mt-2">
+            <p className="text-sm">
+              {transaction.selectedValue === "you"
+                ? lang === "english"
+                  ? "You are Owed"
+                  : "On vous doit"
+                : lang === "english"
+                ? "You owe"
+                : "Tu dois"}
+            </p>
+          </div>
+          <div className="flex justify-center items-center">
+            <p className="font-bold">
+              $
+              {(
+                parseFloat(transaction.personReceiptAmount) +
+                parseFloat(transaction.taxActual)
+              ).toFixed(2)}
+            </p>
+          </div>
+
+          <div className="flex justify-center items-center">
+            {transaction.taxActual !== 0 && (
+              <p className="text-sm mt-2">
+                {lang === "english" ? "Taxes: " : "Impôts: "}
+                {`$${
+                  isNaN(transaction.taxActual)
+                    ? 0
+                    : Math.abs(parseFloat(transaction.taxActual)).toFixed(2)
+                }`}
+              </p>
+            )}
+          </div>
+          <tr className="th-tabletitle">
+            <td className="th-item">
+              <h2 className="th-h2">Item</h2>
+            </td>
+            <td className="th-Hours">
+              <h2 className="th-h2">%</h2>
+            </td>
+            <td className="th-Rate">
+              <h2 className="th-h2">Total</h2>
+            </td>
+          </tr>
+
+          {transaction.submissionArray.map((item, index) => (
+            <tr className="th-service" key={index}>
+              <td className="th-tableitem">
+                <p className="th-itemtext1">{item.name}</p>
+              </td>
+              <td className="th-tableitem">
+                <p className="th-itemtext">{item.sliderValue}%</p>
+              </td>
+              <td className="th-tableitem">
+                <p className="th-itemtext3">{item.amount}</p>
+              </td>
+            </tr>
+          ))}
+
+          <div className="flex justify-center items-center mt-2">
+            <p className="text-sm">
+              {lang === "english" ? "Receipt Total" : "Total des reçus"}: $
+              {transaction.receiptTotal || 0}
+            </p>
+          </div>
+
+          <div className="flex justify-center items-center mt-2">
+            {transaction.invoiceNumber ? (
+              <div>
+                <p className="text-sm mb-2">{`Invoice Number: ${transaction.invoiceNumber}`}</p>
+              </div>
+            ) : (
+              ""
+            )}
+          </div>
+        </div>
+      );
+    });
   }, [filteredTransactions]);
 
   const noTransactionsMessage = useMemo(() => {
@@ -175,8 +206,6 @@ export default function ContactHistoryEdit({
     return uniquePersons;
   }, [transactions]);
 
- 
-
   const [showEditPerson, setShowEditPerson] = useState(false);
   const toggleEditPerson = () => {
     setShowEditPerson(!showEditPerson);
@@ -185,8 +214,8 @@ export default function ContactHistoryEdit({
   return (
     <>
       <main
-         className="flex flex-col items-center justify-center w-full max-w-xl mx-auto bg-white-500 mt-5 rounded p-0 pt-3 shadow sm:max-w-xl md:max-w-2xl lg:max-w-4xl"
-         style={{ maxWidth: "600px" }}
+        className="flex flex-col items-center justify-center w-full max-w-xl mx-auto bg-white-500 mt-5 rounded p-0 pt-3 shadow sm:max-w-xl md:max-w-2xl lg:max-w-4xl"
+        style={{ maxWidth: "600px" }}
       >
         <Header
           selectEditPersonList={selectEditPersonList}
@@ -239,10 +268,8 @@ export default function ContactHistoryEdit({
           ></EditPerson>
         )}
         <div className="flex flex-col items-center justify-center">
-          <div className="rounded-lg px-3 py-2 shadow-md mb-4 mx-auto">
-            <div className="flex items-center justify-end mb-2">
-              
-            </div>
+        <div className="custom-rounded px-3 py-2 mb-4 mx-auto">
+   <div className="flex items-center justify-end mb-2"></div>
 
             {transactionList.length > 0
               ? transactionList
