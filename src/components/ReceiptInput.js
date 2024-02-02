@@ -65,6 +65,8 @@ export default function ReceiptInput({
   setObtainedInfo,
   loggedInUserEmail,
   additionValue,
+  submissionArray, 
+  setSubmissionArray
 }) {
   registerLocale("en", en);
   registerLocale("fr", fr);
@@ -212,6 +214,15 @@ export default function ReceiptInput({
     }
   }
 
+  const calculatePercentage = (sliderValue) => {
+    if (sliderValue === 0) {
+      return 100;
+    } else if (sliderValue === 50) {
+      return 50;
+    } else if (sliderValue === 100) {
+      return 0;
+    }
+  };
   // Handlers for selected values, either me or them
   const handleButton1Click = () => {
     setSelected(1);
@@ -292,6 +303,7 @@ export default function ReceiptInput({
 
   // Handler to push entries into the History tab array
   const handleHistorySubmit = () => {
+    console.log(`personName?`, personName);
     const newReceipt = {
       personName,
       personEmail,
@@ -307,8 +319,9 @@ export default function ReceiptInput({
       displayDate,
       displayInvoice,
       receiptTotal,
+      submissionArray,
     };
-
+    console.log("receiptTotal?", receiptTotal);
     addReceipt(newReceipt);
   };
   const [postedTransaction] = useState(true);
@@ -327,13 +340,32 @@ export default function ReceiptInput({
     console.log("getFinalTotal is being called");
     if (selectedValue === "you") {
       console.log("addNum from GFT is being called");
-      addNum(ContactId, personReceiptAmount, taxActual, personOwing, postedTransaction);
+      addNum(
+        ContactId,
+        personReceiptAmount,
+        taxActual,
+        personOwing,
+        postedTransaction
+      );
     } else {
       console.log("subNum from GFT is being called");
-      subNum(ContactId, personReceiptAmount, taxActual, personOwing, postedTransaction);
+      subNum(
+        ContactId,
+        personReceiptAmount,
+        taxActual,
+        personOwing,
+        postedTransaction
+      );
     }
   };
 
+  const handleSnapShotSubmit = (event) => {
+    event.preventDefault();
+
+    console.log("submissionArray:", submissionArray);
+  };
+
+  
   useEffect(() => {
     setObtainedInfo((prevInfo) =>
       prevInfo.map((item) => ({
@@ -604,6 +636,8 @@ export default function ReceiptInput({
 
                       <div className="flex-column flex items-center justify-center">
                         <ReceiptTable
+                          submissionArray={submissionArray}
+                          setSubmissionArray={setSubmissionArray}
                           handleResetCombinedArray={handleResetCombinedArray}
                           resetCombinedArray={resetCombinedArray}
                           taxRate={taxRate}
@@ -707,6 +741,7 @@ export default function ReceiptInput({
                           setSubmissionError(false);
                         } else {
                           e.preventDefault();
+                          handleSnapShotSubmit(e);
                           setSubmissionError(true);
                           getFinalTotal(e);
                           handleResetCombinedArray();
@@ -1142,6 +1177,7 @@ export default function ReceiptInput({
                                     setSubmissionError(false);
                                   } else {
                                     e.preventDefault();
+                                    handleSnapShotSubmit(e);
                                     setSubmissionError(true);
                                     getFinalTotal();
                                     handleResetCombinedArray();

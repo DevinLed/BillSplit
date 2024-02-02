@@ -46,12 +46,14 @@ export default function ReceiptTable({
   taxOwingPerc,
   taxActual,
   taxRate,
-  lang
+  lang,
+  submissionArray, 
+  setSubmissionArray
 }) {
   // Handler for changing the name of the item added to array
   const [isAddingItem, setIsAddingItem] = useState(false);
   const [showTaxButton, setShowTableButton] = useState(true);
-  
+
   const [currentValue, setCurrentValue] = useState(undefined);
   const handleNameChange = (event) => {
     setName(event.target.value);
@@ -168,8 +170,10 @@ export default function ReceiptTable({
     setCombinedArray(updatedCombinedArray);
   };
   
-  
-  
+  useEffect(() => {
+    setSubmissionArray(combinedArray);
+  }, [combinedArray, setSubmissionArray]);
+
   // Handler for manually editting Tax amount
   const handleTaxAmountChange = (value) => {
     const newValue = value.replace(/^\$/, "");

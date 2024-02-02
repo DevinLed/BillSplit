@@ -159,6 +159,8 @@ function App({ signOut, user }) {
   const [value] = useState("");
 
   // History tab work
+  
+  const [submissionArray, setSubmissionArray] = useState([]);
   const initialCombinedTotal = 0;
   const [combinedTotal, setCombinedTotal] = useState(initialCombinedTotal);
   const [historyData, setHistoryData] = useState([]);
@@ -508,7 +510,7 @@ function App({ signOut, user }) {
           "Content-Type": "application/json",
         },
       });
-
+      console.log("body?", newReceipt)
       if (!response.ok) {
         throw new Error("Failed to add receipt");
       }
@@ -558,6 +560,8 @@ function App({ signOut, user }) {
             path="/ReceiptInput/:ContactId"
             element={
               <ReceiptInput
+              submissionArray={submissionArray}
+              setSubmissionArray={setSubmissionArray}
                 combinedTotal={combinedTotal}
                 setCombinedTotal={setCombinedTotal}
                 personName={personName}
@@ -773,7 +777,8 @@ function App({ signOut, user }) {
           path="/ContactHistoryEdit"
           element={
             <ContactHistoryEdit
-            
+            submissionArray={submissionArray}
+            combinedArray={combinedArray}
             personName={personName}
             personEmail={personEmail}
             personPhone={personPhone}
