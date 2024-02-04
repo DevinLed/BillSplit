@@ -260,7 +260,9 @@ export default function ReceiptTable({
   // combing the 2 arrays, picture and manually entered
   useEffect(() => {
     if (Array.isArray(items) && Array.isArray(obtainedInfo)) {
+      console.log("attempting to merge the tables...")
       setCombinedArray([...items, ...obtainedInfo]);
+      console.log("picture combinedArray:", )
     }
   }, [items, obtainedInfo]);
 

@@ -65,8 +65,9 @@ export default function ReceiptInput({
   setObtainedInfo,
   loggedInUserEmail,
   additionValue,
-  submissionArray, 
-  setSubmissionArray
+  submissionArray,
+  setSubmissionArray,
+  loggedInUsername,
 }) {
   registerLocale("en", en);
   registerLocale("fr", fr);
@@ -320,6 +321,7 @@ export default function ReceiptInput({
       displayInvoice,
       receiptTotal,
       submissionArray,
+      loggedInUsername,
     };
     console.log("receiptTotal?", receiptTotal);
     addReceipt(newReceipt);
@@ -365,7 +367,6 @@ export default function ReceiptInput({
     console.log("submissionArray:", submissionArray);
   };
 
-  
   useEffect(() => {
     setObtainedInfo((prevInfo) =>
       prevInfo.map((item) => ({
@@ -453,7 +454,7 @@ export default function ReceiptInput({
       )}
       <CSSTransition
         in={selectMethodManual}
-        timeout={500} // Adjust the duration of the transition as needed
+        timeout={500} 
         classNames="fade"
         unmountOnExit
       >
@@ -602,7 +603,7 @@ export default function ReceiptInput({
                   </div>
                   <CSSTransition
                     in={showTable}
-                    timeout={500} // Adjust the duration of the transition as needed
+                    timeout={500} 
                     classNames="fade"
                     unmountOnExit
                   >
@@ -706,7 +707,7 @@ export default function ReceiptInput({
                         onClick={(e) => {
                           const finalTotal = personReceiptAmount;
                           if (finalTotal === 0) {
-                            // Handle the error case and prevent further actions
+                            
                             console.error("Error: Invalid final total");
                             setSubmissionError(false);
                           } else {
@@ -736,7 +737,6 @@ export default function ReceiptInput({
                       onClick={(e) => {
                         const finalTotal = personReceiptAmount;
                         if (finalTotal === 0) {
-                          // Handle the error case and prevent further actions
                           console.error("Error: Invalid final total");
                           setSubmissionError(false);
                         } else {
@@ -772,7 +772,7 @@ export default function ReceiptInput({
       </CSSTransition>
       <CSSTransition
         in={selectMethodPicture}
-        timeout={500} // Adjust the duration of the transition as needed
+        timeout={500} 
         classNames="fade"
         unmountOnExit
       >
@@ -1025,7 +1025,7 @@ export default function ReceiptInput({
                             </div>
                             <CSSTransition
                               in={showTable}
-                              timeout={500} // Adjust the duration of the transition as needed
+                              timeout={500} 
                               classNames="fade"
                               unmountOnExit
                             >
@@ -1060,6 +1060,8 @@ export default function ReceiptInput({
                                 <div className="flex-column flex items-center justify-center">
                                   <div>
                                     <ReceiptTable
+                                      submissionArray={submissionArray}
+                                      setSubmissionArray={setSubmissionArray}
                                       handleResetCombinedArray={
                                         handleResetCombinedArray
                                       }
@@ -1135,7 +1137,6 @@ export default function ReceiptInput({
                                   onClick={(e) => {
                                     const finalTotal = personReceiptAmount;
                                     if (finalTotal === 0) {
-                                      // Handle the error case and prevent further actions
                                       console.error(
                                         "Error: Invalid final total"
                                       );
@@ -1172,7 +1173,6 @@ export default function ReceiptInput({
                                 onClick={(e) => {
                                   const finalTotal = personReceiptAmount;
                                   if (finalTotal === 0) {
-                                    // Handle the error case and prevent further actions
                                     console.error("Error: Invalid final total");
                                     setSubmissionError(false);
                                   } else {

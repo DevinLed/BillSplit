@@ -607,6 +607,7 @@ function App({ signOut, user }) {
                 obtainedInfo={obtainedInfo}
                 setObtainedInfo={setObtainedInfo}
                 additionValue={additionValue}
+                loggedInUsername={loggedInUsername}                
               />
             }
           />

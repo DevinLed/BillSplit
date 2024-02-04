@@ -351,8 +351,28 @@ label {
   width: 50mm;
   background: #fff;
   text-align: left;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
 }
 
+#th-invoice-POS2 {
+  padding: 3%;
+  margin: 5% auto;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  text-align: left;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+  display: grid;
+}
+#th-invoice-POS2 p,
+#th-invoice-POS2 h2 {
+  font-size: 1.2em;
+  padding: 10px;
+}
+.expanded #th-invoice-POS {
+  transform: scale(2); 
+  background: rgba(0, 0, 0, 0.5); 
+}
 .th-h1 {
   font-size: 1.5em;
   color: #222;
@@ -364,7 +384,6 @@ label {
 .th-h2,
 .th-itemtext {
   width: 100%; 
-  text-align: center;
 }
 .th-itemtext1 {
   width: 100%; 
@@ -414,26 +433,40 @@ label {
   width: max-content;
   border-collapse: collapse;
 }
-.th-td {
-}
 .th-tabletitle {
   font-size: 0.5em;
   background: #eee;
   width: 100%;
+  text-align: center;
+  justify-content:center;
+  align-items: center;
 }
 .th-service {
   border-bottom: 1px solid #eee;
   width: 100%;
 }
-
+.th-h21{
+  text-align: center
+}
 .th-item,
 .th-Hours,
 .th-Rate,
 .th-tableitem {
   width: 33.33%;
 }
+.th-itemtext2{
+  text-align: center;
+}
+
+.th-Hours{
+  text-align: right;
+}
+.th-Rate{
+  text-align: right;
+}
 .th-item {
   width: 15mm;
+  text-align: left;;
 }
 .th-itemtext {
   font-size: 0.5em;
@@ -441,4 +474,45 @@ label {
 
 #th-legalcopy {
   margin-top: 5mm;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5); 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  max-width: 80%;
+  max-height: 80%;
+  overflow-y: auto;
+}
+
+.modal-enter {
+  opacity: 0;
+}
+
+.modal-enter-active {
+  opacity: 1;
+  transition: opacity 300ms;
+}
+
+.modal-exit {
+  opacity: 1;
+}
+
+.modal-exit-active {
+  opacity: 0;
+  transition: opacity 300ms;
 }
