@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/BillSplit/static/css/main.c1d13b6a.css",
+    "main.css": "/BillSplit/static/css/main.1fdd692b.css",
     "main.js": "/BillSplit/static/js/main.59c6fd94.js",
     "static/media/DivvySample.gif": "/BillSplit/static/media/DivvySample.caf0bdbd0ccb7aa0349e.gif",
     "static/media/Historyphoneoutline.png": "/BillSplit/static/media/Historyphoneoutline.f6eb387df3f764753806.png",
@@ -13,11 +13,11 @@
     "static/media/icomoon.woff?yjc9oj": "/BillSplit/static/media/icomoon.baa8c3df47645e50ef7f.woff",
     "static/media/icomoon.ttf?yjc9oj": "/BillSplit/static/media/icomoon.bbc8a02e138d003f16fa.ttf",
     "index.html": "/BillSplit/index.html",
-    "main.c1d13b6a.css.map": "/BillSplit/static/css/main.c1d13b6a.css.map",
+    "main.1fdd692b.css.map": "/BillSplit/static/css/main.1fdd692b.css.map",
     "main.59c6fd94.js.map": "/BillSplit/static/js/main.59c6fd94.js.map"
   },
   "entrypoints": [
-    "static/css/main.c1d13b6a.css",
+    "static/css/main.1fdd692b.css",
     "static/js/main.59c6fd94.js"
   ]
 }
