@@ -14,6 +14,7 @@ import {
   IoSettingsOutline,
 } from "react-icons/io5";
 
+import NotificationAPIComponent from "../components/NotificationAPI";
 import { CSSTransition } from "react-transition-group";
 import { withAuthenticator, Button, Heading } from "@aws-amplify/ui-react";
 import "@aws-amplify/ui-react/styles.css";
@@ -32,6 +33,7 @@ export default function Home({
   setLang,
   signOut,
   user,
+  loggedInUserEmail
 }) {
   const [startBill, setStartBill] = useState(true);
   const [showPersonEdit, setPersonEdit] = useState(false);
@@ -149,7 +151,8 @@ export default function Home({
   return (
     <>
       <div className={`App ${theme}`}>
-        <div className="flex items-center justify-center mt-4">
+        <div className="flex items-center justify-center mt-1">
+          
           <Heading
             className={
               theme === "dark"
@@ -182,9 +185,9 @@ export default function Home({
           }
           style={{ maxWidth: "600px" }}
         >
+          
           <div>
             <div className="flex flex-col items-center justify-center">
-              {/*  Header narrative for the Main Screen + 6 button selection screens */}
               <Header
                 startBill={startBill}
                 showPersonEdit={showPersonEdit}

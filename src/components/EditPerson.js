@@ -367,17 +367,6 @@ export default function EditPerson({
                 <IoSaveOutline size={24} />
               </label>
             </div>
-            <div className="flex justify-center p-2">
-              <label
-                className={
-                  theme === "dark"
-                    ? "flex w-fit flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-700 hover:no-underline"
-                    : "flex w-fit flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-800 hover:no-underline"
-                }
-              >
-                <IoCloseCircleOutline size={24} />
-              </label>
-            </div>
           </div>
           <CSSTransition
             in={showConfirmation}

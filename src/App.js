@@ -406,13 +406,6 @@ function App({ signOut, user }) {
           });
         });
 
-        // Clear the input fields and other state variables
-        setPersonName("");
-        setPersonPhone("");
-        setPersonEmail("");
-        setPersonOwing("");
-        setSelectedValue("");
-        setIsEditing(false);
         updateDataHandler();
       })
       .catch((error) => {
@@ -525,15 +518,17 @@ function App({ signOut, user }) {
   return (
     <>
       <div className={`App ${theme}`} style={{ paddingTop: "20px" }}>
+        
+         
+      <NotificationAPIComponent userId={loggedInUserEmail} className="Noti"/>
         <div onClick={updateDataHandler}>
         </div>
-        
-        <NotificationAPIComponent userId={loggedInUserEmail} className="Noti"/>
-        <Routes>
+          <Routes>
           <Route
             path="/Home"
             element={
               <Home
+                loggedInUserEmail={loggedInUserEmail}
                 theme={theme}
                 setTheme={setTheme}
                 toggleTheme={toggleTheme}
