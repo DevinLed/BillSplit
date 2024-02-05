@@ -170,10 +170,6 @@ export default function ReceiptTable({
     setCombinedArray(updatedCombinedArray);
   };
   
-  useEffect(() => {
-    setSubmissionArray(combinedArray);
-  }, [combinedArray, setSubmissionArray]);
-
   // Handler for manually editting Tax amount
   const handleTaxAmountChange = (value) => {
     const newValue = value.replace(/^\$/, "");
@@ -262,9 +258,13 @@ export default function ReceiptTable({
     if (Array.isArray(items) && Array.isArray(obtainedInfo)) {
       console.log("attempting to merge the tables...")
       setCombinedArray([...items, ...obtainedInfo]);
-      console.log("picture combinedArray:", )
     }
   }, [items, obtainedInfo]);
+  useEffect(() => {
+    setSubmissionArray(combinedArray);
+    console.log("picturecombinedArray:", submissionArray);
+    }, [combinedArray, setSubmissionArray, submissionArray]);
+
 
   useEffect(() => {
     // Calculate the updated totals based on the remaining items in combinedArray

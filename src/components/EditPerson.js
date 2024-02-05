@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import "./../index.css";
 import { IoSaveOutline, IoCloseCircleOutline } from "react-icons/io5";
 import { AiOutlineDelete } from "react-icons/ai";
@@ -36,6 +36,9 @@ export default function EditPerson({
     setPersonOwing("0.00");
   };
 
+  useEffect(() => {
+    console.log("person owing?", personOwing);
+  }, []);
   function handleKeyDown(e) {
     if (e.key === "Enter") {
       e.target.blur();
@@ -280,6 +283,7 @@ export default function EditPerson({
                       type="text"
                       className="form-control max-six-digits rounded-start"
                       onKeyDown={handleKeyDown}
+                      
                       placeholder={
                         personOwing
                           ? parseFloat(personOwing).toFixed(2)
@@ -307,6 +311,7 @@ export default function EditPerson({
                               : "S'il vous plait, entrez un nombre valide"
                           );
                         }
+                        console.log("value?", value);
                       }}
                     />
                   </div>

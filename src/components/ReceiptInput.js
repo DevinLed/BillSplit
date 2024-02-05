@@ -304,7 +304,7 @@ export default function ReceiptInput({
 
   // Handler to push entries into the History tab array
   const handleHistorySubmit = () => {
-    console.log(`personName?`, personName);
+    console.log("submissionArray being passed to history?", submissionArray);
     const newReceipt = {
       personName,
       personEmail,
@@ -371,7 +371,7 @@ export default function ReceiptInput({
     setObtainedInfo((prevInfo) =>
       prevInfo.map((item) => ({
         ...item,
-        sliderValue: item.sliderValue || 55,
+        sliderValue: item.sliderValue || 50,
       }))
     );
   }, []);

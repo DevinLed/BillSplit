@@ -181,9 +181,9 @@ function App({ signOut, user }) {
   // used to update values of balance for contacts
 
   const currentUserName = user.attributes.name;
-  const editRow = (ContactId) => {
+  const editRow = (ContactId, UserEmail) => {
     const selectedPerson = dataThrow.find(
-      (item) => item.ContactId === ContactId
+      (item) => item.ContactId === ContactId && item.UserEmail === UserEmail
     );
     setPersonName(selectedPerson.Name);
     setPersonEmail(selectedPerson.Email);
@@ -526,8 +526,9 @@ function App({ signOut, user }) {
     <>
       <div className={`App ${theme}`} style={{ paddingTop: "20px" }}>
         <div onClick={updateDataHandler}>
-        <NotificationAPIComponent userId={loggedInUserEmail}/>
         </div>
+        
+        <NotificationAPIComponent userId={loggedInUserEmail} className="Noti"/>
         <Routes>
           <Route
             path="/Home"

@@ -103,13 +103,13 @@ export default function EditList({
                       <Link to={{
                         pathname: "/ContactHistoryEdit",
                         state: {
-                          personName: personName,
-                          personEmail: personEmail,
-                          personPhone: personPhone,
-                          personOwing: personOwing,
+                          personName: item.personName,
+                          personEmail: item.personEmail,
+                          personPhone: item.personPhone,
+                          personOwing: item.personOwing,
                         }
                       }}
-                      onClick={() => editRow(item.ContactId)}>
+                      onClick={() => editRow(item.ContactId, item.UserEmail)}>
                       <li
                         className={
                           "list-group-item flex justify-between m-1 p-2 rounded-lg shadow-sm " +

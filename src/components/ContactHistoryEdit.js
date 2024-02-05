@@ -90,9 +90,9 @@ export default function ContactHistoryEdit({
   const [isExpanded, setIsExpanded] = useState(false);
   const [loading, setLoading] = useState(true);
   const toggleExpanded = () => {
-    console.log('Before Toggle:', isExpanded);
+    console.log("Before Toggle:", isExpanded);
     setIsExpanded(!isExpanded);
-    console.log('After Toggle:', isExpanded);
+    console.log("After Toggle:", isExpanded);
   };
   const handleLabelClick = (transaction) => {
     setSelectedTransaction(transaction);
@@ -186,13 +186,19 @@ export default function ContactHistoryEdit({
             {transaction.submissionArray.map((item, index) => (
               <tr className="th-service" key={index}>
                 <td className="th-tableitem">
-                  <p className="th-itemtext1">{item.name}</p>
+                  <p className="th-itemtext1">
+                    {item.description
+                      ? item.description.slice(0, 4) + ".."
+                      : item.name.slice(0, 4) + ".."}
+                  </p>
                 </td>
                 <td className="th-tableitem">
                   <p className="th-itemtext2">{item.sliderValue}%</p>
                 </td>
                 <td className="th-tableitem">
-                  <p className="th-itemtext3">{item.amount}</p>
+                  <p className="th-itemtext3">
+                    {item.total_amount || item.amount}
+                  </p>
                 </td>
               </tr>
             ))}
@@ -259,7 +265,8 @@ export default function ContactHistoryEdit({
             " py-4 px-10 text-sm font-semibold shadow-md hover:bg-gray-800 hover:no-underline"
           }
         >
-          Edit Contact Details
+          
+          {lang === "english" ? "Edit contact details" : "Modifier les coordonnées"}
         </button>
         {showEditPerson && (
           <EditPerson
@@ -303,115 +310,134 @@ export default function ContactHistoryEdit({
               : noTransactionsMessage}
           </div>
         </div>
-        <CSSTransition in={isExpanded} timeout={300} 
-      classNames="modal" unmountOnExit>
-      <div className="modal-overlay">
-    {selectedTransaction && (
-      <div
-      className=" th-py-2 th-my-2 th-px-0"
-      id="th-invoice-POS2"
-      onClick={() => {
-        handleLabelClick(selectedTransaction);
-        console.log("transaction from click123?", selectedTransaction);
-      }}
-    >
-      <div>
-        <div className="flex justify-center items-center">
-          <p className="font-bold">Submitted by</p>
-        </div>
-        <div className="flex justify-center items-center">
-          <p className="font-bold">{selectedTransaction.loggedInUsername}</p>
-        </div>
+        <CSSTransition
+          in={isExpanded}
+          timeout={300}
+          classNames="modal"
+          unmountOnExit
+        >
+          <div className="modal-overlay">
+            {selectedTransaction && (
+              <div
+                className=" th-py-2 th-my-2 th-px-0"
+                id="th-invoice-POS2"
+                onClick={() => {
+                  handleLabelClick(selectedTransaction);
+                  console.log(
+                    "transaction from click123?",
+                    selectedTransaction
+                  );
+                }}
+              >
+                <div>
+                  <div className="flex justify-center items-center">
+                    <p className="font-bold">Submitted by</p>
+                  </div>
+                  <div className="flex justify-center items-center">
+                    <p className="font-bold">
+                      {selectedTransaction.loggedInUsername}
+                    </p>
+                  </div>
 
-        <div className="flex justify-center items-center mt-2">
-          {selectedTransaction.merchantName && (
-            <p>{`${selectedTransaction.merchantName}`}</p>
-          )}
-        </div>
+                  <div className="flex justify-center items-center mt-2">
+                    {selectedTransaction.merchantName && (
+                      <p>{`${selectedTransaction.merchantName}`}</p>
+                    )}
+                  </div>
 
-        <div className="flex justify-center items-center mt-2">
-          <p className="text-sm">{selectedTransaction.startDate}</p>
-        </div>
-      </div>
-      <div className="flex justify-center items-center mt-2">
-        <p className="text-sm">
-          {selectedTransaction.selectedValue === "you"
-            ? lang === "english"
-              ? "You are Owed"
-              : "On vous doit"
-            : lang === "english"
-            ? "You owe"
-            : "Tu dois"}
-        </p>
-      </div>
-      <div className="flex justify-center items-center">
-        <p className="font-bold">
-          $
-          {(
-            parseFloat(selectedTransaction.personReceiptAmount) +
-            parseFloat(selectedTransaction.taxActual)
-          ).toFixed(2)}
-        </p>
-      </div>
+                  <div className="flex justify-center items-center mt-2">
+                    <p className="text-sm">{selectedTransaction.startDate}</p>
+                  </div>
+                </div>
+                <div className="flex justify-center items-center mt-2">
+                  <p className="text-sm">
+                    {selectedTransaction.selectedValue === "you"
+                      ? lang === "english"
+                        ? "You are Owed"
+                        : "On vous doit"
+                      : lang === "english"
+                      ? "You owe"
+                      : "Tu dois"}
+                  </p>
+                </div>
+                <div className="flex justify-center items-center">
+                  <p className="font-bold">
+                    $
+                    {(
+                      parseFloat(selectedTransaction.personReceiptAmount) +
+                      parseFloat(selectedTransaction.taxActual)
+                    ).toFixed(2)}
+                  </p>
+                </div>
 
-      <div className="flex justify-center items-center">
-        {selectedTransaction.taxActual !== 0 && (
-          <p className="text-sm mt-2">
-            {lang === "english" ? "Taxes: " : "Impôts: "}
-            {`$${
-              isNaN(selectedTransaction.taxActual)
-                ? 0
-                : Math.abs(parseFloat(selectedTransaction.taxActual)).toFixed(2)
-            }`}
-          </p>
-        )}
-      </div>
-      <tr className="th-tabletitle">
-        <td className="th-item">
-          <h2 className="th-h2">Item</h2>
-        </td>
-        <td className="th-Hours">
-          <h2 className="th-h21">%</h2>
-        </td>
-        <td className="th-Rate">
-          <h2 className="th-h2">Total</h2>
-        </td>
-      </tr>
+                <div className="flex justify-center items-center">
+                  {selectedTransaction.taxActual !== 0 && (
+                    <p className="text-sm mt-2">
+                      {lang === "english" ? "Taxes: " : "Impôts: "}
+                      {`$${
+                        isNaN(selectedTransaction.taxActual)
+                          ? 0
+                          : Math.abs(
+                              parseFloat(selectedTransaction.taxActual)
+                            ).toFixed(2)
+                      }`}
+                    </p>
+                  )}
+                </div>
+                <table>
+                <tr className="th-tabletitle">
+                  <td className="th-item">
+                    <h2>Item</h2>
+                  </td>
+                  <td className="th-Hours">
+                    <h2>%</h2>
+                  </td>
+                  <td className="th-Rate">
+                    <h2>Total</h2>
+                  </td>
+                </tr>
 
-      {selectedTransaction.submissionArray.map((item, index) => (
-        <tr className="th-service" key={index}>
-          <td className="th-tableitem">
-            <p className="th-itemtext">{item.name}</p>
-          </td>
-          <td className="th-tableitem">
-            <p className="th-itemtext">{item.sliderValue}%</p>
-          </td>
-          <td className="th-tableitem">
-            <p className="th-itemtext">{item.amount}</p>
-          </td>
-        </tr>
-      ))}
+                {selectedTransaction.submissionArray.map((item, index) => (
+                  <tr className="th-service" key={index}>
+                    <td className="th-tableitemEx">
+                      <p className="th-itemtext1">
+                        {item.description
+                          ? item.description.slice(0, 8) + ".."
+                          : item.name.slice(0, 4) + ".."}
+                      </p>
+                    </td>
+                    <td className="th-tableitem">
+                      <p className="th-itemtext2">{item.sliderValue}%</p>
+                    </td>
+                    <td className="th-tableitem">
+                      <p className="th-itemtext3">
+                        {item.total_amount || item.amount}
+                      </p>
+                    </td>
+                  </tr>
+                ))}
+                </table>
 
-      <div className="flex justify-center items-center mt-2">
-        <p className="text-sm">
-          {lang === "english" ? "Receipt Total" : "Total des reçus"}: $
-          {selectedTransaction.receiptTotal || 0}
-        </p>
-      </div>
+                <div className="flex justify-center items-center mt-2">
+                  <p className="text-sm">
+                    {lang === "english" ? "Receipt Total" : "Total des reçus"}:
+                    ${selectedTransaction.receiptTotal || 0}
+                  </p>
+                </div>
 
-      <div className="flex justify-center items-center mt-2">
-        {selectedTransaction.invoiceNumber ? (
-          <div>
-            <p className="text-sm mb-2">{`Invoice Number: ${selectedTransaction.invoiceNumber}`}</p>
+                <div className="flex justify-center items-center mt-2">
+                  {selectedTransaction.invoiceNumber ? (
+                    <div>
+                      <p className="text-sm mb-2">{`Invoice Number: ${selectedTransaction.invoiceNumber}`}</p>
+                    </div>
+                  ) : (
+                    ""
+                  )}
+                </div>
+              </div>
+            )}
           </div>
-        ) : (
-          ""
-        )}
-      </div>
-    </div>
-    )}
-  </div>
-</CSSTransition>
+        </CSSTransition>
       </main>
     </>
   );

@@ -373,107 +373,72 @@ label {
   transform: scale(2); 
   background: rgba(0, 0, 0, 0.5); 
 }
-.th-h1 {
-  font-size: 1.5em;
-  color: #222;
+.th-tabletitle, .th-service {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-.th-h2 {
-  font-size: 0.9em;
+.th-itemtext1{
+  text-align: left;
+}
+.the-item2{
+  padding-left: 50px;
+  text-align: center;
 }
 
-.th-h2,
-.th-itemtext {
-  width: 100%; 
+.th-tableitem {
+  flex: 1;
 }
-.th-itemtext1 {
-  width: 100%; 
-  text-align: left; 
-}.th-itemtext3 {
-  width: 100%; 
-  text-align: right; 
-}
-.th-h3 {
+#th-invoice-POS2 p, #th-invoice-POS2 h2 {
   font-size: 1.2em;
-  font-weight: 300;
-  line-height: 2em;
-}
-.th-p {
-  font-size: 0.7em;
-  color: #666;
-  line-height: 1.2em;
+  padding: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-#th-top,
-#th-mid,
-#th-bot {
-  border-bottom: 1px solid #eee;
+.th-tabletitle, .th-service, .th-itemtext1, .th-itemtext2, .th-itemtext3 {
+  text-align: center;
+  justify-content: center;
+  align-items: center;
 }
 
-#th-top {
-  min-height: 100px;
-}
-#th-mid {
-  min-height: 80px;
-}
-#th-bot {
-  min-height: 50px;
-}
-
-.th-info {
-  display: block;
-  margin-left: 0;
-}
-.th-title {
-  float: right;
-}
-.th-title p {
-  text-align: right;
-}
-.th-table {
-  width: max-content;
-  border-collapse: collapse;
-}
 .th-tabletitle {
   font-size: 0.5em;
   background: #eee;
   width: 100%;
-  text-align: center;
-  justify-content:center;
-  align-items: center;
 }
+
 .th-service {
   border-bottom: 1px solid #eee;
   width: 100%;
 }
-.th-h21{
-  text-align: center
-}
-.th-item,
-.th-Hours,
-.th-Rate,
-.th-tableitem {
+
+.th-item, .th-Hours, .th-Rate, .th-tableitem {
   width: 33.33%;
 }
-.th-itemtext2{
-  text-align: center;
+
+.th-Hours {
+  text-align: right;
 }
 
-.th-Hours{
+.th-Rate, .th-itemtext3 {
   text-align: right;
 }
-.th-Rate{
-  text-align: right;
+.th-itemtext1 {
+  text-align: left;
 }
+
 .th-item {
   width: 15mm;
-  text-align: left;;
+  text-align: left;
 }
+
 .th-itemtext {
   font-size: 0.5em;
 }
-
-#th-legalcopy {
-  margin-top: 5mm;
+.th-h21{
+  text-align: center;
 }
 
 .modal-overlay {
