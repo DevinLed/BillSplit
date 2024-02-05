@@ -159,10 +159,6 @@ export default function Header({
               <Link to="/EditList">
                 <button className="dropdown-item">{lang === "english" ? "Edit Person" : "Modifier la personne"}</button>
               </Link>
-
-              <Link to="/History">
-                <button className="dropdown-item">{lang === "english" ? "History" : "Historique"}</button>
-              </Link>
               
               <Link to="/Settings">
                   <button className="dropdown-item">{lang === "english" ? "Settings" : "Paramètres"}</button>
@@ -209,10 +205,6 @@ export default function Header({
               </Link>
               <Link to="/EditList">
                 <button className="dropdown-item">{lang === "english" ? "Edit Person" : "Modifier la personne"}</button>
-              </Link>
-
-              <Link to="/History">
-                <button className="dropdown-item">{lang === "english" ? "History" : "Historique"}</button>
               </Link>
               
               <Link to="/Settings">
@@ -261,10 +253,6 @@ export default function Header({
                 <button className="dropdown-item">{lang === "english" ? "Edit Person" : "Modifier la personne"}</button>
               </Link>
 
-              <Link to="/History">
-                <button className="dropdown-item">{lang === "english" ? "History" : "Historique"}</button>
-              </Link>
-              
               <Link to="/Settings">
                   <button className="dropdown-item">{lang === "english" ? "Settings" : "Paramètres"}</button>
                 </Link>
@@ -307,9 +295,6 @@ export default function Header({
                 <Link to="/EditList">
                   <button className="dropdown-item">{lang === "english" ? "Edit Person" : "Modifier la personne"}</button>
                 </Link>
-                <Link to="/History">
-                <button className="dropdown-item">{lang === "english" ? "History" : "Historique"}</button>
-              </Link>
               </div>
             </div>
           </div>

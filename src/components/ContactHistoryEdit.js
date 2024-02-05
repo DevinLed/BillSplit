@@ -247,7 +247,7 @@ export default function ContactHistoryEdit({
   return (
     <>
       <main
-        className="flex flex-col items-center justify-center w-full max-w-xl mx-auto bg-white-500 mt-5 rounded p-0 pt-3 shadow sm:max-w-xl md:max-w-2xl lg:max-w-4xl"
+        className="flex flex-col items-center justify-center w-full max-w-xl mx-auto bg-white-500 mt-1 rounded p-0 pt-3 shadow sm:max-w-xl md:max-w-2xl lg:max-w-4xl"
         style={{ maxWidth: "600px" }}
       >
         <Header
@@ -302,8 +302,10 @@ export default function ContactHistoryEdit({
           ></EditPerson>
         )}
         <div className="flex flex-col items-center justify-center">
-          <div className="custom-rounded px-3 py-2 mb-4 mx-auto">
-            <div className="flex items-center justify-end mb-2"></div>
+          <div className={"custom-rounded px-3 py-2 mb-4 mx-auto" +
+                          (theme === "dark"
+                            ? "bg-gray-800 text-black"
+                            : "bg-white text-gray-800")}>
 
             {transactionList.length > 0
               ? transactionList
@@ -317,9 +319,17 @@ export default function ContactHistoryEdit({
           unmountOnExit
         >
           <div className="modal-overlay">
+            
             {selectedTransaction && (
               <div
-                className=" th-py-2 th-my-2 th-px-0"
+                className=
+                {
+                  " th-py-2 th-my-2 th-px-0 " +
+                  (theme === "dark"
+                    ? "bg-gray-800 text-white"
+                    : "bg-white text-gray-800")
+                }
+                
                 id="th-invoice-POS2"
                 onClick={() => {
                   handleLabelClick(selectedTransaction);

@@ -352,6 +352,8 @@ label {
   background: #fff;
   text-align: left;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+  
+  color: black;
 }
 
 #th-invoice-POS2 {
@@ -363,6 +365,7 @@ label {
   text-align: left;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
   display: grid;
+  color: black;
 }
 #th-invoice-POS2 p,
 #th-invoice-POS2 h2 {

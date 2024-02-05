@@ -10,7 +10,6 @@ import {
 import { v4 as uuidv4 } from "uuid";
 import EditPerson from "./components/EditPerson";
 import SplitBill from "./components/SplitBill";
-import History from "./components/History";
 import LandingPage from "./components/LandingPage";
 import AddPerson from "./components/AddPerson";
 import Home from "./components/Home";
@@ -700,24 +699,6 @@ function App({ signOut, user }) {
               />
             }
           />
-
-          <Route
-            path="/History"
-            element={
-              <History
-                combinedTotal={combinedTotal}
-                setCombinedTotal={setCombinedTotal}
-                receipts={receipts}
-                theme={theme}
-                lang={lang}
-                setLang={setLang}
-                loggedInUsername={loggedInUsername}
-                historyData={historyData}
-                setHistoryData={setHistoryData}
-              />
-            }
-          />
-
           <Route
             path="/AddPerson"
             element={
