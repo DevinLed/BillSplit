@@ -13,10 +13,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: #f1f1f1;
 }
-main {
-  max-width: 1200px;
-}
-
 a {
   text-decoration: none;
 }

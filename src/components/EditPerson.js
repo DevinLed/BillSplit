@@ -62,6 +62,7 @@ export default function EditPerson({
   const [errorEmail, setErrorEmail] = useState(true);
   const [errorMsg, setErrorMsg] = useState("");
   const [submissionError, setSubmissionError] = useState(true);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleNameChange = async (e, ContactId) => {
     const inputName = e.target.value;
@@ -334,6 +335,13 @@ export default function EditPerson({
               <div className="mb-2 text-center text-sm text-red-500">
                 {errorMsg}
               </div>
+              {isSubmitted && (
+            <p className="mb-2 text-center text-sm text-red-500">
+              {lang === "english"
+                ? "Contact has been updated."
+                : "Le contact a été mis à jour."}
+            </p>
+          )}
             </div>
           </div>
           <div className="flex justify-center p-2 space-x-4">
@@ -359,6 +367,7 @@ export default function EditPerson({
                 onClick={(e) => {
                   if (errorBalance && errorPhone && errorEmail && errorName) {
                     handleSubmit(e);
+                    setIsSubmitted(true);
                   } else {
                     setSubmissionError(false);
                   }

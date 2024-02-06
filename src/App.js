@@ -445,10 +445,6 @@ function App({ signOut, user }) {
     }
 
     // Clear the input fields and other state variables
-    setPersonName("");
-    setPersonPhone("");
-    setPersonEmail("");
-    setPersonOwing("");
     setIsEditing(false);
     updateDataHandler();
   };

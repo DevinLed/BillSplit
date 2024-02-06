@@ -326,7 +326,7 @@ export default function ContactHistoryEdit({
                 {
                   " th-py-2 th-my-2 th-px-0 " +
                   (theme === "dark"
-                    ? "bg-gray-800 text-white"
+                    ? "bg-gray-800 text-black"
                     : "bg-white text-gray-800")
                 }
                 
