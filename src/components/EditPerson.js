@@ -107,6 +107,7 @@ export default function EditPerson({
     const url = `${API_URL}/${ContactId}/${user.attributes.email}`;
     console.log(url);
     console.log("HandleDeletePerson - ContactId?", ContactId);
+    console.log("HandleDeletePerson - passedId?", passedId);
     console.log("HandleDeletePerson - UserEmail?", user.attributes.email);
 
     fetch(url, {
@@ -123,7 +124,8 @@ export default function EditPerson({
             (item) => item.ContactId !== passedId
           );
           setDataThrow(updatedData);
-          updateEditHandler();
+          
+          window.location.href = "/BillSplit/#/EditList";
         } else {
           console.error("Failed to delete person");
         }

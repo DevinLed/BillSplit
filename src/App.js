@@ -744,6 +744,7 @@ function App({ signOut, user }) {
                 setDataThrow={setDataThrow}
                 API_URL={API_URL}
                 user={user}
+                
               />
             }
           />

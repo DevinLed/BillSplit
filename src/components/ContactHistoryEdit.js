@@ -270,35 +270,35 @@ export default function ContactHistoryEdit({
         </button>
         {showEditPerson && (
           <EditPerson
-            addPerson={addPerson}
-            setAddPerson={setAddPerson}
-            personName={personName}
-            setPersonName={setPersonName}
-            setPersonPhone={setPersonPhone}
-            setPersonEmail={setPersonEmail}
-            setPersonOwing={setPersonOwing}
-            personEmail={personEmail}
-            personPhone={personPhone}
-            personOwing={personOwing}
-            handleSubmit={handleSubmit}
-            handleEditSubmit={handleEditSubmit}
-            setPersonState={setPersonState}
-            personState={personState}
-            setIsSelected={setIsSelected}
-            setEditPerson={setEditPerson}
-            theme={theme}
-            editPerson={editPerson}
-            handleDeletePerson={handleDeletePerson}
-            lang={lang}
-            passedId={passedId}
-            setPassedId={setPassedId}
-            dataThrow={dataThrow}
-            setDataThrow={setDataThrow}
-            loggedInUserEmail={loggedInUserEmail}
-            API_URL={API_URL}
-            updateDataHandler={updateDataHandler}
-            updateEditHandler={updateEditHandler}
-            user={user}
+          addPerson={addPerson}
+          setAddPerson={setAddPerson}
+          personName={personName}
+          setPersonName={setPersonName}
+          setPersonPhone={setPersonPhone}
+          setPersonEmail={setPersonEmail}
+          setPersonOwing={setPersonOwing}
+          personEmail={personEmail}
+          personPhone={personPhone}
+          personOwing={personOwing}
+          handleSubmit={handleSubmit}
+          handleEditSubmit={handleEditSubmit}
+          setPersonState={setPersonState}
+          personState={personState}
+          setIsSelected={setIsSelected}
+          setEditPerson={setEditPerson}
+          theme={theme}
+          editPerson={editPerson}
+          handleDeletePerson={handleDeletePerson}
+          lang={lang}
+          passedId={passedId}
+          setPassedId={setPassedId}
+          dataThrow={dataThrow}
+          setDataThrow={setDataThrow}
+          loggedInUserEmail={loggedInUserEmail}
+          API_URL={API_URL}
+          updateDataHandler={updateDataHandler}
+          updateEditHandler={updateEditHandler}
+          user={user}
           ></EditPerson>
         )}
         <div className="flex flex-col items-center justify-center">

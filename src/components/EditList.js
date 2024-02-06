@@ -107,9 +107,10 @@ export default function EditList({
                           personEmail: item.personEmail,
                           personPhone: item.personPhone,
                           personOwing: item.personOwing,
+                          ContactId: item.ContactId,
                         }
                       }}
-                      onClick={() => editRow(item.ContactId, item.UserEmail)}>
+                      onClick={() => {editRow(item.ContactId, item.UserEmail);console.log("editRow contactId?", item.ContactId);}}>
                       <li
                         className={
                           "list-group-item flex justify-between m-1 p-2 rounded-lg shadow-sm " +
