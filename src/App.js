@@ -20,7 +20,7 @@ import Settings from "./components/Settings";
 import Footer from "./components/Footer";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { withAuthenticator, Button, Heading } from "@aws-amplify/ui-react";
+import { withAuthenticator, ThemeProvider, Button, Heading } from "@aws-amplify/ui-react";
 import "@aws-amplify/ui-react/styles.css";
 import "./darkMode.css";
 import "./index.css";
@@ -33,6 +33,7 @@ import ContactHistoryEdit from "./components/ContactHistoryEdit";
 Amplify.configure(awsconfig);
 
 function App({ signOut, user }) {
+  
   const [theme, setTheme] = useState("");
 
   const toggleTheme = () => {
@@ -45,6 +46,50 @@ function App({ signOut, user }) {
     }
   };
   // useEffect to track dark mode
+  const darkTheme = {
+    name: 'dark-theme',
+    tokens: {
+      colors: {
+        background: {
+          primary: { value: '#121212' },
+          secondary: { value: '#222222' },
+        },
+        font: {
+          primary: { value: '#ffffff' },
+          secondary: { value: '#bbbbbb' },
+        },
+        border: {
+          primary: { value: '#333333' },
+        },
+        brand: {
+          primary: { value: '#0f62fe' },
+        },
+      },
+      components: {
+        card: {
+          backgroundColor: { value: '{colors.background.secondary.value}' },
+          padding: { value: '2rem' },
+          borderRadius: { value: '0.5rem' },
+        },
+        button: {
+          primary: {
+            backgroundColor: { value: '{colors.brand.primary.value}' },
+            color: { value: '{colors.white.value}' },
+            paddingBlock: { value: '1rem' },
+            paddingInline: { value: '1.5rem' },
+            fontWeight: { value: '700' },
+          },
+          borderRadius: { value: '0.5rem' },
+        },
+        textField: {
+          backgroundColor: { value: '{colors.background.secondary.value}' },
+          borderColor: { value: '{colors.border.primary.value}' },
+          color: { value: '{colors.font.primary.value}' },
+          placeholderColor: { value: '{colors.font.secondary.value}' },
+        },
+      },
+    },
+  };
   useEffect(() => {
     localStorage.setItem("theme", theme);
     document.body.className = theme;
@@ -65,34 +110,6 @@ function App({ signOut, user }) {
     document.body.className = taxRate;
   }, [taxRate]);
 
-  //styling for login prompt
-  const styles = {
-    container: {
-      width: 400,
-      margin: "0 auto",
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "center",
-      padding: 20,
-    },
-    todo: { marginBottom: 15 },
-    input: {
-      border: "none",
-      backgroundColor: "#ddd",
-      marginBottom: 10,
-      padding: 8,
-      fontSize: 18,
-    },
-    todoName: { fontSize: 20, fontWeight: "bold" },
-    todoDescription: { marginBottom: 0 },
-    button: {
-      backgroundColor: "black",
-      color: "white",
-      outline: "none",
-      fontSize: 18,
-      padding: "12px 0px",
-    },
-  };
   // Menus for edit person and edit group
   const [passedId, setPassedId] = useState(0);
   const [addPerson, setAddPerson] = useState(false);
@@ -788,30 +805,4 @@ function App({ signOut, user }) {
 
 export default withAuthenticator(App);
 
-/*
-  Primary Key:
-   - Required
-   - Unique
-  Sort Key:
-   - Optional
-*/
 
-/*
-// Who owes me money?
-// Get all debt/IOUs related to me (the current user)
-QUERY WHERE PK = devin@
-
-PK: devin@ | SK: bob@ | RECEIPT: SOBEYS | AMOUNT: 10
-PK: devin@ | SK: bob@ | RECEIPT: BURGERS | AMOUNT: 20
-
-
-*/
-
-/*
-New GSI
-// Who do i owe money to?
-
-PK: bob@ | SK: devin@ | AMOUNT: 10
-PK: devin@ | SK: bob@ | AMOUNT: -10
-
-*/

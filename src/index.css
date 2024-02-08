@@ -480,3 +480,39 @@ label {
   opacity: 0;
   transition: opacity 300ms;
 }
+/*
+Amplify login styling
+*/
+.amplify-authenticator {
+  --amplify-primary-color: #152939;
+  --amplify-primary-tint: #37475A;
+  --amplify-primary-shade: #0E1C28;
+  background-color: #1a202c;
+  color: #ffffff;
+}
+
+.amplify-button {
+  background-color: var(--amplify-primary-color);
+  color: #ffffff;
+}
+
+.amplify-button:hover {
+  background-color: var(--amplify-primary-tint);
+}
+
+.amplify-button:active {
+  background-color: var(--amplify-primary-shade);
+}
+
+.amplify-form-section {
+  border-radius: 8px;
+}
+
+.amplify-input, .amplify-form-row {
+  background-color: #2D3748;
+  color: #ffffff;
+}
+
+.amplify-input, .amplify-label {
+  color: #ffffff;
+}
