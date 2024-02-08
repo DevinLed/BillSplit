@@ -136,7 +136,7 @@ export default function ReceiptInput({
 
   // Picture handling API section
   const FormData = require("form-data");
-  const apiKey = process.env.REACT_APP_MINDEE_API_KEY;
+  const apiKey = "561e58edb1c93ab9fec230c1439fbf48";
   const handleCapturePhoto = (dataUri) => {
     setPhotoData(dataUri);
     setShowCameraImage(true);
@@ -152,19 +152,19 @@ export default function ReceiptInput({
       data.append("document", photoData);
 
       const headers = new Headers();
-      headers.append("Authorization", `Token ${apiKey}`);
 
       const config = {
         method: "POST",
         headers,
         body: data,
       };
-
+      console.log("passing they keys?", apiKey)
       const response = await fetch(
         `https://api.mindee.net/v1/products/mindee/expense_receipts/v5/predict`,
         config
       );
       const responseData = await response.json();
+      console.log("responseData?",responseData);
       const lineItems =
         responseData.document.inference.prediction.line_items.map((item) => ({
           ...item,
