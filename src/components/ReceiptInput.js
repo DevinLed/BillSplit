@@ -152,6 +152,7 @@ export default function ReceiptInput({
       data.append("document", photoData);
 
       const headers = new Headers();
+      headers.append("Authorization", `Token ${apiKey}`);
 
       const config = {
         method: "POST",
