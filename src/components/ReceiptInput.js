@@ -748,7 +748,7 @@ export default function ReceiptInput({
                           handleHistorySubmit(e);
                           resetReceiptForm();
                           setIsReceiptSubmitted(true);
-                          window.location.href = "/BillSplit/#/SplitBill";
+                          window.location.href = "/#/SplitBill";
                         }
                       }}
                     >
@@ -1154,7 +1154,7 @@ export default function ReceiptInput({
                                       setShowTable(true);
                                       setShowCameraImage(false);
 
-                                      window.location.href = `/BillSplit#/ReceiptInput/${ContactId}`;
+                                      window.location.href = `/#/ReceiptInput/${ContactId}`;
                                     }
                                   }}
                                 >
@@ -1186,7 +1186,7 @@ export default function ReceiptInput({
                                     setIsReceiptSubmitted(true);
                                     setPersonReceiptAmount(0);
                                     window.location.href =
-                                      "/BillSplit/#/SplitBill";
+                                      "/#/SplitBill";
                                   }
                                 }}
                               >

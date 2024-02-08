@@ -125,7 +125,7 @@ export default function EditPerson({
           );
           setDataThrow(updatedData);
           
-          window.location.href = "/BillSplit/#/EditList";
+          window.location.href = "/#/EditList";
         } else {
           console.error("Failed to delete person");
         }
