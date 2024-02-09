@@ -18,6 +18,9 @@ export default function ContactHistoryEdit({
   personEmail,
   personPhone,
   personOwing,
+  ContactId,
+  UserEmail,
+  passedId,
   setPersonName,
   setPersonEmail,
   setPersonPhone,
@@ -39,8 +42,6 @@ export default function ContactHistoryEdit({
   handleDeletePerson,
   dataThrow,
   setDataThrow,
-  passedId,
-  setPassedId,
   updateDataHandler,
   user,
   API_URL,
@@ -281,6 +282,7 @@ export default function ContactHistoryEdit({
           personPhone={personPhone}
           personOwing={personOwing}
           handleSubmit={handleSubmit}
+          passedId={passedId}
           handleEditSubmit={handleEditSubmit}
           setPersonState={setPersonState}
           personState={personState}
@@ -290,8 +292,6 @@ export default function ContactHistoryEdit({
           editPerson={editPerson}
           handleDeletePerson={handleDeletePerson}
           lang={lang}
-          passedId={passedId}
-          setPassedId={setPassedId}
           dataThrow={dataThrow}
           setDataThrow={setDataThrow}
           loggedInUserEmail={loggedInUserEmail}

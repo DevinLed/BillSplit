@@ -10,6 +10,7 @@ export default function EditPerson({
   personPhone,
   personEmail,
   personOwing,
+  ContactId,
   setPersonName,
   setPersonPhone,
   setPersonEmail,
@@ -45,7 +46,7 @@ export default function EditPerson({
     }
   }
   const handleDeletePrompt = () => {
-    console.log(passedId);
+    console.log("delete prompt:", passedId,loggedInUserEmail);
     setShowConfirmation(true);
   };
   const handleCancelDeletePrompt = () => {
@@ -102,13 +103,11 @@ export default function EditPerson({
     )}-${numbersOnly.slice(6, 10)}`;
   };
 
-  const handleDeletePerson = (ContactId, passedId, UserEmail) => {
-    console.log("HandleDeletePerson - UserEmail?", user.attributes.email);
-    const url = `${API_URL}/${ContactId}/${user.attributes.email}`;
+  const handleDeletePerson = (passedId, loggedUserEmail) => {
+    const url = `${API_URL}/${passedId}/${loggedUserEmail}`;
     console.log(url);
-    console.log("HandleDeletePerson - ContactId?", ContactId);
     console.log("HandleDeletePerson - passedId?", passedId);
-    console.log("HandleDeletePerson - UserEmail?", user.attributes.email);
+    console.log("HandleDeletePerson - UserEmail?", loggedUserEmail);
 
     fetch(url, {
       method: "DELETE",
@@ -121,7 +120,7 @@ export default function EditPerson({
           console.log("Person deleted successfully");
           console.log(passedId);
           const updatedData = dataThrow.filter(
-            (item) => item.ContactId !== passedId
+            (item) => item.ContactId !== passedId && item.loggedInUserEmail === loggedInUserEmail
           );
           setDataThrow(updatedData);
           
@@ -354,7 +353,7 @@ export default function EditPerson({
                     ? "flex w-fit flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-700 hover:no-underline"
                     : "flex w-fit flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-800 hover:no-underline"
                 }
-                onClick={(e) => handleDeletePrompt(passedId)}
+                onClick={(e) => {handleDeletePrompt(ContactId, loggedInUserEmail);console.log("passed ID", passedId)}}
               >
                 <AiOutlineDelete size={24} />
               </label>
@@ -411,7 +410,7 @@ export default function EditPerson({
                     }
                     onClick={(e) => {
                       setPersonEmail(passedEmail);
-                      handleDeletePerson(passedId);
+                      handleDeletePerson(passedId, loggedInUserEmail);
                       console.log(passedId);
                     }}
                   >

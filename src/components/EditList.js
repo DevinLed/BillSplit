@@ -108,9 +108,10 @@ export default function EditList({
                           personPhone: item.personPhone,
                           personOwing: item.personOwing,
                           ContactId: item.ContactId,
+                          UserEmail: item.UserEmail,
                         }
                       }}
-                      onClick={() => {editRow(item.ContactId, item.UserEmail);console.log("editRow contactId?", item.ContactId);}}>
+                      onClick={() => editRow(item.ContactId, item.UserEmail)}>
                       <li
                         className={
                           "list-group-item flex justify-between m-1 p-2 rounded-lg shadow-sm " +
@@ -182,46 +183,6 @@ export default function EditList({
             setFormSubmitted={setFormSubmitted}
             lang={lang}
           ></AddPerson>
-        </CSSTransition>
-        <CSSTransition
-          in={editPerson} // Only render when editPerson is true and userId is not null
-          timeout={300}
-          classNames="fade"
-          unmountOnExit
-        >
-          <EditPerson
-            addPerson={addPerson}
-            setAddPerson={setAddPerson}
-            personName={personName}
-            setPersonName={setPersonName}
-            setPersonPhone={setPersonPhone}
-            setPersonEmail={setPersonEmail}
-            setPersonOwing={setPersonOwing}
-            personEmail={personEmail}
-            personPhone={personPhone}
-            personOwing={personOwing}
-            handleSubmit={handleSubmit}
-            handleEditSubmit={handleEditSubmit}
-            setPersonState={setPersonState}
-            personState={personState}
-            setIsSelected={setIsSelected}
-            setEditPerson={setEditPerson}
-            theme={theme}
-            setList={setList}
-            list={list}
-            editPerson={editPerson}
-            handleDeletePerson={handleDeletePerson}
-            lang={lang}
-            passedId={passedId}
-            setPassedId={setPassedId}
-            dataThrow={dataThrow}
-            setDataThrow={setDataThrow}
-            loggedInUserEmail={loggedInUserEmail}
-            API_URL={API_URL}
-            updateDataHandler={updateDataHandler}
-            updateEditHandler={updateEditHandler}
-            user={user}
-          ></EditPerson>
         </CSSTransition>
       </main>
     </>

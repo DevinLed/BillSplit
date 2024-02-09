@@ -103,7 +103,7 @@ function App({ signOut, user }) {
   }, [lang]);
   // tax rate select
 
-  const [taxRate, setTaxRate] = useState(localStorage.getItem("taxRate"));
+  const [taxRate, setTaxRate] = useState(localStorage.getItem("taxRate") || "0.15");
   // useEffect to track tax rate
   useEffect(() => {
     localStorage.setItem("taxRate", taxRate);
@@ -119,6 +119,7 @@ function App({ signOut, user }) {
   const [personEmail, setPersonEmail] = useState("");
   const [personOwing, setPersonOwing] = useState("");
   const [personState, setPersonState] = useState("");
+  const [ContactId, setContactId] = useState("");
   const [selectedPerson, setSelectedPerson] = useState(false);
   const [hasReceipt, setHasReceipt] = useState(false);
   const [list, setList] = useState(() => {
@@ -208,6 +209,7 @@ function App({ signOut, user }) {
     setPassedId(selectedPerson.ContactId);
     setEditPerson(false);
   };
+
   const addNum = (ContactId, val, val2, personOwing, postedTransaction) => {
     const a = parseFloat(personOwing);
     const b = parseFloat(val);
@@ -761,6 +763,8 @@ function App({ signOut, user }) {
                 setDataThrow={setDataThrow}
                 API_URL={API_URL}
                 user={user}
+                passedId={passedId}
+                editRow={editRow}
                 
               />
             }
@@ -780,6 +784,8 @@ function App({ signOut, user }) {
             setPersonEmail={setPersonEmail}
             setPersonPhone={setPersonPhone}
             setPersonOwing={setPersonOwing}
+            passedId={passedId}
+            loggedInUserEmail={loggedInUserEmail}
             theme={theme}
             lang={lang}
             setLang={setLang}
