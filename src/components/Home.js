@@ -52,6 +52,38 @@ export default function Home({
   );
   const changeText = (text) => setButtonText(text);
 
+  /*
+
+  Still testing
+
+
+  const handleChangePassword = async () => {
+    try {
+      const oldPassword = prompt("Enter your old password:");
+      if (!oldPassword) {
+        alert("Changing password was canceled.");
+        return;
+      }
+  
+      const user = await Auth.currentAuthenticatedUser();
+  
+      const newPassword = prompt("Enter your new password:");
+      if (!newPassword) {
+        alert("Changing password was canceled.");
+        return;
+      }
+  
+      await Auth.changePassword(user, oldPassword, newPassword);
+      alert("Password changed successfully!");
+  
+    } catch (error) {
+      console.error("Error changing password:", error);
+      alert("Failed to change password: " + error.message);
+    }
+  };
+  */
+
+
   const yAxisCallback = (value) => `$${value.toFixed(2)}`;
   const [chartData, setChartData] = useState({
     labels: [],
