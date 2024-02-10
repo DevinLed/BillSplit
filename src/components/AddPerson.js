@@ -361,7 +361,6 @@ export default function AddPerson({
                     setFormSubmitted(true);
                     resetForm();
                   } else {
-                    console.log("nop");
                     setSubmissionError(false);
                   }
                 }}

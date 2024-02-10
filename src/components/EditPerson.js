@@ -37,16 +37,12 @@ export default function EditPerson({
     setPersonOwing("0.00");
   };
 
-  useEffect(() => {
-    console.log("person owing?", personOwing);
-  }, []);
   function handleKeyDown(e) {
     if (e.key === "Enter") {
       e.target.blur();
     }
   }
   const handleDeletePrompt = () => {
-    console.log("delete prompt:", passedId,loggedInUserEmail);
     setShowConfirmation(true);
   };
   const handleCancelDeletePrompt = () => {
@@ -105,9 +101,6 @@ export default function EditPerson({
 
   const handleDeletePerson = (passedId, loggedUserEmail) => {
     const url = `${API_URL}/${passedId}/${loggedUserEmail}`;
-    console.log(url);
-    console.log("HandleDeletePerson - passedId?", passedId);
-    console.log("HandleDeletePerson - UserEmail?", loggedUserEmail);
 
     fetch(url, {
       method: "DELETE",
@@ -117,8 +110,6 @@ export default function EditPerson({
     })
       .then((response) => {
         if (response.status === 204) {
-          console.log("Person deleted successfully");
-          console.log(passedId);
           const updatedData = dataThrow.filter(
             (item) => item.ContactId !== passedId && item.loggedInUserEmail === loggedInUserEmail
           );
@@ -313,7 +304,6 @@ export default function EditPerson({
                               : "S'il vous plait, entrez un nombre valide"
                           );
                         }
-                        console.log("value?", value);
                       }}
                     />
                   </div>
@@ -353,7 +343,7 @@ export default function EditPerson({
                     ? "flex w-fit flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-700 hover:no-underline"
                     : "flex w-fit flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-800 hover:no-underline"
                 }
-                onClick={(e) => {handleDeletePrompt(ContactId, loggedInUserEmail);console.log("passed ID", passedId)}}
+                onClick={(e) => {handleDeletePrompt(ContactId, loggedInUserEmail);}}
               >
                 <AiOutlineDelete size={24} />
               </label>
@@ -411,7 +401,6 @@ export default function EditPerson({
                     onClick={(e) => {
                       setPersonEmail(passedEmail);
                       handleDeletePerson(passedId, loggedInUserEmail);
-                      console.log(passedId);
                     }}
                   >
                     {lang === "english" ? "Yes" : "Oui"}

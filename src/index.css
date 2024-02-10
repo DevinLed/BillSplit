@@ -347,8 +347,8 @@ label {
   width: 50mm;
   background: #fff;
   text-align: left;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
-  
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
   color: black;
 }
 
@@ -359,9 +359,11 @@ label {
   justify-content: center;
   background: #fff;
   text-align: left;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   display: grid;
   color: black;
+  overflow-y: auto;
+  max-height: 100vh;
 }
 #th-invoice-POS2 p,
 #th-invoice-POS2 h2 {
@@ -369,18 +371,19 @@ label {
   padding: 10px;
 }
 .expanded #th-invoice-POS {
-  transform: scale(2); 
-  background: rgba(0, 0, 0, 0.5); 
+  transform: scale(2);
+  background: rgba(0, 0, 0, 0.5);
 }
-.th-tabletitle, .th-service {
+.th-tabletitle,
+.th-service {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.th-itemtext1{
+.th-itemtext1 {
   text-align: left;
 }
-.the-item2{
+.the-item2 {
   padding-left: 50px;
   text-align: center;
 }
@@ -388,7 +391,8 @@ label {
 .th-tableitem {
   flex: 1;
 }
-#th-invoice-POS2 p, #th-invoice-POS2 h2 {
+#th-invoice-POS2 p,
+#th-invoice-POS2 h2 {
   font-size: 1.2em;
   padding: 10px;
   white-space: nowrap;
@@ -396,7 +400,11 @@ label {
   text-overflow: ellipsis;
 }
 
-.th-tabletitle, .th-service, .th-itemtext1, .th-itemtext2, .th-itemtext3 {
+.th-tabletitle,
+.th-service,
+.th-itemtext1,
+.th-itemtext2,
+.th-itemtext3 {
   text-align: center;
   justify-content: center;
   align-items: center;
@@ -413,7 +421,10 @@ label {
   width: 100%;
 }
 
-.th-item, .th-Hours, .th-Rate, .th-tableitem {
+.th-item,
+.th-Hours,
+.th-Rate,
+.th-tableitem {
   width: 33.33%;
 }
 
@@ -421,7 +432,8 @@ label {
   text-align: right;
 }
 
-.th-Rate, .th-itemtext3 {
+.th-Rate,
+.th-itemtext3 {
   text-align: right;
 }
 .th-itemtext1 {
@@ -436,7 +448,7 @@ label {
 .th-itemtext {
   font-size: 0.5em;
 }
-.th-h21{
+.th-h21 {
   text-align: center;
 }
 
@@ -446,21 +458,24 @@ label {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.5); 
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
 }
-
 
 .modal-content {
   background: white;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  max-width: 80%;
-  max-height: 80%;
+  width: 80%;
+  max-height: calc(100vh - 120px);
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .modal-enter {
@@ -485,8 +500,8 @@ Amplify login styling
 */
 .amplify-authenticator {
   --amplify-primary-color: #152939;
-  --amplify-primary-tint: #37475A;
-  --amplify-primary-shade: #0E1C28;
+  --amplify-primary-tint: #37475a;
+  --amplify-primary-shade: #0e1c28;
   background-color: #1a202c;
   color: #ffffff;
 }
@@ -508,11 +523,13 @@ Amplify login styling
   border-radius: 8px;
 }
 
-.amplify-input, .amplify-form-row {
-  background-color: #2D3748;
+.amplify-input,
+.amplify-form-row {
+  background-color: #2d3748;
   color: #ffffff;
 }
 
-.amplify-input, .amplify-label {
+.amplify-input,
+.amplify-label {
   color: #ffffff;
 }

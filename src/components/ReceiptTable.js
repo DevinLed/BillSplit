@@ -123,7 +123,6 @@ export default function ReceiptTable({
     setPictureTax(calculatedTax);
     setIsAddingItem(true);
     setShowTableButton(false);
-    console.log(taxRate);
   };
 
   // Handler for when on mobile, enter key will collapse the keyboard popup
@@ -256,13 +255,11 @@ export default function ReceiptTable({
   // combing the 2 arrays, picture and manually entered
   useEffect(() => {
     if (Array.isArray(items) && Array.isArray(obtainedInfo)) {
-      console.log("attempting to merge the tables...")
       setCombinedArray([...items, ...obtainedInfo]);
     }
   }, [items, obtainedInfo]);
   useEffect(() => {
     setSubmissionArray(combinedArray);
-    console.log("picturecombinedArray:", submissionArray);
     }, [combinedArray, setSubmissionArray, submissionArray]);
 
 
@@ -386,7 +383,6 @@ export default function ReceiptTable({
 
                     if (isValid || value === "") {
                       setAmount(value);
-                      console.log("amount verified");
                     } else {
                       console.log("amount not verified");
                     }

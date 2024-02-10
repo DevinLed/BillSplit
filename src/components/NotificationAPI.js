@@ -11,7 +11,6 @@ const NotificationAPIComponent = memo((props) => {
         userId: props.userId,
         markAsReadMode: "MANUAL_AND_CLICK",
       });
-      console.log("props?", props.userId);
       notificationapi.showInApp({
         root: "CONTAINER_DIV_ID",
         popupPosition: PopupPosition.BottomRight,

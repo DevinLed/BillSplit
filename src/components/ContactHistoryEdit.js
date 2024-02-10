@@ -71,7 +71,6 @@ export default function ContactHistoryEdit({
 
   useEffect(() => {
     setSelectedPerson(personEmail);
-    console.log("selectedPerson?", selectedPerson);
   }, [personEmail, selectedPerson]);
   const filteredTransactions = useMemo(() => {
     if (selectedPerson && loggedInUserEmail) {
@@ -91,14 +90,11 @@ export default function ContactHistoryEdit({
   const [isExpanded, setIsExpanded] = useState(false);
   const [loading, setLoading] = useState(true);
   const toggleExpanded = () => {
-    console.log("Before Toggle:", isExpanded);
     setIsExpanded(!isExpanded);
-    console.log("After Toggle:", isExpanded);
   };
   const handleLabelClick = (transaction) => {
     setSelectedTransaction(transaction);
     toggleExpanded();
-    console.log("transaction from handler?", transaction);
   };
   const transactionList = useMemo(() => {
     const sortedTransactions = [...filteredTransactions].sort(
@@ -118,7 +114,6 @@ export default function ContactHistoryEdit({
             id="th-invoice-POS"
             onClick={() => {
               handleLabelClick(transaction);
-              console.log("transaction from click?", transaction);
             }}
           >
             <div>
@@ -333,10 +328,6 @@ export default function ContactHistoryEdit({
                 id="th-invoice-POS2"
                 onClick={() => {
                   handleLabelClick(selectedTransaction);
-                  console.log(
-                    "transaction from click123?",
-                    selectedTransaction
-                  );
                 }}
               >
                 <div>

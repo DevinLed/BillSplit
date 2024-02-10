@@ -39,10 +39,8 @@ function App({ signOut, user }) {
   const toggleTheme = () => {
     if (theme === "light") {
       setTheme("dark");
-      console.log("now in dark mode");
     } else {
       setTheme("light");
-      console.log("now in lite mode");
     }
   };
   // useEffect to track dark mode
@@ -215,16 +213,6 @@ function App({ signOut, user }) {
     const b = parseFloat(val);
     const c = parseFloat(val2);
     const newValue = (a + b + c).toFixed(2);
-    console.log(
-      "Existing owing?",
-      personOwing,
-      "val 1?",
-      val,
-      "val 2?",
-      val2,
-      "New Value?",
-      newValue
-    );
     updateOwingInBackend(ContactId, personOwing, newValue, postedTransaction);
 
     setDisplayAdd(true);
@@ -235,25 +223,13 @@ function App({ signOut, user }) {
     const a = parseFloat(personOwing);
     const b = parseFloat(val);
     const c = parseFloat(val2);
-    const newValue = (a - b - c).toFixed(2);;
-    console.log(
-      "Existing owing?",
-      personOwing,
-      "val 1?",
-      val,
-      "val 2?",
-      val2,
-      "New Value?",
-      newValue
-    );
+    const newValue = (a - b - c).toFixed(2);
     updateSubOwingInBackend(ContactId, personOwing, newValue, postedTransaction);
 
     setDisplayAdd(true);
   };
 
   const updateOwingInBackend = async (ContactId, Owing, additionValue, postedTransaction) => {
-    console.log("updateOwingInBackend:", ContactId, Owing, additionValue);
-    console.log("posted from a transaction?", postedTransaction);
     const updatedData = {
       ContactId: ContactId,
       Name: personName,
@@ -265,8 +241,6 @@ function App({ signOut, user }) {
     };
     
     try {
-      console.log("posted transaction?", postedTransaction);
-      console.log("Before fetch updateOwingInBackend");
       const response = await fetch(`${API_URL}/${ContactId}`, {
         method: "PUT",
         headers: {
@@ -276,7 +250,6 @@ function App({ signOut, user }) {
       });
 
       updateDataHandler();
-      console.log("After fetch updateOwingInBackend");
 
       if (!response.ok) {
         throw new Error("Error updating contact");
@@ -287,8 +260,6 @@ function App({ signOut, user }) {
   };
 
   const updateSubOwingInBackend = async (ContactId, Owing, additionValue, postedTransaction) => {
-    console.log("updateSubOwingInBackend:", ContactId, Owing, additionValue);
-    console.log("posted from a transaction?", postedTransaction);
     const updatedData = {
       ContactId: ContactId,
       Name: personName,
@@ -299,7 +270,6 @@ function App({ signOut, user }) {
       UserName: currentUserName,
     };
     try {
-      console.log("Before fetch updateSubOwingInBackend");
       const response = await fetch(`${API_URL}/${ContactId}`, {
         method: "PUT",
         headers: {
@@ -309,7 +279,6 @@ function App({ signOut, user }) {
       });
 
       updateDataHandler();
-      console.log("After fetch updateSubOwingInBackend");
 
       if (!response.ok) {
         throw new Error("Error updating contact");
@@ -328,7 +297,6 @@ function App({ signOut, user }) {
     e.preventDefault();
 
     const owingValue = personOwing !== "" ? personOwing : 0;
-    console.log("current UserName?", currentUserName);
     const itemData = {
       Name: personName,
       Email: personEmail,
@@ -353,10 +321,8 @@ function App({ signOut, user }) {
       }
 
       const newItem = await response.json();
-      console.log("Item created successfully 123", newItem);
 
       if (newItem.contactAlreadyExists) {
-        console.log("contactAlreadyExists?", newItem.contactAlreadyExists);
         alert(
           "Contact already had you added! Owing value has been updated from their input history"
         );
@@ -413,7 +379,6 @@ function App({ signOut, user }) {
         }
       })
       .then((updatedItem) => {
-        console.log("Item updated successfully", updatedItem);
 
         setDataThrow((prevData) => {
           return prevData.map((item) => {
@@ -445,7 +410,6 @@ function App({ signOut, user }) {
     };
 
     try {
-      console.log("attempting to update contact...");
       const response = await fetch(`${API_URL}/${passedId}`, {
         method: "PUT",
         headers: {
@@ -453,7 +417,6 @@ function App({ signOut, user }) {
         },
         body: JSON.stringify(updatedData),
       });
-      console.log("this is the response from updating: ", response);
       if (response.ok) {
         console.log("Entry updated successfully");
       } else {
@@ -522,7 +485,6 @@ function App({ signOut, user }) {
         throw new Error("Failed to add receipt");
       }
 
-      console.log("Receipt added successfully");
 
       localStorage.removeItem("receipts");
     } catch (error) {

@@ -159,13 +159,11 @@ export default function ReceiptInput({
         headers,
         body: data,
       };
-      console.log("passing they keys?", apiKey)
       const response = await fetch(
         `https://api.mindee.net/v1/products/mindee/expense_receipts/v5/predict`,
         config
       );
       const responseData = await response.json();
-      console.log("responseData?",responseData);
       const lineItems =
         responseData.document.inference.prediction.line_items.map((item) => ({
           ...item,
@@ -189,7 +187,6 @@ export default function ReceiptInput({
         setDisplayMerchant(false);
       }
 
-      console.log(responseData.document);
       setPictureConfidence(taxConfidence);
       setPictureTax(taxAmount || 0);
       setPictureTotal(totalAmount);
@@ -305,7 +302,6 @@ export default function ReceiptInput({
 
   // Handler to push entries into the History tab array
   const handleHistorySubmit = () => {
-    console.log("submissionArray being passed to history?", submissionArray);
     const newReceipt = {
       personName,
       personEmail,
@@ -324,7 +320,6 @@ export default function ReceiptInput({
       submissionArray,
       loggedInUsername,
     };
-    console.log("receiptTotal?", receiptTotal);
     addReceipt(newReceipt);
   };
   const [postedTransaction] = useState(true);
@@ -339,10 +334,7 @@ export default function ReceiptInput({
 
   // Used to update the balance of the person you are splitting receipt with
   const getFinalTotal = () => {
-    console.log("selected person??", selectedValue);
-    console.log("getFinalTotal is being called");
     if (selectedValue === "you") {
-      console.log("addNum from GFT is being called");
       addNum(
         ContactId,
         personReceiptAmount,
@@ -351,7 +343,6 @@ export default function ReceiptInput({
         postedTransaction
       );
     } else {
-      console.log("subNum from GFT is being called");
       subNum(
         ContactId,
         personReceiptAmount,
@@ -365,7 +356,6 @@ export default function ReceiptInput({
   const handleSnapShotSubmit = (event) => {
     event.preventDefault();
 
-    console.log("submissionArray:", submissionArray);
   };
 
   useEffect(() => {
