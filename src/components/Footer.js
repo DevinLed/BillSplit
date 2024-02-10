@@ -13,7 +13,7 @@ export default function Footer({theme, lang,setLang}) {
           <div className="outro">
             <div>
               <p>
-              {lang === "english" ? "App created by Devin Ledwell for Get Coding | Created using React and JSX | Check out my " : "Cette application a été écrite par Devin Ledwell, pour Get Coding | Créé avec React et JSX | Consultez mon "}
+              {lang === "english" ? "© Devin Ledwell | Developed with React, JSX, Node.js, and AWS  | Check out my " : "© Devin Ledwell | Créé avec React, JSX, Node.js, et AWS | Consultez mon "}
                 <a
                   className="font-italic mt-5"
                   target="_blank"
