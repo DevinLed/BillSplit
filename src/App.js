@@ -89,8 +89,9 @@ function App({ signOut, user }) {
     },
   };
   useEffect(() => {
-    localStorage.setItem("theme", theme);
-    document.body.className = theme;
+    const currentTheme = theme || 'light';
+    localStorage.setItem("theme", currentTheme);
+    document.body.className = currentTheme;
   }, [theme]);
   // language select
   const [lang, setLang] = useState(localStorage.getItem("lang") || "english");
