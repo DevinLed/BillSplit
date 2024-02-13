@@ -45,10 +45,98 @@ export default function Home({
     setSelectPersonEdit(false);
     setLang(lang);
   }, [lang, setLang]);
+  const CircleMenu = ({ lang, toggleTheme, buttonText }) => {
+    const radius = 120;
+    const startOffsetPercentage = 50;
+  
+    return (
+      <div className="circle-menu">
+        <div className="center-circle"></div>
+  
+        <Link to="/SplitBill" className="menu-item split-bill">
+          <svg viewBox="0 0 100 100" className="curved-text-svg">
+            <path
+              id="splitBillCurve"
+              fill="none"
+              d={`M50,10 A${radius},${radius} 0 0,1 90,50`}
+              transform="rotate(-87, 50, 50)"
+            />
+  
+            <text fontSize="15"> 
+              <textPath xlinkHref="#splitBillCurve" startOffset={`${startOffsetPercentage}%`} textAnchor="middle">
+                {lang === "english" ? "Share Bill" : "Partagez"}
+              </textPath>
+            </text>
+          </svg>
+          <IoReceiptOutline size={24} className="icon" />
+        </Link>
+  
+        <Link to="/EditList" className="menu-item edit-list">
+          <svg viewBox="0 0 100 100" className="curved-text-svg">
+            <path
+              id="editListCurve"
+              fill="none"
+              d={`M90,50 A${radius + 0.5},${radius + 0.5} 0 0,1 50,90`}
+              transform="rotate(-93, 50, 50)"
+            />
+            <text  fontSize="16"> 
+              <textPath xlinkHref="#editListCurve" startOffset={`${startOffsetPercentage}%`} textAnchor="middle">
+                Contacts
+              </textPath>
+            </text>
+          </svg>
+          <IoPersonCircleOutline size={24} className="icon2"  />
+        </Link>
+  
+        <label onClick={() => {
+              toggleTheme();
+              if (theme === "light") {
+                changeText(lang === "english" ? "Light" : "Lumière");
+              } else {
+                changeText(lang === "english" ? "Dark" : "Sombre");
+              }
+            }} className="menu-item theme-toggle">
+  <IoInvertModeSharp size={24} className="icon3"/>
+  <svg viewBox="0 0 100 100" className="curved-text-svg">
+    <path
+      id="themeToggleCurveAdjusted"
+      fill="none"
+      d={`M10,50 A${radius * 1.1},${radius * 1.1} 0 0,0 50,90`}
+      transform="rotate(0,50,50)"
+    />
+    <text  fontSize="16">
+      <textPath xlinkHref="#themeToggleCurveAdjusted" startOffset={`${startOffsetPercentage}%`} textAnchor="middle">
+        {buttonText}
+      </textPath>
+    </text>
+  </svg>
+</label>
 
+        <Link to="/Settings" className="menu-item settings">
+    <IoSettingsOutline size={24} className="icon4"/>
+    <svg viewBox="0 0 100 100" className="curved-text-svg">
+        <path
+            id="settingsCurveFlipped"
+            fill="none"
+            d={`M50,10 A${radius + 0.5},${radius + 0.5} 0 0,0 10,50`}
+            transform="rotate(182, 54, 54)"
+        />
+        <text fontSize="16">
+            <textPath xlinkHref="#settingsCurveFlipped" startOffset="50%" textAnchor="middle" method="stretch" spacing="auto">
+                {lang === "english" ? "Settings" : "Paramètres"}
+            </textPath>
+        </text>
+    </svg>
+</Link>
+
+      </div>
+    );
+  };
+  
+  
   // For Dark/Bright mode. Keeps mode storage for page refresh.
   const [buttonText, setButtonText] = useState(
-    lang === "english" ? "Dark Mode" : "Mode Sombre"
+    lang === "english" ? "Dark" : "Sombre"
   );
   const changeText = (text) => setButtonText(text);
 
@@ -236,26 +324,9 @@ export default function Home({
                   ""
                 )}
               </div>
-              <div className="circle-menu">
-                <div class="center-circle"></div>
-                <Link to="/SplitBill" className="menu-item split-bill">
-                  <IoReceiptOutline size={24} />
-                </Link>
-
-                <Link to="/EditList" className="menu-item edit-list">
-                  <IoPersonCircleOutline size={24} />
-                </Link>
-
-                <label className="menu-item theme-toggle"
-                 onClick={() => {
-                  toggleTheme();}}>
-                  <IoInvertModeSharp size={24} />
-                </label>
-
-                <Link to="/Settings" className="menu-item settings">
-                  <IoSettingsOutline size={24} />
-                </Link>
-              </div>
+              
+              <CircleMenu lang={lang} toggleTheme={() => toggleTheme()} buttonText={buttonText} />
+       
             </div>
           </div>
 

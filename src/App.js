@@ -20,7 +20,12 @@ import Settings from "./components/Settings";
 import Footer from "./components/Footer";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { withAuthenticator, ThemeProvider, Button, Heading } from "@aws-amplify/ui-react";
+import {
+  withAuthenticator,
+  ThemeProvider,
+  Button,
+  Heading,
+} from "@aws-amplify/ui-react";
 import "@aws-amplify/ui-react/styles.css";
 import "./darkMode.css";
 import "./index.css";
@@ -33,7 +38,6 @@ import ContactHistoryEdit from "./components/ContactHistoryEdit";
 Amplify.configure(awsconfig);
 
 function App({ signOut, user }) {
-  
   const [theme, setTheme] = useState("");
 
   const toggleTheme = () => {
@@ -45,51 +49,51 @@ function App({ signOut, user }) {
   };
   // useEffect to track dark mode
   const darkTheme = {
-    name: 'dark-theme',
+    name: "dark-theme",
     tokens: {
       colors: {
         background: {
-          primary: { value: '#121212' },
-          secondary: { value: '#222222' },
+          primary: { value: "#121212" },
+          secondary: { value: "#222222" },
         },
         font: {
-          primary: { value: '#ffffff' },
-          secondary: { value: '#bbbbbb' },
+          primary: { value: "#ffffff" },
+          secondary: { value: "#bbbbbb" },
         },
         border: {
-          primary: { value: '#333333' },
+          primary: { value: "#333333" },
         },
         brand: {
-          primary: { value: '#0f62fe' },
+          primary: { value: "#0f62fe" },
         },
       },
       components: {
         card: {
-          backgroundColor: { value: '{colors.background.secondary.value}' },
-          padding: { value: '2rem' },
-          borderRadius: { value: '0.5rem' },
+          backgroundColor: { value: "{colors.background.secondary.value}" },
+          padding: { value: "2rem" },
+          borderRadius: { value: "0.5rem" },
         },
         button: {
           primary: {
-            backgroundColor: { value: '{colors.brand.primary.value}' },
-            color: { value: '{colors.white.value}' },
-            paddingBlock: { value: '1rem' },
-            paddingInline: { value: '1.5rem' },
-            fontWeight: { value: '700' },
+            backgroundColor: { value: "{colors.brand.primary.value}" },
+            color: { value: "{colors.white.value}" },
+            paddingBlock: { value: "1rem" },
+            paddingInline: { value: "1.5rem" },
+            fontWeight: { value: "700" },
           },
-          borderRadius: { value: '0.5rem' },
+          borderRadius: { value: "0.5rem" },
         },
         textField: {
-          backgroundColor: { value: '{colors.background.secondary.value}' },
-          borderColor: { value: '{colors.border.primary.value}' },
-          color: { value: '{colors.font.primary.value}' },
-          placeholderColor: { value: '{colors.font.secondary.value}' },
+          backgroundColor: { value: "{colors.background.secondary.value}" },
+          borderColor: { value: "{colors.border.primary.value}" },
+          color: { value: "{colors.font.primary.value}" },
+          placeholderColor: { value: "{colors.font.secondary.value}" },
         },
       },
     },
   };
   useEffect(() => {
-    const currentTheme = theme || 'light';
+    const currentTheme = theme || "light";
     localStorage.setItem("theme", currentTheme);
     document.body.className = currentTheme;
   }, [theme]);
@@ -102,7 +106,9 @@ function App({ signOut, user }) {
   }, [lang]);
   // tax rate select
 
-  const [taxRate, setTaxRate] = useState(localStorage.getItem("taxRate") || "0.15");
+  const [taxRate, setTaxRate] = useState(
+    localStorage.getItem("taxRate") || "0.15"
+  );
   // useEffect to track tax rate
   useEffect(() => {
     localStorage.setItem("taxRate", taxRate);
@@ -175,7 +181,7 @@ function App({ signOut, user }) {
   const [value] = useState("");
 
   // History tab work
-  
+
   const [submissionArray, setSubmissionArray] = useState([]);
   const initialCombinedTotal = 0;
   const [combinedTotal, setCombinedTotal] = useState(initialCombinedTotal);
@@ -220,17 +226,26 @@ function App({ signOut, user }) {
   };
 
   const subNum = (ContactId, val, val2, personOwing, postedTransaction) => {
-    
     const a = parseFloat(personOwing);
     const b = parseFloat(val);
     const c = parseFloat(val2);
     const newValue = (a - b - c).toFixed(2);
-    updateSubOwingInBackend(ContactId, personOwing, newValue, postedTransaction);
+    updateSubOwingInBackend(
+      ContactId,
+      personOwing,
+      newValue,
+      postedTransaction
+    );
 
     setDisplayAdd(true);
   };
 
-  const updateOwingInBackend = async (ContactId, Owing, additionValue, postedTransaction) => {
+  const updateOwingInBackend = async (
+    ContactId,
+    Owing,
+    additionValue,
+    postedTransaction
+  ) => {
     const updatedData = {
       ContactId: ContactId,
       Name: personName,
@@ -240,7 +255,7 @@ function App({ signOut, user }) {
       UserEmail: loggedInUserEmail,
       UserName: currentUserName,
     };
-    
+
     try {
       const response = await fetch(`${API_URL}/${ContactId}`, {
         method: "PUT",
@@ -260,7 +275,12 @@ function App({ signOut, user }) {
     }
   };
 
-  const updateSubOwingInBackend = async (ContactId, Owing, additionValue, postedTransaction) => {
+  const updateSubOwingInBackend = async (
+    ContactId,
+    Owing,
+    additionValue,
+    postedTransaction
+  ) => {
     const updatedData = {
       ContactId: ContactId,
       Name: personName,
@@ -380,7 +400,6 @@ function App({ signOut, user }) {
         }
       })
       .then((updatedItem) => {
-
         setDataThrow((prevData) => {
           return prevData.map((item) => {
             if (item.Email.S === updatedItem.Email.S) {
@@ -481,11 +500,10 @@ function App({ signOut, user }) {
           "Content-Type": "application/json",
         },
       });
-      console.log("body?", newReceipt)
+      console.log("body?", newReceipt);
       if (!response.ok) {
         throw new Error("Failed to add receipt");
       }
-
 
       localStorage.removeItem("receipts");
     } catch (error) {
@@ -495,12 +513,14 @@ function App({ signOut, user }) {
   return (
     <>
       <div className={`App ${theme}`} style={{ paddingTop: "20px" }}>
-        
-         
-      <NotificationAPIComponent userId={loggedInUserEmail} className="Noti"/>
-        <div onClick={updateDataHandler}>
+        <div className="notification-container">
+          <NotificationAPIComponent
+            userId={loggedInUserEmail}
+            className="Noti"
+          />
         </div>
-          <Routes>
+        <div onClick={updateDataHandler}></div>
+        <Routes>
           <Route
             path="/Home"
             element={
@@ -533,8 +553,8 @@ function App({ signOut, user }) {
             path="/ReceiptInput/:ContactId"
             element={
               <ReceiptInput
-              submissionArray={submissionArray}
-              setSubmissionArray={setSubmissionArray}
+                submissionArray={submissionArray}
+                setSubmissionArray={setSubmissionArray}
                 combinedTotal={combinedTotal}
                 setCombinedTotal={setCombinedTotal}
                 personName={personName}
@@ -580,7 +600,7 @@ function App({ signOut, user }) {
                 obtainedInfo={obtainedInfo}
                 setObtainedInfo={setObtainedInfo}
                 additionValue={additionValue}
-                loggedInUsername={loggedInUsername}                
+                loggedInUsername={loggedInUsername}
               />
             }
           />
@@ -728,50 +748,46 @@ function App({ signOut, user }) {
                 user={user}
                 passedId={passedId}
                 editRow={editRow}
-                
               />
             }
           />
-        <Route 
-          path="/ContactHistoryEdit"
-          element={
-            <ContactHistoryEdit
-            submissionArray={submissionArray}
-            combinedArray={combinedArray}
-            personName={personName}
-            personEmail={personEmail}
-            personPhone={personPhone}
-            personOwing={personOwing}
-            handleSubmit={handleSubmit}
-            setPersonName={setPersonName}
-            setPersonEmail={setPersonEmail}
-            setPersonPhone={setPersonPhone}
-            setPersonOwing={setPersonOwing}
-            passedId={passedId}
-            loggedInUserEmail={loggedInUserEmail}
-            theme={theme}
-            lang={lang}
-            setLang={setLang}
-            dataThrow={dataThrow}
-            setDataThrow={setDataThrow}
-            API_URL={API_URL}
-            user={user}
-            
-            combinedTotal={combinedTotal}
-            setCombinedTotal={setCombinedTotal}
-            receipts={receipts}
-            loggedInUsername={loggedInUsername}
-            historyData={historyData}
-            setHistoryData={setHistoryData}
-            />
-          }
+          <Route
+            path="/ContactHistoryEdit"
+            element={
+              <ContactHistoryEdit
+                submissionArray={submissionArray}
+                combinedArray={combinedArray}
+                personName={personName}
+                personEmail={personEmail}
+                personPhone={personPhone}
+                personOwing={personOwing}
+                handleSubmit={handleSubmit}
+                setPersonName={setPersonName}
+                setPersonEmail={setPersonEmail}
+                setPersonPhone={setPersonPhone}
+                setPersonOwing={setPersonOwing}
+                passedId={passedId}
+                loggedInUserEmail={loggedInUserEmail}
+                theme={theme}
+                lang={lang}
+                setLang={setLang}
+                dataThrow={dataThrow}
+                setDataThrow={setDataThrow}
+                API_URL={API_URL}
+                user={user}
+                combinedTotal={combinedTotal}
+                setCombinedTotal={setCombinedTotal}
+                receipts={receipts}
+                loggedInUsername={loggedInUsername}
+                historyData={historyData}
+                setHistoryData={setHistoryData}
+              />
+            }
           />
-          </Routes>
+        </Routes>
       </div>
     </>
   );
 }
 
 export default withAuthenticator(App);
-
-

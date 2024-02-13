@@ -284,6 +284,12 @@ label {
     opacity 200ms,
     transform 200ms;
 }
+.notification-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999; 
+}
 .circle-menu {
   position: relative;
   width: 45vmin;
@@ -309,6 +315,7 @@ label {
   width: 50%;
   height: 50%;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
@@ -316,7 +323,30 @@ label {
   box-sizing: border-box;
   transition: transform 0.3s ease;
 }
-
+.inverse-text {
+    transform: scaleY(-1);
+    transform-origin: 50% 50%;
+}
+.icon {
+  margin-bottom: auto;
+  margin-left: auto;
+  transform: translate(-50%, -50%);
+}
+.icon2 {
+  margin-bottom: auto;
+  margin-right: auto;
+  transform: translate(50%, -50%);
+}
+.icon3 {
+  margin-bottom: auto;
+  margin-left: auto;
+  transform: translate(-50%, 50%);
+}
+.icon4 {
+  margin-bottom: auto;
+  margin-right: auto;
+  transform: translate(50%, 50%);
+}
 .split-bill {
   border-radius: 100% 0 0 0;
 }
