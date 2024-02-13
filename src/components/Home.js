@@ -62,7 +62,7 @@ export default function Home({
               transform="rotate(-87, 50, 50)"
             />
   
-            <text fontSize="15"> 
+            <text fontSize="14"> 
               <textPath xlinkHref="#splitBillCurve" startOffset={`${startOffsetPercentage}%`} textAnchor="middle">
                 {lang === "english" ? "Share Bill" : "Partagez"}
               </textPath>
@@ -101,7 +101,7 @@ export default function Home({
     <path
       id="themeToggleCurveAdjusted"
       fill="none"
-      d={`M10,50 A${radius * 1.1},${radius * 1.1} 0 0,0 50,90`}
+      d={`M-5,50 A${radius * 1.1},${radius * 1.1} 0 0,0 50,103`}
       transform="rotate(0,50,50)"
     />
     <text  fontSize="16">
