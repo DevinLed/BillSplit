@@ -349,28 +349,88 @@ label {
 }
 .split-bill {
   border-radius: 100% 0 0 0;
+  background-color: #A9B8C2;
+  color: #ffffff; 
 }
-
+.split-bill:hover {
+  background-color: #899BA4;
+  transform: scale(1.25);
+}
 .edit-list {
   border-radius: 0 100% 0 0;
+  background-color: #AFCBAA;
+  color: #ffffff; 
 }
-
+.edit-list:hover {
+  background-color: #97A987;
+  transform: scale(1.25);
+}
 .theme-toggle {
   border-radius: 0 0 0 100%;
+  background-color: #BFAED2;
+  color: #ffffff; 
 }
-
+.theme-toggle:hover {
+  background-color: #A992C5;
+  transform: scale(1.25);
+}
 .settings {
   border-radius: 0 0 100% 0;
+  background-color: #E1B59F;
+  color: #ffffff; 
+}
+.settings:hover {
+  background-color: #D79D84;
+  transform: scale(1.25);
 }
 
+.split-billdark {
+  border-radius: 100% 0 0 0;
+  background-color: #7A8C94;
+  color: black; 
+}
+.split-billdark:hover {
+  background-color: #6A7C84;
+  transform: scale(1.25);
+}
+.edit-listdark {
+  border-radius: 0 100% 0 0;
+  background-color: #879877;
+  color: black; 
+}
+.edit-listdark:hover {
+  background-color: #879877;
+  transform: scale(1.25);
+}
+.theme-toggledark {
+  border-radius: 0 0 0 100%;
+  background-color: #967DB0;
+  color: black; 
+}
+.theme-toggledark:hover {
+  background-color: #967DB0;
+  transform: scale(1.25);
+}
+.settingsdark {
+  border-radius: 0 0 100% 0;
+  background-color: #C18C72;
+  color: black; 
+}
+.settingsdark:hover {
+  background-color: #D79D84;
+  transform: scale(1.25);
+}
+
+.textMainMenu{
+  color: black;
+}
+.textMainMenudark{
+  color: white;
+}
 .menu-item span {
   margin-left: 8px;
 }
 
-.menu-item:hover {
-  background-color: #f0f0f0;
-  transform: scale(1.25);
-}
 #th-invoice-POS {
   padding: 10%;
   margin: 10% auto;

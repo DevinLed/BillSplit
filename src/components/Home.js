@@ -4,6 +4,8 @@ import Header from "./Header";
 import Footer from "./Footer";
 import { Bar } from "react-chartjs-2";
 import "chart.js/auto";
+import "../darkMode.css";
+import "../index.css"
 import {
   IoReceiptOutline,
   IoPersonCircleOutline,
@@ -51,9 +53,8 @@ export default function Home({
   
     return (
       <div className="circle-menu">
-        <div className="center-circle"></div>
   
-        <Link to="/SplitBill" className="menu-item split-bill">
+        <Link to="/SplitBill" className={theme === "dark" ? "menu-item split-billdark": "menu-item split-bill"}>
           <svg viewBox="0 0 100 100" className="curved-text-svg">
             <path
               id="splitBillCurve"
@@ -62,8 +63,8 @@ export default function Home({
               transform="rotate(-87, 50, 50)"
             />
   
-            <text fontSize="14"> 
-              <textPath xlinkHref="#splitBillCurve" startOffset={`${startOffsetPercentage}%`} textAnchor="middle">
+            <text fontSize="14" style={{ fill: theme === "dark" ? "white" : "black" }}> 
+            <textPath xlinkHref="#splitBillCurve" startOffset={`${startOffsetPercentage}%`} textAnchor="middle"  className={theme === "dark" ? "textMainMenudark": "textMainMenu"}>
                 {lang === "english" ? "Share Bill" : "Partagez"}
               </textPath>
             </text>
@@ -71,7 +72,7 @@ export default function Home({
           <IoReceiptOutline size={24} className="icon" />
         </Link>
   
-        <Link to="/EditList" className="menu-item edit-list">
+        <Link to="/EditList" className={theme === "dark" ? "menu-item edit-listdark": "menu-item edit-list"}>
           <svg viewBox="0 0 100 100" className="curved-text-svg">
             <path
               id="editListCurve"
@@ -79,7 +80,7 @@ export default function Home({
               d={`M90,50 A${radius + 0.5},${radius + 0.5} 0 0,1 50,90`}
               transform="rotate(-93, 50, 50)"
             />
-            <text  fontSize="16"> 
+            <text  fontSize="16" style={{ fill: theme === "dark" ? "white" : "black" }}> 
               <textPath xlinkHref="#editListCurve" startOffset={`${startOffsetPercentage}%`} textAnchor="middle">
                 Contacts
               </textPath>
@@ -95,7 +96,7 @@ export default function Home({
               } else {
                 changeText(lang === "english" ? "Dark" : "Sombre");
               }
-            }} className="menu-item theme-toggle">
+            }} className={theme === "dark" ? "menu-item theme-toggledark": "menu-item theme-toggle"}>
   <IoInvertModeSharp size={24} className="icon3"/>
   <svg viewBox="0 0 100 100" className="curved-text-svg">
     <path
@@ -104,7 +105,7 @@ export default function Home({
       d={`M-5,50 A${radius * 1.1},${radius * 1.1} 0 0,0 50,103`}
       transform="rotate(0,50,50)"
     />
-    <text  fontSize="16">
+    <text  fontSize="16" style={{ fill: theme === "dark" ? "white" : "black" }}>
       <textPath xlinkHref="#themeToggleCurveAdjusted" startOffset={`${startOffsetPercentage}%`} textAnchor="middle">
         {buttonText}
       </textPath>
@@ -112,7 +113,7 @@ export default function Home({
   </svg>
 </label>
 
-        <Link to="/Settings" className="menu-item settings">
+        <Link to="/Settings" className={theme === "dark" ? "menu-item settingsdark": "menu-item settings"}>
     <IoSettingsOutline size={24} className="icon4"/>
     <svg viewBox="0 0 100 100" className="curved-text-svg">
         <path
@@ -121,7 +122,7 @@ export default function Home({
             d={`M50,10 A${radius + 0.5},${radius + 0.5} 0 0,0 10,50`}
             transform="rotate(182, 54, 54)"
         />
-        <text fontSize="16">
+        <text fontSize="16" style={{ fill: theme === "dark" ? "white" : "black" }} >
             <textPath xlinkHref="#settingsCurveFlipped" startOffset="50%" textAnchor="middle" method="stretch" spacing="auto">
                 {lang === "english" ? "Settings" : "Paramètres"}
             </textPath>

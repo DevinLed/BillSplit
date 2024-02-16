@@ -38,7 +38,7 @@ import ContactHistoryEdit from "./components/ContactHistoryEdit";
 Amplify.configure(awsconfig);
 
 function App({ signOut, user }) {
-  const [theme, setTheme] = useState("");
+  const [theme, setTheme] = useState(null);
 
   const toggleTheme = () => {
     if (theme === "light") {
@@ -47,54 +47,11 @@ function App({ signOut, user }) {
       setTheme("light");
     }
   };
-  // useEffect to track dark mode
-  const darkTheme = {
-    name: "dark-theme",
-    tokens: {
-      colors: {
-        background: {
-          primary: { value: "#121212" },
-          secondary: { value: "#222222" },
-        },
-        font: {
-          primary: { value: "#ffffff" },
-          secondary: { value: "#bbbbbb" },
-        },
-        border: {
-          primary: { value: "#333333" },
-        },
-        brand: {
-          primary: { value: "#0f62fe" },
-        },
-      },
-      components: {
-        card: {
-          backgroundColor: { value: "{colors.background.secondary.value}" },
-          padding: { value: "2rem" },
-          borderRadius: { value: "0.5rem" },
-        },
-        button: {
-          primary: {
-            backgroundColor: { value: "{colors.brand.primary.value}" },
-            color: { value: "{colors.white.value}" },
-            paddingBlock: { value: "1rem" },
-            paddingInline: { value: "1.5rem" },
-            fontWeight: { value: "700" },
-          },
-          borderRadius: { value: "0.5rem" },
-        },
-        textField: {
-          backgroundColor: { value: "{colors.background.secondary.value}" },
-          borderColor: { value: "{colors.border.primary.value}" },
-          color: { value: "{colors.font.primary.value}" },
-          placeholderColor: { value: "{colors.font.secondary.value}" },
-        },
-      },
-    },
-  };
   useEffect(() => {
     const currentTheme = theme || "light";
     localStorage.setItem("theme", currentTheme);
+
+    setTheme(currentTheme);
     document.body.className = currentTheme;
   }, [theme]);
   // language select

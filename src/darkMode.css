@@ -10,3 +10,41 @@ body.light {
   color: #333;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
+
+
+.split-billdark {
+  border-radius: 100% 0 0 0;
+  background-color: #7A8C94;
+  color: black; 
+}
+.split-billdark:hover {
+  background-color: #7A8C94;
+  transform: scale(1.25);
+}
+.edit-listdark {
+  border-radius: 0 100% 0 0;
+  background-color: #879877;
+  color: black; 
+}
+.edit-listdark:hover {
+  background-color: #879877;
+  transform: scale(1.25);
+}
+.theme-toggledark {
+  border-radius: 0 0 0 100%;
+  background-color: #967DB0;
+  color: black; 
+}
+.theme-toggledark:hover {
+  background-color: #967DB0;
+  transform: scale(1.25);
+}
+.settingsdark {
+  border-radius: 0 0 100% 0;
+  background-color: #C18C72;
+  color: black; 
+}
+.settingsdark:hover {
+  background-color: #D79D84;
+  transform: scale(1.25);
+}

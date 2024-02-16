@@ -149,7 +149,13 @@ export default function Settings({
             </CSSTransition>
 
             {/* Display current tax rate */}
-            <p className="text-center mt-4 p-2 bg-white border border-gray-300 rounded">
+            <p
+              className={`text-center mt-4 p-2 border border-gray-300 rounded ${
+                theme === "dark"
+                  ? "textMainMenudark bg-gray-900"
+                  : "textMainMenu  bg-white"
+              }`}
+            >
               {lang === "english"
                 ? "Current Tax Rate"
                 : "Taux d'imposition actuel"}
