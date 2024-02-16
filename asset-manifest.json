@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.2ee3f40c.css",
-    "main.js": "/static/js/main.1e603828.js",
+    "main.css": "/static/css/main.4e3852dd.css",
+    "main.js": "/static/js/main.38757232.js",
     "static/media/DivvySample.gif": "/static/media/DivvySample.caf0bdbd0ccb7aa0349e.gif",
     "static/media/Historyphoneoutline.png": "/static/media/Historyphoneoutline.f6eb387df3f764753806.png",
     "static/media/Receiptphoneoutline.png": "/static/media/Receiptphoneoutline.121c12b21fd4b2908ef8.png",
@@ -13,11 +13,11 @@
     "static/media/icomoon.woff?yjc9oj": "/static/media/icomoon.baa8c3df47645e50ef7f.woff",
     "static/media/icomoon.ttf?yjc9oj": "/static/media/icomoon.bbc8a02e138d003f16fa.ttf",
     "index.html": "/index.html",
-    "main.2ee3f40c.css.map": "/static/css/main.2ee3f40c.css.map",
-    "main.1e603828.js.map": "/static/js/main.1e603828.js.map"
+    "main.4e3852dd.css.map": "/static/css/main.4e3852dd.css.map",
+    "main.38757232.js.map": "/static/js/main.38757232.js.map"
   },
   "entrypoints": [
-    "static/css/main.2ee3f40c.css",
-    "static/js/main.1e603828.js"
+    "static/css/main.4e3852dd.css",
+    "static/js/main.38757232.js"
   ]
 }
