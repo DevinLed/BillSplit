@@ -5,7 +5,7 @@ import Footer from "./Footer";
 import { Bar } from "react-chartjs-2";
 import "chart.js/auto";
 import "../darkMode.css";
-import "../index.css"
+import "../index.css";
 import {
   IoReceiptOutline,
   IoPersonCircleOutline,
@@ -35,7 +35,8 @@ export default function Home({
   setLang,
   signOut,
   user,
-  loggedInUserEmail
+  loggedInUserEmail,
+  dataThrow,
 }) {
   const [startBill, setStartBill] = useState(true);
   const [showPersonEdit, setPersonEdit] = useState(false);
@@ -50,11 +51,17 @@ export default function Home({
   const CircleMenu = ({ lang, toggleTheme, buttonText }) => {
     const radius = 120;
     const startOffsetPercentage = 50;
-  
+
     return (
       <div className="circle-menu">
-  
-        <Link to="/SplitBill" className={theme === "dark" ? "menu-item split-billdark": "menu-item split-bill"}>
+        <Link
+          to="/App/SplitBill"
+          className={
+            theme === "dark"
+              ? "menu-item split-billdark"
+              : "menu-item split-bill"
+          }
+        >
           <svg viewBox="0 0 100 100" className="curved-text-svg">
             <path
               id="splitBillCurve"
@@ -62,17 +69,32 @@ export default function Home({
               d={`M50,10 A${radius},${radius} 0 0,1 90,50`}
               transform="rotate(-87, 50, 50)"
             />
-  
-            <text fontSize="14" style={{ fill: theme === "dark" ? "white" : "black" }}> 
-            <textPath xlinkHref="#splitBillCurve" startOffset={`${startOffsetPercentage}%`} textAnchor="middle"  className={theme === "dark" ? "textMainMenudark": "textMainMenu"}>
+
+            <text
+              fontSize="14"
+              style={{ fill: theme === "dark" ? "white" : "black" }}
+            >
+              <textPath
+                xlinkHref="#splitBillCurve"
+                startOffset={`${startOffsetPercentage}%`}
+                textAnchor="middle"
+                className={
+                  theme === "dark" ? "textMainMenudark" : "textMainMenu"
+                }
+              >
                 {lang === "english" ? "Share Bill" : "Partagez"}
               </textPath>
             </text>
           </svg>
           <IoReceiptOutline size={24} className="icon" />
         </Link>
-  
-        <Link to="/EditList" className={theme === "dark" ? "menu-item edit-listdark": "menu-item edit-list"}>
+
+        <Link
+          to="/App/EditList"
+          className={
+            theme === "dark" ? "menu-item edit-listdark" : "menu-item edit-list"
+          }
+        >
           <svg viewBox="0 0 100 100" className="curved-text-svg">
             <path
               id="editListCurve"
@@ -80,61 +102,94 @@ export default function Home({
               d={`M90,50 A${radius + 0.5},${radius + 0.5} 0 0,1 50,90`}
               transform="rotate(-93, 50, 50)"
             />
-            <text  fontSize="16" style={{ fill: theme === "dark" ? "white" : "black" }}> 
-              <textPath xlinkHref="#editListCurve" startOffset={`${startOffsetPercentage}%`} textAnchor="middle">
+            <text
+              fontSize="16"
+              style={{ fill: theme === "dark" ? "white" : "black" }}
+            >
+              <textPath
+                xlinkHref="#editListCurve"
+                startOffset={`${startOffsetPercentage}%`}
+                textAnchor="middle"
+              >
                 Contacts
               </textPath>
             </text>
           </svg>
-          <IoPersonCircleOutline size={24} className="icon2"  />
+          <IoPersonCircleOutline size={24} className="icon2" />
         </Link>
-  
-        <label onClick={() => {
-              toggleTheme();
-              if (theme === "light") {
-                changeText(lang === "english" ? "Light" : "Lumière");
-              } else {
-                changeText(lang === "english" ? "Dark" : "Sombre");
-              }
-            }} className={theme === "dark" ? "menu-item theme-toggledark": "menu-item theme-toggle"}>
-  <IoInvertModeSharp size={24} className="icon3"/>
-  <svg viewBox="0 0 100 100" className="curved-text-svg">
-    <path
-      id="themeToggleCurveAdjusted"
-      fill="none"
-      d={`M-5,50 A${radius * 1.1},${radius * 1.1} 0 0,0 50,103`}
-      transform="rotate(0,50,50)"
-    />
-    <text  fontSize="16" style={{ fill: theme === "dark" ? "white" : "black" }}>
-      <textPath xlinkHref="#themeToggleCurveAdjusted" startOffset={`${startOffsetPercentage}%`} textAnchor="middle">
-        {buttonText}
-      </textPath>
-    </text>
-  </svg>
-</label>
 
-        <Link to="/Settings" className={theme === "dark" ? "menu-item settingsdark": "menu-item settings"}>
-    <IoSettingsOutline size={24} className="icon4"/>
-    <svg viewBox="0 0 100 100" className="curved-text-svg">
-        <path
-            id="settingsCurveFlipped"
-            fill="none"
-            d={`M50,10 A${radius + 0.5},${radius + 0.5} 0 0,0 10,50`}
-            transform="rotate(182, 54, 54)"
-        />
-        <text fontSize="16" style={{ fill: theme === "dark" ? "white" : "black" }} >
-            <textPath xlinkHref="#settingsCurveFlipped" startOffset="50%" textAnchor="middle" method="stretch" spacing="auto">
+        <label
+          onClick={() => {
+            toggleTheme();
+            if (theme === "light") {
+              changeText(lang === "english" ? "Light" : "Lumière");
+            } else {
+              changeText(lang === "english" ? "Dark" : "Sombre");
+            }
+          }}
+          className={
+            theme === "dark"
+              ? "menu-item theme-toggledark"
+              : "menu-item theme-toggle"
+          }
+        >
+          <IoInvertModeSharp size={24} className="icon3" />
+          <svg viewBox="0 0 100 100" className="curved-text-svg">
+            <path
+              id="themeToggleCurveAdjusted"
+              fill="none"
+              d={`M-5,50 A${radius * 1.1},${radius * 1.1} 0 0,0 50,103`}
+              transform="rotate(0,50,50)"
+            />
+            <text
+              fontSize="16"
+              style={{ fill: theme === "dark" ? "white" : "black" }}
+            >
+              <textPath
+                xlinkHref="#themeToggleCurveAdjusted"
+                startOffset={`${startOffsetPercentage}%`}
+                textAnchor="middle"
+              >
+                {buttonText}
+              </textPath>
+            </text>
+          </svg>
+        </label>
+
+        <Link
+          to="/App/Settings"
+          className={
+            theme === "dark" ? "menu-item settingsdark" : "menu-item settings"
+          }
+        >
+          <IoSettingsOutline size={24} className="icon4" />
+          <svg viewBox="0 0 100 100" className="curved-text-svg">
+            <path
+              id="settingsCurveFlipped"
+              fill="none"
+              d={`M50,10 A${radius + 0.5},${radius + 0.5} 0 0,0 10,50`}
+              transform="rotate(182, 54, 54)"
+            />
+            <text
+              fontSize="16"
+              style={{ fill: theme === "dark" ? "white" : "black" }}
+            >
+              <textPath
+                xlinkHref="#settingsCurveFlipped"
+                startOffset="50%"
+                textAnchor="middle"
+                method="stretch"
+                spacing="auto"
+              >
                 {lang === "english" ? "Settings" : "Paramètres"}
-            </textPath>
-        </text>
-    </svg>
-</Link>
-
+              </textPath>
+            </text>
+          </svg>
+        </Link>
       </div>
     );
   };
-  
-  
+
   // For Dark/Bright mode. Keeps mode storage for page refresh.
   const [buttonText, setButtonText] = useState(
     lang === "english" ? "Dark" : "Sombre"
@@ -171,8 +226,7 @@ export default function Home({
     }
   };
   */
-
-
+console.log("dataThrow:",dataThrow);
   const yAxisCallback = (value) => `$${value.toFixed(2)}`;
   const [chartData, setChartData] = useState({
     labels: [],
@@ -205,15 +259,14 @@ export default function Home({
     title: (tooltipItems) => {
       if (tooltipItems.length > 0) {
         const index = tooltipItems[0].dataIndex;
-        if (index >= 0 && index < list.length) {
-          return list[index].personName;
+        if (index >= 0 && index < dataThrow.length) {
+          return dataThrow[index].Name;
         }
       }
       return "";
     },
     label: (tooltipItem) => `$${tooltipItem.formattedValue}`,
   };
-
   const chartOptions = {
     indexAxis: "x",
     scales: {
@@ -222,6 +275,9 @@ export default function Home({
         grid: {
           color: "rgba(0, 0, 0, 0.1)",
         },
+        ticks: {
+          color: theme === 'dark' ? 'white' : 'black',
+        }
       },
       y: {
         grid: {
@@ -229,17 +285,20 @@ export default function Home({
         },
         ticks: {
           callback: yAxisCallback,
+          color: theme === 'dark' ? 'white' : 'black',
         },
       },
     },
-    plugins: {
-      title: {
-        display: true,
-        text: lang === "english" ? "Current Balances" : "Soldes actuels",
-        font: {
-          size: 16,
-        },
+    plugins: {title: {
+      display: true,
+      text: lang === "english" ? "Current Balances" : "Soldes actuels",
+      font: {
+        size: 16,
+        weight: 'bold',
       },
+      color: theme === 'dark' ? 'white' : 'black', 
+    },
+    
       legend: {
         display: false,
       },
@@ -249,31 +308,39 @@ export default function Home({
         titleAlign: "center",
         titleFont: {
           weight: "bold",
+          color: theme === 'dark' ? 'white' : 'black',
         },
         bodyFont: {
           weight: "normal",
-        },
-        custom: (tooltipModel) => {
-          // Check if tooltip is visible
-          if (tooltipModel.opacity === 0) {
-            return;
-          }
-
-          // Close tooltip after 5 seconds
-          setTimeout(() => {
-            tooltipModel.opacity = 0;
-            this._chart.tooltip.update();
-          }, 5000);
+          color: theme === 'dark' ? 'white' : 'black',
         },
       },
     },
   };
+  
+  useEffect(() => {
+    if (dataThrow && dataThrow.length > 0) {
+      const filteredData = dataThrow.filter(item => item.UserEmail === loggedInUserEmail);
+  
+      const labels = filteredData.map(item => item.Name);
+      const data = filteredData.map(item => item.Owing);
+  
+      setChartData(prevState => ({
+        ...prevState,
+        labels,
+        datasets: [{
+          ...prevState.datasets[0],
+          data,
+        }],
+      }));
+    }
+  }, [dataThrow, loggedInUserEmail]);
+  
 
   return (
     <>
       <div className={`App ${theme}`}>
         <div className="flex items-center justify-center mt-1">
-          
           <Heading
             className={
               theme === "dark"
@@ -306,7 +373,6 @@ export default function Home({
           }
           style={{ maxWidth: "600px" }}
         >
-          
           <div>
             <div className="flex flex-col items-center justify-center">
               <Header
@@ -317,17 +383,19 @@ export default function Home({
                 setPersonEdit={setPersonEdit}
                 theme={theme}
                 lang={lang}
+              /><div style={{ paddingBottom: '10%' }}>
+              {chartData.labels.length > 0 ? (
+                <Bar data={chartData} options={chartOptions} />
+              ) : (
+                ""
+              )}
+            </div>
+
+              <CircleMenu
+                lang={lang}
+                toggleTheme={() => toggleTheme()}
+                buttonText={buttonText}
               />
-              <div>
-                {chartData.labels.length > 0 ? (
-                  <Bar data={chartData} options={chartOptions} />
-                ) : (
-                  ""
-                )}
-              </div>
-              
-              <CircleMenu lang={lang} toggleTheme={() => toggleTheme()} buttonText={buttonText} />
-       
             </div>
           </div>
 

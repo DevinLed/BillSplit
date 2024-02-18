@@ -350,7 +350,7 @@ label {
 .split-bill {
   border-radius: 100% 0 0 0;
   background-color: #A9B8C2;
-  color: #ffffff; 
+  color: black;  
 }
 .split-bill:hover {
   background-color: #899BA4;
@@ -359,7 +359,7 @@ label {
 .edit-list {
   border-radius: 0 100% 0 0;
   background-color: #AFCBAA;
-  color: #ffffff; 
+  color: black; 
 }
 .edit-list:hover {
   background-color: #97A987;
@@ -368,7 +368,7 @@ label {
 .theme-toggle {
   border-radius: 0 0 0 100%;
   background-color: #BFAED2;
-  color: #ffffff; 
+  color: black; 
 }
 .theme-toggle:hover {
   background-color: #A992C5;
@@ -377,7 +377,7 @@ label {
 .settings {
   border-radius: 0 0 100% 0;
   background-color: #E1B59F;
-  color: #ffffff; 
+  color: black; 
 }
 .settings:hover {
   background-color: #D79D84;

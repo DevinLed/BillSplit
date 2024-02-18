@@ -488,9 +488,7 @@ function App({ signOut, user }) {
           />
           <Route path="/" element={<Navigate to="/LandingPage" />} />
 
-          <Route
-            element={
-              <ProtectedRoute isAuthenticated={user !== null}>
+          
                 <Route
                   path="/Home"
                   element={
@@ -508,6 +506,7 @@ function App({ signOut, user }) {
                       setLang={setLang}
                       signOut={signOut}
                       user={user}
+                      dataThrow={dataThrow}
                     />
                   }
                 />
@@ -746,20 +745,9 @@ function App({ signOut, user }) {
                     />
                   }
                 />
-              </ProtectedRoute>
-            }
-          />
         </Routes>
       </div>
     </>
   );
 }
-function ProtectedRoute({ children, isAuthenticated }) {
-  if (!isAuthenticated) {
-    return <Navigate to="/LandingPage" />;
-  }
-
-  return children;
-}
-
 export default withAuthenticator(App);
