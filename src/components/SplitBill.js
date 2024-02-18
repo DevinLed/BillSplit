@@ -57,7 +57,7 @@ export default function SplitBill({
                 <React.Fragment key={index}>
                   {item.Name ? (
                     <Link
-                      to={`/ReceiptInput/${item.ContactId}`}
+                      to={`/App/ReceiptInput/${item.ContactId}`}
                       onClick={() => selectPerson(item.ContactId)}
                       className="no-underline py-1"
                     >

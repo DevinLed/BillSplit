@@ -20,7 +20,7 @@ export default function LandingPage({ theme, lang }) {
           <p className="text-gray-800 text-lg mb-6">
             Divvy is a simple app that helps you split bills and expenses with your friends and family.
           </p>
-          <Link to="/Home">
+          <Link to="/App/Home">
             <button className="text-black mb-0 flex h-24 w-full flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-xl font-semibold shadow-md hover:bg-gray-200 hover:no-underline">
               Divvy it up
             </button>

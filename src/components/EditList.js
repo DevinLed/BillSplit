@@ -101,7 +101,7 @@ export default function EditList({
                   <React.Fragment key={index}>
                     {item.Name && item.Owing ? (
                       <Link to={{
-                        pathname: "/ContactHistoryEdit",
+                        pathname: "/App/ContactHistoryEdit",
                         state: {
                           personName: item.personName,
                           personEmail: item.personEmail,

@@ -43,7 +43,7 @@ export default function Header({
             className="align-items-center mb-5 flex h-10 w-full items-center items-stretch justify-between border-t-2 border-b-2 text-2xl font-bold "
             id="headbar"
           >
-            <Link to="/Home">
+            <Link to="/App/Home">
               <button className="ml-2 text-black hover:text-black">
                 <IoIosArrowBack />
               </button>
@@ -67,11 +67,11 @@ export default function Header({
                 className="dropdown-menu dropdown-menu-right"
                 aria-labelledby="dropdownMenu2"
               >
-                <Link to="/EditList">
+                <Link to="/App/EditList">
                   <button className={theme === "dark" ? "dropdown-item bg-gray-900 text-white hover:bg-gray-800":"dropdown-item"}>{lang === "english" ? "Edit Person" : "Modifier la personne"}</button>
                 </Link>
                 
-                <Link to="/Settings">
+                <Link to="/App/Settings">
                   <button className="dropdown-item">
                   {lang === "english" ? "Settings" : "Paramètres"}</button>
                 </Link>
@@ -89,7 +89,7 @@ export default function Header({
             className="align-items-center mb-5 flex h-10 w-full items-center items-stretch justify-between border-t-2 border-b-2 text-2xl font-bold "
             id="headbar"
           >
-            <Link to="/Home">
+            <Link to="/App/Home">
               <button className="ml-2 text-black hover:text-black">
                 <IoIosArrowBack />
               </button>
@@ -112,11 +112,11 @@ export default function Header({
                 className="dropdown-menu dropdown-menu-right"
                 aria-labelledby="dropdownMenu2"
               >
-                <Link to="/SplitBill">
+                <Link to="/App/SplitBill">
                   <button className="dropdown-item">{lang === "english" ? "New Receipt" : "Nouveau reçu"}</button>
                 </Link>
                 
-                <Link to="/Settings">
+                <Link to="/App/Settings">
                   <button className="dropdown-item"> {lang === "english" ? "Settings" : "Paramètres"}</button>
                 </Link>
               </div>
@@ -131,7 +131,7 @@ export default function Header({
           className="align-items-center mb-5 flex h-10 w-full items-center items-stretch justify-between border-t-2 border-b-2 text-2xl font-bold "
           id="headbar"
         >
-          <Link to="/SplitBIll">
+          <Link to="/App/SplitBIll">
             <button className="ml-2 text-black hover:text-black">
               <IoIosArrowBack />
             </button>
@@ -153,14 +153,14 @@ export default function Header({
               className="dropdown-menu dropdown-menu-right"
               aria-labelledby="dropdownMenu2"
             >
-              <Link to="/SplitBill">
+              <Link to="/App/SplitBill">
                 <button className="dropdown-item">{lang === "english" ? "New Receipt" : "Nouveau reçu"}</button>
               </Link>
-              <Link to="/EditList">
+              <Link to="/App/EditList">
                 <button className="dropdown-item">{lang === "english" ? "Edit Person" : "Modifier la personne"}</button>
               </Link>
               
-              <Link to="/Settings">
+              <Link to="/App/Settings">
                   <button className="dropdown-item">{lang === "english" ? "Settings" : "Paramètres"}</button>
                 </Link>
             </div>
@@ -175,7 +175,7 @@ export default function Header({
           className="align-items-center mb-2 flex h-10 w-full items-center items-stretch justify-between border-t-2 border-b-2 text-2xl font-bold "
           id="headbar"
         >
-          <Link to="/SplitBill">
+          <Link to="/App/SplitBill">
             <button
               className="ml-2 text-black hover:text-black "
               onClick={() => handleResetTotals()}
@@ -200,14 +200,14 @@ export default function Header({
               className="dropdown-menu dropdown-menu-right"
               aria-labelledby="dropdownMenu2"
             >
-              <Link to="/SplitBill">
+              <Link to="/App/SplitBill">
                 <button className="dropdown-item">{lang === "english" ? "New Receipt" : "Nouveau reçu"}</button>
               </Link>
-              <Link to="/EditList">
+              <Link to="/App/EditList">
                 <button className="dropdown-item">{lang === "english" ? "Edit Person" : "Modifier la personne"}</button>
               </Link>
               
-              <Link to="/Settings">
+              <Link to="/App/Settings">
                   <button className="dropdown-item">{lang === "english" ? "Settings" : "Paramètres"}</button>
                 </Link>
             </div>
@@ -221,7 +221,7 @@ export default function Header({
           className="align-items-center mb-5 flex h-10 w-full items-center items-stretch justify-between border-t-2 border-b-2 text-2xl font-bold "
           id="headbar"
         >
-          <Link to="/SplitBill">
+          <Link to="/App/SplitBill">
             <button
               className="ml-2 text-black hover:text-black"
               onClick={(e) => handleResetTotals(e)}
@@ -246,14 +246,14 @@ export default function Header({
               className="dropdown-menu dropdown-menu-right"
               aria-labelledby="dropdownMenu2"
             >
-              <Link to="/SplitBill">
+              <Link to="/App/SplitBill">
                 <button className="dropdown-item">{lang === "english" ? "New Receipt" : "Nouveau reçu"}</button>
               </Link>
-              <Link to="/EditList">
+              <Link to="/App/EditList">
                 <button className="dropdown-item">{lang === "english" ? "Edit Person" : "Modifier la personne"}</button>
               </Link>
 
-              <Link to="/Settings">
+              <Link to="/App/Settings">
                   <button className="dropdown-item">{lang === "english" ? "Settings" : "Paramètres"}</button>
                 </Link>
             </div>
@@ -268,7 +268,7 @@ export default function Header({
             className="align-items-center mb-5 flex h-10 w-full items-center items-stretch justify-between border-t-2 border-b-2 text-2xl font-bold "
             id="headbar"
           >
-            <Link to="/Home">
+            <Link to="/App/Home">
               <button className="ml-2 text-black hover:text-black">
                 <IoIosArrowBack />
               </button>
@@ -289,10 +289,10 @@ export default function Header({
                 className="dropdown-menu dropdown-menu-right"
                 aria-labelledby="dropdownMenu2"
               >
-                <Link to="/SplitBill">
+                <Link to="/App/SplitBill">
                   <button className="dropdown-item">{lang === "english" ? "New Receipt" : "Nouveau reçu"}</button>
                 </Link>
-                <Link to="/EditList">
+                <Link to="/App/EditList">
                   <button className="dropdown-item">{lang === "english" ? "Edit Person" : "Modifier la personne"}</button>
                 </Link>
               </div>
@@ -308,7 +308,7 @@ export default function Header({
             className="align-items-center mb-5 flex h-10 w-full items-center items-stretch justify-between border-t-2 border-b-2 text-2xl font-bold "
             id="headbar"
           >
-            <Link to="/Home">
+            <Link to="/App/Home">
               <button className="ml-2 text-black hover:text-black">
                 <IoIosArrowBack />
               </button>
@@ -329,13 +329,13 @@ export default function Header({
                 className="dropdown-menu dropdown-menu-right"
                 aria-labelledby="dropdownMenu2"
               >
-                <Link to="/SplitBill">
+                <Link to="/App/SplitBill">
                   <button className="dropdown-item">{lang === "english" ? "New Receipt" : "Nouveau reçu"}</button>
                 </Link>
-                <Link to="/EditList">
+                <Link to="/App/EditList">
                   <button className="dropdown-item">{lang === "english" ? "Edit Person" : "Modifier la personne"}</button>
                 </Link>
-                <Link to="/Settings">
+                <Link to="/App/Settings">
                   <button className="dropdown-item">{lang === "english" ? "Settings" : "Paramètres"}</button>
                 </Link>
               </div>
