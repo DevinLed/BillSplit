@@ -31,6 +31,8 @@ export default function AddPerson({
   const [errorBalance, setErrorBalance] = useState(false);
   const [errorPhone, setErrorPhone] = useState(false);
   const [errorEmail, setErrorEmail] = useState(false);
+  const [errorSameUser, setErrorSameUser] = useState(true);
+  const [errorCurrentUser, setErrorCurrentUser] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [submissionError, setSubmissionError] = useState(true);
   const [showInput, setShowInput] = useState(false);
@@ -97,14 +99,18 @@ export default function AddPerson({
     const inputEmail = event.target.value;
     setPersonEmail(inputEmail);
     setErrorEmail(false);
-
-    // Check if email contains "@"
-    if (inputEmail.includes("@")) {
-      setIsValidEmail(true);
-      setErrorEmail(true);
-      console.log("email verified");
+    if (inputEmail === loggedInUserEmail) {
+      setErrorSameUser(true);
+      setErrorCurrentUser(true);
     } else {
-      setIsValidEmail(false);
+      // Check if email contains "@"
+      if (inputEmail.includes("@")) {
+        setIsValidEmail(true);
+        setErrorEmail(true);
+        console.log("email verified");
+      } else {
+        setIsValidEmail(false);
+      }
     }
   };
   function resetForm() {
@@ -138,14 +144,16 @@ export default function AddPerson({
             }
           >
             <div className="flex items-center justify-evenly p-4 border-b border-gray-300">
-              <h3 className="text-xl font-semibold">{lang === "english" ? "Add a Person" : "Ajouter une personne"}</h3>
+              <h3 className="text-xl font-semibold">
+                {lang === "english" ? "Add a Person" : "Ajouter une personne"}
+              </h3>
             </div>
 
-            <div className="p-4">
+            <div className="pt-4 pr-4 pl-4 pb-1">
               <div className="text-center">
                 <div className="mb-4">
                   <label htmlFor="colFormLabel" className="sr-only">
-                  {lang === "english" ? "Name" : "Nom"}
+                    {lang === "english" ? "Name" : "Nom"}
                   </label>
                   <input
                     type="name"
@@ -166,7 +174,9 @@ export default function AddPerson({
 
                 <div className="mb-4">
                   <label htmlFor="colFormLabel" className="sr-only">
-                  {lang === "english" ? "Phone Number" : "Numéro de téléphone"}
+                    {lang === "english"
+                      ? "Phone Number"
+                      : "Numéro de téléphone"}
                   </label>
                   <input
                     autoComplete="off"
@@ -179,7 +189,11 @@ export default function AddPerson({
                         : ""
                     }`}
                     id="colFormLabel"
-                    placeholder={lang === "english" ? "Phone Number" : "Numéro de téléphone"}
+                    placeholder={
+                      lang === "english"
+                        ? "Phone Number"
+                        : "Numéro de téléphone"
+                    }
                     value={formSubmitted ? "" : formatPhoneNumber(personPhone)}
                     onChange={handlePhoneNumberChange}
                   />
@@ -193,7 +207,7 @@ export default function AddPerson({
                     autoComplete="off"
                     type="email"
                     className={`form-control w-full py-2 px-3 rounded-lg focus:outline-none focus:ring ${
-                      isValidEmail ? "ring-green-300" : "ring-red-300"
+                      isValidEmail  &&  !errorCurrentUser? "ring-green-300" : "ring-red-300"
                     }`}
                     id="colFormLabel"
                     placeholder="E-mail"
@@ -201,6 +215,13 @@ export default function AddPerson({
                     value={formSubmitted ? "" : personEmail}
                     onChange={handleEmailChange}
                   />
+                  {errorCurrentUser && (
+                    <p className="text-red-500 text-sm text-center mb-2">
+                      {lang === "english"
+                        ? "You can't add yourself."
+                        : "Tu ne peux pas t'ajouter."}
+                    </p>
+                  )}
                 </div>
 
                 <div className="mb-4">
@@ -211,76 +232,21 @@ export default function AddPerson({
                       (theme === "dark" ? "text-white" : "text-gray-800")
                     }
                   >
-                  {lang === "english" ? "Starting balance?" : "Solde de départ?"}
+                    {lang === "english"
+                      ? "Starting balance?"
+                      : "Solde de départ?"}
                   </label>
                 </div>
 
                 <div className="mb-4">
-                  <div className="flex items-center justify-center mb-2">
-                    <label className="inline-flex items-center cursor-pointer">
-                      <input
-                        type="radio"
-                        className={`form-radio h-4 w-4 text-blue-500 ${
-                          showInput ? "border-blue-500" : "border-gray-400"
-                        }`}
-                        onClick={(e) => {
-                          setShowInput(false);
-                          handleNoButtonClick(e);
-                          setErrorBalance(true);
-                          setPersonOwing("0.00");
-                        }}
-                        disabled={!showInput}
-                        checked={!showInput}
-                      />
-                      <span
-                        className={`ml-2 ${
-                          theme === "dark"
-                            ? showInput
-                              ? "text-gray-400"
-                              : "text-white"
-                            : showInput
-                            ? "text-gray-400"
-                            : "text-black"
-                        }`}
-                      >
-                        {lang === "english" ? "No" : "Non"}
-                      </span>
-                    </label>
-
-                    <label className="ml-8 inline-flex items-center cursor-pointer">
-                      <input
-                        type="radio"
-                        className={`form-radio h-4 w-4 text-blue-500 ${
-                          showInput ? "border-gray-400" : "border-blue-500"
-                        }`}
-                        onClick={() => setShowInput(true)}
-                        disabled={showInput}
-                        checked={showInput}
-                      />
-                      <span
-                        className={`ml-2 ${
-                          theme === "dark"
-                            ? showInput
-                              ? "text-white"
-                              : "text-gray-400"
-                            : showInput
-                            ? "text-black"
-                            : "text-gray-400"
-                        }`}
-                      >
-                        {lang === "english" ? "Yes" : "Oui"}
-                      </span>
-                    </label>
-                  </div>
-
                   <CSSTransition
-                    in={showInput}
-                    timeout={300} 
+                    in={true}
+                    timeout={300}
                     classNames="fade"
                     unmountOnExit
                   >
                     <div
-                      className="flex w-5/6 items-center absolute justify-center"
+                      className="flex items-center mb-3 justify-center"
                       style={{ height: "40px" }}
                     >
                       {/* Set a fixed height for the div */}
@@ -315,7 +281,7 @@ export default function AddPerson({
                                 lang === "english"
                                   ? "Please enter a valid number"
                                   : "S'il vous plait, entrez un nombre valide"
-                              );;
+                              );
                             }
                           }}
                           style={{ borderColor: "lightblue" }}
@@ -356,7 +322,12 @@ export default function AddPerson({
                     : "flex w-fit flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-800 hover:no-underline"
                 }
                 onClick={(e) => {
-                  if (errorBalance && errorPhone && errorEmail) {
+                  if (
+                    errorBalance &&
+                    errorPhone &&
+                    errorEmail &&
+                    errorSameUser
+                  ) {
                     handleAddSubmit(e);
                     setFormSubmitted(true);
                     resetForm();
@@ -371,7 +342,9 @@ export default function AddPerson({
 
             {!submissionError && (
               <p className="text-red-500 text-sm text-center mb-2">
-                {lang === "english" ? "Please complete all fields correctly." : "Veuillez remplir tous les champs correctement."}
+                {lang === "english"
+                  ? "Please complete all fields correctly."
+                  : "Veuillez remplir tous les champs correctement."}
               </p>
             )}
           </div>
