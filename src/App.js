@@ -40,28 +40,35 @@ import ContactHistoryEdit from "./components/ContactHistoryEdit";
 Amplify.configure(awsconfig);
 
 function App({ signOut, user }) {
-  const [theme, setTheme] = useState(null);
+  const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
 
   const toggleTheme = () => {
-    if (theme === "light") {
-      setTheme("dark");
-    } else {
-      setTheme("light");
-    }
+    const newTheme = theme === 'light' ? 'dark' : 'light';
+    setTheme(newTheme);
+    localStorage.setItem('theme', newTheme);
   };
-  useEffect(() => {
-    const currentTheme = theme || "light";
-    localStorage.setItem("theme", currentTheme);
 
-    setTheme(currentTheme);
-    document.body.className = currentTheme;
+  useEffect(() => {
+    const updateThemeClass = (newTheme) => {
+      document.body.className = newTheme;
+    };
+
+    const storedTheme = localStorage.getItem('theme') || 'light';
+    updateThemeClass(storedTheme);
+    setTheme(storedTheme);
+
+    const timerId = setTimeout(() => {
+      updateThemeClass(theme);
+    }, 0);
+
+    return () => clearTimeout(timerId);
   }, [theme]);
+
   // language select
   const [lang, setLang] = useState(localStorage.getItem("lang") || "english");
   // useEffect to track language
   useEffect(() => {
     localStorage.setItem("lang", lang);
-    document.body.className = lang;
   }, [lang]);
   // tax rate select
 

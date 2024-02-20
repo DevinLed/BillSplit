@@ -118,7 +118,7 @@ export default function ContactHistoryEdit({
           >
             <div>
               <div className="flex justify-center items-center">
-                <p className="font-bold">Submitted by</p>
+                <p className="font-bold">{lang === "english" ? "Submitted By" : "Proposé par"}</p>
               </div>
               <div className="flex justify-center items-center">
                 <p className="font-bold">{transaction.loggedInUsername}</p>
@@ -223,7 +223,7 @@ export default function ContactHistoryEdit({
 
   const noTransactionsMessage = useMemo(() => {
     if (filteredTransactions.length === 0) {
-      return <p>No transactions found.</p>;
+      return <p>{lang === "english" ? "No transactions found" : "Aucune transaction trouvée"}</p>;
     }
     return null;
   }, [filteredTransactions]);
