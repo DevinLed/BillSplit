@@ -181,7 +181,7 @@ export default function Home({
                 method="stretch"
                 spacing="auto"
               >
-                {lang === "english" ? "Settings" : "Paramètres"}
+                {lang === "english" ? "Settings" : "Réglages"}
               </textPath>
             </text>
           </svg>
@@ -226,7 +226,6 @@ export default function Home({
     }
   };
   */
-console.log("dataThrow:",dataThrow);
   const yAxisCallback = (value) => `$${value.toFixed(2)}`;
   const [chartData, setChartData] = useState({
     labels: [],
