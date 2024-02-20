@@ -476,6 +476,7 @@ function App({ signOut, user }) {
           <NotificationAPIComponent
             userId={loggedInUserEmail}
             className="Noti"
+            
           />
         </div>
         <div onClick={updateDataHandler}></div>

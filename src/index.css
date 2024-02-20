@@ -207,7 +207,27 @@ label {
     opacity: 0;
   }
 }
+@keyframes fadeInOut {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.custom-dropdown-menu {
+  max-width: 50px;
+  text-align: center;
+  animation: fadeInOut 0.5s ease; 
+}
 
+.custom-dropdown-header {
+  font-size: 1rem; 
+}
+
+.custom-dropdown-item {
+  font-size: 0.8rem;
+}
 .fade-in-out-animation {
   animation: fade-in-out 0.5s ease-in-out infinite alternate;
 }
@@ -288,7 +308,70 @@ label {
   position: fixed;
   top: 0;
   left: 0;
+  z-index: 999;
+  color: white;
+  font-size: 1em;
+  background-color: #f1f1f1;
+  border-radius: 10px;
+  border: 2px solid #ccc;
+  padding: 3px;
+}
+.accountmenu {
+  position: fixed;
+  top: 0;
+  right: 0; 
+  color: black;
+  font-size: 2em;
+}
+.my-custom-dropdown-menu {
+  max-width: 30vw;
+  text-align: center;
+  animation: fadeInOut 0.5s ease;
+  transform: translate3d(180px, 10px, 0);
+  font-size: 1.2rem;
+}
+
+.my-custom-dropdown-header {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+.my-custom-dropdown-item {
+  font-size: 1rem;
+}
+.my-custom-dropdown-menu {
+  width: 100%;
+}
+
+.my-custom-dropdown-item {
+  display: block;
+  width: 100%;
+  text-align: center;
+  padding: 10px 0;
+  background-color: #f0f0f0;
+  color: #333;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.dark-button {
+  background-color: #4a4a4a;
+  color: #fff;
+}
+
+.my-custom-dropdown-item:hover, .dark-button:hover {
+  background-color: #ccc;
+  color: #000;
+}
+
+.accountmenudark {
+  position: fixed;
+  top: 0;
+  right: 0;
   z-index: 999; 
+  color: white;
+  font-size: 2em;
 }
 .circle-menu {
   position: relative;

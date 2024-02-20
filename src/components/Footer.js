@@ -6,7 +6,7 @@ import App from "../App";
 export default function Footer({theme, lang,setLang}) {
   return (
     <>
-      <div className="flex justify-center mt-5">
+      <div className="flex justify-center mt-100">
         <footer className={
               theme === "dark"
                 ? "fixed bottom-0 w-full thank bg-gray-700": "fixed bottom-0 w-full thank bg-gray-100"}>

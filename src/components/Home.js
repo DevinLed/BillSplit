@@ -275,8 +275,8 @@ export default function Home({
           color: "rgba(0, 0, 0, 0.1)",
         },
         ticks: {
-          color: theme === 'dark' ? 'white' : 'black',
-        }
+          color: theme === "dark" ? "white" : "black",
+        },
       },
       y: {
         grid: {
@@ -284,20 +284,21 @@ export default function Home({
         },
         ticks: {
           callback: yAxisCallback,
-          color: theme === 'dark' ? 'white' : 'black',
+          color: theme === "dark" ? "white" : "black",
         },
       },
     },
-    plugins: {title: {
-      display: true,
-      text: lang === "english" ? "Current Balances" : "Soldes actuels",
-      font: {
-        size: 16,
-        weight: 'bold',
+    plugins: {
+      title: {
+        display: true,
+        text: lang === "english" ? "Current Balances" : "Soldes actuels",
+        font: {
+          size: 16,
+          weight: "bold",
+        },
+        color: theme === "dark" ? "white" : "black",
       },
-      color: theme === 'dark' ? 'white' : 'black', 
-    },
-    
+
       legend: {
         display: false,
       },
@@ -307,88 +308,84 @@ export default function Home({
         titleAlign: "center",
         titleFont: {
           weight: "bold",
-          color: theme === 'dark' ? 'white' : 'black',
+          color: theme === "dark" ? "white" : "black",
         },
         bodyFont: {
           weight: "normal",
-          color: theme === 'dark' ? 'white' : 'black',
+          color: theme === "dark" ? "white" : "black",
         },
       },
     },
   };
-  
+
   useEffect(() => {
     if (dataThrow && dataThrow.length > 0) {
-      const filteredData = dataThrow.filter(item => item.UserEmail === loggedInUserEmail);
-  
-      const labels = filteredData.map(item => item.Name);
-      const data = filteredData.map(item => item.Owing);
-  
-      setChartData(prevState => ({
+      const filteredData = dataThrow.filter(
+        (item) => item.UserEmail === loggedInUserEmail
+      );
+
+      const labels = filteredData.map((item) => item.Name);
+      const data = filteredData.map((item) => item.Owing);
+
+      setChartData((prevState) => ({
         ...prevState,
         labels,
-        datasets: [{
-          ...prevState.datasets[0],
-          data,
-        }],
+        datasets: [
+          {
+            ...prevState.datasets[0],
+            data,
+          },
+        ],
       }));
     }
   }, [dataThrow, loggedInUserEmail]);
-  
 
   return (
     <>
       <div className={`App ${theme}`}>
-        <div className="flex items-center justify-center mt-1">
-          <Heading
-            className={
-              theme === "dark"
-                ? "text-white text-center"
-                : "text-gray-800 text-center"
-            }
-            level={1}
-          >
-            {lang === "english" ? "Hello" : "Bonjour"} {user.attributes.name}
-          </Heading>
-        </div>
-        <div className="flex items-center justify-center mt-4">
-          <Button
-            onClick={signOut}
-            className={
-              theme === "dark"
-                ? "text-white text-center"
-                : "text-gray-800 text-center"
-            }
-          >
-            {lang === "english" ? "Sign out" : "Se déconnecter"}
-          </Button>
-        </div>
+        <Header
+          startBill={startBill}
+          showPersonEdit={showPersonEdit}
+          selectPersonEdit={selectPersonEdit}
+          setSelectPersonEdit={setSelectPersonEdit}
+          setPersonEdit={setPersonEdit}
+          theme={theme}
+          lang={lang}
+          signOut={signOut}
+          user={user}
+        />
         <main
           className={
-            "xs:max-w-xl mt-5 rounded p-0 pt-3 shadow sm:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl " +
+            "xs:max-w-xl mt-3 rounded p-0 pt-3 shadow sm:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl " +
             (theme === "dark"
               ? "border-2 border-gray-800 lg-rounded bg-gray-650"
               : "bg-white-500 ")
           }
           style={{ maxWidth: "600px" }}
         >
-          <div>
-            <div className="flex flex-col items-center justify-center">
-              <Header
-                startBill={startBill}
-                showPersonEdit={showPersonEdit}
-                selectPersonEdit={selectPersonEdit}
-                setSelectPersonEdit={setSelectPersonEdit}
-                setPersonEdit={setPersonEdit}
-                theme={theme}
-                lang={lang}
-              /><div style={{ paddingBottom: '10%' }}>
-              {chartData.labels.length > 0 ? (
-                <Bar data={chartData} options={chartOptions} />
-              ) : (
-                ""
-              )}
-            </div>
+          <div className="marginBottom">
+            <div className="flex flex-col items-center justify-center mb-3">
+            <div style={{ paddingBottom: "10%" }}>
+  {chartData.labels.length > 0 ? (
+    <Bar data={chartData} options={chartOptions} />
+  ) : (
+    <Bar
+      data={{
+        labels: ["No Transactions"],
+        datasets: [
+          {
+            label: "Owing Amount",
+            data: [0], 
+            backgroundColor: ["rgba(255, 255, 255, 0.6)"],
+            borderColor: ["rgba(255, 255, 255, 1)"], 
+            borderWidth: 1,
+          },
+        ],
+      }}
+      options={chartOptions}
+    />
+  )}
+</div>
 
               <CircleMenu
                 lang={lang}

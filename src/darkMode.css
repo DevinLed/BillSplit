@@ -48,3 +48,10 @@ body.light {
   background-color: #D79D84;
   transform: scale(1.25);
 }
+.accountmenudark {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 999; 
+  color: white;
+}
