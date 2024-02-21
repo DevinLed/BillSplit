@@ -305,9 +305,6 @@ label {
     transform 200ms;
 }
 .notification-container {
-  position: fixed;
-  top: 0;
-  left: 0;
   z-index: 999;
   color: white;
   font-size: 1em;

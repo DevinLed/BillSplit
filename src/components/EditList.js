@@ -47,6 +47,7 @@ export default function EditList({
   setPassedId,
   updateDataHandler,
   user,
+  loggedInUsername
 }) {
   const API_URL =
     "https://48f95wy514.execute-api.us-east-1.amazonaws.com/prod/contacts";
@@ -93,6 +94,29 @@ export default function EditList({
         <div
           className={`flex flex-col items-center justify-center transition-opacity duration-300`}
         >
+          <ul className="m-0 py-1 w-2/5">
+            <React.Fragment key={"save-with-myself"}>
+              <Link
+                to={`/App/ReceiptInput/save-with-myself`}
+                onClick={() => selectPerson("save-with-myself")}
+                className="no-underline py-1"
+              >
+                <li
+                  className={
+                    "list-group-item flex justify-between m-1 p-2 rounded-lg shadow-sm " +
+                    (theme === "dark"
+                      ? "bg-gray-800 text-white"
+                      : "bg-white text-gray-800")
+                  }
+                >
+                  <div className="flex items-center justify-center flex-grow">
+                    <Avatar name={loggedInUsername} size={32} round />
+                    <span className="ml-2">Personal Expenses</span>
+                  </div>
+                </li>
+              </Link>
+            </React.Fragment>
+          </ul>
           <ul className="m-0 py-1 w-3/4">
             {dataThrow.length > 0 &&
               dataThrow

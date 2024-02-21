@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useCallback, useEffect } from "react";
 import {
   Route,
   Routes,
@@ -40,12 +40,12 @@ import ContactHistoryEdit from "./components/ContactHistoryEdit";
 Amplify.configure(awsconfig);
 
 function App({ signOut, user }) {
-  const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
+  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
 
   const toggleTheme = () => {
-    const newTheme = theme === 'light' ? 'dark' : 'light';
+    const newTheme = theme === "light" ? "dark" : "light";
     setTheme(newTheme);
-    localStorage.setItem('theme', newTheme);
+    localStorage.setItem("theme", newTheme);
   };
 
   useEffect(() => {
@@ -53,7 +53,7 @@ function App({ signOut, user }) {
       document.body.className = newTheme;
     };
 
-    const storedTheme = localStorage.getItem('theme') || 'light';
+    const storedTheme = localStorage.getItem("theme") || "light";
     updateThemeClass(storedTheme);
     setTheme(storedTheme);
 
@@ -120,6 +120,7 @@ function App({ signOut, user }) {
 
   const [dataThrow, setDataThrow] = useState([]);
 
+  const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
   const fetchData = async () => {
     try {
       const response = await fetch(API_URL);
@@ -281,8 +282,6 @@ function App({ signOut, user }) {
     setObtainedInfo([]);
   };
   const handleAddSubmit = async (e) => {
-    e.preventDefault();
-
     const owingValue = personOwing !== "" ? personOwing : 0;
     const itemData = {
       Name: personName,
@@ -292,7 +291,7 @@ function App({ signOut, user }) {
       UserEmail: loggedInUserEmail,
       UserName: currentUserName,
     };
-
+    console.log("adding person with: ", itemData);
     setAddPerson(false);
     try {
       const response = await fetch(API_URL, {
@@ -316,6 +315,45 @@ function App({ signOut, user }) {
       } else {
         console.log("Contact didn't exist, starting owing balance tracker.");
       }
+      // Update local state with the new item
+      setDataThrow((prevData) => [...prevData, newItem]);
+
+      // Reset form fields
+      setPersonName("");
+      setPersonPhone("");
+      setPersonEmail("");
+      setPersonOwing("");
+      setFormSubmitted(true);
+      updateDataHandler();
+    } catch (error) {
+      console.error("Error creating item:", error);
+    }
+  };
+  const handleAddSelfSubmit = async (e) => {
+    const itemData = {
+      Name: currentUserName,
+      Email: loggedInUserEmail,
+      Phone: "5555555555",
+      Owing: "0.00",
+      UserEmail: loggedInUserEmail,
+      UserName: currentUserName,
+    };
+    setAddPerson(false);
+    try {
+      const response = await fetch(API_URL, {
+        method: "POST",
+        body: JSON.stringify(itemData),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to add item");
+      }
+
+      const newItem = await response.json();
+
       // Update local state with the new item
       setDataThrow((prevData) => [...prevData, newItem]);
 
@@ -428,6 +466,22 @@ function App({ signOut, user }) {
     setPersonReceiptAmount(selectingPerson.ReceiptAmount);
   };
 
+  const selectSelf = async (ContactId) => {
+    console.log("this:", ContactId);
+    const selectingPerson = dataThrow.find(
+      (item) =>
+        item.UserEmail === loggedInUserEmail && item.Email === loggedInUserEmail
+    );
+    
+    console.log("that:", selectingPerson);
+    setPersonName(selectingPerson.Name);
+    setPersonPhone(selectingPerson.Phone);
+    setPersonEmail(selectingPerson.Email);
+    setPersonOwing(selectingPerson.Owing);
+    setPersonReceiptAmount(selectingPerson.ReceiptAmount);
+  };
+
+
   // Used to send values to History component
   const [receipts, setReceipts] = useState(() => {
     const storedReceipts = localStorage.getItem("receipts");
@@ -476,16 +530,117 @@ function App({ signOut, user }) {
       console.error("Error adding receipt:", error);
     }
   };
+
+  // draggable notification system:
+  const DraggableComponent = ({ children }) => {
+    const [isDragging, setIsDragging] = useState(false);
+    const [startPos, setStartPos] = useState({ x: 0, y: 0 });
+    const [position, setPosition] = useState({ x: 0, y: 0 });
+
+    const handleStart = useCallback(
+      (clientX, clientY) => {
+        setIsDragging(true);
+        setStartPos({
+          x: clientX - position.x,
+          y: clientY - position.y,
+        });
+      },
+      [position.x, position.y]
+    );
+
+    const handleMove = useCallback(
+      (clientX, clientY) => {
+        if (isDragging) {
+          const newX = clientX - startPos.x;
+          const newY = clientY - startPos.y;
+          setPosition({ x: newX, y: newY });
+        }
+      },
+      [isDragging, startPos]
+    );
+
+    const handleMouseDown = useCallback(
+      (e) => {
+        handleStart(e.clientX, e.clientY);
+      },
+      [handleStart]
+    );
+
+    const handleTouchStart = useCallback(
+      (e) => {
+        const touch = e.touches[0];
+        handleStart(touch.clientX, touch.clientY);
+      },
+      [handleStart]
+    );
+
+    const handleMouseMove = useCallback(
+      (e) => {
+        handleMove(e.clientX, e.clientY);
+      },
+      [handleMove]
+    );
+
+    const handleTouchMove = useCallback(
+      (e) => {
+        const touch = e.touches[0];
+        handleMove(touch.clientX, touch.clientY);
+      },
+      [handleMove]
+    );
+
+    const handleEnd = useCallback(() => {
+      setIsDragging(false);
+    }, []);
+
+    useEffect(() => {
+      if (isDragging) {
+        document.addEventListener("mousemove", handleMouseMove);
+        document.addEventListener("mouseup", handleEnd);
+        document.addEventListener("touchmove", handleTouchMove);
+        document.addEventListener("touchend", handleEnd);
+      } else {
+        document.removeEventListener("mousemove", handleMouseMove);
+        document.removeEventListener("mouseup", handleEnd);
+        document.removeEventListener("touchmove", handleTouchMove);
+        document.removeEventListener("touchend", handleEnd);
+      }
+
+      return () => {
+        document.removeEventListener("mousemove", handleMouseMove);
+        document.removeEventListener("mouseup", handleEnd);
+        document.removeEventListener("touchmove", handleTouchMove);
+        document.removeEventListener("touchend", handleEnd);
+      };
+    }, [isDragging, handleMouseMove, handleTouchMove, handleEnd]);
+
+    return (
+      <div
+        style={{
+          position: "absolute",
+          left: `${position.x}px`,
+          top: `${position.y}px`,
+          cursor: isDragging ? "grabbing" : "grab",
+          touchAction: "none", // Prevents scrolling while dragging on touch devices
+        }}
+        onMouseDown={handleMouseDown}
+        onTouchStart={handleTouchStart}
+      >
+        {children}
+      </div>
+    );
+  };
   return (
     <>
       <div className={`App ${theme}`} style={{ paddingTop: "20px" }}>
-        <div className="notification-container">
-          <NotificationAPIComponent
-            userId={loggedInUserEmail}
-            className="Noti"
-            
-          />
-        </div>
+        <DraggableComponent>
+          <div className="notification-container">
+            <NotificationAPIComponent
+              userId={loggedInUserEmail}
+              className="Noti"
+            />
+          </div>
+        </DraggableComponent>
         <div onClick={updateDataHandler}></div>
         <Routes>
           <Route
@@ -496,263 +651,272 @@ function App({ signOut, user }) {
           />
           <Route path="/" element={<Navigate to="/LandingPage" />} />
 
-          
-                <Route
-                  path="/Home"
-                  element={
-                    <Home
-                      loggedInUserEmail={loggedInUserEmail}
-                      theme={theme}
-                      setTheme={setTheme}
-                      toggleTheme={toggleTheme}
-                      personOwing={personOwing}
-                      personName={personName}
-                      list={list}
-                      showConfirmation={showConfirmation}
-                      setShowConfirmation={setShowConfirmation}
-                      lang={lang}
-                      setLang={setLang}
-                      signOut={signOut}
-                      user={user}
-                      dataThrow={dataThrow}
-                    />
-                  }
-                />
-                <Route
-                  path="/ReceiptInput/:ContactId"
-                  element={
-                    <ReceiptInput
-                      submissionArray={submissionArray}
-                      setSubmissionArray={setSubmissionArray}
-                      combinedTotal={combinedTotal}
-                      setCombinedTotal={setCombinedTotal}
-                      personName={personName}
-                      personOwing={personOwing}
-                      personEmail={personEmail}
-                      loggedInUserEmail={loggedInUserEmail}
-                      startDate={startDate}
-                      setStartDate={setStartDate}
-                      merchantName={merchantName}
-                      setMerchantName={setMerchantName}
-                      invoiceNumber={invoiceNumber}
-                      setInvoiceNumber={setInvoiceNumber}
-                      personReceiptAmount={personReceiptAmount}
-                      setPersonReceiptAmount={setPersonReceiptAmount}
-                      addNum={addNum}
-                      subNum={subNum}
-                      value={value}
-                      addReceipt={addReceipt}
-                      selectedValue={selectedValue}
-                      setSelectedValue={setSelectedValue}
-                      displayMerchant={displayMerchant}
-                      displayDate={displayDate}
-                      displayInvoice={displayInvoice}
-                      setDisplayMerchant={setDisplayMerchant}
-                      setDisplayDate={setDisplayDate}
-                      setDisplayInvoice={setDisplayInvoice}
-                      setIsReceiptSubmitted={setIsReceiptSubmitted}
-                      youPictureTotal={youPictureTotal}
-                      splitPictureTotal={splitPictureTotal}
-                      themPictureTotal={themPictureTotal}
-                      setYouPictureTotal={setYouPictureTotal}
-                      setSplitPictureTotal={setSplitPictureTotal}
-                      setThemPictureTotal={setThemPictureTotal}
-                      theme={theme}
-                      taxRate={taxRate}
-                      lang={lang}
-                      setLang={setLang}
-                      combinedArray={combinedArray}
-                      setCombinedArray={setCombinedArray}
-                      handleResetCombinedArray={handleResetCombinedArray}
-                      historyData={historyData}
-                      setHistoryData={setHistoryData}
-                      obtainedInfo={obtainedInfo}
-                      setObtainedInfo={setObtainedInfo}
-                      additionValue={additionValue}
-                      loggedInUsername={loggedInUsername}
-                    />
-                  }
-                />
-                <Route
-                  path="/SplitBill"
-                  element={
-                    <SplitBill
-                      dataThrow={dataThrow}
-                      addPerson={addPerson}
-                      setAddPerson={setAddPerson}
-                      selectPerson={selectPerson}
-                      personName={personName}
-                      personEmail={personEmail}
-                      personPhone={personPhone}
-                      personOwing={personOwing}
-                      setPersonName={setPersonName}
-                      setPersonEmail={setPersonEmail}
-                      setPersonPhone={setPersonPhone}
-                      setPersonOwing={setPersonOwing}
-                      handleSubmit={handleSubmit}
-                      setPersonState={setPersonState}
-                      personState={personState}
-                      setIsSelected={setIsSelected}
-                      list={list}
-                      value={value}
-                      addNum={addNum}
-                      subNum={subNum}
-                      personReceiptAmount={personReceiptAmount}
-                      setFormSubmitted={setFormSubmitted}
-                      theme={theme}
-                      handleAddSubmit={handleAddSubmit}
-                      lang={lang}
-                      setLang={setLang}
-                      loggedInUsername={loggedInUsername}
-                      loggedInUserEmail={loggedInUserEmail}
-                    />
-                  }
-                />
-                <Route
-                  path="/EditList"
-                  element={
-                    <EditList
-                      user={user}
-                      dataThrow={dataThrow}
-                      setDataThrow={setDataThrow}
-                      handleEditSubmit={handleEditSubmit}
-                      setFormSubmitted={setFormSubmitted}
-                      addPerson={addPerson}
-                      setAddPerson={setAddPerson}
-                      selectPerson={selectPerson}
-                      personName={personName}
-                      personEmail={personEmail}
-                      personPhone={personPhone}
-                      personOwing={personOwing}
-                      setPersonName={setPersonName}
-                      setPersonEmail={setPersonEmail}
-                      setPersonPhone={setPersonPhone}
-                      setPersonOwing={setPersonOwing}
-                      handleSubmit={handleSubmit}
-                      setPersonState={setPersonState}
-                      personState={personState}
-                      setIsSelected={setIsSelected}
-                      editPerson={editPerson}
-                      editRow={editRow}
-                      setEditPerson={setEditPerson}
-                      list={list}
-                      setList={setList}
-                      value={value}
-                      theme={theme}
-                      handleAddSubmit={handleAddSubmit}
-                      lang={lang}
-                      setLang={setLang}
-                      loggedInUsername={loggedInUsername}
-                      loggedInUserEmail={loggedInUserEmail}
-                      passedId={passedId}
-                      API_URL={API_URL}
-                      updateDataHandler={updateDataHandler}
-                    />
-                  }
-                />
-                <Route
-                  path="/Settings"
-                  element={
-                    <Settings
-                      showConfirmation={showConfirmation}
-                      setShowConfirmation={setShowConfirmation}
-                      taxRate={taxRate}
-                      setTaxRate={setTaxRate}
-                      theme={theme}
-                      setTheme={setTheme}
-                      lang={lang}
-                      setLang={setLang}
-                      loggedInUsername={loggedInUsername}
-                    />
-                  }
-                />
-                <Route
-                  path="/AddPerson"
-                  element={
-                    <AddPerson
-                      formSubmitted={formSubmitted}
-                      setFormSubmitted={setFormSubmitted}
-                      theme={theme}
-                      handleAddSubmit={handleAddSubmit}
-                      lang={lang}
-                      setLang={setLang}
-                    />
-                  }
-                />
-                <Route
-                  path="/ReceiptTable"
-                  element={
-                    <ReceiptTable
-                      setThemPictureTotal={setThemPictureTotal}
-                      setSplitPictureTotal={setSplitPictureTotal}
-                      setYouPictureTotal={setYouPictureTotal}
-                      youPictureTotal={youPictureTotal}
-                      splitPictureTotal={splitPictureTotal}
-                      themPictureTotal={themPictureTotal}
-                      selectedValue={selectedValue}
-                      personName={personName}
-                      personReceiptAmount={personReceiptAmount}
-                      setPersonReceiptAmount={setPersonReceiptAmount}
-                      theme={theme}
-                      lang={lang}
-                      setLang={setLang}
-                      combinedArray={combinedArray}
-                      setCombinedArray={setCombinedArray}
-                      handleResetCombinedArray={handleResetCombinedArray}
-                      obtainedInfo={obtainedInfo}
-                      setObtainedInfo={setObtainedInfo}
-                    />
-                  }
-                />
-                <Route
-                  path="/EditPerson"
-                  element={
-                    <EditPerson
-                      theme={theme}
-                      lang={lang}
-                      setLang={setLang}
-                      dataThrow={dataThrow}
-                      setDataThrow={setDataThrow}
-                      API_URL={API_URL}
-                      user={user}
-                      passedId={passedId}
-                      editRow={editRow}
-                    />
-                  }
-                />
-                <Route
-                  path="/ContactHistoryEdit"
-                  element={
-                    <ContactHistoryEdit
-                      submissionArray={submissionArray}
-                      combinedArray={combinedArray}
-                      personName={personName}
-                      personEmail={personEmail}
-                      personPhone={personPhone}
-                      personOwing={personOwing}
-                      handleSubmit={handleSubmit}
-                      setPersonName={setPersonName}
-                      setPersonEmail={setPersonEmail}
-                      setPersonPhone={setPersonPhone}
-                      setPersonOwing={setPersonOwing}
-                      passedId={passedId}
-                      loggedInUserEmail={loggedInUserEmail}
-                      theme={theme}
-                      lang={lang}
-                      setLang={setLang}
-                      dataThrow={dataThrow}
-                      setDataThrow={setDataThrow}
-                      API_URL={API_URL}
-                      user={user}
-                      combinedTotal={combinedTotal}
-                      setCombinedTotal={setCombinedTotal}
-                      receipts={receipts}
-                      loggedInUsername={loggedInUsername}
-                      historyData={historyData}
-                      setHistoryData={setHistoryData}
-                    />
-                  }
-                />
+          <Route
+            path="/Home"
+            element={
+              <Home
+                loggedInUserEmail={loggedInUserEmail}
+                loggedInUsername={loggedInUsername}
+                handleAddSelfSubmit={handleAddSelfSubmit}
+                theme={theme}
+                setTheme={setTheme}
+                toggleTheme={toggleTheme}
+                personOwing={personOwing}
+                personName={personName}
+                list={list}
+                showConfirmation={showConfirmation}
+                setShowConfirmation={setShowConfirmation}
+                lang={lang}
+                setLang={setLang}
+                signOut={signOut}
+                user={user}
+                dataThrow={dataThrow}
+                API_URL={API_URL}
+                setDataThrow={setDataThrow}
+                selectSelf={selectSelf}
+              />
+            }
+          />
+          <Route
+            path="/ReceiptInput/:ContactId"
+            element={
+              <ReceiptInput
+                submissionArray={submissionArray}
+                setSubmissionArray={setSubmissionArray}
+                combinedTotal={combinedTotal}
+                setCombinedTotal={setCombinedTotal}
+                personName={personName}
+                personOwing={personOwing}
+                personEmail={personEmail}
+                loggedInUserEmail={loggedInUserEmail}
+                startDate={startDate}
+                setStartDate={setStartDate}
+                merchantName={merchantName}
+                setMerchantName={setMerchantName}
+                invoiceNumber={invoiceNumber}
+                setInvoiceNumber={setInvoiceNumber}
+                personReceiptAmount={personReceiptAmount}
+                setPersonReceiptAmount={setPersonReceiptAmount}
+                addNum={addNum}
+                subNum={subNum}
+                value={value}
+                addReceipt={addReceipt}
+                selectedValue={selectedValue}
+                setSelectedValue={setSelectedValue}
+                displayMerchant={displayMerchant}
+                displayDate={displayDate}
+                displayInvoice={displayInvoice}
+                setDisplayMerchant={setDisplayMerchant}
+                setDisplayDate={setDisplayDate}
+                setDisplayInvoice={setDisplayInvoice}
+                setIsReceiptSubmitted={setIsReceiptSubmitted}
+                youPictureTotal={youPictureTotal}
+                splitPictureTotal={splitPictureTotal}
+                themPictureTotal={themPictureTotal}
+                setYouPictureTotal={setYouPictureTotal}
+                setSplitPictureTotal={setSplitPictureTotal}
+                setThemPictureTotal={setThemPictureTotal}
+                theme={theme}
+                taxRate={taxRate}
+                lang={lang}
+                setLang={setLang}
+                combinedArray={combinedArray}
+                setCombinedArray={setCombinedArray}
+                handleResetCombinedArray={handleResetCombinedArray}
+                historyData={historyData}
+                setHistoryData={setHistoryData}
+                obtainedInfo={obtainedInfo}
+                setObtainedInfo={setObtainedInfo}
+                additionValue={additionValue}
+                loggedInUsername={loggedInUsername}
+              />
+            }
+          />
+          <Route
+            path="/SplitBill"
+            element={
+              <SplitBill
+                user={user}
+                dataThrow={dataThrow}
+                addPerson={addPerson}
+                setAddPerson={setAddPerson}
+                handleAddSelfSubmit={handleAddSelfSubmit}
+                selectPerson={selectPerson}
+                selectSelf={selectSelf}
+                personName={personName}
+                personEmail={personEmail}
+                personPhone={personPhone}
+                personOwing={personOwing}
+                setPersonName={setPersonName}
+                setPersonEmail={setPersonEmail}
+                setPersonPhone={setPersonPhone}
+                setPersonOwing={setPersonOwing}
+                handleSubmit={handleSubmit}
+                setPersonState={setPersonState}
+                personState={personState}
+                setIsSelected={setIsSelected}
+                list={list}
+                value={value}
+                addNum={addNum}
+                subNum={subNum}
+                personReceiptAmount={personReceiptAmount}
+                setFormSubmitted={setFormSubmitted}
+                theme={theme}
+                handleAddSubmit={handleAddSubmit}
+                lang={lang}
+                setLang={setLang}
+                loggedInUsername={loggedInUsername}
+                loggedInUserEmail={loggedInUserEmail}
+                setDataThrow={setDataThrow}
+              />
+            }
+          />
+          <Route
+            path="/EditList"
+            element={
+              <EditList
+                user={user}
+                dataThrow={dataThrow}
+                setDataThrow={setDataThrow}
+                handleEditSubmit={handleEditSubmit}
+                setFormSubmitted={setFormSubmitted}
+                addPerson={addPerson}
+                setAddPerson={setAddPerson}
+                selectPerson={selectPerson}
+                selectSelf={selectSelf}
+                personName={personName}
+                personEmail={personEmail}
+                personPhone={personPhone}
+                personOwing={personOwing}
+                setPersonName={setPersonName}
+                setPersonEmail={setPersonEmail}
+                setPersonPhone={setPersonPhone}
+                setPersonOwing={setPersonOwing}
+                handleSubmit={handleSubmit}
+                setPersonState={setPersonState}
+                personState={personState}
+                setIsSelected={setIsSelected}
+                editPerson={editPerson}
+                editRow={editRow}
+                setEditPerson={setEditPerson}
+                list={list}
+                setList={setList}
+                value={value}
+                theme={theme}
+                handleAddSubmit={handleAddSubmit}
+                lang={lang}
+                setLang={setLang}
+                loggedInUsername={loggedInUsername}
+                loggedInUserEmail={loggedInUserEmail}
+                passedId={passedId}
+                API_URL={API_URL}
+                updateDataHandler={updateDataHandler}
+              />
+            }
+          />
+          <Route
+            path="/Settings"
+            element={
+              <Settings
+                showConfirmation={showConfirmation}
+                setShowConfirmation={setShowConfirmation}
+                taxRate={taxRate}
+                setTaxRate={setTaxRate}
+                theme={theme}
+                setTheme={setTheme}
+                lang={lang}
+                setLang={setLang}
+                loggedInUsername={loggedInUsername}
+              />
+            }
+          />
+          <Route
+            path="/AddPerson"
+            element={
+              <AddPerson
+                formSubmitted={formSubmitted}
+                setFormSubmitted={setFormSubmitted}
+                theme={theme}
+                handleAddSubmit={handleAddSubmit}
+                lang={lang}
+                setLang={setLang}
+              />
+            }
+          />
+          <Route
+            path="/ReceiptTable"
+            element={
+              <ReceiptTable
+                setThemPictureTotal={setThemPictureTotal}
+                setSplitPictureTotal={setSplitPictureTotal}
+                setYouPictureTotal={setYouPictureTotal}
+                youPictureTotal={youPictureTotal}
+                splitPictureTotal={splitPictureTotal}
+                themPictureTotal={themPictureTotal}
+                selectedValue={selectedValue}
+                personName={personName}
+                personReceiptAmount={personReceiptAmount}
+                setPersonReceiptAmount={setPersonReceiptAmount}
+                theme={theme}
+                lang={lang}
+                setLang={setLang}
+                combinedArray={combinedArray}
+                setCombinedArray={setCombinedArray}
+                handleResetCombinedArray={handleResetCombinedArray}
+                obtainedInfo={obtainedInfo}
+                setObtainedInfo={setObtainedInfo}
+              />
+            }
+          />
+          <Route
+            path="/EditPerson"
+            element={
+              <EditPerson
+                theme={theme}
+                lang={lang}
+                setLang={setLang}
+                dataThrow={dataThrow}
+                setDataThrow={setDataThrow}
+                API_URL={API_URL}
+                user={user}
+                passedId={passedId}
+                editRow={editRow}
+              />
+            }
+          />
+          <Route
+            path="/ContactHistoryEdit"
+            element={
+              <ContactHistoryEdit
+                submissionArray={submissionArray}
+                combinedArray={combinedArray}
+                personName={personName}
+                personEmail={personEmail}
+                personPhone={personPhone}
+                personOwing={personOwing}
+                handleSubmit={handleSubmit}
+                setPersonName={setPersonName}
+                setPersonEmail={setPersonEmail}
+                setPersonPhone={setPersonPhone}
+                setPersonOwing={setPersonOwing}
+                passedId={passedId}
+                loggedInUserEmail={loggedInUserEmail}
+                theme={theme}
+                lang={lang}
+                setLang={setLang}
+                dataThrow={dataThrow}
+                setDataThrow={setDataThrow}
+                API_URL={API_URL}
+                user={user}
+                combinedTotal={combinedTotal}
+                setCombinedTotal={setCombinedTotal}
+                receipts={receipts}
+                loggedInUsername={loggedInUsername}
+                historyData={historyData}
+                setHistoryData={setHistoryData}
+              />
+            }
+          />
         </Routes>
       </div>
     </>

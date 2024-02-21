@@ -36,12 +36,42 @@ export default function Home({
   signOut,
   user,
   loggedInUserEmail,
+  loggedInUsername,
   dataThrow,
+  setDataThrow,
+  API_URL,
+  handleAddSelfSubmit,
+  selectSelf,
 }) {
   const [startBill, setStartBill] = useState(true);
   const [showPersonEdit, setPersonEdit] = useState(false);
   const [selectPersonEdit, setSelectPersonEdit] = useState(false);
+  const handlePersonalExpenseClick = async () => {
+    const personalExpenseEntry = dataThrow.find(
+      (item) =>
+        item.UserEmail === loggedInUserEmail && item.Email === loggedInUserEmail
+    );
 
+    if (personalExpenseEntry) {
+      console.log("ready to expense with user");
+    } else {
+      try {
+        const owingValue = 0;
+        const itemData = {
+          Name: loggedInUsername,
+          Email: loggedInUserEmail,
+          Phone: "5555555555",
+          Owing: owingValue,
+          UserEmail: loggedInUserEmail,
+          UserName: loggedInUsername,
+        };
+
+        await handleAddSelfSubmit(itemData);
+      } catch (error) {
+        console.error("Error creating item:", error);
+      }
+    }
+  };
   useEffect(() => {
     setStartBill(true);
     setPersonEdit(false);
@@ -55,6 +85,12 @@ export default function Home({
     return (
       <div className="circle-menu">
         <Link
+        onClick={handlePersonalExpenseClick}
+          user={user}
+          API_URL={API_URL}
+          setDataThrow={setDataThrow}
+          handleAddSelfSubmit={handleAddSelfSubmit}
+          selectSelf={selectSelf}
           to="/App/SplitBill"
           className={
             theme === "dark"
@@ -365,27 +401,27 @@ export default function Home({
         >
           <div className="marginBottom">
             <div className="flex flex-col items-center justify-center mb-3">
-            <div style={{ paddingBottom: "10%" }}>
-  {chartData.labels.length > 0 ? (
-    <Bar data={chartData} options={chartOptions} />
-  ) : (
-    <Bar
-      data={{
-        labels: ["No Transactions"],
-        datasets: [
-          {
-            label: "Owing Amount",
-            data: [0], 
-            backgroundColor: ["rgba(255, 255, 255, 0.6)"],
-            borderColor: ["rgba(255, 255, 255, 1)"], 
-            borderWidth: 1,
-          },
-        ],
-      }}
-      options={chartOptions}
-    />
-  )}
-</div>
+              <div style={{ paddingBottom: "10%" }}>
+                {chartData.labels.length > 0 ? (
+                  <Bar data={chartData} options={chartOptions} />
+                ) : (
+                  <Bar
+                    data={{
+                      labels: ["No Transactions"],
+                      datasets: [
+                        {
+                          label: "Owing Amount",
+                          data: [0],
+                          backgroundColor: ["rgba(255, 255, 255, 0.6)"],
+                          borderColor: ["rgba(255, 255, 255, 1)"],
+                          borderWidth: 1,
+                        },
+                      ],
+                    }}
+                    options={chartOptions}
+                  />
+                )}
+              </div>
 
               <CircleMenu
                 lang={lang}

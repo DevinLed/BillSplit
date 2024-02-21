@@ -355,7 +355,6 @@ export default function ReceiptInput({
 
   const handleSnapShotSubmit = (event) => {
     event.preventDefault();
-
   };
 
   useEffect(() => {
@@ -385,10 +384,13 @@ export default function ReceiptInput({
 
               <div className="flex flex-col items-center justify-center">
                 <h1>
-                  {lang === "english"
-                    ? "Split a receipt with "
-                    : "Fractionner un reçu avec "}
-                  {personName}
+                  {personName === loggedInUsername
+                    ? lang === "english"
+                      ? "Split a receipt with yourself"
+                      : "Fractionner un reçu avec vous-même"
+                    : lang === "english"
+                    ? "Split a receipt with " + personName
+                    : "Fractionner un reçu avec " + personName}
                 </h1>
                 <ul className="list-group items-center justify-center">
                   <Link className="flex flex-col items-center justify-center">
@@ -445,7 +447,7 @@ export default function ReceiptInput({
       )}
       <CSSTransition
         in={selectMethodManual}
-        timeout={500} 
+        timeout={500}
         classNames="fade"
         unmountOnExit
       >
@@ -594,7 +596,7 @@ export default function ReceiptInput({
                   </div>
                   <CSSTransition
                     in={showTable}
-                    timeout={500} 
+                    timeout={500}
                     classNames="fade"
                     unmountOnExit
                   >
@@ -698,7 +700,6 @@ export default function ReceiptInput({
                         onClick={(e) => {
                           const finalTotal = personReceiptAmount;
                           if (finalTotal === 0) {
-                            
                             console.error("Error: Invalid final total");
                             setSubmissionError(false);
                           } else {
@@ -763,7 +764,7 @@ export default function ReceiptInput({
       </CSSTransition>
       <CSSTransition
         in={selectMethodPicture}
-        timeout={500} 
+        timeout={500}
         classNames="fade"
         unmountOnExit
       >
@@ -1016,7 +1017,7 @@ export default function ReceiptInput({
                             </div>
                             <CSSTransition
                               in={showTable}
-                              timeout={500} 
+                              timeout={500}
                               classNames="fade"
                               unmountOnExit
                             >
@@ -1176,8 +1177,7 @@ export default function ReceiptInput({
                                     resetReceiptForm();
                                     setIsReceiptSubmitted(true);
                                     setPersonReceiptAmount(0);
-                                    window.location.href =
-                                      "/#/App/SplitBill";
+                                    window.location.href = "/#/App/SplitBill";
                                   }
                                 }}
                               >
