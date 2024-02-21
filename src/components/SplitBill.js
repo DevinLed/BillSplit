@@ -107,7 +107,7 @@ export default function SplitBill({
                 >
                   <div className="flex items-center justify-center flex-grow">
                     <Avatar name={loggedInUsername} size={32} round />
-                    <span className="ml-2">Personal Expense</span>
+                    <span className="ml-2">{lang === "english" ? "Personal Expense" : "Dépense personnelle"}</span>
                   </div>
                 </li>
           </ul>

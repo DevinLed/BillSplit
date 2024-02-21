@@ -42,6 +42,7 @@ export default function Home({
   API_URL,
   handleAddSelfSubmit,
   selectSelf,
+  editSelf,
 }) {
   const [startBill, setStartBill] = useState(true);
   const [showPersonEdit, setPersonEdit] = useState(false);
@@ -85,7 +86,7 @@ export default function Home({
     return (
       <div className="circle-menu">
         <Link
-        onClick={handlePersonalExpenseClick}
+          onClick={handlePersonalExpenseClick}
           user={user}
           API_URL={API_URL}
           setDataThrow={setDataThrow}
@@ -126,7 +127,9 @@ export default function Home({
         </Link>
 
         <Link
+          editSelf={editSelf}
           to="/App/EditList"
+          onClick={handlePersonalExpenseClick}
           className={
             theme === "dark" ? "menu-item edit-listdark" : "menu-item edit-list"
           }
@@ -289,7 +292,6 @@ export default function Home({
       },
     ],
   });
-
   const tooltipCallbacks = {
     title: (tooltipItems) => {
       if (tooltipItems.length > 0) {
@@ -357,7 +359,12 @@ export default function Home({
   useEffect(() => {
     if (dataThrow && dataThrow.length > 0) {
       const filteredData = dataThrow.filter(
-        (item) => item.UserEmail === loggedInUserEmail
+        (item) =>
+          item.UserEmail === loggedInUserEmail &&
+          !(
+            item.UserEmail === loggedInUserEmail &&
+            item.Email === loggedInUserEmail
+          )
       );
 
       const labels = filteredData.map((item) => item.Name);

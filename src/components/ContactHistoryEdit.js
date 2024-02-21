@@ -48,6 +48,9 @@ export default function ContactHistoryEdit({
   updateEditHandler,
   combinedArray,
   submissionArray,
+  setSelfValue,
+  selfValue,
+  loggedInUsername
 }) {
   const [selectEditPersonList, setEditSelectPersonList] = useState(true);
   const { id } = useParams();
@@ -118,10 +121,12 @@ export default function ContactHistoryEdit({
           >
             <div>
               <div className="flex justify-center items-center">
-                <p className="font-bold">{lang === "english" ? "Submitted By" : "Proposé par"}</p>
+                <p className="font-bold">
+                  {lang === "english" ? "Submitted By" : "Proposé par"}
+                </p>
               </div>
               <div className="flex justify-center items-center">
-                <p className="font-bold">{transaction.loggedInUsername}</p>
+                <p className="font-bold">{transaction.loggedInUsername === loggedInUsername ? lang === "english" ? "you" : "vous" : transaction.loggedInUsername}</p>
               </div>
 
               <div className="flex justify-center items-center mt-2">
@@ -223,7 +228,13 @@ export default function ContactHistoryEdit({
 
   const noTransactionsMessage = useMemo(() => {
     if (filteredTransactions.length === 0) {
-      return <p>{lang === "english" ? "No transactions found" : "Aucune transaction trouvée"}</p>;
+      return (
+        <p>
+          {lang === "english"
+            ? "No transactions found"
+            : "Aucune transaction trouvée"}
+        </p>
+      );
     }
     return null;
   }, [filteredTransactions]);
@@ -251,7 +262,7 @@ export default function ContactHistoryEdit({
           theme={theme}
           lang={lang}
         />
-        <button
+        {!selfValue ? (<button
           onClick={toggleEditPerson}
           className={
             "mt-4 mb-4 mb-0 flex h-24 w-fit flex-col items-center justify-center rounded-lg border " +
@@ -261,47 +272,52 @@ export default function ContactHistoryEdit({
             " py-4 px-10 text-sm font-semibold shadow-md hover:bg-gray-800 hover:no-underline"
           }
         >
-          
-          {lang === "english" ? "Edit contact details" : "Modifier les coordonnées"}
-        </button>
+          {lang === "english"
+            ? "Edit contact details"
+            : "Modifier les coordonnées"}
+        </button>) : ("") } 
+        
         {showEditPerson && (
           <EditPerson
-          addPerson={addPerson}
-          setAddPerson={setAddPerson}
-          personName={personName}
-          setPersonName={setPersonName}
-          setPersonPhone={setPersonPhone}
-          setPersonEmail={setPersonEmail}
-          setPersonOwing={setPersonOwing}
-          personEmail={personEmail}
-          personPhone={personPhone}
-          personOwing={personOwing}
-          handleSubmit={handleSubmit}
-          passedId={passedId}
-          handleEditSubmit={handleEditSubmit}
-          setPersonState={setPersonState}
-          personState={personState}
-          setIsSelected={setIsSelected}
-          setEditPerson={setEditPerson}
-          theme={theme}
-          editPerson={editPerson}
-          handleDeletePerson={handleDeletePerson}
-          lang={lang}
-          dataThrow={dataThrow}
-          setDataThrow={setDataThrow}
-          loggedInUserEmail={loggedInUserEmail}
-          API_URL={API_URL}
-          updateDataHandler={updateDataHandler}
-          updateEditHandler={updateEditHandler}
-          user={user}
+            addPerson={addPerson}
+            setAddPerson={setAddPerson}
+            personName={personName}
+            setPersonName={setPersonName}
+            setPersonPhone={setPersonPhone}
+            setPersonEmail={setPersonEmail}
+            setPersonOwing={setPersonOwing}
+            personEmail={personEmail}
+            personPhone={personPhone}
+            personOwing={personOwing}
+            handleSubmit={handleSubmit}
+            passedId={passedId}
+            handleEditSubmit={handleEditSubmit}
+            setPersonState={setPersonState}
+            personState={personState}
+            setIsSelected={setIsSelected}
+            setEditPerson={setEditPerson}
+            theme={theme}
+            editPerson={editPerson}
+            handleDeletePerson={handleDeletePerson}
+            lang={lang}
+            dataThrow={dataThrow}
+            setDataThrow={setDataThrow}
+            loggedInUserEmail={loggedInUserEmail}
+            API_URL={API_URL}
+            updateDataHandler={updateDataHandler}
+            updateEditHandler={updateEditHandler}
+            user={user}
           ></EditPerson>
         )}
         <div className="flex flex-col items-center justify-center">
-          <div className={"custom-rounded px-3 py-2 mb-4 mx-auto" +
-                          (theme === "dark"
-                            ? "bg-gray-800 text-black"
-                            : "bg-white text-gray-800")}>
-
+          <div
+            className={
+              "custom-rounded px-3 py-2 mb-4 mx-auto" +
+              (theme === "dark"
+                ? "bg-gray-800 text-black"
+                : "bg-white text-gray-800")
+            }
+          >
             {transactionList.length > 0
               ? transactionList
               : noTransactionsMessage}
@@ -314,17 +330,14 @@ export default function ContactHistoryEdit({
           unmountOnExit
         >
           <div className="modal-overlay">
-            
             {selectedTransaction && (
               <div
-                className=
-                {
+                className={
                   " th-py-2 th-my-2 th-px-0 " +
                   (theme === "dark"
                     ? "bg-gray-800 text-black"
                     : "bg-white text-gray-800")
                 }
-                
                 id="th-invoice-POS2"
                 onClick={() => {
                   handleLabelClick(selectedTransaction);
@@ -386,37 +399,37 @@ export default function ContactHistoryEdit({
                   )}
                 </div>
                 <table>
-                <tr className="th-tabletitle">
-                  <td className="th-item">
-                    <h2>Item</h2>
-                  </td>
-                  <td className="th-Hours">
-                    <h2>%</h2>
-                  </td>
-                  <td className="th-Rate">
-                    <h2>Total</h2>
-                  </td>
-                </tr>
-
-                {selectedTransaction.submissionArray.map((item, index) => (
-                  <tr className="th-service" key={index}>
-                    <td className="th-tableitemEx">
-                      <p className="th-itemtext1">
-                        {item.description
-                          ? item.description.slice(0, 8) + ".."
-                          : item.name.slice(0, 4) + ".."}
-                      </p>
+                  <tr className="th-tabletitle">
+                    <td className="th-item">
+                      <h2>Item</h2>
                     </td>
-                    <td className="th-tableitem">
-                      <p className="th-itemtext2">{item.sliderValue}%</p>
+                    <td className="th-Hours">
+                      <h2>%</h2>
                     </td>
-                    <td className="th-tableitem">
-                      <p className="th-itemtext3">
-                        {item.total_amount || item.amount}
-                      </p>
+                    <td className="th-Rate">
+                      <h2>Total</h2>
                     </td>
                   </tr>
-                ))}
+
+                  {selectedTransaction.submissionArray.map((item, index) => (
+                    <tr className="th-service" key={index}>
+                      <td className="th-tableitemEx">
+                        <p className="th-itemtext1">
+                          {item.description
+                            ? item.description.slice(0, 8) + ".."
+                            : item.name.slice(0, 4) + ".."}
+                        </p>
+                      </td>
+                      <td className="th-tableitem">
+                        <p className="th-itemtext2">{item.sliderValue}%</p>
+                      </td>
+                      <td className="th-tableitem">
+                        <p className="th-itemtext3">
+                          {item.total_amount || item.amount}
+                        </p>
+                      </td>
+                    </tr>
+                  ))}
                 </table>
 
                 <div className="flex justify-center items-center mt-2">

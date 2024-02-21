@@ -161,6 +161,7 @@ function App({ signOut, user }) {
   const [displayInvoice, setDisplayInvoice] = useState(false);
   const [isReceiptSubmitted, setIsReceiptSubmitted] = useState(false);
 
+  const [selfValue, setSelfValue] = useState(null);
   // Landing page
   const [accessedApp, setAccessedApp] = useState(false);
 
@@ -173,6 +174,17 @@ function App({ signOut, user }) {
   const editRow = (ContactId, UserEmail) => {
     const selectedPerson = dataThrow.find(
       (item) => item.ContactId === ContactId && item.UserEmail === UserEmail
+    );
+    setPersonName(selectedPerson.Name);
+    setPersonEmail(selectedPerson.Email);
+    setPersonPhone(selectedPerson.Phone);
+    setPersonOwing(selectedPerson.Owing);
+    setPassedId(selectedPerson.ContactId);
+    setEditPerson(false);
+  };
+  const editSelf = () => {
+    const selectedPerson = dataThrow.find(
+      (item) =>  item.UserEmail === loggedInUserEmail && item.Email === loggedInUserEmail
     );
     setPersonName(selectedPerson.Name);
     setPersonEmail(selectedPerson.Email);
@@ -657,6 +669,7 @@ function App({ signOut, user }) {
               <Home
                 loggedInUserEmail={loggedInUserEmail}
                 loggedInUsername={loggedInUsername}
+                editSelf={editSelf}
                 handleAddSelfSubmit={handleAddSelfSubmit}
                 theme={theme}
                 setTheme={setTheme}
@@ -775,8 +788,11 @@ function App({ signOut, user }) {
             path="/EditList"
             element={
               <EditList
+              selfValue={selfValue}
+              setSelfValue={setSelfValue}
                 user={user}
                 dataThrow={dataThrow}
+                editSelf={editSelf}
                 setDataThrow={setDataThrow}
                 handleEditSubmit={handleEditSubmit}
                 setFormSubmitted={setFormSubmitted}
@@ -888,6 +904,7 @@ function App({ signOut, user }) {
             path="/ContactHistoryEdit"
             element={
               <ContactHistoryEdit
+              loggedInUsername={loggedInUsername}
                 submissionArray={submissionArray}
                 combinedArray={combinedArray}
                 personName={personName}
@@ -911,9 +928,10 @@ function App({ signOut, user }) {
                 combinedTotal={combinedTotal}
                 setCombinedTotal={setCombinedTotal}
                 receipts={receipts}
-                loggedInUsername={loggedInUsername}
                 historyData={historyData}
                 setHistoryData={setHistoryData}
+                selfValue={selfValue}
+                setSelfValue={setSelfValue}
               />
             }
           />

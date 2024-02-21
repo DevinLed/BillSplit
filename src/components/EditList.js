@@ -47,7 +47,10 @@ export default function EditList({
   setPassedId,
   updateDataHandler,
   user,
-  loggedInUsername
+  loggedInUsername,
+  editSelf,
+  selfValue,
+  setSelfValue,
 }) {
   const API_URL =
     "https://48f95wy514.execute-api.us-east-1.amazonaws.com/prod/contacts";
@@ -65,6 +68,7 @@ export default function EditList({
       return null;
     }
   };
+  const selfId = user.attributes.sub;
   const fetchData = async () => {
     try {
       const response = await fetch(API_URL);
@@ -97,9 +101,24 @@ export default function EditList({
           <ul className="m-0 py-1 w-2/5">
             <React.Fragment key={"save-with-myself"}>
               <Link
-                to={`/App/ReceiptInput/save-with-myself`}
-                onClick={() => selectPerson("save-with-myself")}
-                className="no-underline py-1"
+                setSelfValue={setSelfValue}
+                selfValue={selfValue}
+                loggedInUsername={loggedInUsername}
+                to={{
+                  pathname: "/App/ContactHistoryEdit",
+                  state: {
+                    personName: loggedInUsername,
+                    personEmail: loggedInUserEmail,
+                    personPhone: "5555555555",
+                    personOwing: personOwing,
+                    ContactId: selfId,
+                    UserEmail: loggedInUserEmail,
+                  },
+                }}
+                onClick={() => {
+                  setSelfValue(true);
+                  editSelf(selfId, loggedInUserEmail);
+                }}
               >
                 <li
                   className={
@@ -111,7 +130,7 @@ export default function EditList({
                 >
                   <div className="flex items-center justify-center flex-grow">
                     <Avatar name={loggedInUsername} size={32} round />
-                    <span className="ml-2">Personal Expenses</span>
+                    <span className="ml-2">{lang === "english" ? "Personal Expense" : "Dépense personnelle"}</span>
                   </div>
                 </li>
               </Link>
@@ -120,48 +139,62 @@ export default function EditList({
           <ul className="m-0 py-1 w-3/4">
             {dataThrow.length > 0 &&
               dataThrow
-                .filter((item) => item.UserEmail === loggedInUserEmail)
+                 .filter(
+                (item) =>
+                  item.UserEmail === loggedInUserEmail &&
+                  !(
+                    item.UserEmail === loggedInUserEmail &&
+                    item.Email === loggedInUserEmail
+                  )
+              )
                 .map((item, index) => (
                   <React.Fragment key={index}>
                     {item.Name && item.Owing ? (
-                      <Link to={{
-                        pathname: "/App/ContactHistoryEdit",
-                        state: {
-                          personName: item.personName,
-                          personEmail: item.personEmail,
-                          personPhone: item.personPhone,
-                          personOwing: item.personOwing,
-                          ContactId: item.ContactId,
-                          UserEmail: item.UserEmail,
-                        }
-                      }}
-                      onClick={() => editRow(item.ContactId, item.UserEmail)}>
-                      <li
-                        className={
-                          "list-group-item flex justify-between m-1 p-2 rounded-lg shadow-sm " +
-                          (theme === "dark"
-                            ? "bg-gray-800 text-white"
-                            : "bg-white text-gray-800")
-                        }
+                      <Link
+                        setSelfValue={setSelfValue}
+                        selfValue={selfValue}
+                        to={{
+                          pathname: "/App/ContactHistoryEdit",
+                          state: {
+                            personName: item.personName,
+                            personEmail: item.personEmail,
+                            personPhone: item.personPhone,
+                            personOwing: item.personOwing,
+                            ContactId: item.ContactId,
+                            UserEmail: item.UserEmail,
+                          },
+                        }}
+                        onClick={() => {
+                          setSelfValue(false);
+                          editRow(item.ContactId, item.UserEmail);
+                        }}
                       >
-                        <div className="flex items-center">
-                          <Avatar name={item.Name} size={32} round />
-                          <span className="ml-1">
-                            {item.Name.length > 8
-                              ? `${item.Name.substring(0, 8)}...`
-                              : item.Name}
-                          </span>
-                        </div>
-                        <span
-                          className={`badge badge-pill rounded px-1 pt-2 ml-2 text-xs ${
-                            parseFloat(item.Owing) < 0
-                              ? "bg-red-500 text-black"
-                              : "bg-blue-500 text-white"
-                          }`}
+                        <li
+                          className={
+                            "list-group-item flex justify-between m-1 p-2 rounded-lg shadow-sm " +
+                            (theme === "dark"
+                              ? "bg-gray-800 text-white"
+                              : "bg-white text-gray-800")
+                          }
                         >
-                          ${parseFloat(item.Owing).toFixed(2)}
-                        </span>
-                      </li>
+                          <div className="flex items-center">
+                            <Avatar name={item.Name} size={32} round />
+                            <span className="ml-1">
+                              {item.Name.length > 8
+                                ? `${item.Name.substring(0, 8)}...`
+                                : item.Name}
+                            </span>
+                          </div>
+                          <span
+                            className={`badge badge-pill rounded px-1 pt-2 ml-2 text-xs ${
+                              parseFloat(item.Owing) < 0
+                                ? "bg-red-500 text-black"
+                                : "bg-blue-500 text-white"
+                            }`}
+                          >
+                            ${parseFloat(item.Owing).toFixed(2)}
+                          </span>
+                        </li>
                       </Link>
                     ) : null}
                   </React.Fragment>
