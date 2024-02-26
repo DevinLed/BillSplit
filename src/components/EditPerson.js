@@ -111,10 +111,12 @@ export default function EditPerson({
       .then((response) => {
         if (response.status === 204) {
           const updatedData = dataThrow.filter(
-            (item) => item.ContactId !== passedId && item.loggedInUserEmail === loggedInUserEmail
+            (item) =>
+              item.ContactId !== passedId &&
+              item.loggedInUserEmail === loggedInUserEmail
           );
           setDataThrow(updatedData);
-          
+
           window.location.href = "/#/App/EditList";
         } else {
           console.error("Failed to delete person");
@@ -276,7 +278,6 @@ export default function EditPerson({
                       type="text"
                       className="form-control max-six-digits rounded-start"
                       onKeyDown={handleKeyDown}
-                      
                       placeholder={
                         personOwing
                           ? parseFloat(personOwing).toFixed(2)
@@ -327,12 +328,12 @@ export default function EditPerson({
                 {errorMsg}
               </div>
               {isSubmitted && (
-            <p className="mb-2 text-center text-sm text-red-500">
-              {lang === "english"
-                ? "Contact has been updated."
-                : "Le contact a été mis à jour."}
-            </p>
-          )}
+                <p className="mb-2 text-center text-sm text-red-500">
+                  {lang === "english"
+                    ? "Contact has been updated."
+                    : "Le contact a été mis à jour."}
+                </p>
+              )}
             </div>
           </div>
           <div className="flex justify-center p-2 space-x-4">
@@ -343,7 +344,9 @@ export default function EditPerson({
                     ? "flex w-fit flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-700 hover:no-underline"
                     : "flex w-fit flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-800 hover:no-underline"
                 }
-                onClick={(e) => {handleDeletePrompt(ContactId, loggedInUserEmail);}}
+                onClick={(e) => {
+                  handleDeletePrompt(ContactId, loggedInUserEmail);
+                }}
               >
                 <AiOutlineDelete size={24} />
               </label>
