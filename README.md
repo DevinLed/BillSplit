@@ -119,6 +119,11 @@ To contribute to Divvy, follow these steps:
 
 This project is open-source and available under the MIT License.
 
+## Sample:
+<div align="center">
+  <img src="/src/img/AppHome.jpeg" alt="Divvy Logo" width="300">
+</div>
+
 ## Acknowledgements
 
 Special thanks to my coach, Jacob Critch, for his invaluable support throughout the development process. Jacob provided guidance, helped with ideas, resolved bugs, and offered valuable insights into design issues. I am grateful for his availability to brainstorm ideas and the insightful 1-on-1 sessions that improved this project significantly. His mentorship has been instrumental in making Divvy a better expense sharing solution.
