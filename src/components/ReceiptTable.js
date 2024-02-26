@@ -47,8 +47,9 @@ export default function ReceiptTable({
   taxActual,
   taxRate,
   lang,
-  submissionArray, 
-  setSubmissionArray
+  submissionArray,
+  setSubmissionArray,
+  loggedInUsername,
 }) {
   // Handler for changing the name of the item added to array
   const [isAddingItem, setIsAddingItem] = useState(false);
@@ -163,12 +164,12 @@ export default function ReceiptTable({
     const regex = /([0-9]*[.,]{0,1}[0-9]{0,2})/s;
     const matchedValue = value.match(regex);
     const updatedValue = matchedValue ? matchedValue[0] : "";
-  
+
     const updatedCombinedArray = [...combinedArray];
     updatedCombinedArray[index].amount = updatedValue || "0";
     setCombinedArray(updatedCombinedArray);
   };
-  
+
   // Handler for manually editting Tax amount
   const handleTaxAmountChange = (value) => {
     const newValue = value.replace(/^\$/, "");
@@ -260,8 +261,7 @@ export default function ReceiptTable({
   }, [items, obtainedInfo]);
   useEffect(() => {
     setSubmissionArray(combinedArray);
-    }, [combinedArray, setSubmissionArray, submissionArray]);
-
+  }, [combinedArray, setSubmissionArray, submissionArray]);
 
   useEffect(() => {
     // Calculate the updated totals based on the remaining items in combinedArray
@@ -335,23 +335,27 @@ export default function ReceiptTable({
                     {lang === "english" ? "Price" : "Prix"}
                   </span>
                 </th>
-                <th className="pl-1" colSpan={3} style={{ width: "33.33%" }}>
-                  <span className="px-3 py-1 text-left sm:px-4 sm:py-2 ">
-                    <span className="border-b-2 text-left">
-                      {lang === "english" ? "Me" : "Moi"}
+                {personName === loggedInUsername ? (
+                  ""
+                ) : (
+                  <th className="pl-1" colSpan={3} style={{ width: "33.33%" }}>
+                    <span className="px-3 py-1 text-left sm:px-4 sm:py-2 ">
+                      <span className="border-b-2 text-left">
+                        {lang === "english" ? "Me" : "Moi"}
+                      </span>
                     </span>
-                  </span>
-                  <span className="py-1 pr-3 pl-3 text-left sm:px-4 sm:py-2">
-                    <span className="border-b-2 text-center">
-                      {lang === "english" ? "Split" : "Diviser"}
+                    <span className="py-1 pr-3 pl-3 text-left sm:px-4 sm:py-2">
+                      <span className="border-b-2 text-center">
+                        {lang === "english" ? "Split" : "Diviser"}
+                      </span>
                     </span>
-                  </span>
-                  <span className="px-2 py-1 text-left sm:px-4 sm:py-2 ">
-                    <span className="border-b-2 text-right">
-                      {lang === "english" ? "Them" : "Eux"}
+                    <span className="px-2 py-1 text-left sm:px-4 sm:py-2 ">
+                      <span className="border-b-2 text-right">
+                        {lang === "english" ? "Them" : "Eux"}
+                      </span>
                     </span>
-                  </span>
-                </th>
+                  </th>
+                )}
               </tr>
             </thead>
 
@@ -389,24 +393,28 @@ export default function ReceiptTable({
                   }}
                 />
               </td>
-              <td colSpan="3" className="pl-3">
-                <div
-                  style={{
-                    width: "auto",
-                    margin: "auto",
-                  }}
-                >
-                  <Slider
-                    defaultValue={50}
-                    min={0}
-                    max={100}
-                    value={sliderValue}
-                    step={50}
-                    onChange={(value) => handleSliderChange(value)}
-                  />
-                  {renderColumn()}
-                </div>
-              </td>
+              {personName === loggedInUsername ? (
+                ""
+              ) : (
+                <td colSpan="3" className="pl-3">
+                  <div
+                    style={{
+                      width: "auto",
+                      margin: "auto",
+                    }}
+                  >
+                    <Slider
+                      defaultValue={50}
+                      min={0}
+                      max={100}
+                      value={sliderValue}
+                      step={50}
+                      onChange={(value) => handleSliderChange(value)}
+                    />
+                    {renderColumn()}
+                  </div>
+                </td>
+              )}
             </tr>
 
             <tr className="add-button m-2 items-center justify-center text-center text-black">
@@ -503,7 +511,9 @@ export default function ReceiptTable({
                       }}
                     />
                   </td>
-
+                  {personName === loggedInUsername ? (
+  ""
+) : (
                   <td colSpan={3}>
                     <div
                       style={{
@@ -526,6 +536,8 @@ export default function ReceiptTable({
                       {renderColumn()}
                     </div>
                   </td>
+)}
+
                   <td></td>
                   <td></td>
                 </tr>
@@ -558,7 +570,11 @@ export default function ReceiptTable({
                       : getPictureTotal()}
                   </span>
                 </td>
-                <td
+                {personName === loggedInUsername ? (
+  ""
+) : (
+  <>
+                  <td
                   className="px-2 py-1 text-center text-xs text-black"
                   style={{ width: "33.33%" }}
                 >
@@ -618,6 +634,9 @@ export default function ReceiptTable({
                       : parseFloat(themPictureTotal).toFixed(2)}
                   </span>
                 </td>
+                </>
+)}
+
                 <td></td>
                 <td></td>
               </tr>
@@ -747,31 +766,37 @@ export default function ReceiptTable({
                 : "flex justify-left text-lg w-full font-medium text-black whitespace-nowrap"
             }
           >
-            {selectedValue === "you" ? (
-              <>
-                {personName}{" "}
-                {lang === "english" ? "owes you: $" : "  vous doit: $"}
-                {parseFloat(personReceiptAmount).toFixed(2).toString().length >
-                15
-                  ? parseFloat(personReceiptAmount)
-                      .toFixed(2)
-                      .toString()
-                      .slice(0, 15) + "..."
-                  : parseFloat(personReceiptAmount).toFixed(2)}
-              </>
+            {personName === loggedInUsername ? (
+              ""
             ) : (
               <>
-                {lang === "english"
-                  ? `You owe ${personName}`
-                  : `${personName} tu me dois `}{" "}
-                $
-                {parseFloat(personReceiptAmount).toFixed(2).toString().length >
-                15
-                  ? parseFloat(personReceiptAmount)
-                      .toFixed(2)
-                      .toString()
-                      .slice(0, 15) + "..."
-                  : parseFloat(personReceiptAmount).toFixed(2)}
+                {selectedValue === "you" ? (
+                  <>
+                    {personName}{" "}
+                    {lang === "english" ? "owes you: $" : " vous doit: $"}
+                    {parseFloat(personReceiptAmount).toFixed(2).toString()
+                      .length > 15
+                      ? parseFloat(personReceiptAmount)
+                          .toFixed(2)
+                          .toString()
+                          .slice(0, 15) + "..."
+                      : parseFloat(personReceiptAmount).toFixed(2)}
+                  </>
+                ) : (
+                  <>
+                    {lang === "english"
+                      ? `You owe ${personName}`
+                      : `${personName} tu me dois `}
+                    $
+                    {parseFloat(personReceiptAmount).toFixed(2).toString()
+                      .length > 15
+                      ? parseFloat(personReceiptAmount)
+                          .toFixed(2)
+                          .toString()
+                          .slice(0, 15) + "..."
+                      : parseFloat(personReceiptAmount).toFixed(2)}
+                  </>
+                )}
               </>
             )}
           </label>
@@ -794,29 +819,35 @@ export default function ReceiptTable({
                 : "flex items-center justify-left text-lg font-medium text-black whitespace-no-wrap"
             }
           >
-            {selectedValue === "you"
-              ? lang === "english"
-                ? `Taxes ${personName} owes you: $${
-                    isNaN(parseFloat(taxActual))
-                      ? "0.00"
-                      : parseFloat(taxActual).toFixed(2)
-                  }`
-                : `Les impôts que ${personName} vous doit: $${
-                    isNaN(parseFloat(taxActual))
-                      ? "0.00"
-                      : parseFloat(taxActual).toFixed(2)
-                  }`
-              : lang === "english"
-              ? `Taxes you owe ${personName}: $${
-                  isNaN(parseFloat(taxActual))
-                    ? "0.00"
-                    : parseFloat(taxActual).toFixed(2)
-                }`
-              : `Impôts que vous devez ${personName}: $${
-                  isNaN(parseFloat(taxActual))
-                    ? "0.00"
-                    : parseFloat(taxActual).toFixed(2)
-                }`}
+            {personName === loggedInUsername ? (
+              ""
+            ) : (
+              <>
+                {selectedValue === "you"
+                  ? lang === "english"
+                    ? `Taxes ${personName} owes you: $${
+                        isNaN(parseFloat(taxActual))
+                          ? "0.00"
+                          : parseFloat(taxActual).toFixed(2)
+                      }`
+                    : `Les impôts que ${personName} vous doit: $${
+                        isNaN(parseFloat(taxActual))
+                          ? "0.00"
+                          : parseFloat(taxActual).toFixed(2)
+                      }`
+                  : lang === "english"
+                  ? `Taxes you owe ${personName}: $${
+                      isNaN(parseFloat(taxActual))
+                        ? "0.00"
+                        : parseFloat(taxActual).toFixed(2)
+                    }`
+                  : `Impôts que vous devez ${personName}: $${
+                      isNaN(parseFloat(taxActual))
+                        ? "0.00"
+                        : parseFloat(taxActual).toFixed(2)
+                    }`}
+              </>
+            )}
           </label>
         ) : null}
       </div>
