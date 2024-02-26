@@ -121,7 +121,7 @@ This project is open-source and available under the MIT License.
 
 ## Sample:
 <div align="center">
-  <img src="/src/img/AppHome.jpeg" alt="Divvy Logo" width="300">
+  <img src="/src/img/AppHome.jpg" alt="" width="300">
 </div>
 
 ## Acknowledgements
