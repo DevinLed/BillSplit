@@ -115,7 +115,7 @@ export default function EditPerson({
           );
           setDataThrow(updatedData);
           
-          window.location.href = "/#/EditList";
+          window.location.href = "/#/App/EditList";
         } else {
           console.error("Failed to delete person");
         }
