@@ -9,18 +9,23 @@ Live App: [https://devinled.github.io/BillSplit/#/LandingPage](https://devinled.
 **Divvy** is a simple expense-splitting application that helps you manage shared expenses with your friends and family. With Divvy, you can easily add expenses, track balances, and view your expense history, making it convenient to settle up bills among your group.
 
 ## Sample:
-<div align="center">
-  <img src="/src/img/AppHome.jpg" alt="" width="300">
+<div align="center" style="display: flex; flex-wrap: wrap; justify-content: center;">
+  <div style="margin: 5px;">
+    <img src="/src/img/AppHome.jpg" alt="" width="300">
+  </div>
+  <div style="margin: 5px;">
+    <img src="/src/img/ReceiptSubmit.jpg" alt="" width="300">
+  </div>
 </div>
-<div align="center">
-  <img src="/src/img/ReceiptSubmit.jpg" alt="" width="300">
+<div align="center" style="display: flex; flex-wrap: wrap; justify-content: center;">
+  <div style="margin: 5px;">
+    <img src="/src/img/History.jpg" alt="" width="300">
+  </div>
+  <div style="margin: 5px;">
+    <img src="/src/img/NotiAPI.jpg" alt="" width="300">
+  </div>
 </div>
-<div align="center">
-  <img src="/src/img/History.jpg" alt="" width="300">
-</div>
-<div align="center">
-  <img src="/src/img/NotiAPI.jpg" alt="" width="300">
-</div>
+
 ## Features
 
 - **Contact Management:** Easily add new contacts by providing their name, phone number, email, and initial balance. Edit existing contacts to update their information or clear their balances. You also have the option to remove contacts that are no longer needed.
