@@ -11,6 +11,7 @@ import { v4 as uuidv4 } from "uuid";
 import EditPerson from "./components/EditPerson";
 import SplitBill from "./components/SplitBill";
 import LandingPage from "./components/LandingPage";
+import Contact from "./components/Contact";
 import AddPerson from "./components/AddPerson";
 import Home from "./components/Home";
 import Header from "./components/Header";
@@ -661,6 +662,8 @@ function App({ signOut, user }) {
               <LandingPage theme={theme} lang={lang} setLang={setLang} />
             }
           />
+          
+          <Route path="/Contact" element={<Contact />} />
           <Route path="/" element={<Navigate to="/LandingPage" />} />
 
           <Route

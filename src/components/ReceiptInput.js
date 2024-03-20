@@ -798,7 +798,7 @@ export default function ReceiptInput({
                   }
                 >
                   <div className="m-2 mb-4 flex flex-col justify-center items-center sm:flex-row">
-                    <Link to={`/ReceiptInput/${ContactId}`}>
+                    <Link to={`/App/ReceiptInput/${ContactId}`}>
                       <label
                         className={
                           "flex h-24 w-28 flex-col items-center justify-center rounded-lg border border-gray-200 py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline " +
@@ -1351,7 +1351,7 @@ export default function ReceiptInput({
                             }
                           >
                             <div className="max-w-20 m-2 mb-4 flex flex-col justify-center sm:flex-row">
-                              <Link to={`/ReceiptInput/${ContactId}`}>
+                              <Link to={`/App/ReceiptInput/${ContactId}`}>
                                 <button
                                   className={
                                     "flex h-24 w-fit flex-col items-center justify-center rounded-lg border border-gray-200 py-4 px-10 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline " +
