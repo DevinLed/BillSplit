@@ -54,13 +54,13 @@ export function Contact() {
     return (
         <main className="min-h-screen bg-gray-100"   style={{ position: "fixed", top: 0, left: 0, right: 0 }}>
             <div
-                className="bg-blue-400 text-white py-2 px-6 sticky top-0 flex items-center justify-between z-10"
-                style={{ backgroundColor: "rgb(4, 125, 149)" }}
-            >
+        className="bg-blue-400 text-white py-2 h-20 px-6 sticky top-0 flex items-center justify-between"
+        style={{ backgroundColor: "rgb(4, 125, 149)" }}
+      >
                 <Link to="/" className="text-2xl font-bold tracking-wider text-white hover:text-gray-300">Divvy</Link>
                 <div className="flex items-center space-x-4">
                     {renderButton(<AppsIcon />, "App", "/App/Home", "Go to App")}
-                    {renderButton(<SchoolIcon />, "Tutorials", "/Tutorials", "Tutorials")}
+                    {renderButton(<SchoolIcon />, "Tutorial", "/App/Tutorial", "Tutorial")}
                     {renderButton(<ContactMailIcon />, "Contact", "/App/Contact", "Contact Me")}
                 </div>
             </div>
@@ -72,8 +72,8 @@ export function Contact() {
                     </p>
                 </div>
                 <form onSubmit={handleSubmit}>
-                    <div className="px-6 pt-4 pb-2">
-                        <div className="mb-4">
+                    <div className="px-6 pb-2">
+                        <div>
                             <label htmlFor="name" className="block text-gray-900 text-sm font-bold mb-2">Name:</label>
                             <input
                                 type="text"

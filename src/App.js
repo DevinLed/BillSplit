@@ -12,6 +12,7 @@ import EditPerson from "./components/EditPerson";
 import SplitBill from "./components/SplitBill";
 import LandingPage from "./components/LandingPage";
 import Contact from "./components/Contact";
+import Tutorial from "./components/Tutorial";
 import AddPerson from "./components/AddPerson";
 import Home from "./components/Home";
 import Header from "./components/Header";
@@ -664,6 +665,7 @@ function App({ signOut, user }) {
           />
           
           <Route path="/Contact" element={<Contact />} />
+          <Route path="/Tutorial" element={<Tutorial />} />
           <Route path="/" element={<Navigate to="/LandingPage" />} />
 
           <Route
