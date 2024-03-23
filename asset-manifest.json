@@ -1,22 +1,26 @@
 {
   "files": {
-    "main.css": "/static/css/main.4b5c2f55.css",
-    "main.js": "/static/js/main.dfc88763.js",
+    "main.css": "/static/css/main.0c2cad47.css",
+    "main.js": "/static/js/main.0e4f907b.js",
     "static/media/DivvySample.gif": "/static/media/DivvySample.caf0bdbd0ccb7aa0349e.gif",
+    "static/media/bignaturebackground.jpg": "/static/media/bignaturebackground.6cdf6465d354f58c5770.jpg",
     "static/media/Historyphoneoutline.png": "/static/media/Historyphoneoutline.f6eb387df3f764753806.png",
     "static/media/Receiptphoneoutline.png": "/static/media/Receiptphoneoutline.121c12b21fd4b2908ef8.png",
     "static/media/Historydarkoutline.png": "/static/media/Historydarkoutline.3a4d8773216e1cb10c37.png",
+    "static/media/naturebackground.jpeg": "/static/media/naturebackground.4c0e346a1d014550337c.jpeg",
     "static/media/loading.gif": "/static/media/loading.ba4ecef0459ee75c99b2.gif",
+    "static/media/Headshot.png": "/static/media/Headshot.90b3cf6d77b3c79fb0ed.png",
+    "static/media/divvylogo.png": "/static/media/divvylogo.a40a63f26910129fcfb3.png",
     "static/media/icomoon.svg?yjc9oj": "/static/media/icomoon.dd29f727badc9333c79f.svg",
     "static/media/icomoon.eot?yjc9oj": "/static/media/icomoon.f832b9ce6a4c7823513d.eot",
     "static/media/icomoon.woff?yjc9oj": "/static/media/icomoon.baa8c3df47645e50ef7f.woff",
     "static/media/icomoon.ttf?yjc9oj": "/static/media/icomoon.bbc8a02e138d003f16fa.ttf",
     "index.html": "/index.html",
-    "main.4b5c2f55.css.map": "/static/css/main.4b5c2f55.css.map",
-    "main.dfc88763.js.map": "/static/js/main.dfc88763.js.map"
+    "main.0c2cad47.css.map": "/static/css/main.0c2cad47.css.map",
+    "main.0e4f907b.js.map": "/static/js/main.0e4f907b.js.map"
   },
   "entrypoints": [
-    "static/css/main.4b5c2f55.css",
-    "static/js/main.dfc88763.js"
+    "static/css/main.0c2cad47.css",
+    "static/js/main.0e4f907b.js"
   ]
 }
