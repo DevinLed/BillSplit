@@ -1,7 +1,19 @@
 @import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
+.mainBackground {
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  min-height: 100vh;
+  background-image: url('../src/img/naturebackground.jpeg'); 
+}
 
+@media (min-width: 700px) {
+  .mainBackground {
+    background-image: url('../src/img/bignaturebackground.jpg'); 
+  }
+}
 body {
   justify-content: center;
 
