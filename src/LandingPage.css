@@ -1,0 +1,55 @@
+.backgroundImage {
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    min-height: 100vh;
+  }
+  
+  .backgroundImageDefault {
+    background-image: url('../src/img/naturebackground.jpeg');
+  }
+  
+  @media (min-width: 700px) {
+    .backgroundImageLarge {
+      background-image: url('../src/img/bignaturebackground.jpg');
+    }
+  }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    25% { transform: scale(1.05); }
+  }
+  
+  @keyframes hoverPulse {
+    0%, 100% { transform: scale(1.1); }
+    50% { transform: scale(1.15); }
+  }
+  
+  .pulseButton {
+    animation-delay: 3s;
+    animation: pulse 3.5s infinite ease-in-out; 
+  }
+  
+  .pulseButton:hover {
+    animation: hoverPulse 0.5s infinite ease-in-out;
+  }
+
+  .pulseDown {
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    bottom: -170px; 
+    left: 27%;
+    transform: translateX(-50%); 
+    cursor: pointer;
+    animation: pulse 3.5s infinite ease-in-out; 
+    z-index: 1000; 
+    width: 120px;
+    height: 120px; 
+  }
+  .pageHalfHeight {
+    height: 50vh; 
+  }
+  .downicon{
+    width: 100px;
+    height: 100px;
+  }
