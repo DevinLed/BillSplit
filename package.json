@@ -6,6 +6,7 @@
   "dependencies": {
     "@aws-amplify/ui-react": "^4.6.0",
     "@aws-sdk/client-s3": "^3.216.0",
+    "@emailjs/browser": "^4.3.3",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.15.14",
@@ -36,10 +37,13 @@
     "react-router-dom": "^6.9.0",
     "react-scripts": "^5.0.1",
     "react-slider": "^2.0.4",
+    "react-swipeable-views": "^0.14.0",
+    "react-swipeable-views-utils": "^0.14.0",
     "react-switch": "^7.0.0",
     "react-textfit": "^1.1.1",
     "react-transition-group": "^4.4.5",
     "react-useanimations": "^2.10.0",
+    "resend": "^3.2.0",
     "source-map-loader": "^4.0.1",
     "uuid": "^9.0.0",
     "web-vitals": "^2.1.4"

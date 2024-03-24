@@ -53,12 +53,11 @@ export default function LandingPage({ theme }) {
     settleUp: true,
   });
 
-
   const FeatureCards = () => (
     <SwipeableViews
       enableMouseEvents
       axis="y"
-      resistance={true} 
+      resistance={true}
       index={index}
       onChangeIndex={(index) => setIndex(index)}
     >
@@ -112,7 +111,6 @@ export default function LandingPage({ theme }) {
                 style={{
                   display: "flex",
                   alignItems: "flex-start",
-                  gap: "16px",
                 }}
               >
                 <Avatar
@@ -135,7 +133,7 @@ export default function LandingPage({ theme }) {
                     textShadow: "1px 1px 2px rgba(0, 0, 0, 0.2)",
                   }}
                 >
-                  About Me
+                  Divvy
                 </Typography>
               </div>
               <Typography
@@ -147,13 +145,22 @@ export default function LandingPage({ theme }) {
                   clear: "both",
                 }}
               >
-              Welcome to Divvy! I created this application while going through   </Typography>
+                Welcome to Divvy, the financial management tool
+                tailored to simplify your life. As an aspiring developer, I've
+                recently completed GetCoding, a comprehensive coding bootcamp
+                covering JavaScript, React, Node.js, CDK, and AWS services.
+                Divvy is the culmination of my journey into the world of coding,
+                merging my passion for technology with the aim of providing you
+                with an effortless solution for managing your finances.
+              </Typography>
             </div>
           </CardContent>
         </Card>
         <div className="flex justify-between items-center">
           <Card>
-            <div className="pulseDown flex w-max"  onClick={handleDownArrowClick} 
+            <div
+              className="pulseDown flex w-max"
+              onClick={handleDownArrowClick}
               style={{
                 display: "inline-flex",
                 alignItems: "center",
@@ -165,7 +172,8 @@ export default function LandingPage({ theme }) {
                 boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.3)",
                 cursor: "pointer",
                 transition: "transform 0.2s",
-              }}>
+              }}
+            >
               <img src={downimg} alt="Swipe down" className="downicon" />
             </div>
           </Card>
@@ -309,7 +317,7 @@ export default function LandingPage({ theme }) {
               color: "white",
               textAlign: "center",
               padding: "10px",
-              borderRadius: "25%",
+              borderRadius: "20px",
             }}
           >
             <p>

@@ -24,7 +24,6 @@ import DatePicker from "react-datepicker";
 import { CSSTransition } from "react-transition-group";
 import "rc-slider/assets/index.css";
 import "react-datepicker/dist/react-datepicker.css";
-
 export default function ReceiptInput({
   personName,
   personEmail,
@@ -99,14 +98,13 @@ export default function ReceiptInput({
   const [splitTotal, setSplitTotal] = useState(0);
   const [themTotal, setThemTotal] = useState(0);
   const [selected, setSelected] = useState(null);
-  const API_URL =
-    "https://48f95wy514.execute-api.us-east-1.amazonaws.com/prod/transaction";
+  const API_URL = process.env.REACT_APP_API_URL;
 
   const [filledIn, setFilledIn] = useState(false);
   const resetCombinedArray = () => {
     setCombinedArray([]);
   };
-
+  
   const handleScroll = () => {
     const scrollAmount = window.innerHeight * 1.5;
     const duration = 500;
@@ -136,7 +134,7 @@ export default function ReceiptInput({
 
   // Picture handling API section
   const FormData = require("form-data");
-  const apiKey = "561e58edb1c93ab9fec230c1439fbf48";
+  const apiKey = process.env.REACT_APP_MINDEE_API_KEY;
   const handleCapturePhoto = (dataUri) => {
     setPhotoData(dataUri);
     setShowCameraImage(true);
