@@ -1,14 +1,24 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import Header from "./Header";
-import { IoAlertCircle, IoLanguage } from "react-icons/io5";
+import { IoAlertCircle, IoLanguage,
+  IoReceiptOutline,
+  IoPersonCircleOutline,
+  IoListOutline,
+  IoInvertModeSharp,
+  IoHomeOutline,
+  IoSettingsOutline, } from "react-icons/io5";
 import { TbReceiptTax } from "react-icons/tb";
 import { CSSTransition } from "react-transition-group";
+import { PrimeReactProvider, PrimeReactContext } from "primereact/api";
+import { Button } from "@material-tailwind/react";
+import "primereact/resources/themes/lara-light-cyan/theme.css";
 
 export default function Settings({
   theme,
   setTheme,
   taxRate,
+  toggleTheme,
   setTaxRate,
   handleClearData,
   showConfirmation,
@@ -57,6 +67,10 @@ export default function Settings({
     setShowLang(false);
   };
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [buttonText, setButtonText] = useState(
+    lang === "english" ? "Dark" : "Sombre"
+  );
+  const changeText = (text) => setButtonText(text);
 
   return (
     <>
@@ -65,31 +79,38 @@ export default function Settings({
         style={{ maxWidth: "600px" }}
       >
         <Header showSettings={true} theme={theme} lang={lang} />
-
         <div className="flex flex-col items-center justify-center rounded-lg px-3 py-2 shadow-md mb-4 mx-auto">
           {/* Section for selecting tax rate */}
-          <div className="mb-4 text-center">
-            <label
-              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              className={
-                theme === "dark"
-                  ? "flex h-24 w-fit cursor-pointer flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white p-0 text-sm font-semibold shadow-md hover:bg-gray-700 hover:no-underline"
-                  : "flex h-24 w-fit cursor-pointer flex-col items-center justify-center rounded-lg border border-gray-200 bg-white p-0 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
+          <Button
+            variant="gradient"
+            className="flex items-center gap-3 mb-3"
+            onClick={() => {
+              toggleTheme();
+              if (theme === "light") {
+                changeText(lang === "english" ? "Light" : "Lumière");
+              } else {
+                changeText(lang === "english" ? "Dark" : "Sombre");
               }
+            }}
+          >
+            <div style={{ width: "24px", height: "24px" }}>
+              <IoInvertModeSharp size={24} className="icon3" />
+            </div>
+            <span className="text-white text-center">{buttonText}</span>
+          </Button>
+          <div className="text-center">
+            <Button
+              variant="gradient"
+              className="flex items-center gap-3 mb-3"
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
             >
               <div style={{ width: "24px", height: "24px" }}>
                 <TbReceiptTax size={24} />
               </div>
-              <span
-                className={
-                  theme === "dark"
-                    ? "text-white text-center"
-                    : "text-gray-800 text-center"
-                }
-              >
-                {lang === "english" ? "Tax %" : "Impôt %"}
+              <span className="text-white text-center">
+                {lang === "english" ? "Tax Rate" : "Impôt %"}
               </span>
-            </label>
+            </Button>
             <CSSTransition
               in={isDropdownOpen}
               timeout={500}
@@ -108,9 +129,7 @@ export default function Settings({
                       key={region.name}
                       className={
                         "dropdown-option cursor-pointer w-full flex items-center justify-center p-2 border-b-2 border-gray-300" +
-                        (theme === "dark"
-                          ? "bg-gray-900 text-white"
-                          : "bg-white text-gray-800")
+                        (theme === "dark" ? "text-gray-800" : "text-white")
                       }
                       onClick={() => {
                         handleRegionSelect(region.taxRate);
@@ -147,51 +166,24 @@ export default function Settings({
                 </div>
               </div>
             </CSSTransition>
-
-            {/* Display current tax rate */}
-            <p
-              className={`text-center mt-4 p-2 border border-gray-300 rounded ${
-                theme === "dark"
-                  ? "textMainMenudark bg-gray-900"
-                  : "textMainMenu  bg-white"
-              }`}
-            >
-              {lang === "english"
-                ? "Current Tax Rate"
-                : "Taux d'imposition actuel"}
-              : {taxRate === "" ? "Custom" : `${(taxRate * 100).toFixed(2)}%`}
-            </p>
           </div>
           {/* Language Label */}
-          <label
+          <Button
+          
+          variant="gradient"
+          className="flex items-center gap-3 mb-5"
             onClick={(e) => setShowLang(true)}
-            className={`mb-3 flex h-24 w-fit cursor-pointer flex-col items-center justify-center 
-               rounded-lg border ${
-                 theme === "dark"
-                   ? "border-gray-900 bg-gray-900 text-white"
-                   : "border-gray-200 bg-white"
-               } 
-               py-4 px-6 text-sm font-semibold shadow-md 
-               hover:bg-${
-                 theme === "dark" ? "gray-700" : "gray-200"
-               } hover:no-underline`}
           >
-            <div style={{ width: "24px", height: "24px" }}>
               <IoLanguage size={24} />
-            </div>
             <span
-              className={
-                theme === "dark"
-                  ? "text-white text-center"
-                  : "text-gray-800 text-center"
-              }
+              className="text-white text-center"
             >
               {lang === "english" ? "Language" : "Langue"}
             </span>
-          </label>
+          </Button>
           <CSSTransition
             in={showLang}
-            timeout={500} // Adjust the duration of the transition as needed
+            timeout={500} 
             classNames="fade"
             unmountOnExit
           >
