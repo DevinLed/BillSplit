@@ -12,6 +12,7 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import GroupIcon from "@mui/icons-material/Group";
+import PersonIcon from "@mui/icons-material/Person";
 import ReceiptIcon from "@mui/icons-material/Receipt";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import SyncAltIcon from "@mui/icons-material/SyncAlt";
@@ -23,6 +24,7 @@ import Headshot from "../img/Headshot.png";
 import "../LandingPage.css";
 import { Hidden } from "@mui/material";
 import downimg from "../img/downimg.png";
+import Aboutme from "./Aboutme";
 
 export default function LandingPage({ theme }) {
   const [index, setIndex] = useState(0);
@@ -105,56 +107,6 @@ export default function LandingPage({ theme }) {
             backgroundColor: "rgba(255, 255, 255, 0.8)",
           }}
         >
-          <CardContent>
-            <div style={{ display: "flex", flexDirection: "column" }}>
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "flex-start",
-                }}
-              >
-                <Avatar
-                  alt="Headshot"
-                  sx={{
-                    width: 150,
-                    height: 150,
-                    float: "left",
-                    marginRight: "16px",
-                  }}
-                  src={Headshot}
-                />
-                <Typography
-                  gutterBottom
-                  variant="h5"
-                  component="div"
-                  sx={{
-                    fontWeight: "bold",
-                    color: "rgba(0, 0, 0, 0.87)",
-                    textShadow: "1px 1px 2px rgba(0, 0, 0, 0.2)",
-                  }}
-                >
-                  Divvy
-                </Typography>
-              </div>
-              <Typography
-                variant="body2"
-                color="text.secondary"
-                sx={{
-                  color: "rgba(0, 0, 0, 0.7)",
-                  fontSize: "0.95rem",
-                  clear: "both",
-                }}
-              >
-                Welcome to Divvy, the financial management tool
-                tailored to simplify your life. As an aspiring developer, I've
-                recently completed GetCoding, a comprehensive coding bootcamp
-                covering JavaScript, React, Node.js, CDK, and AWS services.
-                Divvy is the culmination of my journey into the world of coding,
-                merging my passion for technology with the aim of providing you
-                with an effortless solution for managing your finances.
-              </Typography>
-            </div>
-          </CardContent>
         </Card>
         <div className="flex justify-between items-center">
           <Card>
@@ -169,6 +121,7 @@ export default function LandingPage({ theme }) {
                 borderRadius: "80%",
                 width: "150px",
                 height: "150px",
+                left: "25%",
                 boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.3)",
                 cursor: "pointer",
                 transition: "transform 0.2s",
@@ -238,13 +191,14 @@ export default function LandingPage({ theme }) {
           right: 0,
           padding: "10px 0",
           overflow: Hidden,
+          zIndex: "2",
         }}
       >
-        <div className="mx-auto px-4 flex justify-between items-center">
+        <div className="mx-auto px-2 flex justify-between items-center">
           <Link to="/" className="text-2xl font-bold">
             Divvy
           </Link>
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center ml-auto  space-x-2">
             {renderButton(<AppsIcon />, "App", "/App/Home", "Go to App")}
             {renderButton(
               <SchoolIcon />,
@@ -252,6 +206,7 @@ export default function LandingPage({ theme }) {
               "/App/Tutorial",
               "Tutorial"
             )}
+            {renderButton(<PersonIcon />, "About", "/App/AboutMe", "About")}
             {renderButton(
               <ContactMailIcon />,
               "Contact",

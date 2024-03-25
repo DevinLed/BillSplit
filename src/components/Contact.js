@@ -5,48 +5,42 @@ import AppsIcon from "@mui/icons-material/Apps";
 import SchoolIcon from "@mui/icons-material/School";
 import ContactMailIcon from "@mui/icons-material/ContactMail";
 import Tooltip from "@mui/material/Tooltip";
-import Footer from "./Footer";
 import { Resend } from "resend";
+import Footer from "./Footer";
 import { Hidden } from "@mui/material";
 import "../LandingPage.css";
-const resend = new Resend(process.env.REACT_APP_RESEND_API);
+import emailjs from 'emailjs-com';
+import PersonIcon from "@mui/icons-material/Person";
+
+    const resend = new Resend('re_L7XmvSAE_6VwFerFvPDYzxHZEcGoaYwaS');
 
 export function Contact() {
-  console.log(process.env.REACT_APP_RESEND_API);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const [submissionError, setSubmissionError] = useState(null);
+  const [showPopup, setShowPopup] = useState(false);
+
 
   const handleSubmit = async (e) => {
-    console.log("testing?", resend);
     e.preventDefault();
     setSubmitting(true);
 
     try {
-      const { error } = await resend.emails.send({
-        from: `${name} <${email}>`,
-        to: ["devinledwell@gmail.com"],
-        subject: "Support Inquiry",
-        html: `<p>Name: ${name}</p><p>Email: ${email}</p><p>Message: ${message}</p>`,
-      });
+      await emailjs.send('service_2m7brig', 'template_ja1ys8r', {
+        name,
+        email,
+        message,
+      }, 'ltHxgEMI-xVVtLImw');
 
-      if (error) {
-        throw new Error(`Failed to send email: ${error}`);
-      }
-
-      // Reset form fields
-      setName("");
-      setEmail("");
-      setMessage("");
-      setSubmitting(false);
-      setSubmissionError(null);
-      alert("Your message has been sent successfully!");
+      setName('');
+      setEmail('');
+      setMessage('');
     } catch (error) {
       console.error("Error sending email:", error);
-      setSubmissionError("Failed to send email. Please try again later.");
+    } finally {
       setSubmitting(false);
+      setShowPopup(true); 
     }
   };
   const renderButton = (icon, text, to, tooltip) => (
@@ -64,7 +58,16 @@ export function Contact() {
   return (
     <main
       className={`backgroundImage backgroundImageDefault ${window.innerWidth > 700 ? "backgroundImageLarge" : ""}`}
-    
+      style={{
+        color: "white",
+        position: "fixed",
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        overflow: Hidden,        
+        overflowY: "auto",
+      }}
     >
       <div
         style={{
@@ -79,11 +82,11 @@ export function Contact() {
           overflow: Hidden,
         }}
       >
-        <div className="mx-auto px-4 flex justify-between items-center">
+        <div className="mx-auto px-2 flex justify-between items-center">
           <Link to="/" className="text-2xl font-bold">
             Divvy
           </Link>
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2">
             {renderButton(<AppsIcon />, "App", "/App/Home", "Go to App")}
             {renderButton(
               <SchoolIcon />,
@@ -91,6 +94,7 @@ export function Contact() {
               "/App/Tutorial",
               "Tutorial"
             )}
+            {renderButton(<PersonIcon />, "About", "/App/AboutMe", "About")}
             {renderButton(
               <ContactMailIcon />,
               "Contact",
@@ -100,7 +104,7 @@ export function Contact() {
           </div>
         </div>
       </div>
-      <div className="max-w-md mx-auto bg-white rounded-lg shadow-md overflow-hidden mt-5">
+      <div className="max-w-md mx-auto bg-white rounded-lg shadow-md overflow-hidden mt-40">
         <div className="px-6 py-4">
           <div className="font-bold text-xl mb-2 text-black">
             Support Inquiry
@@ -167,15 +171,23 @@ export function Contact() {
               <button
                 type="submit"
                 className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+                onClick={(e) => (handleSubmit(e))}
               >
                 Submit
               </button>
             </div>
+            {showPopup && (
+        <div className="popup">
+         
+         <p className="flex justify-center text-gray-700 text-base mt-3">Email Sent!</p>
+        </div>
+      )}
           </div>
         </form>
+      
       </div>
-      <div className="flex justify-center mt-100" >
-        <footer className="fixed bottom-0 w-50%">
+      <div className="flex justify-center mt-100 py-5">
+        <footer className="bottom-0 w-50%">
           <div
             className="outro"
             style={{
