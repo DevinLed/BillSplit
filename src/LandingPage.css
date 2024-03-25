@@ -3,6 +3,7 @@
     background-position: center;
     background-attachment: fixed;
     min-height: 100vh;
+    margin-top: -20px;
   }
   
   .backgroundImageDefault {
@@ -38,7 +39,6 @@
     align-items: center;
     position: absolute;
     bottom: -170px; 
-    left: 27%;
     transform: translateX(-50%); 
     cursor: pointer;
     animation: pulse 3.5s infinite ease-in-out; 

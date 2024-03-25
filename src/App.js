@@ -8,6 +8,7 @@ import {
   Redirect,
 } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
+
 import EditPerson from "./components/EditPerson";
 import SplitBill from "./components/SplitBill";
 import LandingPage from "./components/LandingPage";
@@ -27,7 +28,6 @@ import {
   AuthProvider,
   ThemeProvider,
   ConfirmationProvider,
-  Button,
   Heading,
 } from "@aws-amplify/ui-react";
 import "@aws-amplify/ui-react/styles.css";
@@ -38,7 +38,10 @@ import { Amplify, API, graphqlOperation, Auth, Storage } from "aws-amplify";
 import awsconfig from "./aws-exports";
 import NotificationAPIComponent from "./components/NotificationAPI";
 import ContactHistoryEdit from "./components/ContactHistoryEdit";
+import Aboutme from "./components/Aboutme";
 
+import { PrimeReactProvider, PrimeReactContext } from 'primereact/api';
+import "primereact/resources/themes/lara-light-cyan/theme.css";
 Amplify.configure(awsconfig);
 
 function App({ signOut, user }) {
@@ -122,7 +125,7 @@ function App({ signOut, user }) {
 
   const [dataThrow, setDataThrow] = useState([]);
 
-  const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
   const fetchData = async () => {
     try {
       const response = await fetch(API_URL);
@@ -186,7 +189,8 @@ function App({ signOut, user }) {
   };
   const editSelf = () => {
     const selectedPerson = dataThrow.find(
-      (item) =>  item.UserEmail === loggedInUserEmail && item.Email === loggedInUserEmail
+      (item) =>
+        item.UserEmail === loggedInUserEmail && item.Email === loggedInUserEmail
     );
     setPersonName(selectedPerson.Name);
     setPersonEmail(selectedPerson.Email);
@@ -486,7 +490,7 @@ function App({ signOut, user }) {
       (item) =>
         item.UserEmail === loggedInUserEmail && item.Email === loggedInUserEmail
     );
-    
+
     console.log("that:", selectingPerson);
     setPersonName(selectingPerson.Name);
     setPersonPhone(selectingPerson.Phone);
@@ -494,7 +498,6 @@ function App({ signOut, user }) {
     setPersonOwing(selectingPerson.Owing);
     setPersonReceiptAmount(selectingPerson.ReceiptAmount);
   };
-
 
   // Used to send values to History component
   const [receipts, setReceipts] = useState(() => {
@@ -646,6 +649,8 @@ function App({ signOut, user }) {
   };
   return (
     <>
+    
+    <PrimeReactProvider>
       <div className={`App ${theme}`} style={{ paddingTop: "20px" }}>
         <DraggableComponent>
           <div className="notification-container">
@@ -663,9 +668,10 @@ function App({ signOut, user }) {
               <LandingPage theme={theme} lang={lang} setLang={setLang} />
             }
           />
-          
+
           <Route path="/Contact" element={<Contact />} />
           <Route path="/Tutorial" element={<Tutorial />} />
+          <Route path="/Aboutme" element={<Aboutme />} />
           <Route path="/" element={<Navigate to="/LandingPage" />} />
 
           <Route
@@ -793,8 +799,8 @@ function App({ signOut, user }) {
             path="/EditList"
             element={
               <EditList
-              selfValue={selfValue}
-              setSelfValue={setSelfValue}
+                selfValue={selfValue}
+                setSelfValue={setSelfValue}
                 user={user}
                 dataThrow={dataThrow}
                 editSelf={editSelf}
@@ -848,6 +854,7 @@ function App({ signOut, user }) {
                 lang={lang}
                 setLang={setLang}
                 loggedInUsername={loggedInUsername}
+                toggleTheme={toggleTheme}
               />
             }
           />
@@ -909,7 +916,7 @@ function App({ signOut, user }) {
             path="/ContactHistoryEdit"
             element={
               <ContactHistoryEdit
-              loggedInUsername={loggedInUsername}
+                loggedInUsername={loggedInUsername}
                 submissionArray={submissionArray}
                 combinedArray={combinedArray}
                 personName={personName}
@@ -942,7 +949,9 @@ function App({ signOut, user }) {
           />
         </Routes>
       </div>
+      </PrimeReactProvider>
     </>
+    
   );
 }
 export default withAuthenticator(App);
