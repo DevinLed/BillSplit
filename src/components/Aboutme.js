@@ -13,6 +13,7 @@ import emailjs from "emailjs-com";
 import Avatar from "@mui/material/Avatar";
 import Headshot from "../img/Headshot.png";
 import PersonIcon from "@mui/icons-material/Person";
+import Topbar from "./Topbar";
 
 import "../LandingPage.css";
 import Card from "@mui/material/Card";
@@ -32,17 +33,14 @@ const renderButton = (icon, text, to, tooltip) => (
 
 const AboutMe = () => {
   return (
-    <main
-      className={`backgroundImage backgroundImageDefault ${window.innerWidth > 700 ? "backgroundImageLarge" : ""}`}
-      style={{
-        color: "white",
+    <main style={{ minHeight: "100vh", backgroundColor: "rgb(7, 30, 49)",color: "white",
         position: "fixed",
         top: 0,
         left: 0,
         right: 0,
         bottom: 0,
         overflow: Hidden,        
-        paddingTop: '120px',
+        paddingTop: '80px',
         overflowY: "auto",
       }}
     >
@@ -57,36 +55,16 @@ const AboutMe = () => {
           right: 0,
           padding: "10px 0",
           overflow: Hidden,
+          zIndex: "2",
         }}
       >
-        <div className="mx-auto px-2 flex justify-between items-center">
-          <Link to="/" className="text-2xl font-bold">
-            Divvy
-          </Link>
-          <div className="flex items-center space-x-2">
-            {renderButton(<AppsIcon />, "App", "/App/Home", "Go to App")}
-            {renderButton(
-              <SchoolIcon />,
-              "Tutorial",
-              "/App/Tutorial",
-              "Tutorial"
-            )}
-            {renderButton(<PersonIcon />, "About", "/App/AboutMe", "About")}
-            {renderButton(
-              <ContactMailIcon />,
-              "Contact",
-              "/App/Contact",
-              "Contact Me"
-            )}
-          </div>
-        </div>
+         <Topbar />
       </div>
       
       <Card
           sx={{
             maxWidth: 345,
             mb: 4,
-            opacity: 0.9,
             borderRadius: "16px",
             boxShadow: 3,
             backgroundColor: "rgba(255, 255, 255, 0.8)",

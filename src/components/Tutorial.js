@@ -14,6 +14,7 @@ import divvylogo from "../img/divvylogo.png";
 import { Hidden } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
 import "../LandingPage.css";
+import Topbar from "./Topbar";
 
 export function Tutorial() {
   const renderButton = (icon, text, to, tooltip) => (
@@ -48,8 +49,9 @@ export function Tutorial() {
 
   return (
     <main
-      className={`backgroundImage backgroundImageDefault ${window.innerWidth > 700 ? "backgroundImageLarge" : ""}`}
       style={{
+        minHeight: "100vh",
+        backgroundColor: "rgb(7, 30, 49)",
         color: "white",
         position: "fixed",
         top: 0,
@@ -70,31 +72,11 @@ export function Tutorial() {
           left: 0,
           right: 0,
           padding: "10px 0",
-          zIndex: 2,
+          overflow: Hidden,
+          zIndex: "2",
         }}
       >
-        {" "}
-        <div className="mx-auto px-2 flex justify-between items-center">
-          <Link to="/" className="text-2xl font-bold">
-            Divvy
-          </Link>
-          <div className="flex items-center space-x-2">
-            {renderButton(<AppsIcon />, "App", "/App/Home", "Go to App")}
-            {renderButton(
-              <SchoolIcon />,
-              "Tutorial",
-              "/App/Tutorial",
-              "Tutorial"
-            )}
-            {renderButton(<PersonIcon />, "About", "/App/AboutMe", "About")}
-            {renderButton(
-              <ContactMailIcon />,
-              "Contact",
-              "/App/Contact",
-              "Contact Me"
-            )}
-          </div>
-        </div>
+        <Topbar />
       </div>
 
       <div className="mt-20 flex flex-col items-center justify-center ">

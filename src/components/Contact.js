@@ -9,10 +9,11 @@ import { Resend } from "resend";
 import Footer from "./Footer";
 import { Hidden } from "@mui/material";
 import "../LandingPage.css";
-import emailjs from 'emailjs-com';
+import emailjs from "emailjs-com";
 import PersonIcon from "@mui/icons-material/Person";
+import Topbar from "./Topbar";
 
-    const resend = new Resend('re_L7XmvSAE_6VwFerFvPDYzxHZEcGoaYwaS');
+const resend = new Resend("re_L7XmvSAE_6VwFerFvPDYzxHZEcGoaYwaS");
 
 export function Contact() {
   const [name, setName] = useState("");
@@ -21,26 +22,30 @@ export function Contact() {
   const [submitting, setSubmitting] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitting(true);
 
     try {
-      await emailjs.send('service_2m7brig', 'template_ja1ys8r', {
-        name,
-        email,
-        message,
-      }, 'ltHxgEMI-xVVtLImw');
+      await emailjs.send(
+        "service_2m7brig",
+        "template_ja1ys8r",
+        {
+          name,
+          email,
+          message,
+        },
+        "ltHxgEMI-xVVtLImw"
+      );
 
-      setName('');
-      setEmail('');
-      setMessage('');
+      setName("");
+      setEmail("");
+      setMessage("");
     } catch (error) {
       console.error("Error sending email:", error);
     } finally {
       setSubmitting(false);
-      setShowPopup(true); 
+      setShowPopup(true);
     }
   };
   const renderButton = (icon, text, to, tooltip) => (
@@ -57,15 +62,16 @@ export function Contact() {
 
   return (
     <main
-      className={`backgroundImage backgroundImageDefault ${window.innerWidth > 700 ? "backgroundImageLarge" : ""}`}
       style={{
+        minHeight: "100vh",
+        backgroundColor: "rgb(7, 30, 49)",
         color: "white",
         position: "fixed",
         top: 0,
         left: 0,
         right: 0,
         bottom: 0,
-        overflow: Hidden,        
+        overflow: Hidden,
         overflowY: "auto",
       }}
     >
@@ -80,31 +86,12 @@ export function Contact() {
           right: 0,
           padding: "10px 0",
           overflow: Hidden,
+          zIndex: "2",
         }}
       >
-        <div className="mx-auto px-2 flex justify-between items-center">
-          <Link to="/" className="text-2xl font-bold">
-            Divvy
-          </Link>
-          <div className="flex items-center space-x-2">
-            {renderButton(<AppsIcon />, "App", "/App/Home", "Go to App")}
-            {renderButton(
-              <SchoolIcon />,
-              "Tutorial",
-              "/App/Tutorial",
-              "Tutorial"
-            )}
-            {renderButton(<PersonIcon />, "About", "/App/AboutMe", "About")}
-            {renderButton(
-              <ContactMailIcon />,
-              "Contact",
-              "/App/Contact",
-              "Contact Me"
-            )}
-          </div>
-        </div>
+        <Topbar />
       </div>
-      <div className="max-w-md mx-auto bg-white rounded-lg shadow-md overflow-hidden mt-40">
+      <div className="max-w-md mx-auto bg-white rounded-lg shadow-md overflow-hidden mt-20">
         <div className="px-6 py-4">
           <div className="font-bold text-xl mb-2 text-black">
             Support Inquiry
@@ -171,20 +158,20 @@ export function Contact() {
               <button
                 type="submit"
                 className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-                onClick={(e) => (handleSubmit(e))}
+                onClick={(e) => handleSubmit(e)}
               >
                 Submit
               </button>
             </div>
             {showPopup && (
-        <div className="popup">
-         
-         <p className="flex justify-center text-gray-700 text-base mt-3">Email Sent!</p>
-        </div>
-      )}
+              <div className="popup">
+                <p className="flex justify-center text-gray-700 text-base mt-3">
+                  Email Sent!
+                </p>
+              </div>
+            )}
           </div>
         </form>
-      
       </div>
       <div className="flex justify-center mt-100 py-5">
         <footer className="bottom-0 w-50%">
