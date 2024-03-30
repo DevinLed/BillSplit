@@ -7,7 +7,6 @@ import SchoolIcon from "@mui/icons-material/School";
 import ContactMailIcon from "@mui/icons-material/ContactMail";
 import Tooltip from "@mui/material/Tooltip";
 import Footer from "./Footer";
-import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
@@ -19,12 +18,16 @@ import SyncAltIcon from "@mui/icons-material/SyncAlt";
 import naturebackground from "../img/naturebackground.jpeg";
 import bignaturebackground from "../img/naturebackground.jpeg";
 import divvylogo from "../img/divvylogo.png";
-import SwipeableViews from "react-swipeable-views";
 import Headshot from "../img/Headshot.png";
 import "../LandingPage.css";
 import { Hidden } from "@mui/material";
 import downimg from "../img/downimg.png";
 import Aboutme from "./Aboutme";
+import splitPhone from "../img/splitPhone.jpg";
+import MenuIcon from "@mui/icons-material/Menu";
+import Topbar from "./Topbar";
+import { Button } from "@material-tailwind/react";
+import BarChartIcon from "@mui/icons-material/BarChart";
 
 export default function LandingPage({ theme }) {
   const [index, setIndex] = useState(0);
@@ -49,101 +52,38 @@ export default function LandingPage({ theme }) {
     </Link>
   );
 
-  const [visibleCards, setVisibleCards] = React.useState({
-    splitExpenses: true,
-    expenseTracking: true,
-    settleUp: true,
-  });
-
   const FeatureCards = () => (
-    <SwipeableViews
-      enableMouseEvents
-      axis="y"
-      resistance={true}
-      index={index}
-      onChangeIndex={(index) => setIndex(index)}
-    >
+    <>
       <div>
         <FeatureCard
-          icon={<GroupIcon sx={{ fontSize: 40 }} />}
+          icon={<ReceiptIcon sx={{ fontSize: 40 }} />}
           title="Split Expenses"
-          description="Simplify outings with friends by easily splitting any bill. Snap a photo or enter details manually and let Divvy do the math."
-          onSwipe={() =>
-            setVisibleCards({ ...visibleCards, splitExpenses: false })
-          }
-          isVisible={visibleCards.splitExpenses}
+          description="Simplify outings with friends and family by easily splitting any bill"
         />
       </div>
 
       <div>
         <FeatureCard
-          icon={<AccountBalanceWalletIcon sx={{ fontSize: 40 }} />}
+          icon={<BarChartIcon sx={{ fontSize: 40 }} />}
           title="Expense Tracking"
-          description="Keep an eye on your finances by storing all shared and personal expenses in one intuitive place."
-          onSwipe={() =>
-            setVisibleCards({ ...visibleCards, expenseTracking: false })
-          }
-          isVisible={visibleCards.expenseTracking}
+          description="Keep an eye on your finances by storing all expenses in one place."
         />
       </div>
-
-      <div>
-        <FeatureCard
-          icon={<SyncAltIcon sx={{ fontSize: 40 }} />}
-          title="Settle Up With Ease"
-          description="Effortlessly balance debts among friends, ensuring everyone pays their fair share with a simple tap."
-          onSwipe={() => setVisibleCards({ ...visibleCards, settleUp: false })}
-          isVisible={visibleCards.settleUp}
-        />
-      </div>
-      <div>
-        <Card
-          sx={{
-            maxWidth: 345,
-            mb: 4,
-            opacity: 0.9,
-            borderRadius: "16px",
-            boxShadow: 3,
-            backgroundColor: "rgba(255, 255, 255, 0.8)",
-          }}
-        >
-        </Card>
-        <div className="flex justify-between items-center">
-          <Card>
-            <div
-              className="pulseDown flex w-max"
-              onClick={handleDownArrowClick}
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "center",
-                backgroundColor: "rgba(0, 0, 0, 0.5)",
-                borderRadius: "80%",
-                width: "150px",
-                height: "150px",
-                left: "25%",
-                boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.3)",
-                cursor: "pointer",
-                transition: "transform 0.2s",
-              }}
-            >
-              <img src={downimg} alt="Swipe down" className="downicon" />
-            </div>
-          </Card>
-        </div>
-      </div>
-    </SwipeableViews>
+    </>
   );
 
   const FeatureCard = ({ icon, title, description }) => (
     <Card
       sx={{
-        maxWidth: 345,
-        mb: 4,
-        opacity: 0.9,
-        borderRadius: "16px",
-        boxShadow: 3,
-        backgroundColor: "rgba(255, 255, 255, 0.8)",
+        width: "100%",
+        boxShadow: 0,
+        backgroundColor: "rgb(7, 30, 49)",
+        color: "#FFFFFF",
+        borderRadius: 0,
+        display: "flex",
+        padding: "10px",
+        flexDirection: "row",
+        alignItems: "center",
       }}
     >
       <CardContent>
@@ -156,7 +96,7 @@ export default function LandingPage({ theme }) {
             alignItems: "center",
             gap: 1,
             fontWeight: "bold",
-            color: "rgba(0, 0, 0, 0.87)",
+            color: "#FFFFFF",
             textShadow: "1px 1px 2px rgba(0, 0, 0, 0.2)",
           }}
         >
@@ -167,7 +107,7 @@ export default function LandingPage({ theme }) {
           variant="body2"
           color="text.secondary"
           sx={{
-            color: "rgba(0, 0, 0, 0.7)",
+            color: "#FFFFFF",
             fontSize: "0.95rem",
           }}
         >
@@ -177,9 +117,7 @@ export default function LandingPage({ theme }) {
     </Card>
   );
   return (
-    <main
-      className={`backgroundImage backgroundImageDefault ${window.innerWidth > 700 ? "backgroundImageLarge" : ""}`}
-    >
+    <main style={{ minHeight: "100vh", backgroundColor: "rgb(7, 30, 49)" }}>
       <div
         style={{
           backdropFilter: "blur(5px)",
@@ -194,61 +132,29 @@ export default function LandingPage({ theme }) {
           zIndex: "2",
         }}
       >
-        <div className="mx-auto px-2 flex justify-between items-center">
-          <Link to="/" className="text-2xl font-bold">
-            Divvy
-          </Link>
-          <div className="flex items-center ml-auto  space-x-2">
-            {renderButton(<AppsIcon />, "App", "/App/Home", "Go to App")}
-            {renderButton(
-              <SchoolIcon />,
-              "Tutorial",
-              "/App/Tutorial",
-              "Tutorial"
-            )}
-            {renderButton(<PersonIcon />, "About", "/App/AboutMe", "About")}
-            {renderButton(
-              <ContactMailIcon />,
-              "Contact",
-              "/App/Contact",
-              "Contact Me"
-            )}
-          </div>
-        </div>
+        <Topbar />
       </div>
-      <div className="pt-20 p-4 max-w-3xl mx-auto ">
-        <div
-          style={{
-            textAlign: "center",
-            marginTop: "90px",
-            marginBottom: "60px",
-          }}
-        >
-          <Link to="/App/Home">
-            <div
-              className="pulseButton"
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "center",
-                backgroundColor: "rgba(0, 0, 0, 0.5)",
-                borderRadius: "80%",
-                width: "150px",
-                height: "150px",
-                boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.3)",
-                cursor: "pointer",
-                transition: "transform 0.2s",
-              }}
-            >
-              <img
-                src={divvylogo}
-                alt="Go to App"
-                style={{ width: "60px", height: "60px" }}
-              />
-            </div>
-          </Link>
-        </div>
 
+      <div
+        style={{
+          paddingTop: "60px",
+          width: "100%",
+          textAlign: "center",
+          maxWidth: "550px",
+          marginLeft: "auto",
+          marginRight: "auto",
+        }}
+      >
+        <img
+          src={splitPhone}
+          alt="Splitting a bill"
+          style={{
+            width: "100%",
+            height: "auto",
+          }}
+        />
+      </div>
+      <div>
         <div
           style={{
             display: "flex",
@@ -257,8 +163,30 @@ export default function LandingPage({ theme }) {
           }}
         >
           <FeatureCards></FeatureCards>
+          <div
+            style={{
+              marginTop: "25px",
+            }}
+          >
+            <Link to="/App/Home" >
+            <Button
+              color="green"
+              className="flex items-center gap-3 mb-3"
+              style={{
+                width: "fit-content",
+                color: "#FFFFFF",
+                padding: "10px 20px",
+                borderRadius: "8px",
+                fontSize: "1.2rem", 
+              }}
+            >
+              <span className="text-center">Get Started!</span>
+            </Button>
+            </Link>
+          </div>
         </div>
       </div>
+
       <div className="flex justify-center mt-100">
         <footer
           className={
