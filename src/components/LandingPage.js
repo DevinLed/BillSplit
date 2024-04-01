@@ -150,7 +150,7 @@ export default function LandingPage({ theme }) {
           alt="Splitting a bill"
           style={{
             width: "100%",
-            height: "auto",
+            height: "100%",
           }}
         />
       </div>

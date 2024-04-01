@@ -651,7 +651,7 @@ function App({ signOut, user }) {
     <>
     
     <PrimeReactProvider>
-      <div className={`App ${theme}`} style={{ paddingTop: "20px" }}>
+      <div className={`App ${theme}`}>
         <DraggableComponent>
           <div className="notification-container">
             <NotificationAPIComponent
