@@ -19,6 +19,7 @@ import {
   IoCheckmarkCircle,
   IoCreateOutline,
 } from "react-icons/io5";
+import { Button } from "@material-tailwind/react";
 import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
 import { CSSTransition } from "react-transition-group";
@@ -397,53 +398,50 @@ export default function ReceiptInput({
                       ? "Save Expense"
                       : "Économiser des dépenses"
                     : lang === "english"
-                    ? "Split a receipt with " + personName
-                    : "Fractionner un reçu avec " + personName}
+                    ? "Submit expense by:"
+                    : "Soumettez la dépense par :"}
                 </h1>
                 <ul className="list-group items-center justify-center">
                   <Link className="flex flex-col items-center justify-center">
-                    <label
-                      className={
-                        "mt-4 mb-4 mb-0 flex h-24 w-fit flex-col items-center justify-center rounded-lg border  " +
-                        (theme === "dark"
-                          ? "border-gray-900 bg-gray-900 text-white hover:bg-gray-800"
-                          : "border-gray-200 bg-white text-gray-800 hover:bg-gray-200") +
-                        " py-4 px-10 whitespace-no-wrap text-sm font-semibold shadow-md hover:no-underline"
-                      }
+                  <Button
+            color="lightBlue"
+            ripple="light"
+            className="gradient-btn mb-2 flex items-center justify-center mt-3"
+            style={{ margin: "auto" }}
+
                       onClick={(e) => {
                         setSelectMethodManual(true);
                         setSelectPersonReceipt(false);
                         setPersonReceiptAmount(0);
                       }}
-                    >
-                      <div
-                        className="whitespace-no-wrap"
-                        style={{ width: "24px", height: "24px" }}
-                      >
+          >
+            <div className="flex items-center">
                         <IoCreateOutline size={24} />
-                      </div>
-                      <span className="whitespace-no-wrap">
+              <span className="text-white ml-2">
                         {lang === "english" ? "Manual" : "À la main"}
-                      </span>
-                    </label>
+              </span>
+            </div>
+          </Button>
                   </Link>
                   <li className="flex flex-col items-center justify-center">
-                    <label
-                      className={
-                        "mt-1 mb-4 mb-0 flex h-24 w-fit flex-col items-center justify-center rounded-lg border " +
-                        (theme === "dark"
-                          ? "border-gray-900 bg-gray-900 text-white hover:bg-gray-800"
-                          : "border-gray-200 bg-white text-gray-800 hover:bg-gray-200") +
-                        " py-4 px-10 text-sm font-semibold shadow-md hover:no-underline"
-                      }
-                      onClick={(e) => {
+                  <Button
+            color="lightBlue"
+            ripple="light"
+            className="gradient-btn mb-2 flex items-center justify-center"
+            style={{ margin: "auto" }}
+
+                        onClick={(e) => {
                         setSelectMethodPicture(true);
                         setSelectPersonReceipt(false);
                       }}
-                    >
-                      <IoCameraOutline size={24} />
-                      {lang === "english" ? "Picture" : "Image"}
-                    </label>
+          >
+            <div className="flex items-center">
+                        <IoCameraOutline size={24} />
+              <span className="text-white ml-2">
+                        {lang === "english" ? "Picture" : "Image"}
+              </span>
+            </div>
+          </Button>
                   </li>
                 </ul>
               </div>

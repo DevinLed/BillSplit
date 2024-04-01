@@ -7,6 +7,7 @@ import Avatar from "react-avatar";
 import { CSSTransition } from "react-transition-group";
 import { API } from "aws-amplify";
 import { useNavigate } from 'react-router-dom';
+import { Button } from "@material-tailwind/react";
 
 export default function SplitBill({
   addPerson,
@@ -162,21 +163,23 @@ export default function SplitBill({
               ))}
           </ul>
 
-          <label
-            className={
-              "mt-4 mb-4 mb-0 flex h-24 w-fit flex-col items-center justify-center rounded-lg border " +
-              (theme === "dark"
-                ? "border-gray-900 bg-gray-900 text-white"
-                : "border-gray-200 bg-white text-gray-800") +
-              " py-4 px-10 text-sm font-semibold shadow-md hover:bg-gray-800 hover:no-underline"
-            }
-            onClick={() => {
+          <Button
+            color="lightBlue"
+            ripple="light"
+            className="gradient-btn mb-2 flex items-center justify-center"
+            style={{ margin: "auto" }}
+ onClick={() => {
               setAddPerson(true);
               setFormSubmitted(true);
-            }}
+            }} 
           >
-            <IoPersonAddSharp size={24} />
-          </label>
+            <div className="flex items-center">
+              <IoPersonAddSharp size={24} />
+              <span className="text-white ml-2">
+                {lang === "english" ? "Add Person" : "Ajouter Une Personne"}
+              </span>
+            </div>
+          </Button>
         </div>
 
         <CSSTransition

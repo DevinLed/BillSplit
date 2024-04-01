@@ -6,6 +6,7 @@ import { IoPersonAddSharp } from "react-icons/io5";
 import { Amplify, Auth } from "aws-amplify";
 import Avatar from "react-avatar";
 import { CSSTransition } from "react-transition-group";
+import { Button } from "@material-tailwind/react";
 
 import { Link } from "react-router-dom";
 
@@ -130,7 +131,11 @@ export default function EditList({
                 >
                   <div className="flex items-center justify-center flex-grow">
                     <Avatar name={loggedInUsername} size={32} round />
-                    <span className="ml-2">{lang === "english" ? "Personal Expense" : "Dépense personnelle"}</span>
+                    <span className="ml-2">
+                      {lang === "english"
+                        ? "Personal Expense"
+                        : "Dépense personnelle"}
+                    </span>
                   </div>
                 </li>
               </Link>
@@ -139,14 +144,14 @@ export default function EditList({
           <ul className="m-0 py-1 w-3/4">
             {dataThrow.length > 0 &&
               dataThrow
-                 .filter(
-                (item) =>
-                  item.UserEmail === loggedInUserEmail &&
-                  !(
+                .filter(
+                  (item) =>
                     item.UserEmail === loggedInUserEmail &&
-                    item.Email === loggedInUserEmail
-                  )
-              )
+                    !(
+                      item.UserEmail === loggedInUserEmail &&
+                      item.Email === loggedInUserEmail
+                    )
+                )
                 .map((item, index) => (
                   <React.Fragment key={index}>
                     {item.Name && item.Owing ? (
@@ -200,19 +205,23 @@ export default function EditList({
                   </React.Fragment>
                 ))}
           </ul>
-
-          <label
-            className={
-              "mt-4 mb-4 mb-0 flex h-24 w-fit flex-col items-center justify-center rounded-lg border " +
-              (theme === "dark"
-                ? "border-gray-900 bg-gray-900 text-white"
-                : "border-gray-200 bg-white text-gray-800") +
-              " py-4 px-10 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
-            }
-            onClick={() => setAddPerson(true)}
+          <Button
+            color="lightBlue"
+            ripple="light"
+            className="gradient-btn mb-2 flex items-center justify-center"
+            style={{ margin: "auto" }}
+            onClick={() => {
+              setAddPerson(true);
+              setFormSubmitted(true);
+            }}
           >
-            <IoPersonAddSharp size={24} />
-          </label>
+            <div className="flex items-center">
+              <IoPersonAddSharp size={24} />
+              <span className="text-white ml-2">
+                {lang === "english" ? "Add Person" : "Ajouter Une Personne"}
+              </span>
+            </div>
+          </Button>
         </div>
         <CSSTransition
           in={addPerson}

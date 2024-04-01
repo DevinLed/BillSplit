@@ -1,10 +1,11 @@
 import React from "react";
 import { useState, useRef, useEffect, useMemo } from "react";
 import "./../index.css";
-import { IoSaveOutline, IoCloseCircleOutline } from "react-icons/io5";
+import { IoSaveOutline, IoCloseCircleOutline, IoPencilSharp } from "react-icons/io5";
 import { AiOutlineDelete } from "react-icons/ai";
 import { CSSTransition } from "react-transition-group";
 import { useParams } from "react-router-dom";
+import { Button } from "@material-tailwind/react";
 
 import EditPerson from "./EditPerson";
 import Header from "./Header";
@@ -262,20 +263,24 @@ export default function ContactHistoryEdit({
           theme={theme}
           lang={lang}
         />
-        {!selfValue ? (<button
+        {!selfValue ? ( <Button
+            color="lightBlue"
+            ripple="light"
+            className="gradient-btn mb-2 flex items-center justify-center"
+            style={{ margin: "auto" }}
+
+                       
           onClick={toggleEditPerson}
-          className={
-            "mt-4 mb-4 mb-0 flex h-24 w-fit flex-col items-center justify-center rounded-lg border " +
-            (theme === "dark"
-              ? "border-gray-900 bg-gray-900 text-white"
-              : "border-gray-200 bg-white text-gray-800") +
-            " py-4 px-10 text-sm font-semibold shadow-md hover:bg-gray-800 hover:no-underline"
-          }
-        >
-          {lang === "english"
+          >
+            <div className="flex items-center">
+                        <IoPencilSharp size={24} />
+              <span className="text-white ml-2">
+                        {lang === "english"
             ? "Edit contact details"
             : "Modifier les coordonnées"}
-        </button>) : ("") } 
+              </span>
+            </div>
+          </Button>) : ("") } 
         
         {showEditPerson && (
           <EditPerson

@@ -4,6 +4,7 @@ import "./../index.css";
 import { IoSaveOutline, IoCloseCircleOutline } from "react-icons/io5";
 import { AiOutlineDelete } from "react-icons/ai";
 import { CSSTransition } from "react-transition-group";
+import { Button } from "@material-tailwind/react";
 
 export default function EditPerson({
   personName,
@@ -312,16 +313,19 @@ export default function EditPerson({
               </div>
 
               <div className="pt-4 flex justify-center">
-                <button
-                  className={
-                    theme === "dark"
-                      ? "flex w-fit flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-2 px-4 text-sm font-semibold shadow-md hover:bg-gray-700 hover:no-underline"
-                      : "flex w-fit text-black flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-2 px-4 text-sm font-semibold shadow-md hover:bg-gray-800 hover:no-underline"
-                  }
-                  onClick={handleResetBalance} // Step 5: Call the function to reset the balance
+                <Button
+                  color="lightBlue"
+                  ripple="light"
+                  className="gradient-btn mb-2 flex items-center justify-center"
+                  style={{ margin: "auto" }}
+                  onClick={handleResetBalance}
                 >
-                  {lang === "english" ? "Clear" : "Solde actuel vide"}
-                </button>
+                  <div className="flex items-center">
+                    <span className="text-white">
+                      {lang === "english" ? "Clear" : "Solde actuel vide"}
+                    </span>
+                  </div>
+                </Button>
               </div>
 
               <div className="mb-2 text-center text-sm text-red-500">
@@ -337,28 +341,32 @@ export default function EditPerson({
             </div>
           </div>
           <div className="flex justify-center p-2 space-x-4">
-            <div className="flex justify-center p-2 space-x-4">
-              <label
-                className={
-                  theme === "dark"
-                    ? "flex w-fit flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-700 hover:no-underline"
-                    : "flex w-fit flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-800 hover:no-underline"
-                }
-                onClick={(e) => {
+          <Button
+            color="lightBlue"
+            ripple="light"
+            className="gradient-btn mb-2 flex items-center justify-center"
+            style={{ margin: "auto" }}
+
+                       
+          onClick={(e) => {
                   handleDeletePrompt(ContactId, loggedInUserEmail);
                 }}
-              >
-                <AiOutlineDelete size={24} />
-              </label>
+          >
+            <div className="flex items-center">
+                        <AiOutlineDelete size={24} />
+              <span className="text-white ml-2">
+                        {lang === "english" ? "Delete" : "Supprimer"}
+              </span>
             </div>
-            <div className="flex justify-center p-2">
-              <label
-                className={
-                  theme === "dark"
-                    ? "flex w-fit flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-700 hover:no-underline"
-                    : "flex w-fit flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-800 hover:no-underline"
-                }
-                onClick={(e) => {
+          </Button>
+          <Button
+            color="lightBlue"
+            ripple="light"
+            className="gradient-btn mb-2 flex items-center justify-center"
+            style={{ margin: "auto" }}
+
+                       
+            onClick={(e) => {
                   if (errorBalance && errorPhone && errorEmail && errorName) {
                     handleSubmit(e);
                     setIsSubmitted(true);
@@ -366,10 +374,14 @@ export default function EditPerson({
                     setSubmissionError(false);
                   }
                 }}
-              >
-                <IoSaveOutline size={24} />
-              </label>
+          >
+            <div className="flex items-center">
+                        <IoSaveOutline size={24} />
+              <span className="text-white ml-2">
+                        {lang === "english" ? "Save" : "Enregistrer."}
+              </span>
             </div>
+          </Button>
           </div>
           <CSSTransition
             in={showConfirmation}
