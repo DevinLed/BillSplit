@@ -154,7 +154,7 @@ export default function Home({
         >
           <div className="marginBottom">
             <div className="flex flex-col items-center justify-center mb-3">
-              <div style={{ paddingBottom: "10%" }}>
+              {/* <div style={{ paddingBottom: "10%" }}>
                 <svg
                   viewBox="0 0 100 100"
                   width="200"
@@ -179,19 +179,8 @@ export default function Home({
                   >
                     Owed: $50.20
                   </text>
-                  <CircularProgressbar
-                    value={owingPercentage}
-                    styles={buildStyles({
-                      textSize: '16px',
-                      pathColor: 'orange', // Orange color
-                      trailColor: 'transparent', // Transparent trail
-                      pathTransitionDuration: 0.5, // Transition duration
-                      pathTransition: 'none', // No transition effect
-                      trailWidth: 8, // Trail width
-                    })}
-                  />
                 </svg>
-              </div>
+              </div> */}
 
               <CircleMenu
                 lang={lang}
