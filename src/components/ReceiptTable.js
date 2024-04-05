@@ -8,6 +8,7 @@ import "rc-slider/assets/index.css";
 import "react-datepicker/dist/react-datepicker.css";
 import { IoMdAddCircleOutline, IoMdRemoveCircleOutline } from "react-icons/io";
 import { CSSTransition } from "react-transition-group";
+import { Button } from "@material-tailwind/react";
 
 export default function ReceiptTable({
   name,
@@ -714,12 +715,10 @@ export default function ReceiptTable({
                     }
                   ></div>
                   {showTaxButton ? (
-                    <button
-                      className={
-                        theme === "dark"
-                          ? "bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                          : "bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                      }
+                    <Button
+                    variant="gradient"
+                    className="gradient-btn mb-2 flex items-center justify-center"
+                    style={{ margin: "auto" }}
                       onClick={() => {
                         handleAutoTaxesToggle();
                       }}
@@ -727,7 +726,7 @@ export default function ReceiptTable({
                       {lang === "english"
                         ? "Auto Taxes?"
                         : "Taxes Automatiques"}
-                    </button>
+                    </Button>
                   ) : (
                     ""
                   )}

@@ -105,7 +105,7 @@ export default function ReceiptInput({
   const resetCombinedArray = () => {
     setCombinedArray([]);
   };
-  
+
   const handleScroll = () => {
     const scrollAmount = window.innerHeight * 1.5;
     const duration = 500;
@@ -389,6 +389,7 @@ export default function ReceiptInput({
                 handleResetTotals={handleResetTotals}
                 theme={theme}
                 lang={lang}
+                personName={personName}
               />
 
               <div className="flex flex-col items-center justify-center">
@@ -398,50 +399,46 @@ export default function ReceiptInput({
                       ? "Save Expense"
                       : "Économiser des dépenses"
                     : lang === "english"
-                    ? "Submit expense by:"
-                    : "Soumettez la dépense par :"}
+                      ? "Submit expense by:"
+                      : "Soumettez la dépense par :"}
                 </h1>
                 <ul className="list-group items-center justify-center">
                   <Link className="flex flex-col items-center justify-center">
-                  <Button
-            color="lightBlue"
-            ripple="light"
-            className="gradient-btn mb-2 flex items-center justify-center mt-3"
-            style={{ margin: "auto" }}
-
+                    <Button
+                      variant="gradient"
+                      className="gradient-btn mb-2 flex items-center justify-center mt-3"
+                      style={{ margin: "auto" }}
                       onClick={(e) => {
                         setSelectMethodManual(true);
                         setSelectPersonReceipt(false);
                         setPersonReceiptAmount(0);
                       }}
-          >
-            <div className="flex items-center">
+                    >
+                      <div className="flex items-center">
                         <IoCreateOutline size={24} />
-              <span className="text-white ml-2">
-                        {lang === "english" ? "Manual" : "À la main"}
-              </span>
-            </div>
-          </Button>
+                        <span className="text-white ml-2">
+                          {lang === "english" ? "Manual" : "À la main"}
+                        </span>
+                      </div>
+                    </Button>
                   </Link>
                   <li className="flex flex-col items-center justify-center">
-                  <Button
-            color="lightBlue"
-            ripple="light"
-            className="gradient-btn mb-2 flex items-center justify-center"
-            style={{ margin: "auto" }}
-
-                        onClick={(e) => {
+                    <Button
+                      variant="gradient"
+                      className="gradient-btn mb-2 flex items-center justify-center"
+                      style={{ margin: "auto" }}
+                      onClick={(e) => {
                         setSelectMethodPicture(true);
                         setSelectPersonReceipt(false);
                       }}
-          >
-            <div className="flex items-center">
+                    >
+                      <div className="flex items-center">
                         <IoCameraOutline size={24} />
-              <span className="text-white ml-2">
-                        {lang === "english" ? "Picture" : "Image"}
-              </span>
-            </div>
-          </Button>
+                        <span className="text-white ml-2">
+                          {lang === "english" ? "Picture" : "Image"}
+                        </span>
+                      </div>
+                    </Button>
                   </li>
                 </ul>
               </div>
@@ -467,59 +464,65 @@ export default function ReceiptInput({
               handleResetTotals={handleResetTotals}
               lang={lang}
               theme={theme}
+              personName={personName}
             />
 
             <div className="container mx-auto px-2 py-8 ">
-              <div className="overflow-hidden rounded-lg shadow">
-                <div
+              <div className="max-w-fit">
+                <label
+                  htmlFor="payment"
                   className={
-                    theme === "dark" ? "bg-blue-900 px-6" : "bg-blue-500 px-6"
+                    theme === "dark"
+                      ? "form-control mt-0 mb-0 flex items-center justify-center   bg-gray-600  px-0"
+                      : "form-control mt-0 mb-0 flex items-center   justify-center  px-0"
                   }
                 >
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <input
-                        type="amount"
-                        className={
-                          "form-control mt-3 h-10 text-left font-bold text-gray-300 outline-none " +
-                          (theme === "dark" ? "bg-gray-800" : "bg-gray-100")
-                        }
-                        id="colFormLabel"
-                        placeholder={
-                          lang === "english"
-                            ? "Merchant Name"
-                            : "Nom du commerçant"
-                        }
-                        onKeyDown={handleKeyDown}
-                        onChange={(e) =>
-                          setMerchantName(
-                            e.target.value.replace(/\b\w/g, (c) =>
-                              c.toUpperCase()
-                            )
-                          )
-                        }
-                        onClick={() => setDisplayMerchant(true)}
-                      />
-                      <div>
-                        <input
-                          type="invoice"
-                          className={
-                            "form-control opacity-4 mb-3 w-40 bg-gray-100 text-left font-bold text-gray-300 outline-none " +
-                            (theme === "dark" ? "bg-gray-800" : "bg-gray-100")
-                          }
-                          id="colFormLabel"
-                          placeholder={
-                            lang === "english" ? "Invoice #" : "Facture #"
-                          }
-                          onKeyDown={handleKeyDown}
-                          onChange={(e) => setInvoiceNumber(e.target.value)}
-                          onClick={() => setDisplayInvoice(true)}
-                          autoComplete="off"
-                        />
-                      </div>
-                    </div>
+                  <div
+                    className="flex-1 text-center"
+                    style={{ maxWidth: "50%", margin: 0 }}
+                  >
+                    <span className="text-white ml-2">
+                      {lang === "english" ? "Who Paid?" : "Qui a payé ?"}
+                    </span>
                   </div>
-                </div>
+                  <div className="flex-1 text-center m-0">
+                    <Button
+                      variant="gradient"
+                      className={`m-0 rounded-2 ${
+                        selected === 1 ? "bg-gray-500" : "bg-gray-900"
+                      } h-8 w-16 py-1 px-2 font-bold text-white`}
+                      onClick={() => {
+                        handleButton1Click();
+                        setSelected(1);
+                        setSelectedValue("you");
+                        setShowTable(true);
+                        setDisplayMerchant(false);
+                        setDisplayDate(false);
+                        setDisplayInvoice(false);
+                      }}
+                    >
+                      {lang === "english" ? "Me" : "Moi"}
+                    </Button>
+                    <Button
+                      variant="gradient"
+                      className={`m-0 rounded-2 ${
+                        selected === 1 ? "bg-gray-500" : "bg-gray-900"
+                      } h-8 w-16 py-1 px-2 font-bold text-white`}
+                      onClick={() => {
+                        handleButton2Click();
+                        setSelected(2);
+                        setSelectedValue("them");
+                        setShowTable(true);
+                      }}
+                    >
+                      {personName.length > 12
+                        ? personName.slice(0, 12) + "..."
+                        : personName}
+                    </Button>
+                  </div>
+                </label>
+              </div>
+              <div className="overflow-hidden rounded-lg shadow">
                 {personName === loggedInUsername ? (
                   <div
                     className={
@@ -535,7 +538,66 @@ export default function ReceiptInput({
                       unmountOnExit
                     >
                       <div>
-                        <div className="mt-0">
+                        <div
+                          className={
+                            theme === "dark"
+                              ? "bg-blue-900 px-6"
+                              : "bg-blue-500 px-6"
+                          }
+                        >
+                          <div className="flex items-center justify-center">
+                            <div>
+                              <input
+                                type="amount"
+                                className={
+                                  "form-control mt-3 h-10 text-center font-bold text-gray-300 outline-none " +
+                                  (theme === "dark"
+                                    ? "bg-gray-800"
+                                    : "bg-gray-100")
+                                }
+                                id="colFormLabel"
+                                placeholder={
+                                  lang === "english"
+                                    ? "Merchant Name"
+                                    : "Nom du commerçant"
+                                }
+                                onKeyDown={handleKeyDown}
+                                onChange={(e) =>
+                                  setMerchantName(
+                                    e.target.value.replace(/\b\w/g, (c) =>
+                                      c.toUpperCase()
+                                    )
+                                  )
+                                }
+                                onClick={() => setDisplayMerchant(true)}
+                              />
+                              <div className="flex items-center justify-center">
+                                <input
+                                  type="invoice"
+                                  className={
+                                    "form-control opacity-4 mb-3 w-40 bg-gray-100 text-center font-bold text-gray-300 outline-none " +
+                                    (theme === "dark"
+                                      ? "bg-gray-800"
+                                      : "bg-gray-100")
+                                  }
+                                  id="colFormLabel"
+                                  placeholder={
+                                    lang === "english"
+                                      ? "Invoice #"
+                                      : "Facture #"
+                                  }
+                                  onKeyDown={handleKeyDown}
+                                  onChange={(e) =>
+                                    setInvoiceNumber(e.target.value)
+                                  }
+                                  onClick={() => setDisplayInvoice(true)}
+                                  autoComplete="off"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="mt-0 text-center">
                           <label
                             htmlFor="colFormLabel"
                             className={
@@ -624,79 +686,6 @@ export default function ReceiptInput({
                         : "bg-white px-2 sm:px-6"
                     }
                   >
-                    <div className="mb-4">
-                      <h2
-                        className={
-                          theme === "dark"
-                            ? "text-xl font-bold text-white"
-                            : "text-xl font-bold text-black"
-                        }
-                      >
-                        {lang === "english" ? "Split With:" : "Diviser avec:"}
-                      </h2>
-                      <p
-                        className={
-                          theme === "dark"
-                            ? "text-xl font-bold text-white"
-                            : "text-xl font-bold text-black"
-                        }
-                      >
-                        {personName}
-                      </p>
-                    </div>
-                    <div className="max-w-fit">
-                      <label
-                        htmlFor="payment"
-                        className={
-                          theme === "dark"
-                            ? "form-control mt-0 mb-0 flex items-center justify-center   bg-gray-600  px-0"
-                            : "form-control mt-0 mb-0 flex items-center   justify-center  px-0"
-                        }
-                      >
-                        <div
-                          className={
-                            theme === "dark"
-                              ? "whitespace-no-wrap w-12 pl-2 text-white"
-                              : "whitespace-no-wrap w-12 pl-2"
-                          }
-                        >
-                          <IoCardOutline size={36} />
-                        </div>
-                        <div className="inline-flex px-2">
-                          <button
-                            className={`m-0 rounded-l ${
-                              selected === 1 ? "bg-gray-500" : "bg-gray-900"
-                            } h-8 w-16 py-1 px-2 font-bold text-white`}
-                            onClick={() => {
-                              handleButton1Click();
-                              setSelected(1);
-                              setSelectedValue("you");
-                              setShowTable(true);
-                              setDisplayMerchant(false);
-                              setDisplayDate(false);
-                              setDisplayInvoice(false);
-                            }}
-                          >
-                            {lang === "english" ? "Me" : "Moi"}
-                          </button>
-                          <button
-                            className={`m-0 rounded-r border-l ${
-                              selected === 2 ? "bg-gray-500" : "bg-gray-900"
-                            } min-w-16 max-w-24 h-8 overflow-hidden py-1 px-3 font-bold text-white`}
-                            onClick={() => {
-                              handleButton2Click();
-                              setSelected(2);
-                              setSelectedValue("them");
-                              setShowTable(true);
-                            }}
-                          >
-                            {personName.length > 12
-                              ? personName.slice(0, 12) + "..."
-                              : personName}
-                          </button>
-                        </div>
-                      </label>
-                    </div>
                     <CSSTransition
                       in={showTable}
                       timeout={500}
@@ -704,7 +693,60 @@ export default function ReceiptInput({
                       unmountOnExit
                     >
                       <div>
-                        <div className="mt-0">
+                        <div>
+                          <div className="flex items-center justify-center">
+                            <div>
+                              <input
+                                type="amount"
+                                className={
+                                  "form-control mt-3 h-10 text-center font-bold text-gray-300 outline-none " +
+                                  (theme === "dark"
+                                    ? "bg-gray-800"
+                                    : "bg-gray-100")
+                                }
+                                id="colFormLabel"
+                                placeholder={
+                                  lang === "english"
+                                    ? "Merchant Name"
+                                    : "Nom du commerçant"
+                                }
+                                onKeyDown={handleKeyDown}
+                                onChange={(e) =>
+                                  setMerchantName(
+                                    e.target.value.replace(/\b\w/g, (c) =>
+                                      c.toUpperCase()
+                                    )
+                                  )
+                                }
+                                onClick={() => setDisplayMerchant(true)}
+                              />
+                              <div className="flex items-center justify-center">
+                                <input
+                                  type="invoice"
+                                  className={
+                                    "form-control opacity-4 mb-3 w-40 bg-gray-100 text-center font-bold text-gray-300 outline-none " +
+                                    (theme === "dark"
+                                      ? "bg-gray-800"
+                                      : "bg-gray-100")
+                                  }
+                                  id="colFormLabel"
+                                  placeholder={
+                                    lang === "english"
+                                      ? "Invoice #"
+                                      : "Facture #"
+                                  }
+                                  onKeyDown={handleKeyDown}
+                                  onChange={(e) =>
+                                    setInvoiceNumber(e.target.value)
+                                  }
+                                  onClick={() => setDisplayInvoice(true)}
+                                  autoComplete="off"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="mt-0 text-center">
                           <label
                             htmlFor="colFormLabel"
                             className={
@@ -782,26 +824,19 @@ export default function ReceiptInput({
                             lang={lang}
                           />
                         </div>
-                      </div>
-                    </CSSTransition>
-                  </div>
-                )}
-                <div
+                        <div
                   className={
                     theme === "dark"
-                      ? "grid grid-cols-2 gap-y-0 bg-gray-900 py-4 justify-center text-center"
-                      : "grid grid-cols-2 gap-y-0 bg-white py-4 justify-center text-center"
+                      ? "flex item-center gap-y-0 bg-gray-900 py-4 justify-center text-center"
+                      : "flex item-center gap-y-0 bg-white py-4 justify-center text-center"
                   }
                 >
                   <div className="m-2 mb-4 flex flex-col justify-center items-center sm:flex-row">
                     <Link to={`/App/ReceiptInput/${ContactId}`}>
-                      <label
-                        className={
-                          "flex h-24 w-28 flex-col items-center justify-center rounded-lg border border-gray-200 py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline " +
-                          (theme === "dark"
-                            ? "bg-gray-900 text-white"
-                            : "bg-white text-gray-800")
-                        }
+                      <Button
+                        variant="gradient"
+                        className="gradient-btn mb-2 flex items-center justify-center"
+                        style={{ margin: "auto" }}
                         onClick={(e) => {
                           const finalTotal = personReceiptAmount;
                           if (finalTotal === 0) {
@@ -820,17 +855,19 @@ export default function ReceiptInput({
                         }}
                       >
                         <IoDuplicateOutline size={24} />
-                      </label>
+                        <span className="text-white ml-2">
+                          {lang === "english"
+                            ? "Add another"
+                            : "Ajouter un autre"}
+                        </span>
+                      </Button>
                     </Link>
                   </div>
                   <div className="m-2 mb-4 flex flex-col justify-center items-center sm:flex-row">
-                    <label
-                      className={
-                        "flex h-24 w-28 flex-col items-center justify-center rounded-lg border border-gray-200 py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline " +
-                        (theme === "dark"
-                          ? "bg-gray-900 text-white"
-                          : "bg-white text-gray-800")
-                      }
+                    <Button
+                      variant="gradient"
+                      className="gradient-btn mb-2 flex items-center justify-center"
+                      style={{ margin: "auto" }}
                       onClick={(e) => {
                         const finalTotal = personReceiptAmount;
                         if (finalTotal === 0) {
@@ -850,7 +887,10 @@ export default function ReceiptInput({
                       }}
                     >
                       <IoExitOutline size={24} />
-                    </label>
+                      <span className="text-white ml-2">
+                        {lang === "english" ? "Submit" : "Soumettre"}
+                      </span>
+                    </Button>
                   </div>
                   {!submissionError && (
                     <div className="flex justify-center items-center col-span-2">
@@ -862,6 +902,12 @@ export default function ReceiptInput({
                     </div>
                   )}
                 </div>
+                      </div>
+                      
+                    </CSSTransition>
+                  </div>
+                )}
+                
               </div>
             </div>
           </div>
@@ -883,53 +929,70 @@ export default function ReceiptInput({
               handleResetTotals={handleResetTotals}
               theme={theme}
               lang={lang}
+              personName={personName}
             />
-            <div className="l-36 bg-grey flex flex-col  items-center justify-center rounded-lg px-6 ring-slate-900/5 dark:bg-slate-900">
+            <div
+              style={{ minWidth: "384px" }}
+              className="l-36 bg-grey flex flex-col  items-center justify-center rounded-lg px-1 ring-slate-900/5 dark:bg-slate-900"
+            >
               {personName === loggedInUsername ? (
                 <div></div>
               ) : (
-                <div className="max-w-fit">
-                  <label
-                    htmlFor="payment"
-                    className="justify-left mt-0 mb-3 flex items-center px-2"
-                  >
-                    <div className="whitespace-no-wrap w-22 pl-2 text-black">
-                      <IoCardOutline size={24} />
-                    </div>
-                    <div className="inline-flex px-2">
-                      <button
-                        className={`m-0 rounded-l ${
-                          selected === 1 ? "bg-gray-500" : "bg-gray-900"
-                        } h-8 w-16 py-1 px-2 font-bold text-white`}
-                        onClick={() => {
-                          handleButton1Click();
-                          setSelected(1);
-                          setSelectedValue("you");
-                          setShowTable(true);
-                          setDisplayMerchant(false);
-                          setDisplayDate(false);
-                          setDisplayInvoice(false);
-                        }}
+                <div className="container mx-auto px-2 pb-4">
+                  <div className="max-w-fit">
+                    <label
+                      htmlFor="payment"
+                      className={
+                        theme === "dark"
+                          ? "form-control mt-0 mb-0 flex items-center justify-center   bg-gray-600  px-0"
+                          : "form-control mt-0 mb-0 flex items-center   justify-center  px-0"
+                      }
+                    >
+                      <div
+                        className="flex-1 text-center"
+                        style={{ maxWidth: "50%", margin: 0 }}
                       >
-                        {lang === "english" ? "Me" : "Moi"}
-                      </button>
-                      <button
-                        className={`m-0 rounded-r border-l ${
-                          selected === 2 ? "bg-gray-500" : "bg-gray-900"
-                        } min-w-16 max-w-24 h-8 overflow-hidden py-1 px-3 font-bold text-white`}
-                        onClick={() => {
-                          handleButton2Click();
-                          setSelected(2);
-                          setSelectedValue("them");
-                          setShowTable(true);
-                        }}
-                      >
-                        {personName.length > 12
-                          ? personName.slice(0, 12) + "..."
-                          : personName}
-                      </button>
-                    </div>
-                  </label>
+                        <span className="text-white ml-2">
+                          {lang === "english" ? "Who Paid?" : "Qui a payé ?"}
+                        </span>
+                      </div>
+                      <div className="flex-1 text-center m-0">
+                        <Button
+                          variant="gradient"
+                          className={`m-0 rounded-2 ${
+                            selected === 1 ? "bg-gray-500" : "bg-gray-900"
+                          } h-8 w-16 py-1 px-2 font-bold text-white`}
+                          onClick={() => {
+                            handleButton1Click();
+                            setSelected(1);
+                            setSelectedValue("you");
+                            setShowTable(true);
+                            setDisplayMerchant(false);
+                            setDisplayDate(false);
+                            setDisplayInvoice(false);
+                          }}
+                        >
+                          {lang === "english" ? "Me" : "Moi"}
+                        </Button>
+                        <Button
+                          variant="gradient"
+                          className={`m-0 rounded-2 ${
+                            selected === 1 ? "bg-gray-500" : "bg-gray-900"
+                          } h-8 w-16 py-1 px-2 font-bold text-white`}
+                          onClick={() => {
+                            handleButton2Click();
+                            setSelected(2);
+                            setSelectedValue("them");
+                            setShowTable(true);
+                          }}
+                        >
+                          {personName.length > 12
+                            ? personName.slice(0, 12) + "..."
+                            : personName}
+                        </Button>
+                      </div>
+                    </label>
+                  </div>
                 </div>
               )}
 
@@ -943,12 +1006,10 @@ export default function ReceiptInput({
                           alt="Captured Receipt"
                           className={photoData === loading ? "w-32" : "w-72"}
                         />
-                        <label
-                          className={
-                            theme === "dark"
-                              ? "mt-2 flex h-24 w-fit cursor-pointer flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 py-4 px-6 text-sm font-semibold text-white shadow-md hover:bg-gray-700 hover:no-underline"
-                              : "mt-2 flex h-24 w-fit cursor-pointer flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
-                          }
+                        <Button
+                          variant="gradient"
+                          className="gradient-btn mb-2 mt-2 flex items-center justify-center"
+                          style={{ margin: "auto" }}
                           onClick={(e) =>
                             setShowCameraImage(false)(handleResetTotals(e))
                           }
@@ -957,7 +1018,7 @@ export default function ReceiptInput({
                           {lang === "english"
                             ? "Redo Picture"
                             : "Reprendre la photo"}
-                        </label>
+                        </Button>
                       </div>
                     ) : (
                       <div className="w-96 rounded-lg ">
@@ -970,19 +1031,17 @@ export default function ReceiptInput({
                     )}
 
                     <div className="ml-0 mr-0 mt-1 flex flex-col items-center justify-center">
-                      <label
-                        className={
-                          theme === "dark"
-                            ? "flex h-24 w-fit cursor-pointer flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 py-4 px-6 text-sm font-semibold text-white shadow-md hover:bg-gray-700 hover:no-underline"
-                            : "flex h-24 w-fit cursor-pointer flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline"
-                        }
+                      <Button
+                        variant="gradient"
+                        className="gradient-btn mb-2 flex items-center justify-center"
+                        style={{ margin: "auto" }}
                         onClick={handleCameraSubmit}
                       >
                         <IoCheckmarkCircle size={24} />
                         {lang === "english"
                           ? "Process Receipt Image"
                           : "Traiter l'image du reçu"}
-                      </label>
+                      </Button>
                     </div>
                   </div>
                   {displayPictureInfo ? (
@@ -996,11 +1055,11 @@ export default function ReceiptInput({
                                 : "bg-gray-900 px-6 "
                             }
                           >
-                            <div className="flex items-center justify-between">
+                            <div className="flex items-center justify-center">
                               <div>
                                 <input
                                   type="amount"
-                                  className="form-control mt-3 h-10 bg-gray-900 text-left font-bold text-gray-300 outline-none"
+                                  className="form-control mt-3 h-10 bg-gray-900 text-center font-bold text-gray-300 outline-none"
                                   id="colFormLabel"
                                   placeholder={
                                     merchantName ||
@@ -1018,11 +1077,11 @@ export default function ReceiptInput({
                                   }
                                   onClick={() => setDisplayMerchant(true)}
                                 />
-                                <div>
+                                <div className="flex items-center justify-center">
                                   <input
                                     autoComplete="off"
                                     type="invoice"
-                                    className="form-control opacity-4 mb-3 w-40 bg-gray-900 text-left font-bold text-gray-300 outline-none"
+                                    className="form-control opacity-4 mb-3 w-40 bg-gray-900 text-center font-bold text-gray-300 outline-none"
                                     id="colFormLabel"
                                     placeholder={
                                       lang === "english"
@@ -1157,85 +1216,6 @@ export default function ReceiptInput({
                                   : "bg-white px-2 sm:px-6"
                               }
                             >
-                              <div className="mb-4">
-                                <h2
-                                  className={
-                                    theme === "dark"
-                                      ? "text-xl font-bold text-white"
-                                      : "text-xl font-bold text-black"
-                                  }
-                                >
-                                  {lang === "english"
-                                    ? "Split With:"
-                                    : "Diviser avec"}
-                                </h2>
-                                <p
-                                  className={
-                                    theme === "dark"
-                                      ? "text-xl font-bold text-white"
-                                      : "text-xl font-bold text-black"
-                                  }
-                                >
-                                  {personName}
-                                </p>
-                              </div>
-                              <div className="max-w-fit">
-                                <label
-                                  htmlFor="payment"
-                                  className={
-                                    theme === "dark"
-                                      ? "form-control mt-0 mb-0 flex items-center justify-center bg-gray-600  px-0"
-                                      : "form-control mt-0 mb-0 flex items-center justify-center px-0"
-                                  }
-                                >
-                                  <div
-                                    className={
-                                      theme === "dark"
-                                        ? "whitespace-no-wrap w-12 pl-2 text-white"
-                                        : "whitespace-no-wrap w-12 pl-2"
-                                    }
-                                  >
-                                    <IoCardOutline size={36} />
-                                  </div>
-                                  <div className="inline-flex px-2">
-                                    <button
-                                      className={`m-0 rounded-l ${
-                                        selected === 1
-                                          ? "bg-gray-500"
-                                          : "bg-gray-900"
-                                      } h-8 w-16 py-1 px-2 font-bold text-white`}
-                                      onClick={() => {
-                                        handleButton1Click();
-                                        setSelected(1);
-                                        setSelectedValue("you");
-                                        setShowTable(true);
-                                        setDisplayMerchant(false);
-                                        setDisplayDate(false);
-                                        setDisplayInvoice(false);
-                                      }}
-                                    >
-                                      {lang === "english" ? "Me" : "Moi"}
-                                    </button>
-                                    <button
-                                      className={`m-0 rounded-r border-l ${
-                                        selected === 2
-                                          ? "bg-gray-500"
-                                          : "bg-gray-900"
-                                      } min-w-16 max-w-24 h-8 overflow-hidden py-1 px-3 font-bold text-white`}
-                                      onClick={() => {
-                                        handleButton2Click();
-                                        setSelected(2);
-                                        setSelectedValue("them");
-                                        setShowTable(true);
-                                      }}
-                                    >
-                                      {personName.length > 12
-                                        ? personName.slice(0, 12) + "..."
-                                        : personName}
-                                    </button>
-                                  </div>
-                                </label>
-                              </div>
                               <CSSTransition
                                 in={showTable}
                                 timeout={500}
@@ -1243,8 +1223,9 @@ export default function ReceiptInput({
                                 unmountOnExit
                               >
                                 <div>
-                                  <div className="mt-0">
+                                  <div className="mt-0 text-center">
                                     <label
+                                      style={{ margin: "auto" }}
                                       htmlFor="colFormLabel"
                                       className={
                                         theme === "dark"
@@ -1256,7 +1237,7 @@ export default function ReceiptInput({
                                         ? "Date of Receipt"
                                         : "Date de réception"}
                                     </label>
-                                    <div className="justify-left z-50 mt-3 mb-3 text-center">
+                                    <div className="z-50 mt-3 mb-3 text-center">
                                       <DatePicker
                                         defaultValue="Date of Receipt"
                                         selected={startDate}
@@ -1348,13 +1329,10 @@ export default function ReceiptInput({
                           >
                             <div className="max-w-20 m-2 mb-4 flex flex-col justify-center sm:flex-row">
                               <Link to={`/App/ReceiptInput/${ContactId}`}>
-                                <button
-                                  className={
-                                    "flex h-24 w-fit flex-col items-center justify-center rounded-lg border border-gray-200 py-4 px-10 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline " +
-                                    (theme === "dark"
-                                      ? "bg-gray-900 text-white"
-                                      : "bg-white text-gray-800")
-                                  }
+                                <Button
+                                  variant="gradient"
+                                  className="gradient-btn mb-2 flex items-center justify-center"
+                                  style={{ margin: "auto" }}
                                   onClick={(e) => {
                                     const finalTotal = personReceiptAmount;
                                     if (finalTotal === 0) {
@@ -1380,17 +1358,19 @@ export default function ReceiptInput({
                                   }}
                                 >
                                   <IoDuplicateOutline size={24} />
-                                </button>
+                                  <span className="text-white ml-2">
+                                    {lang === "english"
+                                      ? "Add another"
+                                      : "Ajouter un autre"}
+                                  </span>
+                                </Button>
                               </Link>
                             </div>
                             <div className="max-w-20 m-2 mb-4 flex flex-col justify-center sm:flex-row">
-                              <button
-                                className={
-                                  "flex h-24 w-fit flex-col items-center justify-center rounded-lg border border-gray-200 py-4 px-10 text-sm font-semibold shadow-md hover:bg-gray-200 hover:no-underline " +
-                                  (theme === "dark"
-                                    ? "bg-gray-900 text-white"
-                                    : "bg-white text-gray-800")
-                                }
+                              <Button
+                                variant="gradient"
+                                className="gradient-btn mb-2 flex items-center justify-center"
+                                style={{ margin: "auto" }}
                                 onClick={(e) => {
                                   const finalTotal = personReceiptAmount;
                                   if (finalTotal === 0) {
@@ -1411,7 +1391,10 @@ export default function ReceiptInput({
                                 }}
                               >
                                 <IoExitOutline size={24} />
-                              </button>
+                                <span className="text-white ml-2">
+                                  {lang === "english" ? "Submit" : "Soumettre"}
+                                </span>
+                              </Button>
                             </div>
                           </div>
                           {!submissionError && (
