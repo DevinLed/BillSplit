@@ -117,7 +117,7 @@ export default function LandingPage({ theme }) {
     </Card>
   );
   return (
-    <main style={{ minHeight: "100vh", backgroundColor: "rgb(7, 30, 49)" }}>
+    <main style={{ minHeight: "120vh", backgroundColor: "rgb(7, 30, 49)" }}>
       <div
         style={{
           backdropFilter: "blur(5px)",

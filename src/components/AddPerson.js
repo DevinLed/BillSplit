@@ -2,6 +2,7 @@ import { React, useState, useEffect } from "react";
 import "../index.css";
 import { CSSTransition } from "react-transition-group";
 import { IoSaveOutline, IoCloseCircleOutline } from "react-icons/io5";
+import { Button } from "@material-tailwind/react";
 
 export default function AddPerson({
   personName,
@@ -207,7 +208,9 @@ export default function AddPerson({
                     autoComplete="off"
                     type="email"
                     className={`form-control w-full py-2 px-3 rounded-lg focus:outline-none focus:ring ${
-                      isValidEmail  &&  !errorCurrentUser? "ring-green-300" : "ring-red-300"
+                      isValidEmail && !errorCurrentUser
+                        ? "ring-green-300"
+                        : "ring-red-300"
                     }`}
                     id="colFormLabel"
                     placeholder="E-mail"
@@ -258,8 +261,8 @@ export default function AddPerson({
                             value
                               ? parseFloat(value).toFixed(2)
                               : parseFloat(personOwing).toString() === "NaN"
-                              ? "0.00"
-                              : parseFloat(personOwing).toFixed(2)
+                                ? "0.00"
+                                : parseFloat(personOwing).toFixed(2)
                           }
                           className={`form-control max-six-digits mb-0 rounded-start ${
                             errorBalance ? "is-invalid" : ""
@@ -300,27 +303,28 @@ export default function AddPerson({
             </div>
 
             <div className="flex justify-center p-2 space-x-4">
-              <label
-                className={
-                  theme === "dark"
-                    ? "flex w-fit flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-700 hover:no-underline"
-                    : "flex w-fit flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-800 hover:no-underline"
-                }
+              <Button
+                variant="gradient"
+                className="gradient-btn mb-2 flex items-center justify-center"
+                style={{ margin: "auto" }}
                 onClick={(e) => {
                   setAddPerson(false);
                   setFormSubmitted(true);
                   resetForm();
                 }}
               >
-                <IoCloseCircleOutline size={24} />
-              </label>
+                <div className="flex items-center">
+                  <IoCloseCircleOutline size={24} />
+                  <span className="text-white ml-2">
+                    {lang === "english" ? "Cancel" : "Annuler"}
+                  </span>
+                </div>
+              </Button>
 
-              <label
-                className={
-                  theme === "dark"
-                    ? "flex w-fit flex-col items-center justify-center rounded-lg border border-gray-900 bg-gray-900 text-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-700 hover:no-underline"
-                    : "flex w-fit flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-4 px-6 text-sm font-semibold shadow-md hover:bg-gray-800 hover:no-underline"
-                }
+              <Button
+                variant="gradient"
+                className="gradient-btn mb-2 flex items-center justify-center"
+                style={{ margin: "auto" }}
                 onClick={(e) => {
                   if (
                     errorBalance &&
@@ -337,7 +341,10 @@ export default function AddPerson({
                 }}
               >
                 <IoSaveOutline size={24} />
-              </label>
+                <span className="text-white ml-2">
+                  {lang === "english" ? "Save" : "Enregistrer"}
+                </span>
+              </Button>
             </div>
 
             {!submissionError && (

@@ -164,8 +164,7 @@ export default function SplitBill({
           </ul>
 
           <Button
-            color="lightBlue"
-            ripple="light"
+            variant="gradient"
             className="gradient-btn mb-2 flex items-center justify-center"
             style={{ margin: "auto" }}
  onClick={() => {

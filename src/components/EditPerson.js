@@ -314,8 +314,7 @@ export default function EditPerson({
 
               <div className="pt-4 flex justify-center">
                 <Button
-                  color="lightBlue"
-                  ripple="light"
+                  variant="gradient"
                   className="gradient-btn mb-2 flex items-center justify-center"
                   style={{ margin: "auto" }}
                   onClick={handleResetBalance}
@@ -342,8 +341,7 @@ export default function EditPerson({
           </div>
           <div className="flex justify-center p-2 space-x-4">
           <Button
-            color="lightBlue"
-            ripple="light"
+            variant="gradient"
             className="gradient-btn mb-2 flex items-center justify-center"
             style={{ margin: "auto" }}
 
@@ -360,8 +358,7 @@ export default function EditPerson({
             </div>
           </Button>
           <Button
-            color="lightBlue"
-            ripple="light"
+            variant="gradient"
             className="gradient-btn mb-2 flex items-center justify-center"
             style={{ margin: "auto" }}
 

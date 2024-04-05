@@ -10,6 +10,7 @@ import App from "../App";
 
 import "../darkMode.css";
 export default function Header({
+  personName,
   startBill,
   showHistory,
   showSettings,
@@ -29,39 +30,37 @@ export default function Header({
     <>
       {startBill ? (
         <div>
-        <div className="dropdown my-custom-dropdown">
-  <button
-    className={`${
-      theme === "dark"
-        ? "right-0 mr-2 text-black hover:text-black accountmenudark"
-        : "right-0 mr-2 text-black hover:text-black accountmenu"
-    } mt-2`}
-    type="button"
-    id="dropdownMenuButton"
-    data-toggle="dropdown"
-    aria-haspopup="true"
-    aria-expanded="false"
-  >
-    <AiOutlineMenu />
-  </button>
-  <div
-    className="dropdown-menu dropdown-menu-right my-custom-dropdown-menu"
-    aria-labelledby="dropdownMenuButton"
-  >
-    <h6 className="dropdown-header my-custom-dropdown-header">
-      {user.attributes.name}
-    </h6>
+          <div className="dropdown my-custom-dropdown">
+            <button
+              className={`${
+                theme === "dark"
+                  ? "right-0 mr-2 text-black hover:text-black accountmenudark"
+                  : "right-0 mr-2 text-black hover:text-black accountmenu"
+              } mt-2`}
+              type="button"
+              id="dropdownMenuButton"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              <AiOutlineMenu />
+            </button>
+            <div
+              className="dropdown-menu dropdown-menu-right my-custom-dropdown-menu"
+              aria-labelledby="dropdownMenuButton"
+            >
+              <h6 className="dropdown-header my-custom-dropdown-header">
+                {user.attributes.name}
+              </h6>
 
-    <button
-  className={`my-custom-dropdown-item ${theme === "dark" ? "dark-button" : "light-button"}`}
-  onClick={signOut}
->
-  {lang === "english" ? "Sign Out" : "Se Déconnecter"}
-</button>
-
-  </div>
-</div>
-
+              <button
+                className={`my-custom-dropdown-item ${theme === "dark" ? "dark-button" : "light-button"}`}
+                onClick={signOut}
+              >
+                {lang === "english" ? "Sign Out" : "Se Déconnecter"}
+              </button>
+            </div>
+          </div>
 
           <div className="mt-2 flex flex-col items-center justify-center mb-4">
             <header className="xs:flex-row xs:justify-center mr-3 flex flex-col items-center text-2xl md:flex-row md:justify-center xl:flex-row xl:justify-center">
@@ -259,7 +258,9 @@ export default function Header({
             </button>
           </Link>
           <h1 className="whitespace-nowrap">
-            {lang === "english" ? "Enter Details" : "Entrez les détails"}
+            {lang === "english"
+              ? "Expense with " + personName
+              : "Dépense avec " + personName}
           </h1>
 
           <div className="dropdown">
@@ -313,7 +314,9 @@ export default function Header({
             </button>
           </Link>
           <h1 className="whitespace-nowrap">
-            {lang === "english" ? "Upload Picture" : "Charger une photo"}
+            {lang === "english"
+              ? "Expense with " + personName
+              : "Dépense avec " + personName}
           </h1>
 
           <div className="dropdown">
