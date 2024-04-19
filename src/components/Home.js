@@ -2,14 +2,15 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Header from "./Header";
 import Footer from "./Footer";
-import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
-import 'react-circular-progressbar/dist/styles.css';
+import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
+import "react-circular-progressbar/dist/styles.css";
 import "../darkMode.css";
 import "../index.css";
 import {
   IoReceiptOutline,
   IoPersonCircleOutline,
   IoSettingsOutline,
+  IoPerson,
 } from "react-icons/io5";
 import { Button } from "@material-tailwind/react";
 import "@aws-amplify/ui-react/styles.css";
@@ -71,7 +72,7 @@ export default function Home({
     setSelectPersonEdit(false);
     setLang(lang);
   }, [lang, setLang]);
-  
+
   const CircleMenu = ({ lang }) => {
     return (
       <div className="flex flex-col items-center justify-center h-full">
@@ -79,7 +80,7 @@ export default function Home({
           <Button
             variant="gradient"
             className="gradient-btn mb-2 flex items-center justify-center"
-            style={{ margin: "auto" }} 
+            style={{ margin: "auto" }}
           >
             <div className="flex items-center">
               <IoReceiptOutline size={24} />
@@ -89,12 +90,25 @@ export default function Home({
             </div>
           </Button>
         </Link>
-  
+        <Link to="/App/SelfExpense" className="w-full">
+          <Button
+            variant="gradient"
+            className="gradient-btn mb-2 flex items-center justify-center"
+            style={{ margin: "auto" }}
+          >
+            <div className="flex items-center">
+              <IoPerson size={24} />
+              <span className="text-white ml-2">
+                {lang === "english" ? "Self Expense" : "Dépense Personnelle"}
+              </span>
+            </div>
+          </Button>
+        </Link>
         <Link to="/App/EditList" className="w-full">
           <Button
             variant="gradient"
             className="gradient-btn mb-2 flex items-center justify-center"
-            style={{ margin: "auto" }} 
+            style={{ margin: "auto" }}
           >
             <div className="flex items-center">
               <IoPersonCircleOutline size={24} />
@@ -104,7 +118,7 @@ export default function Home({
             </div>
           </Button>
         </Link>
-  
+
         <Link to="/App/Settings" className="w-full">
           <Button
             variant="gradient"
@@ -122,9 +136,6 @@ export default function Home({
       </div>
     );
   };
-  
-  const owingPercentage = 50; // Example value, replace with actual value
-  const owedPercentage = 70; // Example value, replace with actual value
 
   return (
     <>
@@ -179,10 +190,7 @@ export default function Home({
                 </svg>
               </div> */}
 
-              <CircleMenu
-                lang={lang}
-                toggleTheme={() => toggleTheme()}
-              />
+              <CircleMenu lang={lang} toggleTheme={() => toggleTheme()} />
             </div>
           </div>
 

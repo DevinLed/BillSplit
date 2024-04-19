@@ -69,7 +69,6 @@ export default function EditList({
       return null;
     }
   };
-  const selfId = user.attributes.sub;
   const fetchData = async () => {
     try {
       const response = await fetch(API_URL);
@@ -99,48 +98,6 @@ export default function EditList({
         <div
           className={`flex flex-col items-center justify-center transition-opacity duration-300`}
         >
-          <ul className="m-0 py-1 w-2/5">
-            <React.Fragment key={"save-with-myself"}>
-              <Link
-                setSelfValue={setSelfValue}
-                selfValue={selfValue}
-                loggedInUsername={loggedInUsername}
-                to={{
-                  pathname: "/App/ContactHistoryEdit",
-                  state: {
-                    personName: loggedInUsername,
-                    personEmail: loggedInUserEmail,
-                    personPhone: "5555555555",
-                    personOwing: personOwing,
-                    ContactId: selfId,
-                    UserEmail: loggedInUserEmail,
-                  },
-                }}
-                onClick={() => {
-                  setSelfValue(true);
-                  editSelf(selfId, loggedInUserEmail);
-                }}
-              >
-                <li
-                  className={
-                    "list-group-item flex justify-between m-1 p-2 rounded-lg shadow-sm " +
-                    (theme === "dark"
-                      ? "bg-gray-800 text-white"
-                      : "bg-white text-gray-800")
-                  }
-                >
-                  <div className="flex items-center justify-center flex-grow">
-                    <Avatar name={loggedInUsername} size={32} round />
-                    <span className="ml-2">
-                      {lang === "english"
-                        ? "Personal Expense"
-                        : "Dépense personnelle"}
-                    </span>
-                  </div>
-                </li>
-              </Link>
-            </React.Fragment>
-          </ul>
           <ul className="m-0 py-1 w-3/4">
             {dataThrow.length > 0 &&
               dataThrow

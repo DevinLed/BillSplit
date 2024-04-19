@@ -15,6 +15,7 @@ import LandingPage from "./components/LandingPage";
 import Contact from "./components/Contact";
 import Tutorial from "./components/Tutorial";
 import AddPerson from "./components/AddPerson";
+import SelfExpense from "./components/SelfExpense";
 import Home from "./components/Home";
 import Header from "./components/Header";
 import EditList from "./components/EditList";
@@ -792,6 +793,48 @@ function App({ signOut, user }) {
                 loggedInUsername={loggedInUsername}
                 loggedInUserEmail={loggedInUserEmail}
                 setDataThrow={setDataThrow}
+              />
+            }
+          />
+              <Route
+            path="/SelfExpense"
+            element={
+              <SelfExpense
+                user={user}
+                dataThrow={dataThrow}
+                addPerson={addPerson}
+                setAddPerson={setAddPerson}
+                handleAddSelfSubmit={handleAddSelfSubmit}
+                selectPerson={selectPerson}
+                selectSelf={selectSelf}
+                personName={personName}
+                personEmail={personEmail}
+                personPhone={personPhone}
+                personOwing={personOwing}
+                setPersonName={setPersonName}
+                setPersonEmail={setPersonEmail}
+                setPersonPhone={setPersonPhone}
+                setPersonOwing={setPersonOwing}
+                handleSubmit={handleSubmit}
+                setPersonState={setPersonState}
+                personState={personState}
+                setIsSelected={setIsSelected}
+                list={list}
+                value={value}
+                addNum={addNum}
+                subNum={subNum}
+                personReceiptAmount={personReceiptAmount}
+                setFormSubmitted={setFormSubmitted}
+                theme={theme}
+                handleAddSubmit={handleAddSubmit}
+                lang={lang}
+                setLang={setLang}
+                loggedInUsername={loggedInUsername}
+                loggedInUserEmail={loggedInUserEmail}
+                setDataThrow={setDataThrow}
+                selfValue={selfValue}
+                setSelfValue={setSelfValue}
+                editSelf={editSelf}
               />
             }
           />

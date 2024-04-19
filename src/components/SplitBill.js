@@ -50,44 +50,11 @@ export default function SplitBill({
 
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const handleSelfAdded = async () => {
-    
-    setSelfAdded(true);
-    console.log("turned to true");
-    handlePersonalExpenseClick(); 
-  };
+
   const handleNavigation = async () => {
     
   navigate(`/App/ReceiptInput/${user.attributes.sub}`);
   }
-  const handlePersonalExpenseClick = async () => {
-    const personalExpenseEntry = dataThrow.find(
-      (item) =>
-        item.UserEmail === loggedInUserEmail && item.Email === loggedInUserEmail
-    );
-
-    if (personalExpenseEntry) {
-      selectSelf(user.attributes.sub);
-      navigate(`/App/ReceiptInput/${user.attributes.sub}`);
-    } else {
-      try {
-        const owingValue = 0;
-        const itemData = {
-          Name: loggedInUsername,
-          Email: loggedInUserEmail,
-          Phone: "5555555555",
-          Owing: owingValue,
-          UserEmail: loggedInUserEmail,
-          UserName: loggedInUsername,
-        };
-
-        await handleAddSelfSubmit(itemData);
-        await handleNavigation();
-      } catch (error) {
-        console.error("Error creating item:", error);
-      }
-    }
-  };
   return (
     <>
       <main
@@ -96,22 +63,6 @@ export default function SplitBill({
       >
         <Header selectPersonList={selectPersonList} lang={lang} theme={theme} />
         <div className="flex flex-col items-center justify-center">
-          <ul className="m-0 py-1 w-2/5">
-            <li
-            onClick={handlePersonalExpenseClick }
-                  className={
-                    "list-group-item flex justify-between m-1 p-2 rounded-lg shadow-sm " +
-                    (theme === "dark"
-                      ? "bg-gray-800 text-white"
-                      : "bg-white text-gray-800")
-                  }
-                >
-                  <div className="flex items-center justify-center flex-grow">
-                    <Avatar name={loggedInUsername} size={32} round />
-                    <span className="ml-2">{lang === "english" ? "Personal Expense" : "Dépense personnelle"}</span>
-                  </div>
-                </li>
-          </ul>
           <ul className="m-0 py-1 w-3/4">
             {/* Table generator for people added */}
             {dataThrow
