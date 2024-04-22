@@ -37,10 +37,16 @@ export default function Home({
   handleAddSelfSubmit,
   selectSelf,
   editSelf,
+  selfExpense,
+  setSelfExpense,
 }) {
   const [startBill, setStartBill] = useState(true);
   const [showPersonEdit, setPersonEdit] = useState(false);
   const [selectPersonEdit, setSelectPersonEdit] = useState(false);
+  const handleSelfClick = () => {
+    setSelfExpense(true);
+    console.log("did it", selfExpense);
+  };
   const handlePersonalExpenseClick = async () => {
     const personalExpenseEntry = dataThrow.find(
       (item) =>
@@ -90,7 +96,14 @@ export default function Home({
             </div>
           </Button>
         </Link>
-        <Link to="/App/SelfExpense" className="w-full">
+        <Link
+          to={{
+            pathname: "/App/SelfExpense",
+            state: { selfExpense: selfExpense },
+          }}
+          className="w-full"
+          onClick={handleSelfClick}
+        >
           <Button
             variant="gradient"
             className="gradient-btn mb-2 flex items-center justify-center"

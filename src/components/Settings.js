@@ -1,13 +1,16 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import Header from "./Header";
-import { IoAlertCircle, IoLanguage,
+import {
+  IoAlertCircle,
+  IoLanguage,
   IoReceiptOutline,
   IoPersonCircleOutline,
   IoListOutline,
   IoInvertModeSharp,
   IoHomeOutline,
-  IoSettingsOutline, } from "react-icons/io5";
+  IoSettingsOutline,
+} from "react-icons/io5";
 import { TbReceiptTax } from "react-icons/tb";
 import { CSSTransition } from "react-transition-group";
 import { PrimeReactProvider, PrimeReactContext } from "primereact/api";
@@ -169,21 +172,18 @@ export default function Settings({
           </div>
           {/* Language Label */}
           <Button
-          
-          variant="gradient"
-          className="flex items-center gap-3 mb-5"
+            variant="gradient"
+            className="flex items-center gap-3 mb-5"
             onClick={(e) => setShowLang(true)}
           >
-              <IoLanguage size={24} />
-            <span
-              className="text-white text-center"
-            >
+            <IoLanguage size={24} />
+            <span className="text-white text-center">
               {lang === "english" ? "Language" : "Langue"}
             </span>
           </Button>
           <CSSTransition
             in={showLang}
-            timeout={500} 
+            timeout={500}
             classNames="fade"
             unmountOnExit
           >

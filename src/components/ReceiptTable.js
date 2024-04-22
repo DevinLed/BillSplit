@@ -447,10 +447,10 @@ export default function ReceiptTable({
                           (item.name
                             ? item.name.replace(/\b\w/g, (c) => c.toUpperCase())
                             : item.description
-                            ? item.description.replace(/\b\w/g, (c) =>
-                                c.toUpperCase()
-                              )
-                            : "")) ||
+                              ? item.description.replace(/\b\w/g, (c) =>
+                                  c.toUpperCase()
+                                )
+                              : "")) ||
                         null
                       }
                     >
@@ -513,31 +513,31 @@ export default function ReceiptTable({
                     />
                   </td>
                   {personName === loggedInUsername ? (
-  ""
-) : (
-                  <td colSpan={3}>
-                    <div
-                      style={{
-                        width: "auto",
-                        margin: "auto",
-                        padding: "8px",
-                      }}
-                    >
-                      <Slider
-                        className="ml-2"
-                        defaultValue={item.sliderValue || 50}
-                        min={0}
-                        max={100}
-                        step={50}
-                        value={item.sliderValue}
-                        onChange={(value) =>
-                          handlePictureSliderChange(index, value, item)
-                        }
-                      />
-                      {renderColumn()}
-                    </div>
-                  </td>
-)}
+                    ""
+                  ) : (
+                    <td colSpan={3}>
+                      <div
+                        style={{
+                          width: "auto",
+                          margin: "auto",
+                          padding: "8px",
+                        }}
+                      >
+                        <Slider
+                          className="ml-2"
+                          defaultValue={item.sliderValue || 50}
+                          min={0}
+                          max={100}
+                          step={50}
+                          value={item.sliderValue}
+                          onChange={(value) =>
+                            handlePictureSliderChange(index, value, item)
+                          }
+                        />
+                        {renderColumn()}
+                      </div>
+                    </td>
+                  )}
 
                   <td></td>
                   <td></td>
@@ -572,71 +572,71 @@ export default function ReceiptTable({
                   </span>
                 </td>
                 {personName === loggedInUsername ? (
-  ""
-) : (
-  <>
-                  <td
-                  className="px-2 py-1 text-center text-xs text-black"
-                  style={{ width: "33.33%" }}
-                >
-                  <span
-                    className={
-                      theme === "dark"
-                        ? "ml-2 border-b-2 text-white"
-                        : "ml-2 border-b-2 text-black"
-                    }
-                  >
-                    {parseFloat(youPictureTotal).toFixed(2).toString().length >
-                    7
-                      ? parseFloat(youPictureTotal)
-                          .toFixed(2)
-                          .toString()
-                          .slice(0, 4) + "..."
-                      : parseFloat(youPictureTotal).toFixed(2)}
-                  </span>
-                </td>
-                <td
-                  className="px-2 py-1 text-center text-xs text-black"
-                  style={{ width: "33.33%" }}
-                >
-                  <span
-                    className={
-                      theme === "dark"
-                        ? "ml-3 border-b-2 text-white"
-                        : "ml-2 border-b-2 text-black"
-                    }
-                  >
-                    {parseFloat(splitPictureTotal).toFixed(2).toString()
-                      .length > 7
-                      ? parseFloat(splitPictureTotal)
-                          .toFixed(2)
-                          .toString()
-                          .slice(0, 4) + "..."
-                      : parseFloat(splitPictureTotal).toFixed(2)}
-                  </span>
-                </td>
-                <td
-                  className="px-2 py-1 text-center text-xs text-black"
-                  style={{ width: "33.33%" }}
-                >
-                  <span
-                    className={
-                      theme === "dark"
-                        ? "ml-3 border-b-2 text-white"
-                        : "ml-2 border-b-2 text-black"
-                    }
-                  >
-                    {parseFloat(themPictureTotal).toFixed(2).toString().length >
-                    7
-                      ? parseFloat(themPictureTotal)
-                          .toFixed(2)
-                          .toString()
-                          .slice(0, 4) + "..."
-                      : parseFloat(themPictureTotal).toFixed(2)}
-                  </span>
-                </td>
-                </>
-)}
+                  ""
+                ) : (
+                  <>
+                    <td
+                      className="px-2 py-1 text-center text-xs text-black"
+                      style={{ width: "33.33%" }}
+                    >
+                      <span
+                        className={
+                          theme === "dark"
+                            ? "ml-2 border-b-2 text-white"
+                            : "ml-2 border-b-2 text-black"
+                        }
+                      >
+                        {parseFloat(youPictureTotal).toFixed(2).toString()
+                          .length > 7
+                          ? parseFloat(youPictureTotal)
+                              .toFixed(2)
+                              .toString()
+                              .slice(0, 4) + "..."
+                          : parseFloat(youPictureTotal).toFixed(2)}
+                      </span>
+                    </td>
+                    <td
+                      className="px-2 py-1 text-center text-xs text-black"
+                      style={{ width: "33.33%" }}
+                    >
+                      <span
+                        className={
+                          theme === "dark"
+                            ? "ml-3 border-b-2 text-white"
+                            : "ml-2 border-b-2 text-black"
+                        }
+                      >
+                        {parseFloat(splitPictureTotal).toFixed(2).toString()
+                          .length > 7
+                          ? parseFloat(splitPictureTotal)
+                              .toFixed(2)
+                              .toString()
+                              .slice(0, 4) + "..."
+                          : parseFloat(splitPictureTotal).toFixed(2)}
+                      </span>
+                    </td>
+                    <td
+                      className="px-2 py-1 text-center text-xs text-black"
+                      style={{ width: "33.33%" }}
+                    >
+                      <span
+                        className={
+                          theme === "dark"
+                            ? "ml-3 border-b-2 text-white"
+                            : "ml-2 border-b-2 text-black"
+                        }
+                      >
+                        {parseFloat(themPictureTotal).toFixed(2).toString()
+                          .length > 7
+                          ? parseFloat(themPictureTotal)
+                              .toFixed(2)
+                              .toString()
+                              .slice(0, 4) + "..."
+                          : parseFloat(themPictureTotal).toFixed(2)}
+                      </span>
+                    </td>
+                  </>
+                )}
 
                 <td></td>
                 <td></td>
@@ -716,9 +716,9 @@ export default function ReceiptTable({
                   ></div>
                   {showTaxButton ? (
                     <Button
-                    variant="gradient"
-                    className="gradient-btn mb-2 flex items-center justify-center"
-                    style={{ margin: "auto" }}
+                      variant="gradient"
+                      className="gradient-btn mb-2 flex items-center justify-center"
+                      style={{ margin: "auto" }}
                       onClick={() => {
                         handleAutoTaxesToggle();
                       }}
@@ -835,16 +835,16 @@ export default function ReceiptTable({
                           : parseFloat(taxActual).toFixed(2)
                       }`
                   : lang === "english"
-                  ? `Taxes you owe ${personName}: $${
-                      isNaN(parseFloat(taxActual))
-                        ? "0.00"
-                        : parseFloat(taxActual).toFixed(2)
-                    }`
-                  : `Impôts que vous devez ${personName}: $${
-                      isNaN(parseFloat(taxActual))
-                        ? "0.00"
-                        : parseFloat(taxActual).toFixed(2)
-                    }`}
+                    ? `Taxes you owe ${personName}: $${
+                        isNaN(parseFloat(taxActual))
+                          ? "0.00"
+                          : parseFloat(taxActual).toFixed(2)
+                      }`
+                    : `Impôts que vous devez ${personName}: $${
+                        isNaN(parseFloat(taxActual))
+                          ? "0.00"
+                          : parseFloat(taxActual).toFixed(2)
+                      }`}
               </>
             )}
           </label>
