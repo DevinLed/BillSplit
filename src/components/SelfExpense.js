@@ -46,6 +46,8 @@ export default function SelfExpense({
   editSelf,
   selfValue,
   setSelfValue,
+  selfExpense,
+  setSelfExpense,
 }) {
   const [selectPersonList, setSelectPersonList] = useState(true);
   const selfContactId = user.attributes.sub;
@@ -63,6 +65,7 @@ export default function SelfExpense({
     navigate(`/App/ReceiptInput/${user.attributes.sub}`);
   };
   const handlePersonalExpenseClick = async () => {
+    setSelfExpense(true);
     const personalExpenseEntry = dataThrow.find(
       (item) =>
         item.UserEmail === loggedInUserEmail && item.Email === loggedInUserEmail

@@ -6,7 +6,7 @@ import { IoPersonAddSharp } from "react-icons/io5";
 import Avatar from "react-avatar";
 import { CSSTransition } from "react-transition-group";
 import { API } from "aws-amplify";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import { Button } from "@material-tailwind/react";
 
 export default function SplitBill({
@@ -43,6 +43,8 @@ export default function SplitBill({
   user,
   handleAddSelfSubmit,
   selectSelf,
+  selfExpense,
+  setSelfExpense,
 }) {
   const [selectPersonList, setSelectPersonList] = useState(true);
   const selfContactId = user.attributes.sub;
@@ -52,9 +54,12 @@ export default function SplitBill({
   const [loading, setLoading] = useState(false);
 
   const handleNavigation = async () => {
-    
-  navigate(`/App/ReceiptInput/${user.attributes.sub}`);
-  }
+    navigate(`/App/ReceiptInput/${user.attributes.sub}`);
+  };
+  useEffect(() => {
+    setSelfExpense(false);
+  }, []);
+
   return (
     <>
       <main
@@ -81,7 +86,8 @@ export default function SplitBill({
                       to={`/App/ReceiptInput/${item.ContactId}`}
                       onClick={() => selectPerson(item.ContactId)}
                       className="no-underline py-1"
-                    ><li
+                    >
+                      <li
                         className={
                           "list-group-item flex justify-between m-1 p-2 rounded-lg shadow-sm " +
                           (theme === "dark"
@@ -108,7 +114,6 @@ export default function SplitBill({
                         </span>
                       </li>
                     </Link>
-                      
                   ) : null}
                 </React.Fragment>
               ))}
@@ -118,10 +123,10 @@ export default function SplitBill({
             variant="gradient"
             className="gradient-btn mb-2 flex items-center justify-center"
             style={{ margin: "auto" }}
- onClick={() => {
+            onClick={() => {
               setAddPerson(true);
               setFormSubmitted(true);
-            }} 
+            }}
           >
             <div className="flex items-center">
               <IoPersonAddSharp size={24} />
@@ -134,7 +139,7 @@ export default function SplitBill({
 
         <CSSTransition
           in={addPerson}
-          timeout={300} // Adjust the duration of the transition as needed
+          timeout={300}
           classNames="fade"
           unmountOnExit
         >

@@ -68,6 +68,8 @@ export default function ReceiptInput({
   submissionArray,
   setSubmissionArray,
   loggedInUsername,
+  selfExpense,
+  setSelfExpense,
 }) {
   registerLocale("en", en);
   registerLocale("fr", fr);
@@ -373,6 +375,7 @@ export default function ReceiptInput({
         sliderValue: item.sliderValue || 50,
       }))
     );
+    console.log("self?", selfExpense);
   }, []);
 
   return (
@@ -468,60 +471,64 @@ export default function ReceiptInput({
             />
 
             <div className="container mx-auto px-2 py-8 ">
-              <div className="max-w-fit">
-                <label
-                  htmlFor="payment"
-                  className={
-                    theme === "dark"
-                      ? "form-control mt-0 mb-0 flex items-center justify-center   bg-gray-600  px-0"
-                      : "form-control mt-0 mb-0 flex items-center   justify-center  px-0"
-                  }
-                >
-                  <div
-                    className="flex-1 text-center"
-                    style={{ maxWidth: "50%", margin: 0 }}
+              {personName === loggedInUsername ? (
+                ""
+              ) : (
+                <div className="max-w-fit">
+                  <label
+                    htmlFor="payment"
+                    className={
+                      theme === "dark"
+                        ? "form-control mt-0 mb-0 flex items-center justify-center   bg-gray-600  px-0"
+                        : "form-control mt-0 mb-0 flex items-center   justify-center  px-0"
+                    }
                   >
-                    <span className="text-white ml-2">
-                      {lang === "english" ? "Who Paid?" : "Qui a payé ?"}
-                    </span>
-                  </div>
-                  <div className="flex-1 text-center m-0">
-                    <Button
-                      variant="gradient"
-                      className={`m-0 rounded-2 ${
-                        selected === 1 ? "bg-gray-500" : "bg-gray-900"
-                      } h-8 w-16 py-1 px-2 font-bold text-white`}
-                      onClick={() => {
-                        handleButton1Click();
-                        setSelected(1);
-                        setSelectedValue("you");
-                        setShowTable(true);
-                        setDisplayMerchant(false);
-                        setDisplayDate(false);
-                        setDisplayInvoice(false);
-                      }}
+                    <div
+                      className="flex-1 text-center"
+                      style={{ maxWidth: "50%", margin: 0 }}
                     >
-                      {lang === "english" ? "Me" : "Moi"}
-                    </Button>
-                    <Button
-                      variant="gradient"
-                      className={`m-0 rounded-2 ${
-                        selected === 1 ? "bg-gray-500" : "bg-gray-900"
-                      } h-8 w-16 py-1 px-2 font-bold text-white`}
-                      onClick={() => {
-                        handleButton2Click();
-                        setSelected(2);
-                        setSelectedValue("them");
-                        setShowTable(true);
-                      }}
-                    >
-                      {personName.length > 12
-                        ? personName.slice(0, 12) + "..."
-                        : personName}
-                    </Button>
-                  </div>
-                </label>
-              </div>
+                      <span className="text-white ml-2">
+                        {lang === "english" ? "Who Paid?" : "Qui a payé ?"}
+                      </span>
+                    </div>
+                    <div className="flex-1 text-center m-0">
+                      <Button
+                        variant="gradient"
+                        className={`m-0 rounded-2 ${
+                          selected === 1 ? "bg-gray-500" : "bg-gray-900"
+                        } h-8 w-16 py-1 px-2 font-bold text-white`}
+                        onClick={() => {
+                          handleButton1Click();
+                          setSelected(1);
+                          setSelectedValue("you");
+                          setShowTable(true);
+                          setDisplayMerchant(false);
+                          setDisplayDate(false);
+                          setDisplayInvoice(false);
+                        }}
+                      >
+                        {lang === "english" ? "Me" : "Moi"}
+                      </Button>
+                      <Button
+                        variant="gradient"
+                        className={`m-0 rounded-2 ${
+                          selected === 1 ? "bg-gray-500" : "bg-gray-900"
+                        } h-8 w-16 py-1 px-2 font-bold text-white`}
+                        onClick={() => {
+                          handleButton2Click();
+                          setSelected(2);
+                          setSelectedValue("them");
+                          setShowTable(true);
+                        }}
+                      >
+                        {personName.length > 12
+                          ? personName.slice(0, 12) + "..."
+                          : personName}
+                      </Button>
+                    </div>
+                  </label>
+                </div>
+              )}
               <div className="overflow-hidden rounded-lg shadow">
                 {personName === loggedInUsername ? (
                   <div
@@ -825,89 +832,87 @@ export default function ReceiptInput({
                           />
                         </div>
                         <div
-                  className={
-                    theme === "dark"
-                      ? "flex item-center gap-y-0 bg-gray-900 py-4 justify-center text-center"
-                      : "flex item-center gap-y-0 bg-white py-4 justify-center text-center"
-                  }
-                >
-                  <div className="m-2 mb-4 flex flex-col justify-center items-center sm:flex-row">
-                    <Link to={`/App/ReceiptInput/${ContactId}`}>
-                      <Button
-                        variant="gradient"
-                        className="gradient-btn mb-2 flex items-center justify-center"
-                        style={{ margin: "auto" }}
-                        onClick={(e) => {
-                          const finalTotal = personReceiptAmount;
-                          if (finalTotal === 0) {
-                            console.error("Error: Invalid final total");
-                            setSubmissionError(false);
-                          } else {
-                            e.preventDefault();
-                            getFinalTotal();
-                            handleResetCombinedArray();
-                            setSelectMethodManual(false);
-                            setSelectPersonReceipt(true);
-                            handleHistorySubmit(e);
-                            setIsReceiptSubmitted(true);
-                            setInvoiceNumber(0);
+                          className={
+                            theme === "dark"
+                              ? "flex item-center gap-y-0 bg-gray-900 py-4 justify-center text-center"
+                              : "flex item-center gap-y-0 bg-white py-4 justify-center text-center"
                           }
-                        }}
-                      >
-                        <IoDuplicateOutline size={24} />
-                        <span className="text-white ml-2">
-                          {lang === "english"
-                            ? "Add another"
-                            : "Ajouter un autre"}
-                        </span>
-                      </Button>
-                    </Link>
-                  </div>
-                  <div className="m-2 mb-4 flex flex-col justify-center items-center sm:flex-row">
-                    <Button
-                      variant="gradient"
-                      className="gradient-btn mb-2 flex items-center justify-center"
-                      style={{ margin: "auto" }}
-                      onClick={(e) => {
-                        const finalTotal = personReceiptAmount;
-                        if (finalTotal === 0) {
-                          console.error("Error: Invalid final total");
-                          setSubmissionError(false);
-                        } else {
-                          e.preventDefault();
-                          handleSnapShotSubmit(e);
-                          setSubmissionError(true);
-                          getFinalTotal(e);
-                          handleResetCombinedArray();
-                          handleHistorySubmit(e);
-                          resetReceiptForm();
-                          setIsReceiptSubmitted(true);
-                          window.location.href = "/#/App/SplitBill";
-                        }
-                      }}
-                    >
-                      <IoExitOutline size={24} />
-                      <span className="text-white ml-2">
-                        {lang === "english" ? "Submit" : "Soumettre"}
-                      </span>
-                    </Button>
-                  </div>
-                  {!submissionError && (
-                    <div className="flex justify-center items-center col-span-2">
-                      <p className="mb-2 text-center text-sm text-red-500 w-max mr-1/2">
-                        {lang === "english"
-                          ? "Please add an item before submitting."
-                          : "Veuillez ajouter un élément avant de soumettre."}
-                      </p>
-                    </div>
-                  )}
-                </div>
+                        >
+                          <div className="m-2 mb-4 flex flex-col justify-center items-center sm:flex-row">
+                            <Link to={`/App/ReceiptInput/${ContactId}`}>
+                              <Button
+                                variant="gradient"
+                                className="gradient-btn mb-2 flex items-center justify-center"
+                                style={{ margin: "auto" }}
+                                onClick={(e) => {
+                                  const finalTotal = personReceiptAmount;
+                                  if (finalTotal === 0) {
+                                    console.error("Error: Invalid final total");
+                                    setSubmissionError(false);
+                                  } else {
+                                    e.preventDefault();
+                                    getFinalTotal();
+                                    handleResetCombinedArray();
+                                    setSelectMethodManual(false);
+                                    setSelectPersonReceipt(true);
+                                    handleHistorySubmit(e);
+                                    setIsReceiptSubmitted(true);
+                                    setInvoiceNumber(0);
+                                  }
+                                }}
+                              >
+                                <IoDuplicateOutline size={24} />
+                                <span className="text-white ml-2">
+                                  {lang === "english"
+                                    ? "Add another"
+                                    : "Ajouter un autre"}
+                                </span>
+                              </Button>
+                            </Link>
+                          </div>
+                          <div className="m-2 mb-4 flex flex-col justify-center items-center sm:flex-row">
+                            <Button
+                              variant="gradient"
+                              className="gradient-btn mb-2 flex items-center justify-center"
+                              style={{ margin: "auto" }}
+                              onClick={(e) => {
+                                const finalTotal = personReceiptAmount;
+                                if (finalTotal === 0) {
+                                  console.error("Error: Invalid final total");
+                                  setSubmissionError(false);
+                                } else {
+                                  e.preventDefault();
+                                  handleSnapShotSubmit(e);
+                                  setSubmissionError(true);
+                                  getFinalTotal(e);
+                                  handleResetCombinedArray();
+                                  handleHistorySubmit(e);
+                                  resetReceiptForm();
+                                  setIsReceiptSubmitted(true);
+                                  window.location.href = "/#/App/SplitBill";
+                                }
+                              }}
+                            >
+                              <IoExitOutline size={24} />
+                              <span className="text-white ml-2">
+                                {lang === "english" ? "Submit" : "Soumettre"}
+                              </span>
+                            </Button>
+                          </div>
+                          {!submissionError && (
+                            <div className="flex justify-center items-center col-span-2">
+                              <p className="mb-2 text-center text-sm text-red-500 w-max mr-1/2">
+                                {lang === "english"
+                                  ? "Please add an item before submitting."
+                                  : "Veuillez ajouter un élément avant de soumettre."}
+                              </p>
+                            </div>
+                          )}
+                        </div>
                       </div>
-                      
                     </CSSTransition>
                   </div>
                 )}
-                
               </div>
             </div>
           </div>
