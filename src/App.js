@@ -311,7 +311,6 @@ function App({ signOut, user }) {
       UserEmail: loggedInUserEmail,
       UserName: currentUserName,
     };
-    console.log("adding person with: ", itemData);
     setAddPerson(false);
     try {
       const response = await fetch(API_URL, {
@@ -487,13 +486,11 @@ function App({ signOut, user }) {
   };
 
   const selectSelf = async (ContactId) => {
-    console.log("this:", ContactId);
     const selectingPerson = dataThrow.find(
       (item) =>
         item.UserEmail === loggedInUserEmail && item.Email === loggedInUserEmail
     );
 
-    console.log("that:", selectingPerson);
     setPersonName(selectingPerson.Name);
     setPersonPhone(selectingPerson.Phone);
     setPersonEmail(selectingPerson.Email);
@@ -540,7 +537,6 @@ function App({ signOut, user }) {
           "Content-Type": "application/json",
         },
       });
-      console.log("body?", newReceipt);
       if (!response.ok) {
         throw new Error("Failed to add receipt");
       }

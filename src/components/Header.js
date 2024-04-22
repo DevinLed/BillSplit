@@ -25,6 +25,7 @@ export default function Header({
   setLang,
   signOut,
   user,
+  loggedInUsername,
 }) {
   return (
     <>
@@ -257,11 +258,19 @@ export default function Header({
               <IoIosArrowBack />
             </button>
           </Link>
-          <h1 className="whitespace-nowrap">
-            {lang === "english"
-              ? "Expense with " + personName
-              : "Dépense avec " + personName}
-          </h1>
+          {personName === loggedInUsername ? (
+            <h1 className="whitespace-nowrap">
+              {lang === "english"
+                ? "Expense with yourself"
+                : "Dépense avec toi-même"}
+            </h1>
+          ) : (
+            <h1 className="whitespace-nowrap">
+              {lang === "english"
+                ? "Expense with " + personName
+                : "Dépense avec " + personName}
+            </h1>
+          )}
 
           <div className="dropdown">
             <button

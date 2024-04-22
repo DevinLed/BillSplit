@@ -58,7 +58,6 @@ export default function SelfExpense({
   const [loading, setLoading] = useState(false);
   const handleSelfAdded = async () => {
     setSelfAdded(true);
-    console.log("turned to true");
     handlePersonalExpenseClick();
   };
   const handleNavigation = async () => {

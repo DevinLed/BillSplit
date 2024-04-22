@@ -375,7 +375,6 @@ export default function ReceiptInput({
         sliderValue: item.sliderValue || 50,
       }))
     );
-    console.log("self?", selfExpense);
   }, []);
 
   return (
@@ -468,6 +467,7 @@ export default function ReceiptInput({
               lang={lang}
               theme={theme}
               personName={personName}
+              loggedInUsername={loggedInUsername}
             />
 
             <div className="container mx-auto px-2 py-8 ">
@@ -681,6 +681,84 @@ export default function ReceiptInput({
                             setPictureTax={setPictureTax}
                             lang={lang}
                           />
+                          <div
+                          className={
+                            theme === "dark"
+                              ? "flex item-center gap-y-0 bg-gray-900 py-4 justify-center text-center"
+                              : "flex item-center gap-y-0 bg-white py-4 justify-center text-center"
+                          }
+                        >
+                          <div className="m-2 mb-4 flex flex-col justify-center items-center sm:flex-row">
+                            <Link to={`/App/ReceiptInput/${ContactId}`}>
+                              <Button
+                                variant="gradient"
+                                className="gradient-btn mb-2 flex items-center justify-center"
+                                style={{ margin: "auto" }}
+                                onClick={(e) => {
+                                  const finalTotal = personReceiptAmount;
+                                  if (finalTotal === 0) {
+                                    console.error("Error: Invalid final total");
+                                    setSubmissionError(false);
+                                  } else {
+                                    e.preventDefault();
+                                    getFinalTotal();
+                                    handleResetCombinedArray();
+                                    setSelectMethodManual(false);
+                                    setSelectPersonReceipt(true);
+                                    handleHistorySubmit(e);
+                                    setIsReceiptSubmitted(true);
+                                    setInvoiceNumber(0);
+                                  }
+                                }}
+                              >
+                                <IoDuplicateOutline size={24} />
+                                <span className="text-white ml-2">
+                                  {lang === "english"
+                                    ? "Add another"
+                                    : "Ajouter un autre"}
+                                </span>
+                              </Button>
+                            </Link>
+                          </div>
+                          <div className="m-2 mb-4 flex flex-col justify-center items-center sm:flex-row">
+                            <Button
+                              variant="gradient"
+                              className="gradient-btn mb-2 flex items-center justify-center"
+                              style={{ margin: "auto" }}
+                              onClick={(e) => {
+                                const finalTotal = personReceiptAmount;
+                                if (finalTotal === 0) {
+                                  console.error("Error: Invalid final total");
+                                  setSubmissionError(false);
+                                } else {
+                                  e.preventDefault();
+                                  handleSnapShotSubmit(e);
+                                  setSubmissionError(true);
+                                  getFinalTotal(e);
+                                  handleResetCombinedArray();
+                                  handleHistorySubmit(e);
+                                  resetReceiptForm();
+                                  setIsReceiptSubmitted(true);
+                                  window.location.href = "/#/App/SplitBill";
+                                }
+                              }}
+                            >
+                              <IoExitOutline size={24} />
+                              <span className="text-white ml-2">
+                                {lang === "english" ? "Submit" : "Soumettre"}
+                              </span>
+                            </Button>
+                          </div>
+                        </div>
+                          {!submissionError && (
+                            <div className="flex justify-center items-center col-span-2">
+                              <p className="mb-2 text-center text-sm text-red-500 w-max mr-1/2">
+                                {lang === "english"
+                                  ? "Please add an item before submitting."
+                                  : "Veuillez ajouter un élément avant de soumettre."}
+                              </p>
+                            </div>
+                          )}
                         </div>
                       </div>
                     </CSSTransition>
@@ -899,6 +977,7 @@ export default function ReceiptInput({
                               </span>
                             </Button>
                           </div>
+                        </div>
                           {!submissionError && (
                             <div className="flex justify-center items-center col-span-2">
                               <p className="mb-2 text-center text-sm text-red-500 w-max mr-1/2">
@@ -908,7 +987,6 @@ export default function ReceiptInput({
                               </p>
                             </div>
                           )}
-                        </div>
                       </div>
                     </CSSTransition>
                   </div>
