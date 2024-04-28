@@ -443,6 +443,9 @@ label {
   background-color: #899BA4;
   transform: scale(1.25);
 }
+.glow {
+  filter: drop-shadow(0px 0px 10px #496da0);
+}
 .edit-list {
   border-radius: 0 100% 0 0;
   background-color: #AFCBAA;
@@ -709,4 +712,16 @@ Amplify login styling
 .amplify-input,
 .amplify-label {
   color: #ffffff;
+}
+.pulsing {
+  animation: pulse 1s infinite alternate;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.1);
+  }
 }

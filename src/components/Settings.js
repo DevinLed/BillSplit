@@ -8,6 +8,7 @@ import {
   IoPersonCircleOutline,
   IoListOutline,
   IoInvertModeSharp,
+  IoInvertModeOutline,
   IoHomeOutline,
   IoSettingsOutline,
 } from "react-icons/io5";
@@ -97,7 +98,7 @@ export default function Settings({
             }}
           >
             <div style={{ width: "24px", height: "24px" }}>
-              <IoInvertModeSharp size={24} className="icon3" />
+              {theme === "light" ? (<IoInvertModeSharp size={24} className="icon3" />):(<IoInvertModeOutline size={24} className="icon3" />)}
             </div>
             <span className="text-white text-center">{buttonText}</span>
           </Button>
@@ -139,7 +140,14 @@ export default function Settings({
                         setIsDropdownOpen(false);
                       }}
                     >
-                      <span className="ml-2 ">{region.name}</span>
+                      <span
+                        className={
+                          "ml-2 " +
+                          (theme === "dark" ? "text-white" : "text-gray-800")
+                        }
+                      >
+                        {region.name}
+                      </span>
                     </button>
                   ))}
                   <div className="dropdown-option flex items-center p-2">

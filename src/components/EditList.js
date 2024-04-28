@@ -69,6 +69,16 @@ export default function EditList({
       return null;
     }
   };
+  const isEmptyDataThrow =
+    !dataThrow ||
+    dataThrow.filter(
+      (item) =>
+        item.UserEmail === loggedInUserEmail &&
+        !(
+          item.UserEmail === loggedInUserEmail &&
+          item.Email === loggedInUserEmail
+        )
+    ).length === 0;
   const fetchData = async () => {
     try {
       const response = await fetch(API_URL);
@@ -98,7 +108,29 @@ export default function EditList({
         <div
           className={`flex flex-col items-center justify-center transition-opacity duration-300`}
         >
-          <ul className="m-0 py-1 w-3/4">
+        
+          {isEmptyDataThrow ? (
+            <div className="mb-5">
+              <Button
+                variant="gradient"
+                className="gradient-btn mb-2 flex items-center justify-center glow pulsing"
+                style={{ margin: "auto" }}
+                onClick={() => {
+                  setAddPerson(true);
+                  setFormSubmitted(true);
+                }}
+              >
+                <div className="flex items-center">
+                  <IoPersonAddSharp size={24} />
+                  <span className="text-white ml-2">
+                    {lang === "english" ? "Add Person" : "Ajouter Une Personne"}
+                  </span>
+                </div>
+              </Button>
+            </div>
+          ) : (
+            <>
+              <ul className="max-w-md mb-3 p-2 divide-y divide-gray-200 dark:divide-gray-700 bg-gray-800 dark:bg-gray-900 rounded-lg overflow-hidden shadow-lg">
             {dataThrow.length > 0 &&
               dataThrow
                 .filter(
@@ -130,54 +162,59 @@ export default function EditList({
                           setSelfValue(false);
                           editRow(item.ContactId, item.UserEmail);
                         }}
+                        className="no-underline block"
                       >
-                        <li
-                          className={
-                            "list-group-item flex justify-between m-1 p-2 rounded-lg shadow-sm " +
-                            (theme === "dark"
-                              ? "bg-gray-800 text-white"
-                              : "bg-white text-gray-800")
-                          }
-                        >
-                          <div className="flex items-center">
-                            <Avatar name={item.Name} size={32} round />
-                            <span className="ml-1">
-                              {item.Name.length > 8
-                                ? `${item.Name.substring(0, 8)}...`
-                                : item.Name}
-                            </span>
+                        <li className="py-3 sm:py-4">
+                          <div className="flex items-center space-x-4 rtl:space-x-reverse">
+                            <div className="flex-shrink-0">
+                              <Avatar name={item.Name} size={32} round />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-sm font-medium text-gray-100 truncate dark:text-white">
+                                {item.Name.length > 8
+                                  ? `${item.Name.substring(0, 8)}...`
+                                  : item.Name}
+                              </p>
+                              <p className="text-sm text-gray-400 truncate dark:text-gray-400">
+                              {item.Email.length > 15 ? `${item.Email.substring(0, 15)}...` : item.Email}
+                              </p>
+                            </div>
+                            <div
+                              className={`inline-flex items-center text-base font-semibold ${
+                                parseFloat(item.Owing) < 0
+                                  ? "text-red-500"
+                                  : "text-blue-500"
+                              }`}
+                            >
+                              ${parseFloat(item.Owing).toFixed(2)}
+                            </div>
                           </div>
-                          <span
-                            className={`badge badge-pill rounded px-1 pt-2 ml-2 text-xs ${
-                              parseFloat(item.Owing) < 0
-                                ? "bg-red-500 text-black"
-                                : "bg-blue-500 text-white"
-                            }`}
-                          >
-                            ${parseFloat(item.Owing).toFixed(2)}
-                          </span>
                         </li>
                       </Link>
                     ) : null}
                   </React.Fragment>
                 ))}
           </ul>
-          <Button
-            variant="gradient"
-            className="gradient-btn mb-2 flex items-center justify-center"
-            style={{ margin: "auto" }}
-            onClick={() => {
-              setAddPerson(true);
-              setFormSubmitted(true);
-            }}
-          >
-            <div className="flex items-center">
-              <IoPersonAddSharp size={24} />
-              <span className="text-white ml-2">
-                {lang === "english" ? "Add Person" : "Ajouter Une Personne"}
-              </span>
+            <div className="mb-5">
+              <Button
+                variant="gradient"
+                className="gradient-btn mb-2 flex items-center justify-center"
+                style={{ margin: "auto" }}
+                onClick={() => {
+                  setAddPerson(true);
+                  setFormSubmitted(true);
+                }}
+              >
+                <div className="flex items-center">
+                  <IoPersonAddSharp size={24} />
+                  <span className="text-white ml-2">
+                    {lang === "english" ? "Add Person" : "Ajouter Une Personne"}
+                  </span>
+                </div>
+              </Button>
             </div>
-          </Button>
+            </>
+          )}
         </div>
         <CSSTransition
           in={addPerson}
