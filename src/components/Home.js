@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Header from "./Header";
 import Footer from "./Footer";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
@@ -43,45 +43,47 @@ export default function Home({
   const [startBill, setStartBill] = useState(true);
   const [showPersonEdit, setPersonEdit] = useState(false);
   const [selectPersonEdit, setSelectPersonEdit] = useState(false);
-  const handlePersonalExpenseClick = async () => {
-    const personalExpenseEntry = dataThrow.find(
-      (item) =>
-        item.UserEmail === loggedInUserEmail && item.Email === loggedInUserEmail
-    );
+  const [totalOwing, setTotalOwing] = useState(0);
+  const [totalOwed, setTotalOwed] = useState(0);
+  useEffect(() => {
+    let owingTotal = 0;
+    let owedTotal = 0;
 
-    if (personalExpenseEntry) {
-    } else {
-      try {
-        const owingValue = 0;
-        const itemData = {
-          Name: loggedInUsername,
-          Email: loggedInUserEmail,
-          Phone: "5555555555",
-          Owing: owingValue,
-          UserEmail: loggedInUserEmail,
-          UserName: loggedInUsername,
-        };
-
-        await handleAddSelfSubmit(itemData);
-      } catch (error) {
-        console.error("Error creating item:", error);
+    dataThrow.forEach((item) => {
+      if (
+        item.UserEmail === loggedInUserEmail &&
+        item.Email !== loggedInUserEmail
+      ) {
+        if (parseFloat(item.Owing) > 0) {
+          owingTotal += parseFloat(item.Owing);
+        } else if (parseFloat(item.Owing) < 0) {
+          owedTotal += parseFloat(item.Owing);
+        }
       }
-    }
-  };
+    });
+
+    setTotalOwing(owingTotal);
+    setTotalOwed(owedTotal);
+  }, [dataThrow, loggedInUserEmail]);
+
   useEffect(() => {
     setStartBill(true);
     setPersonEdit(false);
     setSelectPersonEdit(false);
     setLang(lang);
   }, [lang, setLang]);
-
+  const owingPercentage =
+    (totalOwing / (totalOwing + Math.abs(totalOwed))) * 100;
+  const owedPercentage =
+    (Math.abs(totalOwed) / (totalOwing + Math.abs(totalOwed))) * 100;
+  const navigate = useNavigate();
   const CircleMenu = ({ lang }) => {
     return (
       <div className="flex flex-col items-center justify-center h-full">
         <Link to="/App/SplitBill" className="w-full">
           <Button
             variant="gradient"
-            className="gradient-btn mb-2 flex items-center justify-center"
+            className="gradient-btn mb-2 flex items-center justify-center glow"
             style={{ margin: "auto" }}
           >
             <div className="flex items-center">
@@ -170,33 +172,107 @@ export default function Home({
         >
           <div className="marginBottom">
             <div className="flex flex-col items-center justify-center mb-3">
-              {/* <div style={{ paddingBottom: "10%" }}>
-                <svg
-                  viewBox="0 0 100 100"
-                  width="200"
-                  height="200"
-                  style={{ filter: "drop-shadow(0px 0px 10px #f39c12)" }} // Add glow effect
-                >
-                  <text
-                    x="50%"
-                    y="40%"
-                    textAnchor="middle"
-                    fill="white"
-                    fontSize="8"
-                  >
-                    Owing: $205.33
-                  </text>
-                  <text
-                    x="50%"
-                    y="60%"
-                    textAnchor="middle"
-                    fill="white"
-                    fontSize="8"
-                  >
-                    Owed: $50.20
-                  </text>
+              <div
+                style={{ paddingBottom: "10%" }}
+                onClick={() => navigate("/App/SplitBill")}
+                className="cursor-pointer"
+              >
+                <svg viewBox="0 0 100 100" width="200" height="200">
+                  <defs>
+                    <filter
+                      id="glow-path"
+                      x="-50%"
+                      y="-50%"
+                      width="200%"
+                      height="200%"
+                    >
+                      <feDropShadow
+                        dx="0"
+                        dy="0"
+                        stdDeviation="4"
+                        floodColor="#64b5f6"
+                      />
+                    </filter>
+                    <filter
+                      id="glow-trail"
+                      x="-50%"
+                      y="-50%"
+                      width="200%"
+                      height="200%"
+                    >
+                      <feDropShadow
+                        dx="0"
+                        dy="0"
+                        stdDeviation="4"
+                        floodColor="#ffb74d"
+                      />
+                    </filter>
+                  </defs>
+
+                  {totalOwing === 0 && totalOwed === 0 ? (
+                    <>
+                      <text
+                        x="50%"
+                        y="50%"
+                        textAnchor="middle"
+                        fill={theme === "dark" ? "white" : "black"}
+                        fontSize="8"
+                        style={{ filter: "url(#glow-path)" }}
+                      >
+                        {lang === "english"
+                          ? "Welcome To Divvy"
+                          : "Bienvenue chez Divvy"}
+                      </text>
+
+                      <text
+                        x="50%"
+                        y="60%"
+                        textAnchor="middle"
+                        fill={theme === "dark" ? "white" : "black"}
+                        fontSize="8"
+                        style={{ filter: "url(#glow-trail)" }}
+                      ></text>
+                    </>
+                  ) : (
+                    <>
+                      <text
+                        x="50%"
+                        y="40%"
+                        textAnchor="middle"
+                        fill={theme === "dark" ? "white" : "black"}
+                        fontSize="8"
+                        style={{ filter: "url(#glow-path)" }}
+                      >
+                        {lang === "english" ? "Owed" : "Dû"}: $
+                        {totalOwing.toFixed(2)}
+                      </text>
+                      <text
+                        x="50%"
+                        y="60%"
+                        textAnchor="middle"
+                        fill={theme === "dark" ? "white" : "black"}
+                        fontSize="8"
+                        style={{ filter: "url(#glow-trail)" }}
+                      >
+                        {lang === "english" ? "Owing" : "Due"}: $
+                        {Math.abs(totalOwed).toFixed(2)}
+                      </text>
+                    </>
+                  )}
+                  <CircularProgressbar
+                    value={owingPercentage}
+                    styles={buildStyles({
+                      textSize: "16px",
+                      pathColor: "#64b5f6",
+                      trailColor: "#ffb74d",
+                      pathTransitionDuration: 0.5,
+                      pathTransition: "none",
+                      trailWidth: 8,
+                      filter: "url(#glow-trail)",
+                    })}
+                  />
                 </svg>
-              </div> */}
+              </div>
 
               <CircleMenu lang={lang} toggleTheme={() => toggleTheme()} />
             </div>

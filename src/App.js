@@ -763,6 +763,7 @@ function App({ signOut, user }) {
               element={
                 <SplitBill
                   user={user}
+                  setPersonReceiptAmount={setPersonReceiptAmount}
                   dataThrow={dataThrow}
                   addPerson={addPerson}
                   setAddPerson={setAddPerson}
