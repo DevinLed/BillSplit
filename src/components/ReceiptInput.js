@@ -8,7 +8,7 @@ import "react-html5-camera-photo/build/css/index.css";
 import loading from "../img/loading.gif";
 import Header from "./Header";
 import ReceiptTable from "./ReceiptTable";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import "../darkMode.css";
 import {
   IoCameraOutline,
@@ -70,17 +70,22 @@ export default function ReceiptInput({
   loggedInUsername,
   selfExpense,
   setSelfExpense,
+  setSelectPersonReceipt,
+
 }) {
   registerLocale("en", en);
   registerLocale("fr", fr);
+  
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const selectMethodPicture = searchParams.get("selectMethodPicture");
+  const selectMethodManual = searchParams.get("selectMethodManual");
+
   const [payerId, setPayerId] = useState("");
   const [debtorId, setDebtorId] = useState("");
   const { ContactId } = useParams();
   const [pictureError, setPictureError] = useState(false);
   const [submissionError, setSubmissionError] = useState(true);
-  const [selectPersonReceipt, setSelectPersonReceipt] = useState(true);
-  const [selectMethodManual, setSelectMethodManual] = useState(false);
-  const [selectMethodPicture, setSelectMethodPicture] = useState(false);
   const [photoData, setPhotoData] = useState(null);
   const [pictureTotal, setPictureTotal] = useState(0);
   const [pictureTax, setPictureTax] = useState(0);
@@ -204,7 +209,6 @@ export default function ReceiptInput({
     setMerchantName("");
     setInvoiceNumber("");
     setStartDate(new Date());
-    setSelectMethodManual(false);
   }
 
   // Handler for enter key on mobile collasping keyboard pop
@@ -379,78 +383,7 @@ export default function ReceiptInput({
 
   return (
     <>
-      {selectPersonReceipt ? (
-        <>
-          <main
-            className="xs:max-w-xl bg-white-500 mt-1 rounded p-0 pt-3 shadow sm:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl"
-            style={{ maxWidth: "600px" }}
-          >
-            <div className="flex flex-col items-center justify-center">
-              <Header
-                selectPersonReceipt={selectPersonReceipt}
-                handleResetTotals={handleResetTotals}
-                theme={theme}
-                lang={lang}
-                personName={personName}
-              />
-
-              <div className="flex flex-col items-center justify-center">
-                <h1>
-                  {personName === loggedInUsername
-                    ? lang === "english"
-                      ? "Save Expense"
-                      : "Économiser des dépenses"
-                    : lang === "english"
-                      ? "Submit expense by:"
-                      : "Soumettez la dépense par :"}
-                </h1>
-                <ul className="list-group items-center justify-center">
-                  <Link className="flex flex-col items-center justify-center">
-                    <Button
-                      variant="gradient"
-                      className="gradient-btn mb-2 flex items-center justify-center mt-3"
-                      style={{ margin: "auto" }}
-                      onClick={(e) => {
-                        setSelectMethodManual(true);
-                        setSelectPersonReceipt(false);
-                        setPersonReceiptAmount(0);
-                      }}
-                    >
-                      <div className="flex items-center">
-                        <IoCreateOutline size={24} />
-                        <span className="text-white ml-2">
-                          {lang === "english" ? "Manual" : "À la main"}
-                        </span>
-                      </div>
-                    </Button>
-                  </Link>
-                  <li className="flex flex-col items-center justify-center">
-                    <Button
-                      variant="gradient"
-                      className="gradient-btn mb-2 flex items-center justify-center"
-                      style={{ margin: "auto" }}
-                      onClick={(e) => {
-                        setSelectMethodPicture(true);
-                        setSelectPersonReceipt(false);
-                      }}
-                    >
-                      <div className="flex items-center">
-                        <IoCameraOutline size={24} />
-                        <span className="text-white ml-2">
-                          {lang === "english" ? "Picture" : "Image"}
-                        </span>
-                      </div>
-                    </Button>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </main>
-        </>
-      ) : (
-        ""
-      )}
-      <CSSTransition
+           <CSSTransition
         in={selectMethodManual}
         timeout={500}
         classNames="fade"
@@ -487,7 +420,12 @@ export default function ReceiptInput({
                       className="flex-1 text-center"
                       style={{ maxWidth: "50%", margin: 0 }}
                     >
-                      <span className="text-white ml-2">
+                      <span
+                        className={
+                          "ml-2 " +
+                          (theme === "dark" ? "text-white" : "text-gray-800")
+                        }
+                      >
                         {lang === "english" ? "Who Paid?" : "Qui a payé ?"}
                       </span>
                     </div>
@@ -521,8 +459,8 @@ export default function ReceiptInput({
                           setShowTable(true);
                         }}
                       >
-                        {personName.length > 12
-                          ? personName.slice(0, 12) + "..."
+                        {personName.length > 6
+                          ? personName.slice(0, 6) + "..."
                           : personName}
                       </Button>
                     </div>
@@ -682,14 +620,14 @@ export default function ReceiptInput({
                             lang={lang}
                           />
                           <div
-                          className={
-                            theme === "dark"
-                              ? "flex item-center gap-y-0 bg-gray-900 py-4 justify-center text-center"
-                              : "flex item-center gap-y-0 bg-white py-4 justify-center text-center"
-                          }
-                        >
-                          <div className="m-2 mb-4 flex flex-col justify-center items-center sm:flex-row">
-                            <Link to={`/App/ReceiptInput/${ContactId}`}>
+                            className={
+                              theme === "dark"
+                                ? "flex item-center gap-y-0 bg-gray-900 py-4 justify-center text-center"
+                                : "flex item-center gap-y-0 bg-white py-4 justify-center text-center"
+                            }
+                          >
+                            
+                            <div className="m-2 mb-4 flex flex-col justify-center items-center sm:flex-row">
                               <Button
                                 variant="gradient"
                                 className="gradient-btn mb-2 flex items-center justify-center"
@@ -701,55 +639,24 @@ export default function ReceiptInput({
                                     setSubmissionError(false);
                                   } else {
                                     e.preventDefault();
-                                    getFinalTotal();
+                                    handleSnapShotSubmit(e);
+                                    setSubmissionError(true);
+                                    getFinalTotal(e);
                                     handleResetCombinedArray();
-                                    setSelectMethodManual(false);
-                                    setSelectPersonReceipt(true);
                                     handleHistorySubmit(e);
+                                    resetReceiptForm();
                                     setIsReceiptSubmitted(true);
-                                    setInvoiceNumber(0);
+                                    window.location.href = "/#/App/SplitBill";
                                   }
                                 }}
                               >
-                                <IoDuplicateOutline size={24} />
+                                <IoExitOutline size={24} />
                                 <span className="text-white ml-2">
-                                  {lang === "english"
-                                    ? "Add another"
-                                    : "Ajouter un autre"}
+                                  {lang === "english" ? "Submit" : "Soumettre"}
                                 </span>
                               </Button>
-                            </Link>
+                            </div>
                           </div>
-                          <div className="m-2 mb-4 flex flex-col justify-center items-center sm:flex-row">
-                            <Button
-                              variant="gradient"
-                              className="gradient-btn mb-2 flex items-center justify-center"
-                              style={{ margin: "auto" }}
-                              onClick={(e) => {
-                                const finalTotal = personReceiptAmount;
-                                if (finalTotal === 0) {
-                                  console.error("Error: Invalid final total");
-                                  setSubmissionError(false);
-                                } else {
-                                  e.preventDefault();
-                                  handleSnapShotSubmit(e);
-                                  setSubmissionError(true);
-                                  getFinalTotal(e);
-                                  handleResetCombinedArray();
-                                  handleHistorySubmit(e);
-                                  resetReceiptForm();
-                                  setIsReceiptSubmitted(true);
-                                  window.location.href = "/#/App/SplitBill";
-                                }
-                              }}
-                            >
-                              <IoExitOutline size={24} />
-                              <span className="text-white ml-2">
-                                {lang === "english" ? "Submit" : "Soumettre"}
-                              </span>
-                            </Button>
-                          </div>
-                        </div>
                           {!submissionError && (
                             <div className="flex justify-center items-center col-span-2">
                               <p className="mb-2 text-center text-sm text-red-500 w-max mr-1/2">
@@ -916,38 +823,7 @@ export default function ReceiptInput({
                               : "flex item-center gap-y-0 bg-white py-4 justify-center text-center"
                           }
                         >
-                          <div className="m-2 mb-4 flex flex-col justify-center items-center sm:flex-row">
-                            <Link to={`/App/ReceiptInput/${ContactId}`}>
-                              <Button
-                                variant="gradient"
-                                className="gradient-btn mb-2 flex items-center justify-center"
-                                style={{ margin: "auto" }}
-                                onClick={(e) => {
-                                  const finalTotal = personReceiptAmount;
-                                  if (finalTotal === 0) {
-                                    console.error("Error: Invalid final total");
-                                    setSubmissionError(false);
-                                  } else {
-                                    e.preventDefault();
-                                    getFinalTotal();
-                                    handleResetCombinedArray();
-                                    setSelectMethodManual(false);
-                                    setSelectPersonReceipt(true);
-                                    handleHistorySubmit(e);
-                                    setIsReceiptSubmitted(true);
-                                    setInvoiceNumber(0);
-                                  }
-                                }}
-                              >
-                                <IoDuplicateOutline size={24} />
-                                <span className="text-white ml-2">
-                                  {lang === "english"
-                                    ? "Add another"
-                                    : "Ajouter un autre"}
-                                </span>
-                              </Button>
-                            </Link>
-                          </div>
+                         
                           <div className="m-2 mb-4 flex flex-col justify-center items-center sm:flex-row">
                             <Button
                               variant="gradient"
@@ -978,15 +854,15 @@ export default function ReceiptInput({
                             </Button>
                           </div>
                         </div>
-                          {!submissionError && (
-                            <div className="flex justify-center items-center col-span-2">
-                              <p className="mb-2 text-center text-sm text-red-500 w-max mr-1/2">
-                                {lang === "english"
-                                  ? "Please add an item before submitting."
-                                  : "Veuillez ajouter un élément avant de soumettre."}
-                              </p>
-                            </div>
-                          )}
+                        {!submissionError && (
+                          <div className="flex justify-center items-center col-span-2">
+                            <p className="mb-2 text-center text-sm text-red-500 w-max mr-1/2">
+                              {lang === "english"
+                                ? "Please add an item before submitting."
+                                : "Veuillez ajouter un élément avant de soumettre."}
+                            </p>
+                          </div>
+                        )}
                       </div>
                     </CSSTransition>
                   </div>
@@ -1035,9 +911,14 @@ export default function ReceiptInput({
                         className="flex-1 text-center"
                         style={{ maxWidth: "50%", margin: 0 }}
                       >
-                        <span className="text-white ml-2">
-                          {lang === "english" ? "Who Paid?" : "Qui a payé ?"}
-                        </span>
+                         <span
+                        className={
+                          "ml-2 " +
+                          (theme === "dark" ? "text-white" : "text-gray-800")
+                        }
+                      >
+                        {lang === "english" ? "Who Paid?" : "Qui a payé ?"}
+                      </span>
                       </div>
                       <div className="flex-1 text-center m-0">
                         <Button
@@ -1069,8 +950,8 @@ export default function ReceiptInput({
                             setShowTable(true);
                           }}
                         >
-                          {personName.length > 12
-                            ? personName.slice(0, 12) + "..."
+                          {personName.length > 6
+                            ? personName.slice(0, 6) + "..."
                             : personName}
                         </Button>
                       </div>
@@ -1093,8 +974,9 @@ export default function ReceiptInput({
                           variant="gradient"
                           className="gradient-btn mb-2 mt-2 flex items-center justify-center"
                           style={{ margin: "auto" }}
-                          onClick={(e) =>
-                            setShowCameraImage(false)(handleResetTotals(e))
+                          onClick={(e) => {
+                            setShowCameraImage(false);
+                            (handleResetTotals(e));}
                           }
                         >
                           <IoRepeatSharp size={24} />
@@ -1410,45 +1292,7 @@ export default function ReceiptInput({
                                 : "flex item-center justify-center gap-y-0 bg-white py-4"
                             }
                           >
-                            <div className="max-w-20 m-2 mb-4 flex flex-col justify-center sm:flex-row">
-                              <Link to={`/App/ReceiptInput/${ContactId}`}>
-                                <Button
-                                  variant="gradient"
-                                  className="gradient-btn mb-2 flex items-center justify-center"
-                                  style={{ margin: "auto" }}
-                                  onClick={(e) => {
-                                    const finalTotal = personReceiptAmount;
-                                    if (finalTotal === 0) {
-                                      console.error(
-                                        "Error: Invalid final total"
-                                      );
-                                      setSubmissionError(false);
-                                    } else {
-                                      e.preventDefault();
-                                      getFinalTotal();
-                                      handleResetCombinedArray();
-                                      setSelectMethodPicture(false);
-                                      setSelectPersonReceipt(true);
-                                      handleHistorySubmit(e);
-                                      setIsReceiptSubmitted(true);
-                                      setInvoiceNumber(0);
-                                      setPhotoData(null);
-                                      setShowTable(true);
-                                      setShowCameraImage(false);
-
-                                      window.location.href = `/#/App/ReceiptInput/${ContactId}`;
-                                    }
-                                  }}
-                                >
-                                  <IoDuplicateOutline size={24} />
-                                  <span className="text-white ml-2">
-                                    {lang === "english"
-                                      ? "Add another"
-                                      : "Ajouter un autre"}
-                                  </span>
-                                </Button>
-                              </Link>
-                            </div>
+                            
                             <div className="max-w-20 m-2 mb-4 flex flex-col justify-center sm:flex-row">
                               <Button
                                 variant="gradient"
