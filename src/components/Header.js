@@ -1,12 +1,7 @@
 import React from "react";
 import { IoIosArrowBack } from "react-icons/io";
-import {
-  IoArrowBackCircleOutline,
-  IoArrowBackCircleSharp,
-} from "react-icons/io5";
 import { AiOutlineMenu } from "react-icons/ai";
 import { Link } from "react-router-dom";
-import App from "../App";
 
 import "../darkMode.css";
 export default function Header({
@@ -22,7 +17,6 @@ export default function Header({
   handleResetTotals,
   theme,
   lang,
-  setLang,
   signOut,
   user,
   loggedInUsername,
@@ -95,7 +89,7 @@ export default function Header({
             </Link>
 
             <h1 className="whitespace-nowrap">
-              {lang === "english" ? "Select Person" : "Choisissez la personne"}
+              {lang === "english" ? "Share a bill" : "Partager une facture"}
             </h1>
 
             <div className="dropdown">

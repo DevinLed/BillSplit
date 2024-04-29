@@ -1,7 +1,7 @@
 import React from "react";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import "./../index.css";
-import { IoSaveOutline, IoCloseCircleOutline } from "react-icons/io5";
+import { IoSaveOutline } from "react-icons/io5";
 import { AiOutlineDelete } from "react-icons/ai";
 import { CSSTransition } from "react-transition-group";
 import { Button } from "@material-tailwind/react";
@@ -19,19 +19,13 @@ export default function EditPerson({
   handleSubmit,
   formSubmitted,
   theme,
-  setList,
   lang,
-  handleEditSubmit,
   passedEmail,
   dataThrow,
   setDataThrow,
   loggedInUserEmail,
   passedId,
-  setPassedId,
   API_URL,
-  updateDataHandler,
-  updateEditHandler,
-  user,
 }) {
   const myElementRef = useRef(null);
   const handleResetBalance = () => {
@@ -340,45 +334,41 @@ export default function EditPerson({
             </div>
           </div>
           <div className="flex justify-center p-2 space-x-4">
-          <Button
-            variant="gradient"
-            className="gradient-btn mb-2 flex items-center justify-center"
-            style={{ margin: "auto" }}
-
-                       
-          onClick={(e) => {
-                  handleDeletePrompt(ContactId, loggedInUserEmail);
-                }}
-          >
-            <div className="flex items-center">
-                        <AiOutlineDelete size={24} />
-              <span className="text-white ml-2">
-                        {lang === "english" ? "Delete" : "Supprimer"}
-              </span>
-            </div>
-          </Button>
-          <Button
-            variant="gradient"
-            className="gradient-btn mb-2 flex items-center justify-center"
-            style={{ margin: "auto" }}
-
-                       
-            onClick={(e) => {
-                  if (errorBalance && errorPhone && errorEmail && errorName) {
-                    handleSubmit(e);
-                    setIsSubmitted(true);
-                  } else {
-                    setSubmissionError(false);
-                  }
-                }}
-          >
-            <div className="flex items-center">
-                        <IoSaveOutline size={24} />
-              <span className="text-white ml-2">
-                        {lang === "english" ? "Save" : "Enregistrer."}
-              </span>
-            </div>
-          </Button>
+            <Button
+              variant="gradient"
+              className="gradient-btn mb-2 flex items-center justify-center"
+              style={{ margin: "auto" }}
+              onClick={(e) => {
+                handleDeletePrompt(ContactId, loggedInUserEmail);
+              }}
+            >
+              <div className="flex items-center">
+                <AiOutlineDelete size={24} />
+                <span className="text-white ml-2">
+                  {lang === "english" ? "Delete" : "Supprimer"}
+                </span>
+              </div>
+            </Button>
+            <Button
+              variant="gradient"
+              className="gradient-btn mb-2 flex items-center justify-center"
+              style={{ margin: "auto" }}
+              onClick={(e) => {
+                if (errorBalance && errorPhone && errorEmail && errorName) {
+                  handleSubmit(e);
+                  setIsSubmitted(true);
+                } else {
+                  setSubmissionError(false);
+                }
+              }}
+            >
+              <div className="flex items-center">
+                <IoSaveOutline size={24} />
+                <span className="text-white ml-2">
+                  {lang === "english" ? "Save" : "Enregistrer."}
+                </span>
+              </div>
+            </Button>
           </div>
           <CSSTransition
             in={showConfirmation}

@@ -1,7 +1,6 @@
 import React from "react";
 import "../darkMode.css";
 import "../index.css";
-import App from "../App";
 
 export default function Footer({theme, lang,setLang}) {
   return (

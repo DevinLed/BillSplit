@@ -2,8 +2,10 @@ import React, { useRef, useState, useEffect } from "react";
 import { BrowserRouter, Switch, Route, Routes, Link } from "react-router-dom";
 import AddPerson from "./AddPerson";
 import Header from "./Header";
-import { IoPersonAddSharp } from "react-icons/io5";
+import { IoPersonAddSharp, IoEye } from "react-icons/io5";
 import Avatar from "react-avatar";
+import { IoReceiptOutline } from "react-icons/io5";
+import { GrView } from "react-icons/gr";
 import { CSSTransition } from "react-transition-group";
 import { API } from "aws-amplify";
 import { useNavigate } from "react-router-dom";
@@ -107,7 +109,7 @@ export default function SelfExpense({
             onClick={handlePersonalExpenseClick}
           >
             <div className="flex items-center justify-center flex-grow">
-              <Avatar name={loggedInUsername} size={32} round />
+              <IoReceiptOutline size={32}/>
               <span className="ml-2">
                 {lang === "english" ? "New Expense" : "Nouvelle dépense"}
               </span>
@@ -142,7 +144,7 @@ export default function SelfExpense({
                   style={{ margin: "auto" }}
                 >
                   <div className="flex items-center justify-center flex-grow">
-                    <Avatar name={loggedInUsername} size={32} round />
+              <IoEye size={32}/>
                     <span className="ml-2">
                       {lang === "english"
                         ? "View Expenses"

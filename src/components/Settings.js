@@ -2,31 +2,20 @@ import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import Header from "./Header";
 import {
-  IoAlertCircle,
   IoLanguage,
-  IoReceiptOutline,
-  IoPersonCircleOutline,
-  IoListOutline,
   IoInvertModeSharp,
   IoInvertModeOutline,
-  IoHomeOutline,
-  IoSettingsOutline,
 } from "react-icons/io5";
 import { TbReceiptTax } from "react-icons/tb";
 import { CSSTransition } from "react-transition-group";
-import { PrimeReactProvider, PrimeReactContext } from "primereact/api";
 import { Button } from "@material-tailwind/react";
 import "primereact/resources/themes/lara-light-cyan/theme.css";
 
 export default function Settings({
   theme,
-  setTheme,
   taxRate,
   toggleTheme,
   setTaxRate,
-  handleClearData,
-  showConfirmation,
-  setShowConfirmation,
   lang,
   setLang,
 }) {
@@ -98,7 +87,11 @@ export default function Settings({
             }}
           >
             <div style={{ width: "24px", height: "24px" }}>
-              {theme === "light" ? (<IoInvertModeSharp size={24} className="icon3" />):(<IoInvertModeOutline size={24} className="icon3" />)}
+              {theme === "light" ? (
+                <IoInvertModeSharp size={24} className="icon3" />
+              ) : (
+                <IoInvertModeOutline size={24} className="icon3" />
+              )}
             </div>
             <span className="text-white text-center">{buttonText}</span>
           </Button>

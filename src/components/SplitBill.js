@@ -1,12 +1,10 @@
-import React, { useRef, useState, useEffect } from "react";
-import { BrowserRouter, Switch, Route, Routes, Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import AddPerson from "./AddPerson";
 import Header from "./Header";
 import { IoPersonAddSharp } from "react-icons/io5";
 import Avatar from "react-avatar";
 import { CSSTransition } from "react-transition-group";
-import { API } from "aws-amplify";
-import { useNavigate } from "react-router-dom";
 import { Button } from "@material-tailwind/react";
 import MethodSelect from "./MethodSelect";
 
@@ -36,15 +34,9 @@ export default function SplitBill({
   theme,
   handleAddSubmit,
   lang,
-  setLang,
-  loggedInUsername,
   loggedInUserEmail,
   dataThrow,
-  API_URL,
   user,
-  handleAddSelfSubmit,
-  selectSelf,
-  selfExpense,
   setSelfExpense,
   setPersonReceiptAmount,
 }) {
@@ -53,16 +45,7 @@ export default function SplitBill({
   const [selectMethodPicture, setSelectMethodPicture] = useState(false);
   const [selectPersonList, setSelectPersonList] = useState(true);
   const [selectedModalPerson, setSelectedModalPerson] = useState();
-  const selfContactId = user.attributes.sub;
-  const [selfAdded, setSelfAdded] = useState(false);
   const [showMethodSelectModal, setShowMethodSelectModal] = useState(false);
-  const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
-
-  const handleNavigation = async () => {
-    navigate(`/App/ReceiptInput/${user.attributes.sub}`);
-  };
-
   const isEmptyDataThrow =
     !dataThrow ||
     dataThrow.filter(
@@ -99,7 +82,7 @@ export default function SplitBill({
                 <div className="flex items-center">
                   <IoPersonAddSharp size={24} />
                   <span className="text-white ml-2">
-                    {lang === "english" ? "Add Person" : "Ajouter Une Personne"}
+                    {lang === "english" ? "Add a Friend First" : "Ajoutez d'abord un ami"}
                   </span>
                 </div>
               </Button>
@@ -117,7 +100,6 @@ export default function SplitBill({
                       )
                   )
                   .map((item, index) => (
-                    <li key={index} className="py-3 sm:py-4">
                       <Link
                         onClick={() => {
                           selectPerson(item.ContactId);
@@ -126,6 +108,7 @@ export default function SplitBill({
                         }}
                         className="no-underline"
                       >
+                    <li key={index} className="py-3 sm:py-4">
                         <div className="flex items-center space-x-4 rtl:space-x-reverse">
                           <div className="flex-shrink-0">
                             <Avatar name={item.Name} size={32} round />
@@ -150,8 +133,8 @@ export default function SplitBill({
                             ${parseFloat(item.Owing).toFixed(2)}
                           </div>
                         </div>
-                      </Link>
                     </li>
+                      </Link>
                   ))}
               </ul>
               <div className="mb-5">
@@ -213,7 +196,7 @@ export default function SplitBill({
         </CSSTransition>
       </main>
       {showMethodSelectModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"  style={{ marginTop: "-300px" }}>
           <div className="bg-white p-6 rounded-lg">
             <MethodSelect
               lang={lang}
@@ -224,6 +207,7 @@ export default function SplitBill({
               selectedModalPerson={selectedModalPerson}
               selectMethodPicture={selectMethodPicture}
               selectMethodManual={selectMethodManual}
+              theme={theme}
             />
             <Button
               variant="gradient"

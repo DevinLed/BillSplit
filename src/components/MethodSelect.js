@@ -1,17 +1,14 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { IoCreateOutline, IoCameraOutline } from "react-icons/io5";
 import { Button } from "@material-tailwind/react";
 
 const MethodSelect = ({
   lang,
   setSelectMethodManual,
-  setSelectMethodPicture,
   setSelectPersonReceipt,
   setPersonReceiptAmount,
   selectedModalPerson,
-  selectMethodPicture,
-  selectMethodManual,
 }) => {
     const navigate = useNavigate();
 
@@ -33,7 +30,7 @@ const MethodSelect = ({
     >
       <div className="flex flex-col items-center justify-center">
         <div className="flex flex-col items-center justify-center">
-          <h1>
+          <h1 className="text-gray-800">
             {lang === "english" ? "Select Method" : "Sélectionner la méthode"}
           </h1>
           <ul className="list-group items-center justify-center">

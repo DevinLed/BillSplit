@@ -1,19 +1,9 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import IconButton from "@mui/material/IconButton";
-import AppsIcon from "@mui/icons-material/Apps";
-import SchoolIcon from "@mui/icons-material/School";
-import ContactMailIcon from "@mui/icons-material/ContactMail";
-import Tooltip from "@mui/material/Tooltip";
-import { Resend } from "resend";
-import Footer from "./Footer";
 import { Hidden } from "@mui/material";
 import "../LandingPage.css";
 import emailjs from "emailjs-com";
-import PersonIcon from "@mui/icons-material/Person";
 import Topbar from "./Topbar";
 
-const resend = new Resend("re_L7XmvSAE_6VwFerFvPDYzxHZEcGoaYwaS");
 
 export function Contact() {
   const [name, setName] = useState("");
@@ -48,18 +38,6 @@ export function Contact() {
       setShowPopup(true);
     }
   };
-  const renderButton = (icon, text, to, tooltip) => (
-    <Link
-      to={to}
-      className="inline-flex flex-col items-center justify-center text-center"
-    >
-      <Tooltip title={tooltip}>
-        <IconButton color="inherit">{icon}</IconButton>
-      </Tooltip>
-      <span className="text-xs text-white">{text}</span>
-    </Link>
-  );
-
   return (
     <main
       style={{

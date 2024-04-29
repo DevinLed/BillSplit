@@ -15,7 +15,7 @@ import {
 import { Button } from "@material-tailwind/react";
 import "@aws-amplify/ui-react/styles.css";
 
-import { Amplify, API, graphqlOperation, Auth } from "aws-amplify";
+import { Amplify } from "aws-amplify";
 
 import awsconfig from "../aws-exports";
 Amplify.configure(awsconfig);
@@ -23,22 +23,13 @@ Amplify.configure(awsconfig);
 export default function Home({
   theme,
   toggleTheme,
-  handleClearData,
-  list,
   lang,
   setLang,
   signOut,
   user,
   loggedInUserEmail,
-  loggedInUsername,
   dataThrow,
-  setDataThrow,
-  API_URL,
-  handleAddSelfSubmit,
-  selectSelf,
-  editSelf,
   selfExpense,
-  setSelfExpense,
 }) {
   const [startBill, setStartBill] = useState(true);
   const [showPersonEdit, setPersonEdit] = useState(false);
@@ -173,7 +164,7 @@ export default function Home({
           <div className="marginBottom">
             <div className="flex flex-col items-center justify-center mb-3">
               <div
-                style={{ paddingBottom: "10%" }}
+                style={{ paddingBottom: "4%" }}
                 onClick={() => navigate("/App/SplitBill")}
                 className="cursor-pointer"
               >

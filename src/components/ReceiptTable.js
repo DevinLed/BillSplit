@@ -2,20 +2,18 @@ import React, { useState, useEffect } from "react";
 import "react-html5-camera-photo/build/css/index.css";
 import "../index.css";
 import "../darkMode.css";
-
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import "react-datepicker/dist/react-datepicker.css";
 import { IoMdAddCircleOutline, IoMdRemoveCircleOutline } from "react-icons/io";
-import { CSSTransition } from "react-transition-group";
 import { Button } from "@material-tailwind/react";
+import { useNavigate } from "react-router-dom";
 
 export default function ReceiptTable({
   name,
   amount,
   setAmount,
   items,
-  currentIndex,
   handleReceiptPictureSubmit,
   combinedArray,
   setCombinedArray,
@@ -36,15 +34,8 @@ export default function ReceiptTable({
   setPictureTax,
   pictureConfidence,
   setName,
-  filledIn,
-  setFilledIn,
   theme,
-  receiptTotal,
   setReceiptTotal,
-  taxReal,
-  setTaxReal,
-  taxOwing,
-  taxOwingPerc,
   taxActual,
   taxRate,
   lang,
@@ -52,11 +43,12 @@ export default function ReceiptTable({
   setSubmissionArray,
   loggedInUsername,
 }) {
+  
+  const navigate = useNavigate();
   // Handler for changing the name of the item added to array
   const [isAddingItem, setIsAddingItem] = useState(false);
   const [showTaxButton, setShowTableButton] = useState(true);
 
-  const [currentValue, setCurrentValue] = useState(undefined);
   const handleNameChange = (event) => {
     setName(event.target.value);
   };
