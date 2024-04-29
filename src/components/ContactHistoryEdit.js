@@ -1,8 +1,7 @@
 import React from "react";
-import { useState, useRef, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import "./../index.css";
-import { IoSaveOutline, IoCloseCircleOutline, IoPencilSharp } from "react-icons/io5";
-import { AiOutlineDelete } from "react-icons/ai";
+import { IoPencilSharp } from "react-icons/io5";
 import { CSSTransition } from "react-transition-group";
 import { useParams } from "react-router-dom";
 import { Button } from "@material-tailwind/react";
@@ -14,13 +13,10 @@ export default function ContactHistoryEdit({
   lang,
   addPerson,
   setAddPerson,
-  selectPerson,
   personName,
   personEmail,
   personPhone,
   personOwing,
-  ContactId,
-  UserEmail,
   passedId,
   setPersonName,
   setPersonEmail,
@@ -33,13 +29,7 @@ export default function ContactHistoryEdit({
   setIsSelected,
   editPerson,
   setEditPerson,
-  editRow,
-  value,
-  setValue,
-  handleAddSubmit,
-  setLang,
   loggedInUserEmail,
-  setFormSubmitted,
   handleDeletePerson,
   dataThrow,
   setDataThrow,
@@ -47,11 +37,8 @@ export default function ContactHistoryEdit({
   user,
   API_URL,
   updateEditHandler,
-  combinedArray,
-  submissionArray,
-  setSelfValue,
   selfValue,
-  loggedInUsername
+  loggedInUsername,
 }) {
   const [selectEditPersonList, setEditSelectPersonList] = useState(true);
   const { id } = useParams();
@@ -92,7 +79,6 @@ export default function ContactHistoryEdit({
   const [selectedTransaction, setSelectedTransaction] = useState(null);
 
   const [isExpanded, setIsExpanded] = useState(false);
-  const [loading, setLoading] = useState(true);
   const toggleExpanded = () => {
     setIsExpanded(!isExpanded);
   };
@@ -127,7 +113,13 @@ export default function ContactHistoryEdit({
                 </p>
               </div>
               <div className="flex justify-center items-center">
-                <p className="font-bold">{transaction.loggedInUsername === loggedInUsername ? lang === "english" ? "you" : "vous" : transaction.loggedInUsername}</p>
+                <p className="font-bold">
+                  {transaction.loggedInUsername === loggedInUsername
+                    ? lang === "english"
+                      ? "you"
+                      : "vous"
+                    : transaction.loggedInUsername}
+                </p>
               </div>
 
               <div className="flex justify-center items-center mt-2">
@@ -147,8 +139,8 @@ export default function ContactHistoryEdit({
                     ? "You are Owed"
                     : "On vous doit"
                   : lang === "english"
-                  ? "You owe"
-                  : "Tu dois"}
+                    ? "You owe"
+                    : "Tu dois"}
               </p>
             </div>
             <div className="flex justify-center items-center">
@@ -240,18 +232,28 @@ export default function ContactHistoryEdit({
     return null;
   }, [filteredTransactions]);
 
-  const personNames = useMemo(() => {
-    const uniquePersons = Array.from(
-      new Set(transactions.map((transaction) => transaction.personName))
-    );
-    return uniquePersons;
-  }, [transactions]);
-
   const [showEditPerson, setShowEditPerson] = useState(false);
   const toggleEditPerson = () => {
     setShowEditPerson(!showEditPerson);
   };
+  useEffect(() => {
+    const confirmBeforeUnload = (e) => {
+      e.preventDefault();
+      e.returnValue = ""; 
+    };
 
+    const handleUnload = () => {
+      window.location.href = "/#/App/EditList";
+    };
+
+    window.onbeforeunload = confirmBeforeUnload;
+    window.addEventListener("unload", handleUnload);
+
+    return () => {
+      window.removeEventListener("unload", handleUnload);
+      window.onbeforeunload = null;
+    };
+  }, []);
   return (
     <>
       <main
@@ -263,25 +265,27 @@ export default function ContactHistoryEdit({
           theme={theme}
           lang={lang}
         />
-        {!selfValue ? ( <Button
+        {!selfValue ? (
+          <Button
             color="lightBlue"
             ripple="light"
             className="gradient-btn mb-2 flex items-center justify-center"
             style={{ margin: "auto" }}
-
-                       
-          onClick={toggleEditPerson}
+            onClick={toggleEditPerson}
           >
             <div className="flex items-center">
-                        <IoPencilSharp size={24} />
+              <IoPencilSharp size={24} />
               <span className="text-white ml-2">
-                        {lang === "english"
-            ? "Edit contact details"
-            : "Modifier les coordonnées"}
+                {lang === "english"
+                  ? "Edit contact details"
+                  : "Modifier les coordonnées"}
               </span>
             </div>
-          </Button>) : ("") } 
-        
+          </Button>
+        ) : (
+          ""
+        )}
+
         {showEditPerson && (
           <EditPerson
             addPerson={addPerson}
@@ -375,8 +379,8 @@ export default function ContactHistoryEdit({
                         ? "You are Owed"
                         : "On vous doit"
                       : lang === "english"
-                      ? "You owe"
-                      : "Tu dois"}
+                        ? "You owe"
+                        : "Tu dois"}
                   </p>
                 </div>
                 <div className="flex justify-center items-center">

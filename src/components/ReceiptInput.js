@@ -11,13 +11,9 @@ import ReceiptTable from "./ReceiptTable";
 import { Link, useLocation } from "react-router-dom";
 import "../darkMode.css";
 import {
-  IoCameraOutline,
-  IoCardOutline,
   IoExitOutline,
-  IoDuplicateOutline,
   IoRepeatSharp,
   IoCheckmarkCircle,
-  IoCreateOutline,
 } from "react-icons/io5";
 import { Button } from "@material-tailwind/react";
 import "react-datepicker/dist/react-datepicker.css";
@@ -64,18 +60,13 @@ export default function ReceiptInput({
   obtainedInfo,
   setObtainedInfo,
   loggedInUserEmail,
-  additionValue,
   submissionArray,
   setSubmissionArray,
   loggedInUsername,
-  selfExpense,
-  setSelfExpense,
-  setSelectPersonReceipt,
-
 }) {
   registerLocale("en", en);
   registerLocale("fr", fr);
-  
+
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const selectMethodPicture = searchParams.get("selectMethodPicture");
@@ -380,10 +371,27 @@ export default function ReceiptInput({
       }))
     );
   }, []);
+  useEffect(() => {
+    const confirmBeforeUnload = (e) => {
+      e.preventDefault();
+      e.returnValue = ""; 
+    };
 
+    const handleUnload = () => {
+      window.location.href = "/#/App/SplitBill";
+    };
+
+    window.onbeforeunload = confirmBeforeUnload;
+    window.addEventListener("unload", handleUnload);
+
+    return () => {
+      window.removeEventListener("unload", handleUnload);
+      window.onbeforeunload = null;
+    };
+  }, []);
   return (
     <>
-           <CSSTransition
+      <CSSTransition
         in={selectMethodManual}
         timeout={500}
         classNames="fade"
@@ -626,7 +634,6 @@ export default function ReceiptInput({
                                 : "flex item-center gap-y-0 bg-white py-4 justify-center text-center"
                             }
                           >
-                            
                             <div className="m-2 mb-4 flex flex-col justify-center items-center sm:flex-row">
                               <Button
                                 variant="gradient"
@@ -823,7 +830,6 @@ export default function ReceiptInput({
                               : "flex item-center gap-y-0 bg-white py-4 justify-center text-center"
                           }
                         >
-                         
                           <div className="m-2 mb-4 flex flex-col justify-center items-center sm:flex-row">
                             <Button
                               variant="gradient"
@@ -911,14 +917,14 @@ export default function ReceiptInput({
                         className="flex-1 text-center"
                         style={{ maxWidth: "50%", margin: 0 }}
                       >
-                         <span
-                        className={
-                          "ml-2 " +
-                          (theme === "dark" ? "text-white" : "text-gray-800")
-                        }
-                      >
-                        {lang === "english" ? "Who Paid?" : "Qui a payé ?"}
-                      </span>
+                        <span
+                          className={
+                            "ml-2 " +
+                            (theme === "dark" ? "text-white" : "text-gray-800")
+                          }
+                        >
+                          {lang === "english" ? "Who Paid?" : "Qui a payé ?"}
+                        </span>
                       </div>
                       <div className="flex-1 text-center m-0">
                         <Button
@@ -976,8 +982,8 @@ export default function ReceiptInput({
                           style={{ margin: "auto" }}
                           onClick={(e) => {
                             setShowCameraImage(false);
-                            (handleResetTotals(e));}
-                          }
+                            handleResetTotals(e);
+                          }}
                         >
                           <IoRepeatSharp size={24} />
                           {lang === "english"
@@ -1292,7 +1298,6 @@ export default function ReceiptInput({
                                 : "flex item-center justify-center gap-y-0 bg-white py-4"
                             }
                           >
-                            
                             <div className="max-w-20 m-2 mb-4 flex flex-col justify-center sm:flex-row">
                               <Button
                                 variant="gradient"
