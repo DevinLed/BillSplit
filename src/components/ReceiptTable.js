@@ -7,7 +7,6 @@ import "rc-slider/assets/index.css";
 import "react-datepicker/dist/react-datepicker.css";
 import { IoMdAddCircleOutline, IoMdRemoveCircleOutline } from "react-icons/io";
 import { Button } from "@material-tailwind/react";
-import { useNavigate } from "react-router-dom";
 
 export default function ReceiptTable({
   name,
@@ -43,8 +42,6 @@ export default function ReceiptTable({
   setSubmissionArray,
   loggedInUsername,
 }) {
-  
-  const navigate = useNavigate();
   // Handler for changing the name of the item added to array
   const [isAddingItem, setIsAddingItem] = useState(false);
   const [showTaxButton, setShowTableButton] = useState(true);
@@ -117,6 +114,11 @@ export default function ReceiptTable({
     setPictureTax(calculatedTax);
     setIsAddingItem(true);
     setShowTableButton(false);
+  };
+  const handleNoAutoTaxesToggle = () => {
+    setPictureTax("");
+    setIsAddingItem(false);
+    setShowTableButton(true);
   };
 
   // Handler for when on mobile, enter key will collapse the keyboard popup
@@ -703,25 +705,54 @@ export default function ReceiptTable({
                 <td colSpan={6} className="text-center">
                   <div
                     className={
-                      theme === "dark" ? "bg-gray-900 h-3" : "bg-white h-3"
+                      theme === "dark"
+                        ? " rounded-lg bg-gray-800"
+                        : "rounded-lg bg-gray-100"
                     }
                   ></div>
-                  {showTaxButton ? (
-                    <Button
-                      variant="gradient"
-                      className="gradient-btn mb-2 flex items-center justify-center"
-                      style={{ margin: "auto" }}
-                      onClick={() => {
-                        handleAutoTaxesToggle();
-                      }}
-                    >
+                  <div
+                    style={{
+                      backgroundColor: "#f5f5f5",
+                      padding: "1rem",
+                      borderRadius: "0.5rem",
+                    }}
+                  >
+                    <label>
                       {lang === "english"
                         ? "Auto Taxes?"
                         : "Taxes Automatiques"}
-                    </Button>
-                  ) : (
-                    ""
-                  )}
+                    </label>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        height: "3rem",
+                      }}
+                    >
+                      <div style={{ marginRight: "1rem" }}>
+                        <input
+                          type="radio"
+                          id="autoTaxesYes"
+                          name="autoTaxes"
+                          value="yes"
+                          onChange={() => handleAutoTaxesToggle()}
+                        />
+                        <label htmlFor="autoTaxesYes">Yes</label>
+                      </div>
+                      <div>
+                        <input
+                          type="radio"
+                          id="autoTaxesNo"
+                          name="autoTaxes"
+                          value="no"
+                          onChange={handleNoAutoTaxesToggle}
+                          
+                        />
+                        <label htmlFor="autoTaxesNo">No</label>
+                      </div>
+                    </div>
+                  </div>
                 </td>
                 <td></td>
                 <td></td>
