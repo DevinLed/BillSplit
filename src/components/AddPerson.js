@@ -3,6 +3,7 @@ import "../index.css";
 import { CSSTransition } from "react-transition-group";
 import { IoSaveOutline, IoCloseCircleOutline } from "react-icons/io5";
 import { Button } from "@material-tailwind/react";
+import { Textarea } from "@material-tailwind/react";
 
 export default function AddPerson({
   personName,
@@ -143,6 +144,7 @@ export default function AddPerson({
                     }}
                     autoComplete="off"
                   />
+                  
                 </div>
 
                 <div className="mb-4">

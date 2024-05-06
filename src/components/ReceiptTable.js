@@ -701,20 +701,21 @@ export default function ReceiptTable({
                   <td></td>
                 </tr>
               ) : null}
-              <tr className={theme === "dark" ? "bg-gray-900" : "bg-white"}>
+              <tr
+                className={
+                  theme === "dark"
+                    ? "bg-gray-900 text-center"
+                    : "bg-white text-center"
+                }
+              >
                 <td colSpan={6} className="text-center">
-                  <div
-                    className={
-                      theme === "dark"
-                        ? " rounded-lg bg-gray-800"
-                        : "rounded-lg bg-gray-100"
-                    }
-                  ></div>
                   <div
                     style={{
                       backgroundColor: "#f5f5f5",
-                      padding: "1rem",
+                      padding: "5px",
                       borderRadius: "0.5rem",
+                      display: "inline-block",
+                      width: "50%",
                     }}
                   >
                     <label>
@@ -722,15 +723,10 @@ export default function ReceiptTable({
                         ? "Auto Taxes?"
                         : "Taxes Automatiques"}
                     </label>
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        height: "3rem",
-                      }}
-                    >
-                      <div style={{ marginRight: "1rem" }}>
+                    <div style={{ paddingTop: "5px", height: "40px" }}>
+                      <div
+                        style={{ marginRight: "1rem", display: "inline-block" }}
+                      >
                         <input
                           type="radio"
                           id="autoTaxesYes"
@@ -740,22 +736,20 @@ export default function ReceiptTable({
                         />
                         <label htmlFor="autoTaxesYes">Yes</label>
                       </div>
-                      <div>
+                      <div style={{ display: "inline-block" }}>
                         <input
                           type="radio"
                           id="autoTaxesNo"
                           name="autoTaxes"
                           value="no"
                           onChange={handleNoAutoTaxesToggle}
-                          
+                          defaultChecked
                         />
                         <label htmlFor="autoTaxesNo">No</label>
                       </div>
                     </div>
                   </div>
                 </td>
-                <td></td>
-                <td></td>
               </tr>
             </tfoot>
           </table>

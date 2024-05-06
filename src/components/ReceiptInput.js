@@ -72,8 +72,6 @@ export default function ReceiptInput({
   const selectMethodPicture = searchParams.get("selectMethodPicture");
   const selectMethodManual = searchParams.get("selectMethodManual");
 
-  const [payerId, setPayerId] = useState("");
-  const [debtorId, setDebtorId] = useState("");
   const { ContactId } = useParams();
   const [pictureError, setPictureError] = useState(false);
   const [submissionError, setSubmissionError] = useState(true);
@@ -209,15 +207,7 @@ export default function ReceiptInput({
     }
   }
 
-  const calculatePercentage = (sliderValue) => {
-    if (sliderValue === 0) {
-      return 100;
-    } else if (sliderValue === 50) {
-      return 50;
-    } else if (sliderValue === 100) {
-      return 0;
-    }
-  };
+
   // Handlers for selected values, either me or them
   const handleButton1Click = () => {
     setSelected(1);
@@ -551,19 +541,7 @@ export default function ReceiptInput({
                           </div>
                         </div>
                         <div className="mt-0 text-center">
-                          <label
-                            htmlFor="colFormLabel"
-                            className={
-                              theme === "dark"
-                                ? "col-form-label text-center text-white"
-                                : "col-form-label text-center text-black"
-                            }
-                          >
-                            {lang === "english"
-                              ? "Date of Receipt"
-                              : "Date de réception"}
-                          </label>
-                          <div className="justify-left z-50 mt-3 mb-3 text-center">
+                         <div className="justify-left z-50 mt-3 mb-3 text-center">
                             <DatePicker
                               defaultValue="Date of Receipt"
                               selected={startDate}
@@ -746,19 +724,7 @@ export default function ReceiptInput({
                           </div>
                         </div>
                         <div className="mt-0 text-center">
-                          <label
-                            htmlFor="colFormLabel"
-                            className={
-                              theme === "dark"
-                                ? "col-form-label text-center text-white"
-                                : "col-form-label text-center text-black"
-                            }
-                          >
-                            {lang === "english"
-                              ? "Date of Receipt"
-                              : "Date de réception"}
-                          </label>
-                          <div className="justify-left z-50 mt-3 mb-3 text-center">
+                         <div className="justify-left z-50 mt-3 mb-3 text-center">
                             <DatePicker
                               defaultValue="Date of Receipt"
                               selected={startDate}
@@ -1085,18 +1051,6 @@ export default function ReceiptInput({
                               >
                                 <div>
                                   <div className="mt-0">
-                                    <label
-                                      htmlFor="colFormLabel"
-                                      className={
-                                        theme === "dark"
-                                          ? "col-form-label text-center text-white"
-                                          : "col-form-label text-center text-black"
-                                      }
-                                    >
-                                      {lang === "english"
-                                        ? "Date of Receipt"
-                                        : "Date de réception"}
-                                    </label>
                                     <div className="justify-left z-50 mt-3 mb-3 text-center">
                                       <DatePicker
                                         defaultValue="Date of Receipt"
@@ -1200,13 +1154,10 @@ export default function ReceiptInput({
                                       htmlFor="colFormLabel"
                                       className={
                                         theme === "dark"
-                                          ? "col-form-label text-center text-white"
-                                          : "col-form-label text-center text-black"
+                                          ? "col-form-label text-center text-white h-0"
+                                          : "col-form-label text-center text-black h-0"
                                       }
                                     >
-                                      {lang === "english"
-                                        ? "Date of Receipt"
-                                        : "Date de réception"}
                                     </label>
                                     <div className="z-50 mt-3 mb-3 text-center">
                                       <DatePicker
@@ -1383,12 +1334,16 @@ export default function ReceiptInput({
                   : "La photo est trop floue"}
               </p>
               <div className="flex justify-center item-center mt-4">
-                <button
-                  className="ml-1 px-4 py-2 mr-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400"
+              <Button
+                        variant="gradient"
+                        className={`m-0 rounded-2 ${
+                          selected === 1 ? "bg-gray-500" : "bg-gray-900"
+                        } h-8 w-16 py-1 px-2 font-bold text-white`}
+                        
                   onClick={() => setPictureError(false)}
-                >
+                      >
                   OK
-                </button>
+                </Button>
               </div>
             </div>
           </div>
