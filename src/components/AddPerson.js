@@ -3,7 +3,7 @@ import "../index.css";
 import { CSSTransition } from "react-transition-group";
 import { IoSaveOutline, IoCloseCircleOutline } from "react-icons/io5";
 import { Button } from "@material-tailwind/react";
-import { Textarea } from "@material-tailwind/react";
+import { Input } from "@material-tailwind/react";
 
 export default function AddPerson({
   personName,
@@ -48,7 +48,25 @@ export default function AddPerson({
       6
     )}-${numbersOnly.slice(6, 10)}`;
   };
+  const handleEscPress = (event, setAddPerson, setFormSubmitted, resetForm) => {
+    if (event.key === 'Escape') {
+      setAddPerson(false);
+      setFormSubmitted(true);
+      resetForm();
+    }
+  };
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      handleEscPress(event, setAddPerson, setFormSubmitted, resetForm);
+    };
 
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [setAddPerson, setFormSubmitted, resetForm]);
+  
   const handlePhoneNumberChange = (event) => {
     const inputValue = event.target.value;
     const formattedValue = formatPhoneNumber(inputValue);
@@ -144,7 +162,6 @@ export default function AddPerson({
                     }}
                     autoComplete="off"
                   />
-                  
                 </div>
 
                 <div className="mb-4">
@@ -157,11 +174,11 @@ export default function AddPerson({
                     autoComplete="off"
                     type="phone"
                     className={`form-control w-full py-2 px-3 rounded-lg focus:outline-none focus:ring ${
-                      isValidPhoneNumber ? "ring-green-300" : "ring-red-300"
-                    } ${
-                      personPhone.length >= 10 && !isValidPhoneNumber
-                        ? "ring-red-300"
-                        : ""
+                      personPhone.length >= 13 && isValidPhoneNumber
+                        ? "ring-green-300"
+                        : personPhone.length >= 13 && !isValidPhoneNumber
+                          ? "ring-red-300"
+                          : ""
                     }`}
                     id="colFormLabel"
                     placeholder={
@@ -182,9 +199,11 @@ export default function AddPerson({
                     autoComplete="off"
                     type="email"
                     className={`form-control w-full py-2 px-3 rounded-lg focus:outline-none focus:ring ${
-                      isValidEmail && !errorCurrentUser
-                        ? "ring-green-300"
-                        : "ring-red-300"
+                      personEmail.length > 15 && !personEmail.includes("@")
+                        ? "ring-red-300"
+                        : isValidEmail && !errorCurrentUser
+                          ? "ring-green-300"
+                          : "ring-transparent" // Default ring color
                     }`}
                     id="colFormLabel"
                     placeholder="E-mail"
@@ -215,7 +234,9 @@ export default function AddPerson({
                   </label>
                 </div>
 
-                <div className="mb-4">
+                <div className="mb-0">
+                  
+          <p className="mt-0 text-sm text-gray-500">{lang === "english" ? "+ if they owe you" : "+ s'ils vous doivent"}</p>
                   <CSSTransition
                     in={true}
                     timeout={300}
@@ -223,7 +244,7 @@ export default function AddPerson({
                     unmountOnExit
                   >
                     <div
-                      className="flex items-center mb-3 justify-center"
+                      className="flex items-center justify-center"
                       style={{ height: "40px" }}
                     >
                       {/* Set a fixed height for the div */}
@@ -266,6 +287,8 @@ export default function AddPerson({
                       </div>
                     </div>
                   </CSSTransition>
+                  
+          <p className="mt-0 mb-3 text-sm text-gray-500">{lang === "english" ? "- if you owe them" : "- si vous leur devez"}</p>
                 </div>
 
                 {errorMsg && (
