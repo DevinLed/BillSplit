@@ -391,21 +391,42 @@ export default function ReceiptTable({
               {personName === loggedInUsername ? (
                 ""
               ) : (
-                <td colSpan="3" className="pl-3">
-                  <div
-                    style={{
-                      width: "auto",
-                      margin: "auto",
-                    }}
-                  >
-                    <Slider
-                      defaultValue={50}
-                      min={0}
-                      max={100}
-                      value={sliderValue}
-                      step={50}
-                      onChange={(value) => handleSliderChange(value)}
-                    />
+                <td colSpan="3" style={{
+                  paddingTop: "10px",
+                }}>
+                  <div>
+                    <div>
+                      <label
+                        style={{
+                          marginRight: "50px",
+                          marginLeft: "25px",
+                          paddingTop: "10px",
+                        }}
+                      >
+                        <input
+                          type="radio"
+                          value="0"
+                          checked={sliderValue === 0}
+                          onChange={() => handleSliderChange(0)}
+                        />
+                      </label>
+                      <label style={{ marginRight: "45px" }}>
+                        <input
+                          type="radio"
+                          value="50"
+                          checked={sliderValue === 50}
+                          onChange={() => handleSliderChange(50)}
+                        />
+                      </label>
+                      <label>
+                        <input
+                          type="radio"
+                          value="100"
+                          checked={sliderValue === 100}
+                          onChange={() => handleSliderChange(100)}
+                        />
+                      </label>
+                    </div>
                     {renderColumn()}
                   </div>
                 </td>
@@ -485,6 +506,7 @@ export default function ReceiptTable({
                       display: "flex",
                       alignItems: "center",
                       height: "100%",
+                      paddingTop: "15px"
                     }}
                   >
                     <input
@@ -511,23 +533,46 @@ export default function ReceiptTable({
                   ) : (
                     <td colSpan={3}>
                       <div
-                        style={{
-                          width: "auto",
-                          margin: "auto",
-                          padding: "8px",
-                        }}
                       >
-                        <Slider
-                          className="ml-2"
-                          defaultValue={item.sliderValue || 50}
-                          min={0}
-                          max={100}
-                          step={50}
-                          value={item.sliderValue}
-                          onChange={(value) =>
-                            handlePictureSliderChange(index, value, item)
-                          }
-                        />
+                        <div 
+                        style={{
+                          paddingLeft: "8px",
+                          paddingTop: "15px", 
+                        }}>
+                          <label
+                            style={{ marginRight: "50px", marginLeft: "18px" }}
+                          >
+                            <input
+                              type="radio"
+                              value="0"
+                              checked={item.sliderValue === 0}
+                              onChange={() =>
+                                handlePictureSliderChange(index, 0, item)
+                              }
+                            />
+                          </label>
+
+                          <label style={{ marginRight: "45px" }}>
+                            <input
+                              type="radio"
+                              value="50"
+                              checked={item.sliderValue === 50}
+                              onChange={() =>
+                                handlePictureSliderChange(index, 50, item)
+                              }
+                            />
+                          </label>
+                          <label>
+                            <input
+                              type="radio"
+                              value="100"
+                              checked={item.sliderValue === 100}
+                              onChange={() =>
+                                handlePictureSliderChange(index, 100, item)
+                              }
+                            />
+                          </label>
+                        </div>
                         {renderColumn()}
                       </div>
                     </td>

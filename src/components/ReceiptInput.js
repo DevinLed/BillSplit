@@ -19,7 +19,6 @@ import { Button } from "@material-tailwind/react";
 import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
 import { CSSTransition } from "react-transition-group";
-import "rc-slider/assets/index.css";
 import "react-datepicker/dist/react-datepicker.css";
 export default function ReceiptInput({
   personName,
