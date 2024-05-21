@@ -2,6 +2,10 @@ import React from "react";
 import { IoIosArrowBack } from "react-icons/io";
 import { AiOutlineMenu } from "react-icons/ai";
 import { Link } from "react-router-dom";
+import {
+  IoSunnyOutline,
+  IoMoonOutline,
+} from "react-icons/io5";
 
 import "../darkMode.css";
 export default function Header({
@@ -20,6 +24,7 @@ export default function Header({
   signOut,
   user,
   loggedInUsername,
+  toggleTheme
 }) {
   return (
     <>
@@ -79,7 +84,7 @@ export default function Header({
       {selectPersonList ? (
         <>
           <div
-            className="align-items-center mb-5 flex h-10 w-full items-center items-stretch justify-between border-t-2 border-b-2 text-2xl font-bold "
+            className="align-items-center mb-2 flex h-10 w-full items-center items-stretch justify-between border-t-2 border-b-2 text-2xl font-bold "
             id="headbar"
           >
             <Link to="/App/Home">
@@ -91,7 +96,6 @@ export default function Header({
             <h1 className="whitespace-nowrap">
               {lang === "english" ? "Share a bill" : "Partager une facture"}
             </h1>
-
             <div className="dropdown">
               <button
                 align="end"
@@ -130,6 +134,20 @@ export default function Header({
               </div>
             </div>
           </div>
+          <div>            
+<div className="switch-container mb-3">
+  <IoSunnyOutline size={24} />
+  <label className="switch">
+    <input
+      type="checkbox"
+      checked={theme === "dark"}
+      onChange={toggleTheme}
+    />
+    <span className="slider"></span>
+  </label>
+  <IoMoonOutline size={24} />
+</div>
+          </div>
         </>
       ) : (
         ""
@@ -138,7 +156,7 @@ export default function Header({
       {selectEditPersonList ? (
         <>
           <div
-            className="align-items-center mb-5 flex h-10 w-full items-center items-stretch justify-between border-t-2 border-b-2 text-2xl font-bold "
+            className="align-items-center mb-2 flex h-10 w-full items-center items-stretch justify-between border-t-2 border-b-2 text-2xl font-bold "
             id="headbar"
           >
             <Link to="/App/Home">
@@ -180,14 +198,27 @@ export default function Header({
                 </Link>
               </div>
             </div>
+            
           </div>
+<div className="switch-container mb-3">
+  <IoSunnyOutline size={24} />
+  <label className="switch">
+    <input
+      type="checkbox"
+      checked={theme === "dark"}
+      onChange={toggleTheme}
+    />
+    <span className="slider"></span>
+  </label>
+  <IoMoonOutline size={24} />
+</div>
         </>
       ) : (
         ""
       )}
       {selectPersonReceipt ? (
         <div
-          className="align-items-center mb-5 flex h-10 w-full items-center items-stretch justify-between border-t-2 border-b-2 text-2xl font-bold "
+          className="align-items-center mb-2 flex h-10 w-full items-center items-stretch justify-between border-t-2 border-b-2 text-2xl font-bold "
           id="headbar"
         >
           <Link to="/App/SplitBIll">
@@ -234,12 +265,26 @@ export default function Header({
               </Link>
             </div>
           </div>
+          
+<div className="switch-container mb-2">
+  <IoSunnyOutline size={24} />
+  <label className="switch">
+    <input
+      type="checkbox"
+      checked={theme === "dark"}
+      onChange={toggleTheme}
+    />
+    <span className="slider"></span>
+  </label>
+  <IoMoonOutline size={24} />
+</div>
         </div>
       ) : (
         ""
       )}
 
       {selectMethodManual ? (
+        <>
         <div
           className="align-items-center mb-2 flex h-10 w-full items-center items-stretch justify-between border-t-2 border-b-2 text-2xl font-bold "
           id="headbar"
@@ -300,6 +345,20 @@ export default function Header({
             </div>
           </div>
         </div>
+          
+<div className="switch-container mb-1">
+  <IoSunnyOutline size={24} />
+  <label className="switch">
+    <input
+      type="checkbox"
+      checked={theme === "dark"}
+      onChange={toggleTheme}
+    />
+    <span className="slider"></span>
+  </label>
+  <IoMoonOutline size={24} />
+</div>
+</>
       ) : (
         ""
       )}
@@ -355,6 +414,19 @@ export default function Header({
               </Link>
             </div>
           </div>
+          
+<div className="switch-container mb-2">
+  <IoSunnyOutline size={24} />
+  <label className="switch">
+    <input
+      type="checkbox"
+      checked={theme === "dark"}
+      onChange={toggleTheme}
+    />
+    <span className="slider"></span>
+  </label>
+  <IoMoonOutline size={24} />
+</div>
         </div>
       ) : (
         ""
@@ -362,7 +434,7 @@ export default function Header({
       {showSettings ? (
         <>
           <div
-            className="align-items-center mb-5 flex h-10 w-full items-center items-stretch justify-between border-t-2 border-b-2 text-2xl font-bold "
+            className="align-items-center mb-2 flex h-10 w-full items-center items-stretch justify-between border-t-2 border-b-2 text-2xl font-bold "
             id="headbar"
           >
             <Link to="/App/Home">
@@ -403,6 +475,19 @@ export default function Header({
               </div>
             </div>
           </div>
+            
+<div className="switch-container mb-2">
+  <IoSunnyOutline size={24} />
+  <label className="switch">
+    <input
+      type="checkbox"
+      checked={theme === "dark"}
+      onChange={toggleTheme}
+    />
+    <span className="slider"></span>
+  </label>
+  <IoMoonOutline size={24} />
+</div>
         </>
       ) : (
         ""
@@ -455,6 +540,19 @@ export default function Header({
                 </Link>
               </div>
             </div>
+            
+<div className="switch-container mb-2">
+  <IoSunnyOutline size={24} />
+  <label className="switch">
+    <input
+      type="checkbox"
+      checked={theme === "dark"}
+      onChange={toggleTheme}
+    />
+    <span className="slider"></span>
+  </label>
+  <IoMoonOutline size={24} />
+</div>
           </div>
         </>
       ) : (
