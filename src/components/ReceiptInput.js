@@ -62,6 +62,7 @@ export default function ReceiptInput({
   submissionArray,
   setSubmissionArray,
   loggedInUsername,
+  toggleTheme,
 }) {
   registerLocale("en", en);
   registerLocale("fr", fr);
@@ -398,6 +399,7 @@ export default function ReceiptInput({
               theme={theme}
               personName={personName}
               loggedInUsername={loggedInUsername}
+              toggleTheme={toggleTheme}
             />
 
             <div className="container mx-auto px-2 py-8 ">

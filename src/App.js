@@ -705,6 +705,7 @@ function App({ signOut, user }) {
               path="/ReceiptInput/:ContactId"
               element={
                 <ReceiptInput
+                toggleTheme={toggleTheme}
                   submissionArray={submissionArray}
                   setSubmissionArray={setSubmissionArray}
                   combinedTotal={combinedTotal}
@@ -762,6 +763,7 @@ function App({ signOut, user }) {
               path="/SplitBill"
               element={
                 <SplitBill
+                  toggleTheme={toggleTheme}
                   user={user}
                   setPersonReceiptAmount={setPersonReceiptAmount}
                   dataThrow={dataThrow}
@@ -804,6 +806,7 @@ function App({ signOut, user }) {
               path="/SelfExpense"
               element={
                 <SelfExpense
+                toggleTheme={toggleTheme}
                   selfExpense={selfExpense}
                   setSelfExpense={setSelfExpense}
                   user={user}
@@ -848,6 +851,7 @@ function App({ signOut, user }) {
               path="/EditList"
               element={
                 <EditList
+                toggleTheme={toggleTheme}
                   selfValue={selfValue}
                   setSelfValue={setSelfValue}
                   user={user}
@@ -894,6 +898,7 @@ function App({ signOut, user }) {
               path="/Settings"
               element={
                 <Settings
+                toggleTheme={toggleTheme}
                   showConfirmation={showConfirmation}
                   setShowConfirmation={setShowConfirmation}
                   taxRate={taxRate}
@@ -903,7 +908,6 @@ function App({ signOut, user }) {
                   lang={lang}
                   setLang={setLang}
                   loggedInUsername={loggedInUsername}
-                  toggleTheme={toggleTheme}
                 />
               }
             />
@@ -965,6 +969,7 @@ function App({ signOut, user }) {
               path="/ContactHistoryEdit"
               element={
                 <ContactHistoryEdit
+                toggleTheme={toggleTheme}
                   loggedInUsername={loggedInUsername}
                   submissionArray={submissionArray}
                   combinedArray={combinedArray}

@@ -11,13 +11,15 @@ import {
   IoPersonCircleOutline,
   IoSettingsOutline,
   IoPerson,
+  IoSunnyOutline,
+  IoMoonOutline,
 } from "react-icons/io5";
 import { Button } from "@material-tailwind/react";
 import "@aws-amplify/ui-react/styles.css";
 
 import { Amplify } from "aws-amplify";
 
-import awsconfig from "../aws-exports";
+import awsconfig from "../aws-exports"; 
 Amplify.configure(awsconfig);
 
 export default function Home({
@@ -162,7 +164,20 @@ export default function Home({
           style={{ maxWidth: "600px", marginTop: "50px" }}
         >
           <div className="marginBottom">
-            <div className="flex flex-col items-center justify-center mb-3">
+            
+          <div className="switch-container mt-2">
+  <IoSunnyOutline size={24} />
+  <label className="switch">
+    <input
+      type="checkbox"
+      checked={theme === "dark"}
+      onChange={toggleTheme}
+    />
+    <span className="slider"></span>
+  </label>
+  <IoMoonOutline size={24} />
+</div>
+            <div className="flex flex-col items-center justify-center mt-3 mb-3">
               <div
                 style={{ paddingBottom: "4%" }}
                 onClick={() => navigate("/App/SplitBill")}
@@ -211,8 +226,8 @@ export default function Home({
                         style={{ filter: "url(#glow-path)" }}
                       >
                         {lang === "english"
-                          ? "Welcome To Divvy"
-                          : "Bienvenue chez Divvy"}
+                          ? "Click to Divvy it up"
+                          : "Cliquez pour répartir"}
                       </text>
 
                       <text
@@ -268,7 +283,6 @@ export default function Home({
               <CircleMenu lang={lang} toggleTheme={() => toggleTheme()} />
             </div>
           </div>
-
           <Footer theme={theme} lang={lang} />
         </main>
       </div>

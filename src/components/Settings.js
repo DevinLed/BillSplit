@@ -74,27 +74,7 @@ export default function Settings({
         <Header showSettings={true} theme={theme} lang={lang} />
         <div className="flex flex-col items-center justify-center rounded-lg px-3 py-2 shadow-md mb-4 mx-auto">
           {/* Section for selecting tax rate */}
-          <Button
-            variant="gradient"
-            className="flex items-center gap-3 mb-3"
-            onClick={() => {
-              toggleTheme();
-              if (theme === "light") {
-                changeText(lang === "english" ? "Light" : "Lumière");
-              } else {
-                changeText(lang === "english" ? "Dark" : "Sombre");
-              }
-            }}
-          >
-            <div style={{ width: "24px", height: "24px" }}>
-              {theme === "light" ? (
-                <IoInvertModeSharp size={24} className="icon3" />
-              ) : (
-                <IoInvertModeOutline size={24} className="icon3" />
-              )}
-            </div>
-            <span className="text-white text-center">{buttonText}</span>
-          </Button>
+         
           <div className="text-center">
             <Button
               variant="gradient"

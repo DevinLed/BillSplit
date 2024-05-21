@@ -39,6 +39,7 @@ export default function ContactHistoryEdit({
   updateEditHandler,
   selfValue,
   loggedInUsername,
+  toggleTheme
 }) {
   const [selectEditPersonList, setEditSelectPersonList] = useState(true);
   const { id } = useParams();
@@ -264,6 +265,7 @@ export default function ContactHistoryEdit({
           selectEditPersonList={selectEditPersonList}
           theme={theme}
           lang={lang}
+          toggleTheme={toggleTheme}
         />
         {!selfValue ? (
           <Button

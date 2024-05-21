@@ -38,6 +38,7 @@ export default function EditList({
   setDataThrow,
   selfValue,
   setSelfValue,
+  toggleTheme
 }) {
   const API_URL =
     "https://48f95wy514.execute-api.us-east-1.amazonaws.com/prod/contacts";
@@ -76,6 +77,7 @@ export default function EditList({
           selectEditPersonList={selectEditPersonList}
           theme={theme}
           lang={lang}
+          toggleTheme={toggleTheme}
         />
         <div
           className={`flex flex-col items-center justify-center transition-opacity duration-300`}
