@@ -310,13 +310,15 @@ export default function ReceiptTable({
             : "whitespace-no-wrap m-0  flex max-w-full justify-center bg-white py-1 px-1 dark:bg-slate-900"
         }
       >
-        <div className="mb-0 flex max-w-min justify-center rounded-lg border-2">
+        <div className="mb-0 flex max-w-min justify-center rounded-lg border-2" >
           <table
             className={
               theme === "dark"
                 ? "mx-1 my-2 bg-gray-900 text-white"
                 : "mx-1 my-2 "
             }
+            
+            style={{ minWidth: "250px" }}
           >
             <thead className="whitespace-no-wrap max-w-fit overflow-hidden truncate">
               <tr className="whitespace-no-wrap max-w-fit overflow-hidden px-2">
