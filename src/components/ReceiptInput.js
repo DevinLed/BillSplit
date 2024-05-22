@@ -861,6 +861,7 @@ export default function ReceiptInput({
               handleResetTotals={handleResetTotals}
               theme={theme}
               lang={lang}
+              toggleTheme={toggleTheme}
               personName={personName}
             />
             <div

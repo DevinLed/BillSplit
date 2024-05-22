@@ -4,6 +4,7 @@ import { CSSTransition } from "react-transition-group";
 import { IoSaveOutline, IoCloseCircleOutline } from "react-icons/io5";
 import { Button } from "@material-tailwind/react";
 import { Input } from "@material-tailwind/react";
+import { FaSpinner } from "react-icons/fa";
 
 export default function AddPerson({
   personName,
@@ -32,6 +33,7 @@ export default function AddPerson({
   const [errorCurrentUser, setErrorCurrentUser] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [submissionError, setSubmissionError] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   function handleKeyDown(e) {
     if (e.key === "Enter") {
       e.target.blur();
@@ -323,18 +325,17 @@ export default function AddPerson({
                 className="gradient-btn mb-2 flex items-center justify-center"
                 style={{ margin: "auto" }}
                 onClick={(e) => {
-                  if (
-                    errorBalance &&
-                    errorPhone &&
-                    errorEmail &&
-                    errorSameUser
-                  ) {
-                    handleAddSubmit(e);
-                    setFormSubmitted(true);
-                    resetForm();
-                  } else {
-                    setSubmissionError(false);
-                  }
+                  setIsLoading(true);
+                  setTimeout(() => {
+                    setIsLoading(false);
+                    if (errorBalance && errorPhone && errorEmail && errorSameUser) {
+                      handleAddSubmit(e);
+                      setFormSubmitted(true);
+                      resetForm();
+                    } else {
+                      setSubmissionError(false);
+                    }
+                  }, 2500); 
                 }}
               >
                 <IoSaveOutline size={24} />
@@ -354,6 +355,14 @@ export default function AddPerson({
           </div>
         </div>
       </div>
+      
+      {isLoading && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded-lg flex items-center justify-center">
+            <FaSpinner className="animate-spin" size={48} color="darkblue" />
+          </div>
+        </div>
+      )}
     </>
   );
 }

@@ -2,10 +2,7 @@ import React from "react";
 import { IoIosArrowBack } from "react-icons/io";
 import { AiOutlineMenu } from "react-icons/ai";
 import { Link } from "react-router-dom";
-import {
-  IoSunnyOutline,
-  IoMoonOutline,
-} from "react-icons/io5";
+import { IoSunnyOutline, IoMoonOutline } from "react-icons/io5";
 
 import "../darkMode.css";
 export default function Header({
@@ -24,7 +21,7 @@ export default function Header({
   signOut,
   user,
   loggedInUsername,
-  toggleTheme
+  toggleTheme,
 }) {
   return (
     <>
@@ -134,19 +131,19 @@ export default function Header({
               </div>
             </div>
           </div>
-          <div>            
-<div className="switch-container mb-3">
-  <IoSunnyOutline size={24} />
-  <label className="switch">
-    <input
-      type="checkbox"
-      checked={theme === "dark"}
-      onChange={toggleTheme}
-    />
-    <span className="slider"></span>
-  </label>
-  <IoMoonOutline size={24} />
-</div>
+          <div>
+            <div className="switch-container mb-3">
+              <IoSunnyOutline size={24} />
+              <label className="switch">
+                <input
+                  type="checkbox"
+                  checked={theme === "dark"}
+                  onChange={toggleTheme}
+                />
+                <span className="slider"></span>
+              </label>
+              <IoMoonOutline size={24} />
+            </div>
           </div>
         </>
       ) : (
@@ -198,20 +195,19 @@ export default function Header({
                 </Link>
               </div>
             </div>
-            
           </div>
-<div className="switch-container mb-3">
-  <IoSunnyOutline size={24} />
-  <label className="switch">
-    <input
-      type="checkbox"
-      checked={theme === "dark"}
-      onChange={toggleTheme}
-    />
-    <span className="slider"></span>
-  </label>
-  <IoMoonOutline size={24} />
-</div>
+          <div className="switch-container mb-3">
+            <IoSunnyOutline size={24} />
+            <label className="switch">
+              <input
+                type="checkbox"
+                checked={theme === "dark"}
+                onChange={toggleTheme}
+              />
+              <span className="slider"></span>
+            </label>
+            <IoMoonOutline size={24} />
+          </div>
         </>
       ) : (
         ""
@@ -265,19 +261,19 @@ export default function Header({
               </Link>
             </div>
           </div>
-          
-<div className="switch-container mb-2">
-  <IoSunnyOutline size={24} />
-  <label className="switch">
-    <input
-      type="checkbox"
-      checked={theme === "dark"}
-      onChange={toggleTheme}
-    />
-    <span className="slider"></span>
-  </label>
-  <IoMoonOutline size={24} />
-</div>
+
+          <div className="switch-container mb-2">
+            <IoSunnyOutline size={24} />
+            <label className="switch">
+              <input
+                type="checkbox"
+                checked={theme === "dark"}
+                onChange={toggleTheme}
+              />
+              <span className="slider"></span>
+            </label>
+            <IoMoonOutline size={24} />
+          </div>
         </div>
       ) : (
         ""
@@ -285,149 +281,154 @@ export default function Header({
 
       {selectMethodManual ? (
         <>
-        <div
-          className="align-items-center mb-2 flex h-10 w-full items-center items-stretch justify-between border-t-2 border-b-2 text-2xl font-bold "
-          id="headbar"
-        >
-          <Link to="/App/SplitBill">
-            <button
-              className="ml-2 text-black hover:text-black "
-              onClick={() => handleResetTotals()}
-            >
-              <IoIosArrowBack />
-            </button>
-          </Link>
-          {personName === loggedInUsername ? (
-            <h1 className="whitespace-nowrap">
-              {lang === "english"
-                ? "Expense with yourself"
-                : "Dépense avec toi-même"}
-            </h1>
-          ) : (
+          <div
+            className="align-items-center mb-2 flex h-10 w-full items-center items-stretch justify-between border-t-2 border-b-2 text-2xl font-bold "
+            id="headbar"
+          >
+            <Link to="/App/SplitBill">
+              <button
+                className="ml-2 text-black hover:text-black "
+                onClick={() => handleResetTotals()}
+              >
+                <IoIosArrowBack />
+              </button>
+            </Link>
+            {personName === loggedInUsername ? (
+              <h1 className="whitespace-nowrap">
+                {lang === "english"
+                  ? "Expense with yourself"
+                  : "Dépense avec toi-même"}
+              </h1>
+            ) : (
+              <h1 className="whitespace-nowrap">
+                {lang === "english"
+                  ? "Expense with " + personName
+                  : "Dépense avec " + personName}
+              </h1>
+            )}
+
+            <div className="dropdown">
+              <button
+                className="mr-2 text-black hover:text-black"
+                type="button"
+                id="dropdownMenu2"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                <AiOutlineMenu />
+              </button>
+              <div
+                className="dropdown-menu dropdown-menu-right"
+                aria-labelledby="dropdownMenu2"
+              >
+                <Link to="/App/SplitBill">
+                  <button className="dropdown-item">
+                    {lang === "english" ? "New Receipt" : "Nouveau reçu"}
+                  </button>
+                </Link>
+                <Link to="/App/EditList">
+                  <button className="dropdown-item">
+                    {lang === "english"
+                      ? "Edit Person"
+                      : "Modifier la personne"}
+                  </button>
+                </Link>
+
+                <Link to="/App/Settings">
+                  <button className="dropdown-item">
+                    {lang === "english" ? "Settings" : "Paramètres"}
+                  </button>
+                </Link>
+              </div>
+            </div>
+          </div>
+
+          <div className="switch-container mb-1">
+            <IoSunnyOutline size={24} />
+            <label className="switch">
+              <input
+                type="checkbox"
+                checked={theme === "dark"}
+                onChange={toggleTheme}
+              />
+              <span className="slider"></span>
+            </label>
+            <IoMoonOutline size={24} />
+          </div>
+        </>
+      ) : (
+        ""
+      )}
+      {selectMethodPicture ? (
+        <>
+          <div
+            className="align-items-center mb-2 flex h-10 w-full items-center items-stretch justify-between border-t-2 border-b-2 text-2xl font-bold "
+            id="headbar"
+          >
+            <Link to="/App/SplitBill">
+              <button
+                className="ml-2 text-black hover:text-black"
+                onClick={(e) => handleResetTotals(e)}
+              >
+                <IoIosArrowBack />
+              </button>
+            </Link>
             <h1 className="whitespace-nowrap">
               {lang === "english"
                 ? "Expense with " + personName
                 : "Dépense avec " + personName}
             </h1>
-          )}
 
-          <div className="dropdown">
-            <button
-              className="mr-2 text-black hover:text-black"
-              type="button"
-              id="dropdownMenu2"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              <AiOutlineMenu />
-            </button>
-            <div
-              className="dropdown-menu dropdown-menu-right"
-              aria-labelledby="dropdownMenu2"
-            >
-              <Link to="/App/SplitBill">
-                <button className="dropdown-item">
-                  {lang === "english" ? "New Receipt" : "Nouveau reçu"}
-                </button>
-              </Link>
-              <Link to="/App/EditList">
-                <button className="dropdown-item">
-                  {lang === "english" ? "Edit Person" : "Modifier la personne"}
-                </button>
-              </Link>
+            <div className="dropdown">
+              <button
+                className="mr-2 text-black hover:text-black"
+                type="button"
+                id="dropdownMenu2"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                <AiOutlineMenu />
+              </button>
+              <div
+                className="dropdown-menu dropdown-menu-right"
+                aria-labelledby="dropdownMenu2"
+              >
+                <Link to="/App/SplitBill">
+                  <button className="dropdown-item">
+                    {lang === "english" ? "New Receipt" : "Nouveau reçu"}
+                  </button>
+                </Link>
+                <Link to="/App/EditList">
+                  <button className="dropdown-item">
+                    {lang === "english"
+                      ? "Edit Person"
+                      : "Modifier la personne"}
+                  </button>
+                </Link>
 
-              <Link to="/App/Settings">
-                <button className="dropdown-item">
-                  {lang === "english" ? "Settings" : "Paramètres"}
-                </button>
-              </Link>
+                <Link to="/App/Settings">
+                  <button className="dropdown-item">
+                    {lang === "english" ? "Settings" : "Paramètres"}
+                  </button>
+                </Link>
+              </div>
             </div>
           </div>
-        </div>
-          
-<div className="switch-container mb-1">
-  <IoSunnyOutline size={24} />
-  <label className="switch">
-    <input
-      type="checkbox"
-      checked={theme === "dark"}
-      onChange={toggleTheme}
-    />
-    <span className="slider"></span>
-  </label>
-  <IoMoonOutline size={24} />
-</div>
-</>
-      ) : (
-        ""
-      )}
-      {selectMethodPicture ? (
-        <div
-          className="align-items-center mb-5 flex h-10 w-full items-center items-stretch justify-between border-t-2 border-b-2 text-2xl font-bold "
-          id="headbar"
-        >
-          <Link to="/App/SplitBill">
-            <button
-              className="ml-2 text-black hover:text-black"
-              onClick={(e) => handleResetTotals(e)}
-            >
-              <IoIosArrowBack />
-            </button>
-          </Link>
-          <h1 className="whitespace-nowrap">
-            {lang === "english"
-              ? "Expense with " + personName
-              : "Dépense avec " + personName}
-          </h1>
-
-          <div className="dropdown">
-            <button
-              className="mr-2 text-black hover:text-black"
-              type="button"
-              id="dropdownMenu2"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              <AiOutlineMenu />
-            </button>
-            <div
-              className="dropdown-menu dropdown-menu-right"
-              aria-labelledby="dropdownMenu2"
-            >
-              <Link to="/App/SplitBill">
-                <button className="dropdown-item">
-                  {lang === "english" ? "New Receipt" : "Nouveau reçu"}
-                </button>
-              </Link>
-              <Link to="/App/EditList">
-                <button className="dropdown-item">
-                  {lang === "english" ? "Edit Person" : "Modifier la personne"}
-                </button>
-              </Link>
-
-              <Link to="/App/Settings">
-                <button className="dropdown-item">
-                  {lang === "english" ? "Settings" : "Paramètres"}
-                </button>
-              </Link>
-            </div>
+          <div className="switch-container mb-2">
+            <IoSunnyOutline size={24} />
+            <label className="switch">
+              <input
+                type="checkbox"
+                checked={theme === "dark"}
+                onChange={toggleTheme}
+              />
+              <span className="slider"></span>
+            </label>
+            <IoMoonOutline size={24} />
           </div>
-          
-<div className="switch-container mb-2">
-  <IoSunnyOutline size={24} />
-  <label className="switch">
-    <input
-      type="checkbox"
-      checked={theme === "dark"}
-      onChange={toggleTheme}
-    />
-    <span className="slider"></span>
-  </label>
-  <IoMoonOutline size={24} />
-</div>
-        </div>
+        </>
       ) : (
         ""
       )}
@@ -475,19 +476,19 @@ export default function Header({
               </div>
             </div>
           </div>
-            
-<div className="switch-container mb-2">
-  <IoSunnyOutline size={24} />
-  <label className="switch">
-    <input
-      type="checkbox"
-      checked={theme === "dark"}
-      onChange={toggleTheme}
-    />
-    <span className="slider"></span>
-  </label>
-  <IoMoonOutline size={24} />
-</div>
+
+          <div className="switch-container mb-2">
+            <IoSunnyOutline size={24} />
+            <label className="switch">
+              <input
+                type="checkbox"
+                checked={theme === "dark"}
+                onChange={toggleTheme}
+              />
+              <span className="slider"></span>
+            </label>
+            <IoMoonOutline size={24} />
+          </div>
         </>
       ) : (
         ""
@@ -540,19 +541,19 @@ export default function Header({
                 </Link>
               </div>
             </div>
-            
-<div className="switch-container mb-2">
-  <IoSunnyOutline size={24} />
-  <label className="switch">
-    <input
-      type="checkbox"
-      checked={theme === "dark"}
-      onChange={toggleTheme}
-    />
-    <span className="slider"></span>
-  </label>
-  <IoMoonOutline size={24} />
-</div>
+
+            <div className="switch-container mb-2">
+              <IoSunnyOutline size={24} />
+              <label className="switch">
+                <input
+                  type="checkbox"
+                  checked={theme === "dark"}
+                  onChange={toggleTheme}
+                />
+                <span className="slider"></span>
+              </label>
+              <IoMoonOutline size={24} />
+            </div>
           </div>
         </>
       ) : (

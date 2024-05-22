@@ -705,7 +705,7 @@ function App({ signOut, user }) {
               path="/ReceiptInput/:ContactId"
               element={
                 <ReceiptInput
-                toggleTheme={toggleTheme}
+                  toggleTheme={toggleTheme}
                   submissionArray={submissionArray}
                   setSubmissionArray={setSubmissionArray}
                   combinedTotal={combinedTotal}
@@ -806,7 +806,7 @@ function App({ signOut, user }) {
               path="/SelfExpense"
               element={
                 <SelfExpense
-                toggleTheme={toggleTheme}
+                  toggleTheme={toggleTheme}
                   selfExpense={selfExpense}
                   setSelfExpense={setSelfExpense}
                   user={user}
@@ -822,6 +822,7 @@ function App({ signOut, user }) {
                   personOwing={personOwing}
                   setPersonName={setPersonName}
                   setPersonEmail={setPersonEmail}
+                  setPersonReceiptAmount={setPersonReceiptAmount}
                   setPersonPhone={setPersonPhone}
                   setPersonOwing={setPersonOwing}
                   handleSubmit={handleSubmit}
@@ -851,7 +852,7 @@ function App({ signOut, user }) {
               path="/EditList"
               element={
                 <EditList
-                toggleTheme={toggleTheme}
+                  toggleTheme={toggleTheme}
                   selfValue={selfValue}
                   setSelfValue={setSelfValue}
                   user={user}
@@ -898,7 +899,7 @@ function App({ signOut, user }) {
               path="/Settings"
               element={
                 <Settings
-                toggleTheme={toggleTheme}
+                  toggleTheme={toggleTheme}
                   showConfirmation={showConfirmation}
                   setShowConfirmation={setShowConfirmation}
                   taxRate={taxRate}
@@ -969,7 +970,7 @@ function App({ signOut, user }) {
               path="/ContactHistoryEdit"
               element={
                 <ContactHistoryEdit
-                toggleTheme={toggleTheme}
+                  toggleTheme={toggleTheme}
                   loggedInUsername={loggedInUsername}
                   submissionArray={submissionArray}
                   combinedArray={combinedArray}
