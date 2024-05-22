@@ -2,14 +2,14 @@ import React, { useRef, useState, useEffect } from "react";
 import { BrowserRouter, Switch, Route, Routes, Link } from "react-router-dom";
 import AddPerson from "./AddPerson";
 import Header from "./Header";
-import { IoPersonAddSharp, IoEye } from "react-icons/io5";
+import { IoPersonAddSharp, IoEye, IoReceiptOutline } from "react-icons/io5";
 import Avatar from "react-avatar";
-import { IoReceiptOutline } from "react-icons/io5";
 import { GrView } from "react-icons/gr";
 import { CSSTransition } from "react-transition-group";
 import { API } from "aws-amplify";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@material-tailwind/react";
+import MethodSelect from "./MethodSelect";
 
 export default function SelfExpense({
   addPerson,
@@ -50,8 +50,15 @@ export default function SelfExpense({
   setSelfValue,
   selfExpense,
   setSelfExpense,
-  toggleTheme
+  toggleTheme,
+  setPersonReceiptAmount,
 }) {
+  
+  const [selectPersonReceipt, setSelectPersonReceipt] = useState(true);
+  const [selectMethodManual, setSelectMethodManual] = useState(false);
+  const [selectMethodPicture, setSelectMethodPicture] = useState(false);
+  const [selectedModalPerson, setSelectedModalPerson] = useState();
+  const [showMethodSelectModal, setShowMethodSelectModal] = useState(false);
   const [selectPersonList, setSelectPersonList] = useState(true);
   const selfContactId = user.attributes.sub;
   const [selfAdded, setSelfAdded] = useState(false);
@@ -66,16 +73,18 @@ export default function SelfExpense({
   const handleNavigation = async () => {
     navigate(`/App/ReceiptInput/${user.attributes.sub}`);
   };
+
   const handlePersonalExpenseClick = async () => {
+    editSelf(selfId, loggedInUserEmail);
     setSelfExpense(true);
     const personalExpenseEntry = dataThrow.find(
       (item) =>
         item.UserEmail === loggedInUserEmail && item.Email === loggedInUserEmail
     );
-
+  
     if (personalExpenseEntry) {
       selectSelf(user.attributes.sub);
-      navigate(`/App/ReceiptInput/${user.attributes.sub}`);
+      setShowMethodSelectModal(true); 
     } else {
       try {
         const owingValue = 0;
@@ -87,13 +96,18 @@ export default function SelfExpense({
           UserEmail: loggedInUserEmail,
           UserName: loggedInUsername,
         };
-
+  
         await handleAddSelfSubmit(itemData);
-        await handleNavigation();
+        setShowMethodSelectModal(true);
       } catch (error) {
         console.error("Error creating item:", error);
       }
     }
+  };
+
+  const handleSelfClick = () => {
+    setShowMethodSelectModal(true);
+    editSelf(selfId, loggedInUserEmail);
   };
   return (
     <>
@@ -120,9 +134,6 @@ export default function SelfExpense({
           <ul className="m-0 py-1 w-2/5">
             <React.Fragment key={"save-with-myself"}>
               <Link
-                setSelfValue={setSelfValue}
-                selfValue={selfValue}
-                loggedInUsername={loggedInUsername}
                 to={{
                   pathname: "/App/ContactHistoryEdit",
                   state: {
@@ -134,10 +145,7 @@ export default function SelfExpense({
                     UserEmail: loggedInUserEmail,
                   },
                 }}
-                onClick={() => {
-                  setSelfValue(true);
-                  editSelf(selfId, loggedInUserEmail);
-                }}
+                onClick={handleSelfClick}
               >
                 <Button
                   variant="gradient"
@@ -145,7 +153,7 @@ export default function SelfExpense({
                   style={{ margin: "auto" }}
                 >
                   <div className="flex items-center justify-center flex-grow">
-              <IoEye size={32}/>
+                    <IoEye size={32}/>
                     <span className="ml-2">
                       {lang === "english"
                         ? "View Expenses"
@@ -158,6 +166,35 @@ export default function SelfExpense({
           </ul>
         </div>
       </main>
+      {showMethodSelectModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50" style={{ marginTop: "-300px" }}>
+          <div className="bg-white p-6 rounded-lg">
+            <MethodSelect
+              lang={lang}
+              theme={theme}
+              setSelectMethodManual={setSelectMethodManual}
+              setSelectMethodPicture={setSelectMethodPicture}
+              setSelectPersonReceipt={setSelectPersonReceipt}
+              setPersonReceiptAmount={setPersonReceiptAmount}
+              selectedModalPerson={selectedModalPerson}
+              selectMethodPicture={selectMethodPicture}
+              selectMethodManual={selectMethodManual}
+            />
+            <Button
+              variant="gradient"
+              className="gradient-btn mb-2 flex items-center justify-center"
+              style={{ margin: "auto" }}
+              onClick={() => setShowMethodSelectModal(false)}
+            >
+              <div className="flex items-center">
+                <span className="text-white">
+                  {lang === "english" ? "Close" : "Fermer"}
+                </span>
+              </div>
+            </Button>
+          </div>
+        </div>
+      )}
     </>
   );
 }
