@@ -207,7 +207,6 @@ export default function ReceiptInput({
     }
   }
 
-
   // Handlers for selected values, either me or them
   const handleButton1Click = () => {
     setSelected(1);
@@ -364,7 +363,7 @@ export default function ReceiptInput({
   useEffect(() => {
     const confirmBeforeUnload = (e) => {
       e.preventDefault();
-      e.returnValue = ""; 
+      e.returnValue = "";
     };
 
     const handleUnload = () => {
@@ -406,32 +405,30 @@ export default function ReceiptInput({
               {personName === loggedInUsername ? (
                 ""
               ) : (
-                <div className="max-w-fit">
+                <div className="max-w-fit flex justify-center pb-4">
                   <label
                     htmlFor="payment"
                     className={
                       theme === "dark"
-                        ? "form-control mt-0 mb-0 flex items-center justify-center   bg-gray-600  px-0"
-                        : "form-control mt-0 mb-0 flex items-center   justify-center  px-0"
+                        ? "form-control mt-0 mb-0 flex flex-col items-center justify-center bg-gray-600 px-0"
+                        : "form-control mt-0 mb-0 flex flex-col items-center justify-center px-0"
                     }
+                    style={{ maxWidth: "fit-content" }}
                   >
-                    <div
-                      className="flex-1 text-center"
-                      style={{ maxWidth: "50%", margin: 0 }}
-                    >
+                    <div className="flex justify-center w-full mb-2">
                       <span
                         className={
                           "ml-2 " +
                           (theme === "dark" ? "text-white" : "text-gray-800")
                         }
                       >
-                        {lang === "english" ? "Who Paid?" : "Qui a payé ?"}
+                        {lang === "english" ? "Who paid?" : "Qui a payé ?"}
                       </span>
                     </div>
-                    <div className="flex-1 text-center m-0">
+                    <div className="flex justify-center space-x-2">
                       <Button
                         variant="gradient"
-                        className={`m-0 rounded-2 ${
+                        className={`rounded-2 ${
                           selected === 1 ? "bg-gray-500" : "bg-gray-900"
                         } h-8 w-16 py-1 px-2 font-bold text-white`}
                         onClick={() => {
@@ -448,8 +445,8 @@ export default function ReceiptInput({
                       </Button>
                       <Button
                         variant="gradient"
-                        className={`m-0 rounded-2 ${
-                          selected === 1 ? "bg-gray-500" : "bg-gray-900"
+                        className={`rounded-2 ${
+                          selected === 2 ? "bg-gray-500" : "bg-gray-900"
                         } h-8 w-16 py-1 px-2 font-bold text-white`}
                         onClick={() => {
                           handleButton2Click();
@@ -542,7 +539,7 @@ export default function ReceiptInput({
                           </div>
                         </div>
                         <div className="mt-0 text-center">
-                         <div className="justify-left z-50 mt-3 mb-3 text-center">
+                          <div className="justify-left z-50 mt-3 mb-3 text-center">
                             <DatePicker
                               defaultValue="Date of Receipt"
                               selected={startDate}
@@ -725,7 +722,7 @@ export default function ReceiptInput({
                           </div>
                         </div>
                         <div className="mt-0 text-center">
-                         <div className="justify-left z-50 mt-3 mb-3 text-center">
+                          <div className="justify-left z-50 mt-3 mb-3 text-center">
                             <DatePicker
                               defaultValue="Date of Receipt"
                               selected={startDate}
@@ -872,14 +869,16 @@ export default function ReceiptInput({
                 <div></div>
               ) : (
                 <div className="container mx-auto px-2 pb-4">
-                  <div className="max-w-fit">
+                  <div className="max-w-fit flex justify-center pb-4">
                     <label
                       htmlFor="payment"
                       className={
                         theme === "dark"
-                          ? "form-control mt-0 mb-0 flex items-center justify-center   bg-gray-600  px-0"
-                          : "form-control mt-0 mb-0 flex items-center   justify-center  px-0"
+                          ? "form-control mt-0 mb-0 flex flex-col items-center justify-center bg-gray-600 px-0"
+                          : "form-control mt-0 mb-0 flex flex-col items-center justify-center px-0"
                       }
+                      
+                    style={{ maxWidth: "fit-content" }}
                     >
                       <div
                         className="flex-1 text-center"
@@ -891,7 +890,7 @@ export default function ReceiptInput({
                             (theme === "dark" ? "text-white" : "text-gray-800")
                           }
                         >
-                          {lang === "english" ? "Who Paid?" : "Qui a payé ?"}
+                          {lang === "english" ? "Who paid?" : "Qui a payé ?"}
                         </span>
                       </div>
                       <div className="flex-1 text-center m-0">
@@ -1159,8 +1158,7 @@ export default function ReceiptInput({
                                           ? "col-form-label text-center text-white h-0"
                                           : "col-form-label text-center text-black h-0"
                                       }
-                                    >
-                                    </label>
+                                    ></label>
                                     <div className="z-50 mt-3 mb-3 text-center">
                                       <DatePicker
                                         defaultValue="Date of Receipt"
@@ -1336,14 +1334,13 @@ export default function ReceiptInput({
                   : "La photo est trop floue"}
               </p>
               <div className="flex justify-center item-center mt-4">
-              <Button
-                        variant="gradient"
-                        className={`m-0 rounded-2 ${
-                          selected === 1 ? "bg-gray-500" : "bg-gray-900"
-                        } h-8 w-16 py-1 px-2 font-bold text-white`}
-                        
+                <Button
+                  variant="gradient"
+                  className={`m-0 rounded-2 ${
+                    selected === 1 ? "bg-gray-500" : "bg-gray-900"
+                  } h-8 w-16 py-1 px-2 font-bold text-white`}
                   onClick={() => setPictureError(false)}
-                      >
+                >
                   OK
                 </Button>
               </div>
