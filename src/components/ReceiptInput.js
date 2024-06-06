@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect, onBlur, useCamera } from "react";
+import React, { useState, useEffect, } from "react";
 import { registerLocale } from "react-datepicker";
 import en from "date-fns/locale/en-US";
 import fr from "date-fns/locale/fr";
@@ -8,7 +8,7 @@ import "react-html5-camera-photo/build/css/index.css";
 import loading from "../img/loading.gif";
 import Header from "./Header";
 import ReceiptTable from "./ReceiptTable";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import "../darkMode.css";
 import {
   IoExitOutline,
@@ -80,9 +80,7 @@ export default function ReceiptInput({
   const [pictureTax, setPictureTax] = useState(0);
   const [taxReal, setTaxReal] = useState(0);
   const [pictureConfidence, setPictureConfidence] = useState(0);
-  const [showImage, setShowImage] = useState(false);
   const [showCameraImage, setShowCameraImage] = useState(false);
-  const [showRedoButton, setShowRedoButton] = useState(false);
   const [displayPictureInfo, setDisplayPictureInfo] = useState(false);
   const [isAddedManually, setIsAddedManually] = useState(false);
   const [items, setItems] = useState([]);
@@ -135,13 +133,11 @@ export default function ReceiptInput({
   const handleCapturePhoto = (dataUri) => {
     setPhotoData(dataUri);
     setShowCameraImage(true);
-    setShowRedoButton(true);
   };
   // Image processing for table input
   const handleCameraSubmit = async () => {
     document.body.classList.add("scroll-transition");
     setPhotoData(loading);
-    setShowImage(true);
     try {
       const data = new FormData();
       data.append("document", photoData);
@@ -185,7 +181,6 @@ export default function ReceiptInput({
       setPictureConfidence(taxConfidence);
       setPictureTax(taxAmount || 0);
       setPictureTotal(totalAmount);
-      setShowImage(false);
       setPhotoData(photoData);
       setSplitPictureTotal(totalAmount);
       handleScroll();
@@ -602,6 +597,7 @@ export default function ReceiptInput({
                             pictureTax={pictureTax}
                             setPictureTax={setPictureTax}
                             lang={lang}
+                            pictureConfidence={pictureConfidence}
                           />
                           <div
                             className={
@@ -869,7 +865,7 @@ export default function ReceiptInput({
                 <div></div>
               ) : (
                 <div className="container mx-auto px-2 pb-4">
-                  <div className="max-w-fit flex justify-center pb-4">
+                  <div className="max-w-fit flex justify-center pb-2">
                     <label
                       htmlFor="payment"
                       className={

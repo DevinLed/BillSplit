@@ -1,56 +1,20 @@
 import React, { useState } from "react";
-import Avatar from "@mui/material/Avatar";
 import { Link } from "react-router-dom";
 import IconButton from "@mui/material/IconButton";
-import AppsIcon from "@mui/icons-material/Apps";
-import SchoolIcon from "@mui/icons-material/School";
-import ContactMailIcon from "@mui/icons-material/ContactMail";
 import Tooltip from "@mui/material/Tooltip";
-import Footer from "./Footer";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
-import GroupIcon from "@mui/icons-material/Group";
-import PersonIcon from "@mui/icons-material/Person";
 import ReceiptIcon from "@mui/icons-material/Receipt";
-import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
-import SyncAltIcon from "@mui/icons-material/SyncAlt";
-import naturebackground from "../img/naturebackground.jpeg";
-import bignaturebackground from "../img/naturebackground.jpeg";
-import divvylogo from "../img/divvylogo.png";
-import Headshot from "../img/Headshot.png";
 import "../LandingPage.css";
 import { Hidden } from "@mui/material";
-import downimg from "../img/downimg.png";
-import Aboutme from "./Aboutme";
 import splitPhone from "../img/splitPhone.jpg";
-import MenuIcon from "@mui/icons-material/Menu";
 import Topbar from "./Topbar";
 import { Button } from "@material-tailwind/react";
 import BarChartIcon from "@mui/icons-material/BarChart";
 
 export default function LandingPage({ theme }) {
-  const [index, setIndex] = useState(0);
-  const [isIndexZero, setIsIndexZero] = useState(false);
-  const handleDownArrowClick = () => {
-    if (index !== 0) {
-      setIndex(0);
-      setIsIndexZero(true);
-    } else {
-      setIsIndexZero(false);
-    }
-  };
-  const renderButton = (icon, text, to, tooltip) => (
-    <Link
-      to={to}
-      className="inline-flex flex-col items-center justify-center text-center"
-    >
-      <Tooltip title={tooltip}>
-        <IconButton color="inherit">{icon}</IconButton>
-      </Tooltip>
-      <span className="text-xs text-white">{text}</span>
-    </Link>
-  );
+
 
   const FeatureCards = () => (
     <>

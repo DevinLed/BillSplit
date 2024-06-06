@@ -3,7 +3,6 @@ import "../index.css";
 import { CSSTransition } from "react-transition-group";
 import { IoSaveOutline, IoCloseCircleOutline } from "react-icons/io5";
 import { Button } from "@material-tailwind/react";
-import { Input } from "@material-tailwind/react";
 import { FaSpinner } from "react-icons/fa";
 
 export default function AddPerson({

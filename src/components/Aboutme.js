@@ -1,35 +1,14 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import IconButton from "@mui/material/IconButton";
-import AppsIcon from "@mui/icons-material/Apps";
-import SchoolIcon from "@mui/icons-material/School";
-import ContactMailIcon from "@mui/icons-material/ContactMail";
-import Tooltip from "@mui/material/Tooltip";
-import { Resend } from "resend";
-import Footer from "./Footer";
+import React from "react";
 import { Hidden } from "@mui/material";
 import "../LandingPage.css";
-import emailjs from "emailjs-com";
 import Avatar from "@mui/material/Avatar";
 import Headshot from "../img/Headshot.png";
-import PersonIcon from "@mui/icons-material/Person";
 import Topbar from "./Topbar";
 
 import "../LandingPage.css";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
-const renderButton = (icon, text, to, tooltip) => (
-  <Link
-    to={to}
-    className="inline-flex flex-col items-center justify-center text-center"
-  >
-    <Tooltip title={tooltip}>
-      <IconButton color="inherit">{icon}</IconButton>
-    </Tooltip>
-    <span className="text-xs text-white">{text}</span>
-  </Link>
-);
 
 const AboutMe = () => {
   return (

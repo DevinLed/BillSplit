@@ -1,54 +1,21 @@
-import React, { useRef, useState, useEffect } from "react";
-import { BrowserRouter, Switch, Route, Routes, Link } from "react-router-dom";
-import AddPerson from "./AddPerson";
+import React, { useState} from "react";
+import { Link } from "react-router-dom";
 import Header from "./Header";
-import { IoPersonAddSharp, IoEye, IoReceiptOutline } from "react-icons/io5";
-import Avatar from "react-avatar";
-import { GrView } from "react-icons/gr";
-import { CSSTransition } from "react-transition-group";
-import { API } from "aws-amplify";
-import { useNavigate } from "react-router-dom";
+import { IoEye, IoReceiptOutline } from "react-icons/io5";
 import { Button } from "@material-tailwind/react";
 import MethodSelect from "./MethodSelect";
 
 export default function SelfExpense({
-  addPerson,
-  setAddPerson,
-  selectPerson,
-  personName,
-  personEmail,
-  personPhone,
   personOwing,
-  setPersonName,
-  setPersonEmail,
-  setPersonPhone,
-  setPersonOwing,
-  handleSubmit,
-  setPersonState,
-  personState,
-  setIsSelected,
-  list,
-  value,
-  setValue,
-  addNum,
-  subNum,
-  personReceiptAmount,
-  setFormSubmitted,
   theme,
-  handleAddSubmit,
   lang,
-  setLang,
   loggedInUsername,
   loggedInUserEmail,
   dataThrow,
-  API_URL,
   user,
   handleAddSelfSubmit,
   selectSelf,
   editSelf,
-  selfValue,
-  setSelfValue,
-  selfExpense,
   setSelfExpense,
   toggleTheme,
   setPersonReceiptAmount,
@@ -60,20 +27,8 @@ export default function SelfExpense({
   const [selectedModalPerson, setSelectedModalPerson] = useState();
   const [showMethodSelectModal, setShowMethodSelectModal] = useState(false);
   const [selectPersonList, setSelectPersonList] = useState(true);
-  const selfContactId = user.attributes.sub;
-  const [selfAdded, setSelfAdded] = useState(false);
 
-  const navigate = useNavigate();
   const selfId = user.attributes.sub;
-  const [loading, setLoading] = useState(false);
-  const handleSelfAdded = async () => {
-    setSelfAdded(true);
-    handlePersonalExpenseClick();
-  };
-  const handleNavigation = async () => {
-    navigate(`/App/ReceiptInput/${user.attributes.sub}`);
-  };
-
   const handlePersonalExpenseClick = async () => {
     editSelf(selfId, loggedInUserEmail);
     setSelfExpense(true);

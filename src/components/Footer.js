@@ -2,7 +2,7 @@ import React from "react";
 import "../darkMode.css";
 import "../index.css";
 
-export default function Footer({theme, lang,setLang}) {
+export default function Footer({theme, lang}) {
   return (
     <>
       <div className="flex justify-center mt-100">

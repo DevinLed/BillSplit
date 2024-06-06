@@ -3,7 +3,6 @@ import { useState, useEffect, useMemo } from "react";
 import "./../index.css";
 import { IoPencilSharp } from "react-icons/io5";
 import { CSSTransition } from "react-transition-group";
-import { useParams } from "react-router-dom";
 import { Button } from "@material-tailwind/react";
 
 import EditPerson from "./EditPerson";
@@ -42,7 +41,6 @@ export default function ContactHistoryEdit({
   toggleTheme
 }) {
   const [selectEditPersonList, setEditSelectPersonList] = useState(true);
-  const { id } = useParams();
   const [selectedPerson, setSelectedPerson] = useState("");
   const [transactions, setTransactions] = useState([]);
   useEffect(() => {

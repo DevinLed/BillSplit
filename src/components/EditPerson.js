@@ -165,15 +165,6 @@ export default function EditPerson({
       setErrorEmail(true);
       console.log("Email verified");
 
-      // Create an object with the updated email
-      const updatedUserData = {
-        id: ContactId,
-        personName: Name,
-        personPhone: Phone,
-        personEmail: inputEmail,
-        personOwing: Owing,
-      };
-
       try {
         const response = await fetch(`${API_URL}/${ContactId}`);
 

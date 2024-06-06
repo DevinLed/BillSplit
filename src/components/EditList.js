@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import AddPerson from "./AddPerson";
 import Header from "./Header";
-import EditPerson from "./EditPerson";
 import { IoPersonAddSharp } from "react-icons/io5";
-import { Amplify, Auth } from "aws-amplify";
+import { Amplify } from "aws-amplify";
 import Avatar from "react-avatar";
 import { CSSTransition } from "react-transition-group";
 import { Button } from "@material-tailwind/react";

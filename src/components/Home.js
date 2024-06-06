@@ -19,7 +19,7 @@ import "@aws-amplify/ui-react/styles.css";
 
 import { Amplify } from "aws-amplify";
 
-import awsconfig from "../aws-exports"; 
+import awsconfig from "../aws-exports";
 Amplify.configure(awsconfig);
 
 export default function Home({
@@ -67,8 +67,6 @@ export default function Home({
   }, [lang, setLang]);
   const owingPercentage =
     (totalOwing / (totalOwing + Math.abs(totalOwed))) * 100;
-  const owedPercentage =
-    (Math.abs(totalOwed) / (totalOwing + Math.abs(totalOwed))) * 100;
   const navigate = useNavigate();
   const CircleMenu = ({ lang }) => {
     return (
@@ -164,19 +162,18 @@ export default function Home({
           style={{ maxWidth: "600px", marginTop: "50px" }}
         >
           <div className="marginBottom">
-            
-          <div className="switch-container mt-2">
-  <IoSunnyOutline size={24} />
-  <label className="switch">
-    <input
-      type="checkbox"
-      checked={theme === "dark"}
-      onChange={toggleTheme}
-    />
-    <span className="slider"></span>
-  </label>
-  <IoMoonOutline size={24} />
-</div>
+            <div className="switch-container mt-2">
+              <IoSunnyOutline size={24} />
+              <label className="switch">
+                <input
+                  type="checkbox"
+                  checked={theme === "dark"}
+                  onChange={toggleTheme}
+                />
+                <span className="slider"></span>
+              </label>
+              <IoMoonOutline size={24} />
+            </div>
             <div className="flex flex-col items-center justify-center mt-3 mb-3">
               <div
                 style={{ paddingBottom: "4%" }}

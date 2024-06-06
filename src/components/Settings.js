@@ -1,10 +1,7 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
 import Header from "./Header";
 import {
-  IoLanguage,
-  IoInvertModeSharp,
-  IoInvertModeOutline,
+  IoLanguage
 } from "react-icons/io5";
 import { TbReceiptTax } from "react-icons/tb";
 import { CSSTransition } from "react-transition-group";
@@ -19,7 +16,6 @@ export default function Settings({
   lang,
   setLang,
 }) {
-  const { id } = useParams();
   const [showLang, setShowLang] = useState(false);
 
   const [selectedTaxRate, setSelectedTaxRate] = useState(taxRate);
@@ -60,10 +56,6 @@ export default function Settings({
     setShowLang(false);
   };
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [buttonText, setButtonText] = useState(
-    lang === "english" ? "Dark" : "Sombre"
-  );
-  const changeText = (text) => setButtonText(text);
 
   return (
     <>

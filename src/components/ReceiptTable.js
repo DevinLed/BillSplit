@@ -2,11 +2,9 @@ import React, { useState, useEffect } from "react";
 import "react-html5-camera-photo/build/css/index.css";
 import "../index.css";
 import "../darkMode.css";
-import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import "react-datepicker/dist/react-datepicker.css";
 import { IoMdAddCircleOutline, IoMdRemoveCircleOutline } from "react-icons/io";
-import { Button } from "@material-tailwind/react";
 
 export default function ReceiptTable({
   name,

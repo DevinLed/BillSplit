@@ -1,33 +1,13 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import IconButton from "@mui/material/IconButton";
-import AppsIcon from "@mui/icons-material/Apps";
-import SchoolIcon from "@mui/icons-material/School";
-import ContactMailIcon from "@mui/icons-material/ContactMail";
-import Tooltip from "@mui/material/Tooltip";
-import Footer from "./Footer";
 import Receiptphoneoutline from "../img/Receiptphoneoutline.png";
 import Historyphoneoutline from "../img/Historyphoneoutline.png";
 import Historydarkoutline from "../img/Historydarkoutline.png";
 import DivvySample from "../img/DivvySample.gif";
-import divvylogo from "../img/divvylogo.png";
 import { Hidden } from "@mui/material";
-import PersonIcon from "@mui/icons-material/Person";
 import "../LandingPage.css";
 import Topbar from "./Topbar";
 
 export function Tutorial() {
-  const renderButton = (icon, text, to, tooltip) => (
-    <Link
-      to={to}
-      className="inline-flex flex-col items-center justify-center text-center"
-    >
-      <Tooltip title={tooltip}>
-        <IconButton color="inherit">{icon}</IconButton>
-      </Tooltip>
-      <span className="text-xs text-white">{text}</span>
-    </Link>
-  );
 
   const FeatureCard = ({ imageSrc, altText, description }) => (
     <div
