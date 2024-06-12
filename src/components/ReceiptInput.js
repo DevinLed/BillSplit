@@ -573,7 +573,6 @@ export default function ReceiptInput({
                             handleReceiptPictureSubmit={
                               handleReceiptPictureSubmit
                             }
-                            setIsAddedManually={setIsAddedManually}
                             combinedArray={combinedArray}
                             setCombinedArray={setCombinedArray}
                             pictureTotal={pictureTotal}

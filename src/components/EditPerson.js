@@ -27,16 +27,19 @@ export default function EditPerson({
   passedId,
   API_URL,
 }) {
-  const myElementRef = useRef(null);
+  const myElementRef = useRef(null); // Reference for confirmation dialog
+  // Reset balance to "0.00"
   const handleResetBalance = () => {
     setPersonOwing("0.00");
   };
 
+  // Handle Enter key press to blur the input field
   function handleKeyDown(e) {
     if (e.key === "Enter") {
       e.target.blur();
     }
   }
+    // Show delete confirmation dialog
   const handleDeletePrompt = () => {
     setShowConfirmation(true);
   };
@@ -55,7 +58,7 @@ export default function EditPerson({
   const [errorMsg, setErrorMsg] = useState("");
   const [submissionError, setSubmissionError] = useState(true);
   const [isSubmitted, setIsSubmitted] = useState(false);
-
+  // Handle name input change
   const handleNameChange = async (e, ContactId) => {
     const inputName = e.target.value;
     setPersonName(inputName);
@@ -82,7 +85,7 @@ export default function EditPerson({
       console.log("Error in name input");
     }
   };
-
+// Format phone number input
   const formatPhoneNumber = (inputValue) => {
     const numbersOnly = inputValue.replace(/[^\d]/g, ""); // Remove all non-numeric characters
     if (numbersOnly.length <= 3) return numbersOnly;
@@ -93,7 +96,7 @@ export default function EditPerson({
       6
     )}-${numbersOnly.slice(6, 10)}`;
   };
-
+  // Handle person deletion
   const handleDeletePerson = (passedId, loggedUserEmail) => {
     const url = `${API_URL}/${passedId}/${loggedUserEmail}`;
 
@@ -121,7 +124,7 @@ export default function EditPerson({
         console.error("Error deleting person:", error);
       });
   };
-
+// Handle phone number input change
   const handlePhoneNumberChange = async (event, ContactId) => {
     const inputValue = event.target.value;
     const formattedValue = formatPhoneNumber(inputValue);
@@ -153,7 +156,7 @@ export default function EditPerson({
       console.log("Error in phone input");
     }
   };
-
+// Handle email input change
   const handleEmailChange = async (event, ContactId, Name, Phone, Owing) => {
     const inputEmail = event.target.value;
     setPersonEmail(inputEmail);

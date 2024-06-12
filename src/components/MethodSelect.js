@@ -10,19 +10,21 @@ const MethodSelect = ({
   setPersonReceiptAmount,
   selectedModalPerson,
 }) => {
-    const navigate = useNavigate();
+  const navigate = useNavigate(); // Navigation hook
 
-    const handleManualButtonClick = () => {
-        setSelectPersonReceipt(false);
-        setPersonReceiptAmount(0);
-        navigate(`/App/ReceiptInput/${selectedModalPerson}?selectMethodManual=true`);
-      };
-    
-      const handlePictureButtonClick = () => {
-        setSelectPersonReceipt(false);
-        setPersonReceiptAmount(0);
-        navigate(`/App/ReceiptInput/${selectedModalPerson}?selectMethodPicture=true`);
-      };
+  // Handle manual method button click
+  const handleManualButtonClick = () => {
+      setSelectPersonReceipt(false); // Deselect person receipt
+      setPersonReceiptAmount(0); // Reset receipt amount
+      navigate(`/App/ReceiptInput/${selectedModalPerson}?selectMethodManual=true`); // Navigate to manual input
+    };
+  
+  // Handle picture method button click
+  const handlePictureButtonClick = () => {
+      setSelectPersonReceipt(false); // Deselect person receipt
+      setPersonReceiptAmount(0); // Reset receipt amount
+      navigate(`/App/ReceiptInput/${selectedModalPerson}?selectMethodPicture=true`); // Navigate to picture input
+    };
   return (
     <main
       className="xs:max-w-xl bg-white-500 mt-1 rounded p-0 pt-3 shadow sm:max-w-xl md:mx-auto lg:max-w-2xl xl:max-w-4xl"

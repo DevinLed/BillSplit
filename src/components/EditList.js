@@ -39,33 +39,33 @@ export default function EditList({
   setSelfValue,
   toggleTheme
 }) {
-  const API_URL =
-    "https://48f95wy514.execute-api.us-east-1.amazonaws.com/prod/contacts";
-  const [selectEditPersonList, setEditSelectPersonList] = useState(true);
-
-  const isEmptyDataThrow =
-    !dataThrow ||
-    dataThrow.filter(
-      (item) =>
-        item.UserEmail === loggedInUserEmail &&
-        !(
-          item.UserEmail === loggedInUserEmail &&
-          item.Email === loggedInUserEmail
-        )
+    // Define the API URL for fetching contact data
+    const API_URL = "https://48f95wy514.execute-api.us-east-1.amazonaws.com/prod/contacts";
+    // State to toggle the edit person list view
+    const [selectEditPersonList, setEditSelectPersonList] = useState(true);
+  
+    // Check if dataThrow is empty or only contains entries where the user is editing their own contact for self expenses
+    const isEmptyDataThrow = !dataThrow || dataThrow.filter(
+      (item) => item.UserEmail === loggedInUserEmail &&
+        !(item.UserEmail === loggedInUserEmail && item.Email === loggedInUserEmail)
     ).length === 0;
-  const fetchData = async () => {
-    try {
-      const response = await fetch(API_URL);
-      const data = await response.json();
-      setDataThrow(data);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
+  
+    // Fetch contact data from the API
+    const fetchData = async () => {
+      try {
+        const response = await fetch(API_URL);
+        const data = await response.json();
+        setDataThrow(data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+  
+    // Fetch data when the component mounts
+    useEffect(() => {
+      fetchData();
+    }, []);
+  
   return (
     <>
       <main

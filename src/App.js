@@ -1,13 +1,9 @@
-import React, { useRef, useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import {
   Route,
   Routes,
-  Link,
-  path,
   Navigate,
-  Redirect,
 } from "react-router-dom";
-import { v4 as uuidv4 } from "uuid";
 
 import EditPerson from "./components/EditPerson";
 import SplitBill from "./components/SplitBill";
@@ -17,31 +13,24 @@ import Tutorial from "./components/Tutorial";
 import AddPerson from "./components/AddPerson";
 import SelfExpense from "./components/SelfExpense";
 import Home from "./components/Home";
-import Header from "./components/Header";
 import EditList from "./components/EditList";
 import ReceiptInput from "./components/ReceiptInput";
 import Settings from "./components/Settings";
-import Footer from "./components/Footer";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import {
-  withAuthenticator,
-  AuthProvider,
-  ThemeProvider,
-  ConfirmationProvider,
-  Heading,
+  withAuthenticator
 } from "@aws-amplify/ui-react";
 import "@aws-amplify/ui-react/styles.css";
 import "./darkMode.css";
 import "./index.css";
 import ReceiptTable from "./components/ReceiptTable";
-import { Amplify, API, graphqlOperation, Auth, Storage } from "aws-amplify";
+import { Amplify, Auth} from "aws-amplify";
 import awsconfig from "./aws-exports";
 import NotificationAPIComponent from "./components/NotificationAPI";
 import ContactHistoryEdit from "./components/ContactHistoryEdit";
 import Aboutme from "./components/Aboutme";
 
-import { PrimeReactProvider, PrimeReactContext } from "primereact/api";
+import { PrimeReactProvider } from "primereact/api";
 import "primereact/resources/themes/lara-light-cyan/theme.css";
 Amplify.configure(awsconfig);
 
@@ -127,7 +116,6 @@ function App({ signOut, user }) {
 
   const [dataThrow, setDataThrow] = useState([]);
 
-  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
   const fetchData = async () => {
     try {
       const response = await fetch(API_URL);
@@ -162,15 +150,12 @@ function App({ signOut, user }) {
   const [historyData, setHistoryData] = useState([]);
   const [displayAdd, setDisplayAdd] = useState(true);
   const [selectedValue, setSelectedValue] = useState("you");
-  const [history, setHistory] = useState([]);
   const [displayMerchant, setDisplayMerchant] = useState(false);
   const [displayDate, setDisplayDate] = useState(false);
   const [displayInvoice, setDisplayInvoice] = useState(false);
   const [isReceiptSubmitted, setIsReceiptSubmitted] = useState(false);
 
   const [selfValue, setSelfValue] = useState(null);
-  // Landing page
-  const [accessedApp, setAccessedApp] = useState(false);
 
   // Settings page
   const [showConfirmation, setShowConfirmation] = useState(false);
