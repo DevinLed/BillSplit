@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.413a2d3d.css",
-    "main.js": "/static/js/main.16a70ee2.js",
+    "main.js": "/static/js/main.d5abf227.js",
     "static/media/DivvySample.gif": "/static/media/DivvySample.caf0bdbd0ccb7aa0349e.gif",
     "static/media/bignaturebackground.jpg": "/static/media/bignaturebackground.6cdf6465d354f58c5770.jpg",
     "static/media/Historyphoneoutline.png": "/static/media/Historyphoneoutline.f6eb387df3f764753806.png",
@@ -13,17 +13,16 @@
     "static/media/Inter-roman.var.woff2?v=3.19": "/static/media/Inter-roman.var.ba4caefcdf5b36b438db.woff2",
     "static/media/splitPhone.jpg": "/static/media/splitPhone.d7f6ad95088b4b39e330.jpg",
     "static/media/Headshot.png": "/static/media/Headshot.90b3cf6d77b3c79fb0ed.png",
-    "static/media/divvylogo.png": "/static/media/divvylogo.a40a63f26910129fcfb3.png",
     "static/media/icomoon.svg?yjc9oj": "/static/media/icomoon.dd29f727badc9333c79f.svg",
     "static/media/icomoon.eot?yjc9oj": "/static/media/icomoon.f832b9ce6a4c7823513d.eot",
     "static/media/icomoon.woff?yjc9oj": "/static/media/icomoon.baa8c3df47645e50ef7f.woff",
     "static/media/icomoon.ttf?yjc9oj": "/static/media/icomoon.bbc8a02e138d003f16fa.ttf",
     "index.html": "/index.html",
     "main.413a2d3d.css.map": "/static/css/main.413a2d3d.css.map",
-    "main.16a70ee2.js.map": "/static/js/main.16a70ee2.js.map"
+    "main.d5abf227.js.map": "/static/js/main.d5abf227.js.map"
   },
   "entrypoints": [
     "static/css/main.413a2d3d.css",
-    "static/js/main.16a70ee2.js"
+    "static/js/main.d5abf227.js"
   ]
 }
