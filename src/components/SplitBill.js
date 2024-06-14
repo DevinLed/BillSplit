@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import AddPerson from "./AddPerson";
+import AddGroup from "./AddGroup"; // Import AddGroup component
 import Header from "./Header";
 import { IoPersonAddSharp } from "react-icons/io5";
 import Avatar from "react-avatar";
@@ -47,6 +48,7 @@ export default function SplitBill({
   const [selectPersonList, setSelectPersonList] = useState(true);
   const [selectedModalPerson, setSelectedModalPerson] = useState();
   const [showMethodSelectModal, setShowMethodSelectModal] = useState(false);
+  const [addGroup, setAddGroup] = useState(false); // State for AddGroup component
   const isEmptyDataThrow =
     !dataThrow ||
     dataThrow.filter(
@@ -57,6 +59,7 @@ export default function SplitBill({
           item.Email === loggedInUserEmail
         )
     ).length === 0;
+
   useEffect(() => {
     setSelfExpense(false);
   }, []);
@@ -138,7 +141,7 @@ export default function SplitBill({
                       </Link>
                   ))}
               </ul>
-              <div className="mb-5">
+              <div className="mb-5 flex space-x-4">
                 <Button
                   variant="gradient"
                   className="gradient-btn mb-2 flex items-center justify-center"
@@ -154,6 +157,24 @@ export default function SplitBill({
                       {lang === "english"
                         ? "Add Person"
                         : "Ajouter Une Personne"}
+                    </span>
+                  </div>
+                </Button>
+                <Button
+                  variant="gradient"
+                  className="gradient-btn mb-2 flex items-center justify-center"
+                  style={{ margin: "auto" }}
+                  onClick={() => {
+                    setAddGroup(true);
+                    setFormSubmitted(true);
+                  }}
+                >
+                  <div className="flex items-center">
+                    <IoPersonAddSharp size={24} />
+                    <span className="text-white ml-2">
+                      {lang === "english"
+                        ? "Add Group"
+                        : "Ajouter Un Groupe"}
                     </span>
                   </div>
                 </Button>
@@ -193,7 +214,26 @@ export default function SplitBill({
             handleAddSubmit={handleAddSubmit}
             lang={lang}
             loggedInUserEmail={loggedInUserEmail}
-          ></AddPerson>
+          />
+        </CSSTransition>
+
+        <CSSTransition
+          in={addGroup}
+          timeout={300}
+          classNames="fade"
+          unmountOnExit
+        >
+          <AddGroup
+            setAddGroup={setAddGroup}
+            theme={theme}
+            handleAddGroupSubmit={(people) => {
+              // Handle the group submission
+              console.log('Group submitted:', people);
+              // Add your logic to handle the group data
+            }}
+            lang={lang}
+            loggedInUserEmail={loggedInUserEmail}
+          />
         </CSSTransition>
       </main>
       {showMethodSelectModal && (

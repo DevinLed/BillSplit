@@ -2,7 +2,7 @@ import React, { useState, useEffect, } from "react";
 import { registerLocale } from "react-datepicker";
 import en from "date-fns/locale/en-US";
 import fr from "date-fns/locale/fr";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { Camera } from "react-html5-camera-photo";
 import "react-html5-camera-photo/build/css/index.css";
 import loading from "../img/loading.gif";
@@ -134,17 +134,19 @@ export default function ReceiptInput({
     setPhotoData(dataUri);
     setShowCameraImage(true);
   };
+  const navigate = useNavigate();
   // Image processing for table input
   const handleCameraSubmit = async () => {
+     // Initialize useNavigate hook
     document.body.classList.add("scroll-transition");
     setPhotoData(loading);
     try {
       const data = new FormData();
       data.append("document", photoData);
-
+  
       const headers = new Headers();
       headers.append("Authorization", `Token ${apiKey}`);
-
+  
       const config = {
         method: "POST",
         headers,
@@ -177,7 +179,7 @@ export default function ReceiptInput({
       if (merchantName === null) {
         setDisplayMerchant(false);
       }
-
+  
       setPictureConfidence(taxConfidence);
       setPictureTax(taxAmount || 0);
       setPictureTotal(totalAmount);
@@ -186,6 +188,11 @@ export default function ReceiptInput({
       handleScroll();
     } catch (error) {
       console.error("Error processing image:", error);
+      alert("Something went wrong... Please try again"); // Display the popup
+  
+      setTimeout(() => {
+        navigate('/App/SplitBill'); // Route to the desired page after 3 seconds
+      }, 3000);
     }
   };
 
